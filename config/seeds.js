@@ -186,7 +186,7 @@ module.exports.seeds = {
           "name": "GE",
         }
       ],
-      "field": "Rerporting Level",
+      "field": "Reporting Level",
     },
     {
       "values": [{
@@ -331,6 +331,62 @@ module.exports.seeds = {
         }
       ],
       "field": "Risk Strategy",
+    },
+    {
+      "values": [{
+          "name": "P am Markt",
+        },
+        {
+          "name": "P KWK",
+        },
+        {
+          "name": "P Wind",
+        },
+        {
+          "name": "Wärme & Contracting",
+        },
+        {
+          "name": "Handel",
+        },
+        {
+          "name": "Verkauf CH",
+        },
+        {
+          "name": "Netze",
+        },
+        {
+          "name": "Infra-Engineering",
+        },
+        {
+          "name": "Netz-DL",
+        },
+        {
+          "name": "Wind & Solar DL",
+        },
+        {
+          "name": "Gebäudetechnik",
+        },
+        {
+          "name": "Energiebezogene DL",
+        },
+        {
+          "name": "Steuerung & Support",
+        },
+        {
+          "name": "F&E",
+        }
+      ],
+      "field": "Business Segment",
+    },
+    {
+      "values": [{
+          "name": "Yes",
+        },
+        {
+          "name": "No",
+        }
+      ],
+      "field": "Mandatory Projects",
     }
   ]
 }

@@ -105,5 +105,12 @@ module.exports = {
     projectMethodology: {
       model: 'dropdownMapper'
     },
+    currentReserveHistory: {
+      type: 'json'
+    },
+    hasDraftReport: {
+      type: 'boolean',
+      defaultsTo: false
+    }
   }
 };

@@ -102,5 +102,85 @@ module.exports = {
     }).catch(err => {
       res.badRequest(err);
     });
-  }
+  },
+
+  submitOutline: (req, res) => {
+    let body = req.body;
+    Projects.create(body).then(projectResponse => {
+      Projects.findOne({
+        id: projectResponse.id
+      }).then(project => {
+        let temp = {
+          projectOutline: project.projectOutline[0],
+          status: "Awaiting for Response",
+          assignedTo: body.projectOutline.pmoOfficer.id,
+          project: projectResponse.id,
+          docType: "Outline",
+          sentTo: "PMO",
+          isFreezed: false,
+          version: body.projectOutline.version,
+          uid: project.uid
+        };
+
+        OutlineApproval.create(temp).then(response => {
+          EmailService.sendMail({
+            email: 'pmo@megowork.com',
+            subject: "Approval Request",
+            message: `The following Project Approval request is waiting for your response. <br><br><br>  Please follow the link to reply: <a href='http://euk-84842.eukservers.com'>http://euk-84842.eukservers.com</a> <br><br><br><br> Thank You <br><br> MEGOWORK PPM <br><br> Note: This is an automatically generated message. Please do not reply to this message.`
+          }, (err) => {
+            if (err) {
+              console.log(err);
+              res.forbidden({
+                message: "Error sending email."
+              });
+            } else {
+              res.ok({
+                message: "Email sent."
+              });
+            }
+          });
+        });
+      });
+    });
+  },
+
+  submitOutlineUpdateCase: (req, res) => {
+    let body = req.body;
+    let outline = JSON.parse(JSON.stringify(body.projectOutline));
+    delete (body.projectOutline);
+
+    Projects.update({ id: req.params.id }, body).then(projectResponse => {
+      ProjectOutline.update({id: outline.id}, outline).then(outlineObj => {
+        OutlineApproval.create({
+          projectOutline: outlineObj,
+          status: "Awaiting for Response",
+          assignedTo: outline.pmoOfficer.id,
+          project: projectResponse.id,
+          docType: "Outline",
+          sentTo: "PMO",
+          isFreezed: false,
+          version: outline.version,
+          uid: projectResponse.uid
+        }).then(response => {
+          EmailService.sendMail({
+            email: 'pmo@megowork.com',
+            subject: "Approval Request",
+            message: `The following Project Approval request is waiting for your response. <br><br><br>  Please follow the link to reply: <a href='http://euk-84842.eukservers.com'>http://euk-84842.eukservers.com</a> <br><br><br><br> Thank You <br><br> MEGOWORK PPM <br><br> Note: This is an automatically generated message. Please do not reply to this message.`
+          }, (err) => {
+            if (err) {
+              console.log(err);
+              res.forbidden({
+                message: "Error sending email."
+              });
+            } else {
+              res.ok({
+                message: "Email sent."
+              });
+            }
+          });
+        });
+      });
+    });
+  },
+
 };

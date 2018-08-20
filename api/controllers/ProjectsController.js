@@ -32,13 +32,13 @@ module.exports = {
   getSubmittedProjects: (req, res) => {
     Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }
       ]
     }).populate('projectOutline').populate('projectOrder').sort('createdAt DESC').limit(10).then(projects => {
       res.ok(projects);
@@ -96,12 +96,12 @@ module.exports = {
       isClosed: true,
       isCashedOut: false
     }, {
-      isCashedOut: true
-    }).then(projects => {
-      res.ok(projects);
-    }).catch(err => {
-      res.badRequest(err);
-    });
+        isCashedOut: true
+      }).then(projects => {
+        res.ok(projects);
+      }).catch(err => {
+        res.badRequest(err);
+      });
   },
 
   submitOutline: (req, res) => {
@@ -109,7 +109,7 @@ module.exports = {
     Projects.create(body).then(projectResponse => {
       Projects.findOne({
         id: projectResponse.id
-      }).then(project => {
+      }).populate('projectOutline').then(project => {
         let temp = {
           projectOutline: project.projectOutline[0],
           status: "Awaiting for Response",
@@ -150,17 +150,17 @@ module.exports = {
     delete (body.projectOutline);
 
     Projects.update({ id: req.params.id }, body).then(projectResponse => {
-      ProjectOutline.update({id: outline.id}, outline).then(outlineObj => {
+      ProjectOutline.update({ id: outline.id }, outline).then(outlineObj => {
         OutlineApproval.create({
-          projectOutline: outlineObj,
+          projectOutline: outlineObj[0],
           status: "Awaiting for Response",
           assignedTo: outline.pmoOfficer.id,
-          project: projectResponse.id,
+          project: projectResponse[0].id,
           docType: "Outline",
           sentTo: "PMO",
           isFreezed: false,
           version: outline.version,
-          uid: projectResponse.uid
+          uid: projectResponse[0].uid
         }).then(response => {
           EmailService.sendMail({
             email: 'pmo@megowork.com',

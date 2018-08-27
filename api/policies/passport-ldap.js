@@ -21,25 +21,23 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
-passport.use(new SamlStrategy(
-  {
-    callbackUrl: 'https://109.203.126.97:1337/saml/consume',
-    entryPoint: 'https://login.microsoftonline.com/eb4f0621-3972-4ef0-9843-f918e2abde82/saml2',
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+passport.use(new SamlStrategy({
+    callbackUrl: config.callbackUrl,
+    entryPoint: config.entryPointUrl,
     issuer: 'MYPPM',
     cert: fs.readFileSync('./api/policies/PPM.cer', 'utf-8'),
     signatureAlgorithm: 'sha256'
   },
   function (profile, done) {
-    return done(null,
-      {
-        id: profile['nameID'],
-        email: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-        displayName: profile['http://schemas.microsoft.com/identity/claims/displayname'],
-        firstName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-        lastName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
-      });
-  })
-);
+    return done(null, {
+      id: profile['nameID'],
+      email: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+      displayName: profile['http://schemas.microsoft.com/identity/claims/displayname'],
+      firstName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+      lastName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+    });
+  }));
 
 // var OPTS = {
 //   identityMetadata: 'https://login.microsoftonline.com/luftmatrazetoutlook.onmicrosoft.com/v2.0/.well-known/openid-configuration',
@@ -102,7 +100,11 @@ module.exports = function (req, res, next) {
 
   // return res.forbidden('You are not permitted to perform this action.');
 
-  passport.authenticate('saml', { successRedirect: '/', failureRedirect: '/failure', failureFlash: true },
+  passport.authenticate('saml', {
+      successRedirect: '/',
+      failureRedirect: '/failure',
+      failureFlash: true
+    },
     function (req, res) {
       return next();
     })(req, res);

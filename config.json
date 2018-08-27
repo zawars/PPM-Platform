@@ -1,0 +1,10 @@
+{
+  "url": "https://login.microsoftonline.com/luftmatrazetoutlook.onmicrosoft.com/oauth2/token",
+  "clientId": "42b8cc8e-5a2b-4455-828b-3a8f59aed428",
+  "clientSecret": "Q4YvrZxZgynFcUHwbRSRIQnEMx9HHpE+H+6bYx2m6lI=",
+  "adminEmail": "admin@luftmatrazetoutlook.onmicrosoft.com",
+  "adminPassword": "kitcHlew2233$",
+  "callbackRedirectUrl": "https://megowork.co.uk/#/auth/",
+  "callbackUrl": "https://109.203.126.97:1337/saml/consume",
+  "entryPointUrl": "https://login.microsoftonline.com/eb4f0621-3972-4ef0-9843-f918e2abde82/saml2"
+}

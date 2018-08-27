@@ -7,6 +7,7 @@
 
 const saml = require('saml-encoder-decoder-js');
 const parseString = require('xml2js').parseString;
+const fs = require('fs');
 
 module.exports = {
   login: function (req, res) {
@@ -21,6 +22,8 @@ module.exports = {
   },
 
   samlConsumeToken: (req, res) => {
+    const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
     //save user;
     saml.decodeSamlPost(req.body.SAMLResponse, function (err, xml) {
       if (!err) {
@@ -35,13 +38,13 @@ module.exports = {
                 role: 'guest',
               }).then(createdObj => {
                 res.writeHead(301, {
-                  Location: 'https://megowork.co.uk/#/auth/' + createdObj.id
+                  Location: config.callbackRedirectUrl + createdObj.id
                 });
                 res.end();
               });
             } else {
               res.writeHead(301, {
-                Location: 'https://megowork.co.uk/#/auth/' + user[0].id
+                Location: config.callbackRedirectUrl + user[0].id
               });
               res.end();
             }

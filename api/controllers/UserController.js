@@ -4,8 +4,9 @@
  * @description :: Server-side logic for managing Users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-var request = require('request');
-let async = require('async');
+const request = require('request');
+const async = require('async');
+const fs = require('fs');
 
 module.exports = {
   getUsersFromRoles: (req, res) => {
@@ -55,19 +56,21 @@ module.exports = {
 };
 
 let syncUsers = async (res) => {
+  const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
   var options = {
     method: 'POST',
-    url: 'https://login.microsoftonline.com/luftmatrazetoutlook.onmicrosoft.com/oauth2/token',
+    url: config.url,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     form: {
-      client_id: '42b8cc8e-5a2b-4455-828b-3a8f59aed428',
-      client_secret: 'Q4YvrZxZgynFcUHwbRSRIQnEMx9HHpE+H+6bYx2m6lI=',
+      client_id: config.clientId,
+      client_secret: config.clientSecret,
       resource: 'https://graph.microsoft.com',
       grant_type: 'password',
-      username: 'admin@luftmatrazetoutlook.onmicrosoft.com',
-      password: 'kitcHlew2233$',
+      username: config.adminEmail,
+      password: config.adminPassword,
       scope: 'openid'
     }
   };

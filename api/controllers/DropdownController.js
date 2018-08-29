@@ -6,7 +6,13 @@
  */
 
 module.exports = {
+    index: (req, res) => {
+      Dropdown.find().populate('values', { sort: 'name ASC' }).then(dropdownList => {
+        res.ok(dropdownList);
+      }).catch(err => {
+        res.badRequest(err);
+      });
+    },
   
-
-};
-
+  };
+  

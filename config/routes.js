@@ -77,5 +77,6 @@ module.exports.routes = {
   'GET /resourceByReport/:id': 'ResourceController.resourceByReport',
   'POST /submitOutline': 'ProjectsController.submitOutline',
   'POST /submitOutlineUpdateCase/:id': 'ProjectsController.submitOutlineUpdateCase',
+  'GET /dropdown': 'DropdownController.index',
 
 };

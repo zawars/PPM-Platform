@@ -20,5 +20,13 @@ module.exports = {
   // models: {
   //   connection: 'someMongodbServer'
   // }
+  mongodbServer: {
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+    user: 'root', //optional => superOwner
+    password: '', //optional => superOwner
+    database: 'pmt' //optional
+  },
 
 };

@@ -88,90 +88,39 @@ let syncUsers = async (res) => {
       }
     };
 
-    request(options1, function (error1, response1, body1) {
-      if (error) {
-        sails.log.error('error1');
-      }
-
-
-
-      //Synchronize New Users from Active Directory
-      // let usersList = JSON.parse(body1).value; //List returned from AD.
-      // let ADUsersSet = getEmailSetfromADCollection(new Set(usersList));
-
-      // User.find().then(async users => {
-      //   let existingUsersSet = getEmailSetfromMongoCollection(new Set(users));
-
-      //   let newUsersSet = difference(ADUsersSet, existingUsersSet);
-      //   if (newUsersSet.size > 0) {
-      //     for (let item of newUsersSet) {
-      //       let obj = usersList.filter(val => val.userPrincipalName == item)[0];
-      //       await User.create({
-      //         email: item,
-      //         role: 'guest',
-      //         name: obj.displayName
-      //       });
-      //       sails.log.info('User Created.');
-      //     }
-      //   }
-
-      //   // Synchronize Deleted Users in AD.
-      //   let updatedUsersList = await User.find();
-      //   let updatedUsersSet = getEmailSetfromMongoCollection(new Set(updatedUsersList));
-      //   let deletedUsersSet = difference(updatedUsersSet, ADUsersSet);
-
-      //   if (deletedUsersSet.size > 0) {
-      //     for (let obj of deletedUsersSet) {
-      //       await User.destroy({
-      //         email: obj
-      //       });
-      //       sails.log.info('User Deleted.');
-      //     }
-      //   }
-
-      //   res.ok({
-      //     message: "Synchronized."
-      //   })
-
-      // });
-
-
+    request(options1, async (error1, response1, body1) => {
+      if (error) sails.log.error('error1')
 
       // new code 
       let usersList = JSON.parse(body1).value; //List returned from AD.
       //loop for update or create user
-      usersList.forEach(function (i) {
-
-        User.findOne({ $or: [{ azureId: i.id }, { email: i.userPrincipalName }] }).then(async user => {
-
+      for (let item of usersList) {
+        try {
+          let user = await User.findOne({ $or: [{ azureId: item.id }, { email: item.userPrincipalName }] });
           if (user) {
-            //update
-            user.azureId = i.id;
-            user.email = i.userPrincipalName;
-            user.name = i.givenName;
-            user.role = i.displayName;
-            user.save((err) => {
-              if (err) sails.log.error(error);
+            user.azureId = item.id;
+            user.email = item.userPrincipalName;
+            user.name = item.givenName;
+            user.role = item.displayName;
 
-              sails.log.info('User updated');
-            })
+            await user.save()
+
           } else {
-            //create
-            User.create({
-              azureId: i.id,
-              email: i.userPrincipalName,
-              name: i.givenName,
-              role: i.displayName
-            }, (err, user) => {
-              if (err) sails.log.error(error);
-
-              sails.log.info('User created');
+            let newUser = User.create({
+              azureId: item.id,
+              email: item.userPrincipalName,
+              name: item.givenName,
+              role: item.displayName
             })
+            await newUser.save()
           }
-        })
-      })
-      // for delete user if extra in local db
-      // Synchronize Deleted Users in AD.
+
+        } catch (error) {
+          sails.log.error(error);
+        }
+      }
+
+      sails.log.info(`Synced azure users ${body1}`);
 
       User.find().then(async updatedUsersList => {
 
@@ -182,14 +131,13 @@ let syncUsers = async (res) => {
 
         if (deletedUsersSet.size > 0) {
           for (let obj of deletedUsersSet) {
-            await User.destroy({
-              azureId: obj
-            });
+            await User.destroy({ azureId: obj });
             sails.log.info('User Deleted.');
           }
         }
-
-        res.ok({ message: "Synchronized." })
+        if (res != undefined) {
+          res.ok({ message: "Synchronized." })
+        }
       })
     });
   });

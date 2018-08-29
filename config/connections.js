@@ -18,6 +18,16 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
+const sails = require('sails');
+const dev = require('./env/development')
+const prod = require('./env/production');
+let mongoConfig;
+
+if (sails.config.environment === 'production') {
+  mongoConfig = prod;
+} else {
+  mongoConfig = dev;
+}
 
 module.exports.connections = {
 
@@ -57,12 +67,12 @@ module.exports.connections = {
    *                                                                          *
    ***************************************************************************/
   mongodbServer: {
-    adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    user: 'root', //optional => superOwner
-    password: '', //optional => superOwner
-    database: 'pmt' //optional
+    adapter: mongoConfig.mongodbServer.adapter,
+    host: mongoConfig.mongodbServer.host,
+    port: mongoConfig.mongodbServer.port,
+    user: mongoConfig.mongodbServer.user, //optional => superOwner
+    password: mongoConfig.mongodbServer.password, //optional => superOwner
+    database: mongoConfig.mongodbServer.database //optional
   },
 
   /***************************************************************************

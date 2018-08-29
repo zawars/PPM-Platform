@@ -38,6 +38,14 @@ module.exports = {
   ssl: {
     key: require('fs').readFileSync(__dirname + '/ssl/key.pem'),
     cert: require('fs').readFileSync(__dirname + '/ssl/cert.pem')
-  }
+  },
+  mongodbServer: {
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+    user: 'admin', //optional => superOwner
+    password: 'admin', //optional => superOwner
+    database: 'pmt' //optional
+  },
 
 };

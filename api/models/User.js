@@ -8,6 +8,9 @@
 module.exports = {
 
   attributes: {
+    azureId: {
+      type: 'string'
+    },
     email: {
       type: 'string'
     },

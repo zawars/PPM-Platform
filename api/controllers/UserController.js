@@ -77,7 +77,7 @@ let syncUsers = async (res) => {
 
   request(options, function (error, response, body) {
     if (error) {
-      throw new Error(error);
+      sails.log.error(error);
     }
 
     let options1 = {
@@ -90,48 +90,107 @@ let syncUsers = async (res) => {
 
     request(options1, function (error1, response1, body1) {
       if (error) {
-        throw new Error(error1);
+        sails.log.error('error1');
       }
 
+
+
       //Synchronize New Users from Active Directory
+      // let usersList = JSON.parse(body1).value; //List returned from AD.
+      // let ADUsersSet = getEmailSetfromADCollection(new Set(usersList));
+
+      // User.find().then(async users => {
+      //   let existingUsersSet = getEmailSetfromMongoCollection(new Set(users));
+
+      //   let newUsersSet = difference(ADUsersSet, existingUsersSet);
+      //   if (newUsersSet.size > 0) {
+      //     for (let item of newUsersSet) {
+      //       let obj = usersList.filter(val => val.userPrincipalName == item)[0];
+      //       await User.create({
+      //         email: item,
+      //         role: 'guest',
+      //         name: obj.displayName
+      //       });
+      //       sails.log.info('User Created.');
+      //     }
+      //   }
+
+      //   // Synchronize Deleted Users in AD.
+      //   let updatedUsersList = await User.find();
+      //   let updatedUsersSet = getEmailSetfromMongoCollection(new Set(updatedUsersList));
+      //   let deletedUsersSet = difference(updatedUsersSet, ADUsersSet);
+
+      //   if (deletedUsersSet.size > 0) {
+      //     for (let obj of deletedUsersSet) {
+      //       await User.destroy({
+      //         email: obj
+      //       });
+      //       sails.log.info('User Deleted.');
+      //     }
+      //   }
+
+      //   res.ok({
+      //     message: "Synchronized."
+      //   })
+
+      // });
+
+
+
+      // new code 
       let usersList = JSON.parse(body1).value; //List returned from AD.
-      let ADUsersSet = getEmailSetfromADCollection(new Set(usersList));
+      //loop for update or create user
+      usersList.forEach(function (i) {
 
-      User.find().then(async users => {
-        let existingUsersSet = getEmailSetfromMongoCollection(new Set(users));
+        User.findOne({ $or: [{ azureId: i.id }, { email: i.userPrincipalName }] }).then(async user => {
 
-        let newUsersSet = difference(ADUsersSet, existingUsersSet);
-        if (newUsersSet.size > 0) {
-          for (let item of newUsersSet) {
-            let obj = usersList.filter(val => val.userPrincipalName == item)[0];
-            await User.create({
-              email: item,
-              role: 'guest',
-              name: obj.displayName
-            });
-            sails.log.info('User Created.');
+          if (user) {
+            //update
+            user.azureId = i.id;
+            user.email = i.userPrincipalName;
+            user.name = i.givenName;
+            user.role = i.displayName;
+            user.save((err) => {
+              if (err) sails.log.error(error);
+
+              sails.log.info('User updated');
+            })
+          } else {
+            //create
+            User.create({
+              azureId: i.id,
+              email: i.userPrincipalName,
+              name: i.givenName,
+              role: i.displayName
+            }, (err, user) => {
+              if (err) sails.log.error(error);
+
+              sails.log.info('User created');
+            })
           }
-        }
+        })
+      })
+      // for delete user if extra in local db
+      // Synchronize Deleted Users in AD.
+
+      User.find().then(async updatedUsersList => {
 
         // Synchronize Deleted Users in AD.
-        let updatedUsersList = await User.find();
+        let ADUsersSet = getEmailSetfromADCollection(new Set(usersList));
         let updatedUsersSet = getEmailSetfromMongoCollection(new Set(updatedUsersList));
         let deletedUsersSet = difference(updatedUsersSet, ADUsersSet);
 
         if (deletedUsersSet.size > 0) {
           for (let obj of deletedUsersSet) {
             await User.destroy({
-              email: obj
+              azureId: obj
             });
             sails.log.info('User Deleted.');
           }
         }
 
-        res.ok({
-          message: "Synchronized."
-        })
-
-      });
+        res.ok({ message: "Synchronized." })
+      })
     });
   });
 }
@@ -147,7 +206,7 @@ function difference(setA, setB) {
 let getEmailSetfromMongoCollection = (userList) => {
   let set = new Set();
   userList.forEach(user => {
-    set.add(user.email);
+    set.add(user.azureId);
   });
   return set;
 }
@@ -155,7 +214,7 @@ let getEmailSetfromMongoCollection = (userList) => {
 let getEmailSetfromADCollection = (userList) => {
   let set = new Set();
   userList.forEach(user => {
-    set.add(user.userPrincipalName);
+    set.add(user.id);
   });
   return set;
 }

@@ -110,13 +110,12 @@ let syncUsers = async (res) => {
               await user[0].save();
             }
           } else {
-            let newUser = User.create({
+            await User.create({
               azureId: item.id,
               email: item.userPrincipalName,
               name: item.givenName,
               role: item.displayName
-            })
-            await newUser.save()
+            });
           }
 
         } catch (error) {

@@ -91,23 +91,24 @@ let syncUsers = async (res) => {
     request(options1, async (error1, response1, body1) => {
       if (error) sails.log.error('error1')
 
-      // new code 
+      // updation and creation of users
       let usersList = JSON.parse(body1).value; //List returned from AD.
+      let localUsersList = await User.find(); // Local Users list
+
       //loop for update or create user
       for (let item of usersList) {
         try {
-          let user = await User.findOne({ $or: [{ azureId: item.id }, { email: item.userPrincipalName }] });
-          if (user) {
-            if (user.email === item.userPrincipalName && user.name === item.givenName) {
-              user.azureId = item.id;
-              user.email = item.userPrincipalName;
-              user.name = item.givenName;
-              user.role = item.displayName;
+          let user = localUsersList.filter(val => val.azureId == item.id);
 
-              await user.save()
+          if (user.length > 0) {
+            if (user[0].email != item.userPrincipalName || user[0].name != item.givenName) {
+              user[0].azureId = item.id;
+              user[0].email = item.userPrincipalName;
+              user[0].name = item.givenName;
+              user[0].role = item.displayName;
+
+              await user[0].save();
             }
-
-
           } else {
             let newUser = User.create({
               azureId: item.id,

@@ -98,12 +98,15 @@ let syncUsers = async (res) => {
         try {
           let user = await User.findOne({ $or: [{ azureId: item.id }, { email: item.userPrincipalName }] });
           if (user) {
-            user.azureId = item.id;
-            user.email = item.userPrincipalName;
-            user.name = item.givenName;
-            user.role = item.displayName;
+            if (user.email === item.userPrincipalName && user.name === item.givenName) {
+              user.azureId = item.id;
+              user.email = item.userPrincipalName;
+              user.name = item.givenName;
+              user.role = item.displayName;
 
-            await user.save()
+              await user.save()
+            }
+
 
           } else {
             let newUser = User.create({

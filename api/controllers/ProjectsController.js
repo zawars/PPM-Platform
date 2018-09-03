@@ -11,7 +11,7 @@ module.exports = {
   userProjects: (req, res) => {
     Projects.find({
       user: req.params.id
-    }).populate('projectOutline').populate('projectOrder').populate('changeRequests').populate('closingReport').sort('uid DESC').then(projects => {
+    }).populate('projectOutline').populate('projectOrder').populate('changeRequests').populate('closingReport').populate('projectReport').sort('uid DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
       res.badRequest(error);

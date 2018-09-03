@@ -25,7 +25,7 @@ module.exports = {
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  port: 8080,
+  port: 1337,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
@@ -43,8 +43,8 @@ module.exports = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-    user: 'admin', //optional => superOwner
-    password: 'admin', //optional => superOwner
+    user: '', //optional => superOwner
+    password: '', //optional => superOwner
     database: 'pmt' //optional
   },
 

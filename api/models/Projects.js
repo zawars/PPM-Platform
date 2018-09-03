@@ -68,7 +68,7 @@ module.exports = {
       type: 'integer',
     },
     projectReport: {
-      type: 'string'
+      model: 'reports'
     },
     history: {
       collection: 'history',

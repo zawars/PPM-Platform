@@ -68,10 +68,10 @@ let syncUsers = async (res) => {
       client_id: config.clientId,
       client_secret: config.clientSecret,
       resource: 'https://graph.microsoft.com',
-      grant_type: 'password',
-      username: config.adminEmail,
-      password: config.adminPassword,
-      scope: 'openid'
+      grant_type: 'client_credentials',
+      // username: config.adminEmail,
+      // password: config.adminPassword,
+      // scope: 'openid'
     }
   };
 

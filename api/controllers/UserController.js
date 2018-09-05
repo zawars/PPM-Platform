@@ -104,7 +104,7 @@ let syncUsers = async (res) => {
             if (user[0].email != item.userPrincipalName || user[0].name != item.givenName) {
               user[0].azureId = item.id;
               user[0].email = item.userPrincipalName;
-              user[0].name = item.givenName + ' ' + item.surname;
+              user[0].name = item.surname + ', ' + item.givenName;
 
               await user[0].save();
             }

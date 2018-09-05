@@ -41,7 +41,7 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node --inspect app.js"
+    "start": "nodemon --inspect app.js"
   },
   "main": "app.js",
   "repository": {

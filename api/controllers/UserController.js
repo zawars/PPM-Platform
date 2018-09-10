@@ -8,6 +8,8 @@ const request = require('request');
 const async = require('async');
 const fs = require('fs');
 
+let usersList = [];
+
 module.exports = {
   getUsersFromRoles: (req, res) => {
     User.find({
@@ -16,7 +18,7 @@ module.exports = {
       res.ok(users);
     }).catch(error => {
       re.badRequest(error);
-    })
+    });
   },
 
   getUserByEmail: (req, res) => {
@@ -123,7 +125,7 @@ let parseUsers = async (options1, res, response) => {
     if (error1) sails.log.error(error1)
 
     // updation and creation of users
-    let usersList = JSON.parse(body1).value; //List returned from AD.
+    usersList.push(...JSON.parse(body1).value); //List returned from AD.
     let localUsersList = await User.find(); // Local Users list
     for (let item of usersList) {
       try {
@@ -177,6 +179,7 @@ let parseUsers = async (options1, res, response) => {
           }
         }
         if (res != undefined) {
+          usersList = [];
           res.ok({ message: "Synchronized." })
         }
       });

@@ -78,5 +78,6 @@ module.exports.routes = {
   'POST /submitOutline': 'ProjectsController.submitOutline',
   'POST /submitOutlineUpdateCase/:id': 'ProjectsController.submitOutlineUpdateCase',
   'GET /dropdown': 'DropdownController.index',
+  'GET /user/search/:query': 'UserController.search',
 
 };

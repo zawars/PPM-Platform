@@ -12,13 +12,30 @@ let usersList = [];
 
 module.exports = {
   getUsersFromRoles: (req, res) => {
-    User.find({
-      role: req.params.role
-    }).then(users => {
-      res.ok(users);
-    }).catch(error => {
-      re.badRequest(error);
-    });
+    if (req.params.role == "PMO") {
+      User.find({
+        role: req.params.role,
+      }).then(users => {
+        User.find({
+          role: 'admin',
+          isPmoAlso: true
+        }).then(adminUsers => {
+          res.ok([...users, ...adminUsers]);
+        }).catch(err => {
+          res.badRequest(err);
+        });
+      }).catch(error => {
+        res.badRequest(error);
+      });
+    } else {
+      User.find({
+        role: req.params.role
+      }).then(users => {
+        res.ok(users);
+      }).catch(error => {
+        res.badRequest(error);
+      });
+    }
   },
 
   getUserByEmail: (req, res) => {
@@ -54,6 +71,19 @@ module.exports = {
 
   syncUsers: (req, res) => {
     syncUsers(res);
+  },
+
+  search: (req, res) => {
+    let query = req.params.query;
+    User.find({
+      name: {
+        'contains': query
+      }
+    }).then(users => {
+      res.ok(users)
+    }).catch(err => {
+      res.badRequest(err);
+    });
   }
 };
 

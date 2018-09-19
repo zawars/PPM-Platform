@@ -41,7 +41,7 @@ module.exports = {
   },
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: 'localhost',
+    host: process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME,
     port: 27017,
     user: '', //optional => superOwner
     password: '', //optional => superOwner

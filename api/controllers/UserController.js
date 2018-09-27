@@ -159,7 +159,7 @@ let parseUsers = async (options1, res, response) => {
         let user = localUsersList.filter(val => val.azureId == item.id);
 
         if (user.length > 0) {
-          if (user[0].email != item.userPrincipalName || user[0].name != (item.surname + ', ' + item.givenName)) {
+          if (user[0].email != item.userPrincipalName || user[0].name != (item.surname + ', ' + item.givenName) || user[0].department != item.department) {
             user[0].azureId = item.id;
             user[0].email = item.userPrincipalName;
             user[0].name = item.surname + ', ' + item.givenName;

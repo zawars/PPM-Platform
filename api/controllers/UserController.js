@@ -101,9 +101,6 @@ let syncUsers = async (res) => {
       client_secret: config.clientSecret,
       resource: 'https://graph.microsoft.com',
       grant_type: 'client_credentials',
-      // username: config.adminEmail,
-      // password: config.adminPassword,
-      // scope: 'openid'
     }
   };
 
@@ -114,7 +111,7 @@ let syncUsers = async (res) => {
 
     let options1 = {
       method: 'GET',
-      url: 'https://graph.microsoft.com/v1.0/users',
+      url: 'https://graph.microsoft.com/v1.0/users?$select=id,department,mail,displayName,givenName,surname,jobTitle,mobilePhone,officeLocation,preferredLanguage,userPrincipalName',
       headers: {
         Authorization: 'Bearer ' + JSON.parse(response.body).access_token
       }
@@ -166,6 +163,7 @@ let parseUsers = async (options1, res, response) => {
             user[0].azureId = item.id;
             user[0].email = item.userPrincipalName;
             user[0].name = item.surname + ', ' + item.givenName;
+            user[0].department = item.department;
 
             await user[0].save();
           }
@@ -173,7 +171,8 @@ let parseUsers = async (options1, res, response) => {
           await User.create({
             azureId: item.id,
             email: item.userPrincipalName,
-            name: item.givenName,
+            name: item.surname + ', ' + item.givenName,
+            department: item.department,
             role: 'guest'
           });
         }
@@ -204,13 +203,17 @@ let parseUsers = async (options1, res, response) => {
 
         if (deletedUsersSet.size > 0) {
           for (let obj of deletedUsersSet) {
-            await User.destroy({ azureId: obj });
+            await User.destroy({
+              azureId: obj
+            });
             sails.log.info('User Deleted.');
           }
         }
         if (res != undefined) {
           usersList = [];
-          res.ok({ message: "Synchronized." })
+          res.ok({
+            message: "Synchronized."
+          })
         }
       });
     }

@@ -42,15 +42,6 @@ module.exports = {
     project: {
       model: 'projects'
     },
-    pmoOfficer: {
-      model: 'user'
-    },
-    projectSponsor: {
-      model: 'user'
-    },
-    projectFico: {
-      model: 'user'
-    },
   },
 
 };

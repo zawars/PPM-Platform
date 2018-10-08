@@ -15,7 +15,7 @@ module.exports = {
 
     
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-    //  ║╣ ║║║╠╩╗║╣ + ║║╚═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
     isSubmitted: {
       type: 'boolean'
@@ -41,16 +41,6 @@ module.exports = {
       model: 'projects',
       unique: true
     },
-    pmoOfficer: {
-      model: 'user'
-    },
-    projectSponsor: {
-      model: 'user'
-    },
-    projectFico: {
-      model: 'user'
-    },
-
   },
 
 };

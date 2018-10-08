@@ -20,6 +20,9 @@ module.exports = {
     role: {
       type: 'string'
     },
+    department: {
+      type: 'string'
+    },
     projects: {
       collection: 'projects',
       via: 'user'

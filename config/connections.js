@@ -66,13 +66,21 @@ module.exports.connections = {
    * Run: npm install sails-mongo                                             *
    *                                                                          *
    ***************************************************************************/
+  // mongodbServer: {
+  //   adapter: mongoConfig.mongodbServer.adapter,
+  //   host: mongoConfig.mongodbServer.host,
+  //   port: mongoConfig.mongodbServer.port,
+  //   user: mongoConfig.mongodbServer.user, //optional => superOwner
+  //   password: mongoConfig.mongodbServer.password, //optional => superOwner
+  //   database: mongoConfig.mongodbServer.database //optional
+  // },
   mongodbServer: {
-    adapter: mongoConfig.mongodbServer.adapter,
-    host: mongoConfig.mongodbServer.host,
-    port: mongoConfig.mongodbServer.port,
-    user: mongoConfig.mongodbServer.user, //optional => superOwner
-    password: mongoConfig.mongodbServer.password, //optional => superOwner
-    database: mongoConfig.mongodbServer.database //optional
+    adapter: 'sails-mongo',
+    host: process.env.OPENSHIFT_MONGODB_DB_HOST,
+    port: process.env.OPENSHIFT_MONGODB_DB_PORT,
+    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME, //optional => superOwner
+    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD, //optional => superOwner
+    database: 'pmt' //optional
   },
 
   /***************************************************************************

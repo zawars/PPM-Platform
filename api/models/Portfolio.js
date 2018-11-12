@@ -12,7 +12,7 @@ module.exports = {
       type: 'string',
     },
     subPortfolio: {
-      type: 'string'
+      type: 'json'
     },
     department: {
       type: 'string',

@@ -53,7 +53,19 @@ module.exports.seeds = {
     {
       "text": "Project Closing Report has been rejected by approver.",
       "event": "Project Closing Report Rejected",
-    }
+    },
+    {
+      "text": "Project Order is on hold from the approver.",
+      "event": "Project Order On Hold"
+    },
+    {
+      "text": "Change Request is on hold from the approver.",
+      "event": "Change Request On Hold"
+    },
+    {
+      "text": "Closing Report is on hold from the approver.",
+      "event": "Closing Report On Hold"
+    },
   ],
   dropdown: [{
       "values": [{

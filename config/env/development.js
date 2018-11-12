@@ -30,10 +30,10 @@ module.exports = {
   // },
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: 'ds151463.mlab.com', // process.env.OPENSHIFT_MONGODB_DB_HOST, //'localhost',
-    port: '51463', //process.env.OPENSHIFT_MONGODB_DB_PORT, //27017,
-    user: 'user', //process.env.OPENSHIFT_MONGODB_DB_USERNAME, //'', //optional => superOwner
-    password: 'user123456', //process.env.OPENSHIFT_MONGODB_DB_PASSWORD, //'', //optional => superOwner
+    host: process.env.OPENSHIFT_MONGODB_DB_HOST, //'localhost',
+    port: process.env.OPENSHIFT_MONGODB_DB_PORT, //27017,
+    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME || '', //optional => superOwner
+    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD || '', //optional => superOwner
     database: 'pmt' //optional
   },
 

@@ -25,7 +25,9 @@ module.exports = {
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  port: 1337,
+  // port: 1337,
+  port: process.env.OPENSHIFT_NODEJS_PORT || 8080,
+  host: process.env.OPENSHIFT_NODEJS_IP,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
@@ -43,8 +45,8 @@ module.exports = {
     adapter: 'sails-mongo',
     host: process.env.OPENSHIFT_MONGODB_DB_HOST, //'localhost',
     port: process.env.OPENSHIFT_MONGODB_DB_PORT, //27017,
-    user: '', //optional => superOwner
-    password: '', //optional => superOwner
+    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME, //'', //optional => superOwner
+    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD, //'', //optional => superOwner
     database: 'pmt' //optional
   },
 

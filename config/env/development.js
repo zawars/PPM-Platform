@@ -20,12 +20,20 @@ module.exports = {
   // models: {
   //   connection: 'someMongodbServer'
   // }
+  // mongodbServer: {
+  //   adapter: 'sails-mongo',
+  //   host: 'localhost',
+  //   port: 27017,
+  //   user: 'root', //optional => superOwner
+  //   password: '', //optional => superOwner
+  //   database: 'pmt' //optional
+  // },
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    user: 'root', //optional => superOwner
-    password: '', //optional => superOwner
+    host: process.env.OPENSHIFT_MONGODB_DB_HOST, //'localhost',
+    port: process.env.OPENSHIFT_MONGODB_DB_PORT, //27017,
+    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME, //'', //optional => superOwner
+    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD, //'', //optional => superOwner
     database: 'pmt' //optional
   },
 

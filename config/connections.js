@@ -78,8 +78,8 @@ module.exports.connections = {
     adapter: 'sails-mongo',
     host: process.env.OPENSHIFT_MONGODB_DB_HOST,
     port: process.env.OPENSHIFT_MONGODB_DB_PORT,
-    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME, //optional => superOwner
-    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD, //optional => superOwner
+    user: '', //optional => superOwner
+    password: '', //optional => superOwner
     database: 'pmt' //optional
   },
 

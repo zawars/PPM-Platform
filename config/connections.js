@@ -76,10 +76,10 @@ module.exports.connections = {
   // },
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: process.env.OPENSHIFT_MONGODB_DB_HOST,
-    port: process.env.OPENSHIFT_MONGODB_DB_PORT,
-    user: '', //optional => superOwner
-    password: '', //optional => superOwner
+    host: process.env.MONGODB_SERVICE_HOST,
+    port: process.env.MONGODB_SERVICE_PORT,
+    user: process.env.MONGODB_USER, //optional => superOwner
+    password: process.env.MONGODB_PASSWORD, //optional => superOwner
     database: 'pmt' //optional
   },
 

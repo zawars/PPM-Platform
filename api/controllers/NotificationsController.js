@@ -5,7 +5,13 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-module.exports = {
-	
-};
+const fs = require('fs');
 
+module.exports = {
+  fetchLanguage: (req, res) => {
+    let locale = req.params.id;
+
+    let file = fs.readFileSync('assets/langs/' + locale, 'utf8')
+    res.ok(file);
+  }
+};

@@ -54,7 +54,6 @@ try {
     rc = function () { return {}; };
   }
 }
-console.log(process.env)
 
 // Start server
 sails.lift(rc('sails'));

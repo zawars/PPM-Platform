@@ -16,13 +16,19 @@ module.exports = {
     DropdownMapper.findOne({
       id: id
     }).then(dropdownObj => {
-      let de = deFile[dropdownObj.name];
-      let fr = frFile[dropdownObj.name];
-      res.ok({
-        data: dropdownObj,
-        de: de,
-        fr: fr
-      });
+      if (dropdownObj != undefined) {
+        let de = deFile[dropdownObj.name];
+        let fr = frFile[dropdownObj.name];
+        res.ok({
+          data: dropdownObj,
+          de: de,
+          fr: fr
+        });
+      } else {
+        res.badRequest({
+          message: 'Data not Found'
+        });
+      }
     });
   },
 
@@ -37,7 +43,10 @@ module.exports = {
       delete(deFile[dropdownObj.name]);
       delete(frFile[dropdownObj.name]);
 
-      DropdownMapper.delete({
+      fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2));
+      fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2));
+
+      DropdownMapper.destroy({
         id: id
       }).then(response => {
         res.ok({
@@ -64,6 +73,9 @@ module.exports = {
       deFile[obj.name] = de;
       frFile[obj.name] = fr;
 
+      fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2));
+      fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2));
+
       DropdownMapper.update({
         id: id
       }).set({
@@ -71,6 +83,8 @@ module.exports = {
       }).then(response => {
         res.ok({
           data: response,
+          de: deFile,
+          fr: frFile
         });
       });
     });

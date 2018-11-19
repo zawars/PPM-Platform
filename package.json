@@ -42,7 +42,7 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js --production",
+    "start": "sails lift --prod",
     "inspect": "nodemon --inspect app.js"
   },
   "main": "app.js",

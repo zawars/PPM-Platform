@@ -51,7 +51,7 @@ module.exports.bootstrap = function (cb) {
 
   //Run Server on HTTPS
   if (sails.config.environment === "production") {
-    http.createServer(sails.hooks.http.app).listen(process.env.OPENSHIFT_NODEJS_PORT || 81); //81
+    http.createServer(sails.hooks.http.app).listen(81);
   }
 
   cb();

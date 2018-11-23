@@ -53,19 +53,7 @@ module.exports.seeds = {
     {
       "text": "Project Closing Report has been rejected by approver.",
       "event": "Project Closing Report Rejected",
-    },
-    {
-      "text": "Project Order is on hold from the approver.",
-      "event": "Project Order On Hold"
-    },
-    {
-      "text": "Change Request is on hold from the approver.",
-      "event": "Change Request On Hold"
-    },
-    {
-      "text": "Closing Report is on hold from the approver.",
-      "event": "Closing Report On Hold"
-    },
+    }
   ],
   dropdown: [{
       "values": [{
@@ -400,5 +388,886 @@ module.exports.seeds = {
       ],
       "field": "Mandatory Projects",
     }
-  ]
+  ],
+  helpGuide: [{
+      name: 'Project Outline',
+      fields: [{
+          name: 'Project Name',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Purpose',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Manager',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Estimated Project Duration',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Current Situation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Goals',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Deliverables',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Out Of Scope',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Risks',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Currency',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Qualitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Quantitative Benefits',
+          value: '',
+          type: ''
+        },
+        {
+          name: 'Estimated Project Cost',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Involved Partners',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Mandatory Project',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Unit',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Area',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Segment',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reporting Level',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Classification',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Type',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Part of a Program',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Strategic Contribution',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Feasibility',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Profitability',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Start of creation of Project Order',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'End of creation of project order',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Funds Required for Initiation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Additional Information',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Attachments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'PMO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Sponsor',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        }
+      ]
+    },
+    {
+      name: 'Project Order',
+      fields: [{
+          name: 'Project Name',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Purpose',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Manager',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Estimated Project Duration',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Current Situation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Goals',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Deliverables',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Out Of Scope',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Communication',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Currency',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Qualitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Quantitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Budgeted',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Costs',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Involved Partners',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Risks',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Dependencies',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        // {
+        //   name: 'Milestones',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Project Organisation',
+        //   value: '',
+        //type: ''
+        // },
+        {
+          name: 'Mandatory Project',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Unit',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Area',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Segment',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reporting Level',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Classification',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Type',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Part of a Program',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Strategic Contribution',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Feasibility',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Profitability',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Additional Information',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Attachments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'PMO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Sponsor',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'FICO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        }
+      ]
+    },
+    {
+      name: 'Change Request',
+      fields: [
+        // {
+        //   name: 'Project Name',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Project Manager',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Reason for Change Request',
+        //   value: '',
+        //type: ''
+        // },
+        {
+          name: 'Goals',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Deliverables',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Out Of Scope',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Currency',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Quantitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Qualitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        // {
+        //   name: 'Actual Project Budget',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Effects on Project Budget',
+        //   value: '',
+        // type: ''
+        // },
+        // {
+        //   name: 'Effects on Time',
+        //   value: '',
+        //type: ''
+        // },
+        {
+          name: 'Consequences of non-implementation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Possible Alternatives',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Mandatory Project',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Unit',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Area',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Business Segment',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reporting Level',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Classification',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Type',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Part of a Program',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Strategic Contribution',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Feasibility',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Profitability',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        // {
+        //   name: 'Additional Information',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Attachments',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'PMO',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Project Sponsor',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'FICO',
+        //   value: '',
+        //type: ''
+        // }
+      ]
+    },
+    {
+      name: 'Closing Report',
+      fields: [
+        // {
+        //   name: 'Project Name',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Project Manager',
+        //   value: '',
+        //type: ''
+        // },
+        {
+          name: 'Goals',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Deliverables',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        // {
+        //   name: 'Reason For Deviation (Goals And Deliverables)',
+        //   value: '',
+        //type: ''
+        // },
+        {
+          name: 'Quantitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Qualitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        // {
+        //   name: 'Reason For Deviation (Qualitative and Quantitative Benefits)',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Cost Deviations',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Time Deviation',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Reason For Deviation (Cost and Time) ',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Lessons Learned',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Pending',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Additional Information',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Attachments',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'PMO',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'Project Sponsor',
+        //   value: '',
+        //type: ''
+        // },
+        // {
+        //   name: 'FICO',
+        //   value: '',
+        //  type: ''
+        // }
+      ]
+    }
+  ],
+  questions: [{
+      name: 'Project Outline',
+      questions: [{
+          question: 'Does your project involve any BKW employee, corporate or customer data?',
+          department: 'Compliance'
+        },
+        {
+          question: 'Has the financing of your project been clarified with your department controller?',
+          department: 'Controlling'
+        },
+        {
+          question: 'Does your project have an impact on BKW external customer?',
+          department: 'Customer Experience'
+        },
+        {
+          question: 'Does your project have any impact on BKW organisation?',
+          department: 'Human Resources'
+        },
+        {
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
+          department: 'ICT'
+        },
+        {
+          question: 'Will any material, software application or services will be procured from external sources?',
+          department: 'Procurement'
+        }
+      ]
+    },
+    {
+      name: 'Project Order',
+      questions: [{
+          question: 'Does your project involve any BKW employee, corporate or customer data?',
+          department: 'Compliance'
+        },
+        {
+          question: 'Has the financing of your project been clarified with your department controller?',
+          department: 'Controlling'
+        },
+        {
+          question: 'Does your project have an impact on BKW external customer?',
+          department: 'Customer Experience'
+        },
+        {
+          question: 'Does your project have any impact on BKW organisation?',
+          department: 'Human Resources'
+        },
+        {
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
+          department: 'ICT'
+        },
+        {
+          question: 'Will any material, software application or services will be procured from external sources?',
+          department: 'Procurement'
+        }
+      ]
+    },
+    {
+      name: 'Change Request',
+      questions: [{
+          question: 'Does your project involve any BKW employee, corporate or customer data?',
+          department: 'Compliance'
+        },
+        {
+          question: 'Has the financing of your project been clarified with your department controller?',
+          department: 'Controlling'
+        },
+        {
+          question: 'Does your project have an impact on BKW external customer?',
+          department: 'Customer Experience'
+        },
+        {
+          question: 'Does your project have any impact on BKW organisation?',
+          department: 'Human Resources'
+        },
+        {
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
+          department: 'ICT'
+        },
+        {
+          question: 'Will any material, software application or services will be procured from external sources?',
+          department: 'Procurement'
+        }
+      ]
+    },
+    {
+      name: 'Closing Report',
+      questions: [{
+          question: 'Does your project involve any BKW employee, corporate or customer data?',
+          department: 'Compliance'
+        },
+        {
+          question: 'Has the financing of your project been clarified with your department controller?',
+          department: 'Controlling'
+        },
+        {
+          question: 'Does your project have an impact on BKW external customer?',
+          department: 'Customer Experience'
+        },
+        {
+          question: 'Does your project have any impact on BKW organisation?',
+          department: 'Human Resources'
+        },
+        {
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
+          department: 'ICT'
+        },
+        {
+          question: 'Will any material, software application or services will be procured from external sources?',
+          department: 'Procurement'
+        }
+      ]
+    }
+  ],
 }

@@ -84,5 +84,9 @@ module.exports.routes = {
   'DELETE /dropdownMapper/:id': 'DropdownMapperController.delete',
   'PUT /dropdownMapper/:id': 'DropdownMapperController.update',
   'GET /notification/lang/:id': 'NotificationsController.fetchLanguage',
+  'GET /helpGuideMapper/:id': 'HelpGuideMapperController.show',
+  'PUT /helpGuideMapper/:id': 'HelpGuideMapperController.update',
+  'GET /helpGuide/getHelpGuideByFormName/:query': 'HelpGuideController.getHelpGuideByFormName',
+  'GET /questions/getQuestionsByFormName/:query': 'QuestionsController.getQuestionsByFormName',
 
 };

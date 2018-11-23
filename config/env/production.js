@@ -25,9 +25,7 @@ module.exports = {
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  // port: 1337,
-  port: process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-  ip: process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
+  port: 1337,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
@@ -39,16 +37,16 @@ module.exports = {
 
   ssl: {
     key: require('fs').readFileSync(__dirname + '/ssl/key.pem'),
-    cert: require('fs').readFileSync(__dirname + '/ssl/cert.pem')
+    cert: require('fs').readFileSync(__dirname + '/ssl/cert.pem'),
+    // passphrase: "megowork"
   },
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: process.env.OPENSHIFT_MONGODB_DB_HOST || process.env.MONGO_HOST, //'localhost',
-    port: process.env.OPENSHIFT_MONGODB_DB_PORT || process.env.MONGO_PORT, //27017,
-    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME || process.env.MONGODB_USER || 'admin', //optional => superOwner
-    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD || process.env.MONGODB_PASSWORD || 'secret', //optional => superOwner
-    database: 'pmt',
-    url: process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
+    host: 'localhost',
+    port: 27017,
+    user: '', //optional => superOwner
+    password: '', //optional => superOwner
+    database: 'pmt' //optional
   },
 
 };

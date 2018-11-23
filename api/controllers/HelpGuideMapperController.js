@@ -23,8 +23,8 @@ module.exports = {
 
           res.ok({
             data: helpGuideObj,
-            de: de,
-            fr: fr
+            de: de || '',
+            fr: fr || ''
           });
         } else {
           res.ok({

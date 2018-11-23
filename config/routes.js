@@ -88,5 +88,7 @@ module.exports.routes = {
   'PUT /helpGuideMapper/:id': 'HelpGuideMapperController.update',
   'GET /helpGuide/getHelpGuideByFormName/:query': 'HelpGuideController.getHelpGuideByFormName',
   'GET /questions/getQuestionsByFormName/:query': 'QuestionsController.getQuestionsByFormName',
+  'GET /questionsMapper/:id': 'QuestionsMapperController.show',
+  'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
 
 };

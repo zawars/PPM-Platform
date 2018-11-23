@@ -389,7 +389,7 @@ module.exports.seeds = {
       "field": "Mandatory Projects",
     }
   ],
-  helpGuide: [{
+  helpguide: [{
       name: 'Project Outline',
       fields: [{
           name: 'Project Name',
@@ -593,13 +593,6 @@ module.exports.seeds = {
           originalName: ''
         },
         {
-          name: 'Attachments',
-          value: '',
-          type: '',
-          attachmentId: '',
-          originalName: ''
-        },
-        {
           name: 'PMO',
           value: '',
           type: '',
@@ -612,7 +605,14 @@ module.exports.seeds = {
           type: '',
           attachmentId: '',
           originalName: ''
-        }
+        },
+        {
+          name: 'Attachments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
       ]
     },
     {

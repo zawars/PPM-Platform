@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   ppm-server:
     container_name: ppm-server
@@ -6,8 +6,16 @@ services:
     build: .
     ports:
       - "1337:1337"
+    volumes:
+      - .:/app
     links:
       - mongo
+    deploy:
+      replicas: 5
+      restart_policy:
+        condition: on-failure
+    environment:
+    - NODE_ENV=production
   mongo:
     container_name: mongo
     image: mongo

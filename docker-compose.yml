@@ -10,10 +10,8 @@ services:
       - .:/app
     links:
       - mongo
-    deploy:
-      replicas: 5
-      restart_policy:
-        condition: on-failure
+    depends_on: 
+      - mongo
     environment:
     - NODE_ENV=production
   mongo:
@@ -23,3 +21,12 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+#   mongo:
+#     container_name: mongo
+#     image: mongo
+#     volumes:
+#       - mongodata:/data/db
+#     ports:
+#       - "27017:27017"
+# volumes:
+#   mongodata:

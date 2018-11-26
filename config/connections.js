@@ -68,11 +68,12 @@ module.exports.connections = {
    ***************************************************************************/
   mongodbServer: {
     adapter: mongoConfig.mongodbServer.adapter,
-    host: mongoConfig.mongodbServer.host,
-    port: mongoConfig.mongodbServer.port,
-    user: mongoConfig.mongodbServer.user, //optional => superOwner
-    password: mongoConfig.mongodbServer.password, //optional => superOwner
-    database: mongoConfig.mongodbServer.database //optional
+    // host: mongoConfig.mongodbServer.host,
+    // port: mongoConfig.mongodbServer.port,
+    // user: mongoConfig.mongodbServer.user, //optional => superOwner
+    // password: mongoConfig.mongodbServer.password, //optional => superOwner
+    // database: mongoConfig.mongodbServer.database //optional
+    url: `mongodb://${mongoConfig.mongodbServer.host}:${mongoConfig.mongodbServer.port}/${mongoConfig.mongodbServer.database}`
   },
 
   /***************************************************************************

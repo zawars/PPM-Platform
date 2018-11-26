@@ -9,10 +9,6 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 var http = require('http');
-// const HTTP = require('machinepack-http');
-var request = require('request');
-let async = require('async');
-const fs = require('fs');
 const cronJob = require('./cronJob').cronJob;
 
 module.exports.bootstrap = function (cb) {

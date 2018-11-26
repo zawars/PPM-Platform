@@ -192,8 +192,6 @@ let parseUsers = async (options1, res, response) => {
       };
       parseUsers(opts, res, response);
     } else {
-      sails.log.info(`Synced azure users ${body1}`);
-
       User.find().then(async updatedUsersList => {
 
         // Synchronize Deleted Users in AD.

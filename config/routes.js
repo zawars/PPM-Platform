@@ -90,5 +90,6 @@ module.exports.routes = {
   'GET /questions/getQuestionsByFormName/:query': 'QuestionsController.getQuestionsByFormName',
   'GET /questionsMapper/:id': 'QuestionsMapperController.show',
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
+  'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
 
 };

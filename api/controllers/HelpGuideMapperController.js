@@ -44,12 +44,12 @@ module.exports = {
     let data = req.body;
     let obj = data.helpGuide;
     let de, fr, deFile, frFile;
+    deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
+    frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
 
     if (obj.type == 'text') {
       de = data.de;
       fr = data.fr;
-      deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
-      frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
     }
 
     HelpGuideMapper.findOne({

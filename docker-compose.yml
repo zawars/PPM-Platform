@@ -3,15 +3,16 @@ services:
   ppm-server:
     container_name: ppm-server
     restart: always
-    build: .
+    # build: .
+    image: megoworkdevteam/ppm-server
     ports:
       - "1337:1337"
     volumes:
       - .:/app
     links:
       - mongo
-    depends_on: 
-      - mongo
+    # depends_on: 
+    #   - mongo
     environment:
     - NODE_ENV=production
   # mongo:
@@ -28,5 +29,12 @@ services:
       - mongodata:/data/db
     ports:
       - "27017:27017"
+  ppm-client: 
+    image: megoworkdevteam/ppm-client
+    ports:
+      - "4200:4200"
+    depends_on: 
+      - ppm-server
+    restart: always
 volumes:
   mongodata:

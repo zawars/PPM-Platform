@@ -74,8 +74,8 @@ module.exports.session = {
    *                                                                          *
    ***************************************************************************/
 
-  adapter: '@sailshq/connect-mongo',
-  url: 'mongodb://mongo:27017/pmt', // user, password and port optional
+  // adapter: '@sailshq/connect-mongo',
+  // url: 'mongodb://mongo:27017/pmt', // user, password and port optional
 
   /***************************************************************************
    *                                                                          *
@@ -89,7 +89,7 @@ module.exports.session = {
    *                                                                          *
    ***************************************************************************/
 
-  collection: 'sessions',
+  // collection: 'sessions',
   // stringify: true,
   // mongoOptions: {
   //   server: {

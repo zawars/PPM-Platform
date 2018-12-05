@@ -617,8 +617,7 @@
   "Please select a new end date.": "Das Feld 'Neues Enddatum' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
   "Please enter a consequences Of non implementation.": "Das Feld 'Konsequenzen bei Nicht-Realisierung' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
   "Please enter a possible alternatives.": "Das Feld 'Mögliche Alternativen' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
-  "undefined": "Geschäft Projeckts",
-  "Business Project ": "Geschäft Projeckt   ",
+  "Business Project ": "Geschäft Projeckt",
   "Social Project": "Sozial Projekte",
   "Others": "Übrige",
   "Executing": "Durchführung",
@@ -642,6 +641,8 @@
   "PMO Comments": "PMO Kommentare",
   "Designated Project Manager": "Designierte/r Projektleiter/in",
   "BKW Share": "BKW Anteil",
+  "Milestone Name": "Meilensteinname",
+  "Project Cost": "Projektkosten",
   "Project Order sent to PMO for approval.": "Projektauftrag wurde zur Genehmigung an PMO gesendet.",
   "Project Order sent to Sponsor for approval.": "Projektauftrag wurde zur Genehmigung an den Projektauftraggeber/in gesendet.",
   "Project Order sent to FICO for approval.": "Projektauftrag wurde zur Genehmigung an den FIKO gesendet."

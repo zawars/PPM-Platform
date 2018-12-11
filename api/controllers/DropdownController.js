@@ -18,6 +18,13 @@ module.exports = {
     });
   },
 
+  create: (req, res) => {
+    let data = req.body;
+    Dropdown.create(data).populate('values').then(response => {
+      res.ok(response);
+    });
+  },
+
   update: async (req, res) => {
     let data = req.body;
     let de = data.de;

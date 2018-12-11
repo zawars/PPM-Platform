@@ -80,6 +80,7 @@ module.exports.routes = {
   'GET /dropdown': 'DropdownController.index',
   'GET /user/search/:query': 'UserController.search',
   'PUT /dropdown/:id': 'DropdownController.update',
+  'POST /dropdown': 'DropdownController.create',
   'GET /dropdownMapper/:id': 'DropdownMapperController.show',
   'DELETE /dropdownMapper/:id': 'DropdownMapperController.delete',
   'PUT /dropdownMapper/:id': 'DropdownMapperController.update',

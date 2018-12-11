@@ -387,6 +387,16 @@ module.exports.seeds = {
         }
       ],
       "field": "Mandatory Projects",
+    },
+    {
+      "values": [{
+          "name": "On"
+        },
+        {
+          "name": "From"
+        }
+      ],
+      "field": "Impact"
     }
   ],
   helpguide: [{

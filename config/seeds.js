@@ -746,16 +746,6 @@ module.exports.seeds = {
           attachmentId: '',
           originalName: ''
         },
-        // {
-        //   name: 'Milestones',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Project Organisation',
-        //   value: '',
-        //type: ''
-        // },
         {
           name: 'Mandatory Project',
           value: '',
@@ -867,28 +857,40 @@ module.exports.seeds = {
           type: '',
           attachmentId: '',
           originalName: ''
+        },
+        {
+          name: 'Project Organisation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Tripple Constraint',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Order Questions',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Milestones',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
         }
       ]
     },
     {
       name: 'Change Request',
-      fields: [
-        // {
-        //   name: 'Project Name',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Project Manager',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Reason for Change Request',
-        //   value: '',
-        //type: ''
-        // },
-        {
+      fields: [{
           name: 'Goals',
           value: '',
           type: '',
@@ -930,21 +932,6 @@ module.exports.seeds = {
           attachmentId: '',
           originalName: ''
         },
-        // {
-        //   name: 'Actual Project Budget',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Effects on Project Budget',
-        //   value: '',
-        // type: ''
-        // },
-        // {
-        //   name: 'Effects on Time',
-        //   value: '',
-        //type: ''
-        // },
         {
           name: 'Consequences of non-implementation',
           value: '',
@@ -1036,47 +1023,88 @@ module.exports.seeds = {
           attachmentId: '',
           originalName: ''
         },
-        // {
-        //   name: 'Additional Information',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Attachments',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'PMO',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Project Sponsor',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'FICO',
-        //   value: '',
-        //type: ''
-        // }
+        {
+          name: 'Project Name',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Manager',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reason for Change Request',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Actual Project Budget',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Effects on Project Budget',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Effects on Time',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Consequences of non-implementation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'ChangeRequest Questions',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'PMO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Sponsor',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Tripple Constraint',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        }
       ]
     },
     {
       name: 'Closing Report',
-      fields: [
-        // {
-        //   name: 'Project Name',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Project Manager',
-        //   value: '',
-        //type: ''
-        // },
-        {
+      fields: [{
           name: 'Goals',
           value: '',
           type: '',
@@ -1090,11 +1118,6 @@ module.exports.seeds = {
           attachmentId: '',
           originalName: ''
         },
-        // {
-        //   name: 'Reason For Deviation (Goals And Deliverables)',
-        //   value: '',
-        //type: ''
-        // },
         {
           name: 'Quantitative Benefits',
           value: '',
@@ -1109,61 +1132,97 @@ module.exports.seeds = {
           attachmentId: '',
           originalName: ''
         },
-        // {
-        //   name: 'Reason For Deviation (Qualitative and Quantitative Benefits)',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Cost Deviations',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Time Deviation',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Reason For Deviation (Cost and Time) ',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Lessons Learned',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Pending',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Additional Information',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Attachments',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'PMO',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'Project Sponsor',
-        //   value: '',
-        //type: ''
-        // },
-        // {
-        //   name: 'FICO',
-        //   value: '',
-        //  type: ''
-        // }
+        {
+          name: 'Project Name',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Manager',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reason For Deviation Goals And Deliverables',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reason For Deviation Qualitative and Quantitative Benefits',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Cost Deviations',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Time Deviation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Reason For Deviation Cost and Time',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Lessons Learned',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Pending',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'ClosingReport Questions',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'PMO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Project Sponsor',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'FICO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        }
       ]
     }
   ],

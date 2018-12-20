@@ -1099,6 +1099,20 @@ module.exports.seeds = {
           type: '',
           attachmentId: '',
           originalName: ''
+        },
+        {
+          name: 'Possible Alternatives',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Additional Information',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
         }
       ]
     },
@@ -1218,6 +1232,13 @@ module.exports.seeds = {
         },
         {
           name: 'FICO',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Additional Information',
           value: '',
           type: '',
           attachmentId: '',

@@ -32,13 +32,13 @@ module.exports = {
   getSubmittedProjects: (req, res) => {
     Projects.find({
       or: [{
-        outlineSubmitted: true,
-        outlineApproved: false,
-      },
-      {
-        orderSubmitted: true,
-        orderApproved: false
-      }
+          outlineSubmitted: true,
+          outlineApproved: false,
+        },
+        {
+          orderSubmitted: true,
+          orderApproved: false
+        }
       ]
     }).populate('projectOutline').populate('projectOrder').sort('createdAt DESC').limit(10).then(projects => {
       res.ok(projects);
@@ -96,12 +96,12 @@ module.exports = {
       isClosed: true,
       isCashedOut: false
     }, {
-        isCashedOut: true
-      }).then(projects => {
-        res.ok(projects);
-      }).catch(err => {
-        res.badRequest(err);
-      });
+      isCashedOut: true
+    }).then(projects => {
+      res.ok(projects);
+    }).catch(err => {
+      res.badRequest(err);
+    });
   },
 
   submitOutline: (req, res) => {
@@ -112,7 +112,7 @@ module.exports = {
       }).populate('projectOutline').then(project => {
         let temp = {
           projectOutline: project.projectOutline[0],
-          status: "Awaiting for Response",
+          status: "Open",
           assignedTo: body.projectOutline.pmoOfficer.id,
           project: projectResponse.id,
           docType: "Outline",
@@ -135,7 +135,7 @@ module.exports = {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
-    delete (body.projectOutline);
+    delete(body.projectOutline);
 
     Projects.update({
       id: req.params.id
@@ -151,7 +151,7 @@ module.exports = {
 
           OutlineApproval.create({
             projectOutline: backup,
-            status: "Awaiting for Response",
+            status: "Open",
             assignedTo: outline.pmoOfficer.id,
             project: projectResponse[0].id,
             docType: "Outline",

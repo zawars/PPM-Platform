@@ -42,15 +42,13 @@ module.exports.bootstrap = function (cb) {
       EmailService.programCounter = 0;
     }
   });
-
+  
   cronJob();
 
   //Run Server on HTTPS
   if (sails.config.environment === "production") {
     http.createServer(sails.hooks.http.app).listen(81);
   }
-
-  console.log(process.env);
 
   cb();
 };

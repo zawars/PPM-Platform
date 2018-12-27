@@ -42,10 +42,10 @@ module.exports = {
   },
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: 'mongo',
-    port: 27017,
-    user: '', //optional => superOwner
-    password: '', //optional => superOwner
+    host: process.env.OPENSHIFT_MONGODB_DB_HOST || process.env.MONGO_HOST || 'mongo',
+    port: process.env.OPENSHIFT_MONGODB_DB_PORT || process.env.MONGO_PORT || 27017,
+    user: process.env.OPENSHIFT_MONGODB_DB_USERNAME || process.env.MONGODB_USER || '', //optional => superOwner
+    password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD || process.env.MONGODB_PASSWORD || '', //optional => superOwner
     database: 'pmt' //optional
   },
 

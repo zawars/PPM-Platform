@@ -49,8 +49,7 @@ module.exports = {
     database: 'pmt' //optional
   },
 
-  hookTimeout: 60000,
-  _hookTimeout: 60000,
+  hookTimeout: 40000,
   secret: 'e7523de3ded2590f8c6bd79ca7ece72a',
 
 };

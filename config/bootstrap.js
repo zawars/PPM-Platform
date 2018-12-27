@@ -50,5 +50,7 @@ module.exports.bootstrap = function (cb) {
     http.createServer(sails.hooks.http.app).listen(81);
   }
 
+  console.log(process.env);
+
   cb();
 };

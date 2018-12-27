@@ -29,6 +29,8 @@ if (sails.config.environment === 'production') {
   mongoConfig = dev;
 }
 
+console.log(`mongodb://${mongoConfig.mongodbServer.user}:${mongoConfig.mongodbServer.password}@${mongoConfig.mongodbServer.host}:${mongoConfig.mongodbServer.port}/${mongoConfig.mongodbServer.database}`);
+
 module.exports.connections = {
 
   /***************************************************************************

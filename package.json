@@ -47,8 +47,8 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/awaisatiq/PMT-Server.git"
+    "url": "https://zawarshahid@bitbucket.org/zawarshahid/megowork-ppm-server.git"
   },
-  "author": "awaisatiq",
+  "author": "Zawar Shahid",
   "license": ""
 }

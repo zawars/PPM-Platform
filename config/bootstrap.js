@@ -46,9 +46,9 @@ module.exports.bootstrap = function (cb) {
   cronJob();
 
   //Run Server on HTTPS
-  if (sails.config.environment === "production") {
-    http.createServer(sails.hooks.http.app).listen(81);
-  }
+  // if (sails.config.environment === "production") {
+  //   http.createServer(sails.hooks.http.app).listen(81);
+  // }
 
   cb();
 };

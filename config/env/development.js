@@ -24,7 +24,7 @@ module.exports = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-    user: 'root', //optional => superOwner
+    user: '', //optional => superOwner
     password: '', //optional => superOwner
     database: 'pmt' //optional
   },

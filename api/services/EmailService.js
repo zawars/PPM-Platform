@@ -37,7 +37,13 @@ module.exports = {
       from: 'project.notifications@megowork.com',
       to: options.email,
       subject: options.subject,
-      html: options.message
+      html: options.message + `<br><br>
+      <div>Freundliche Grüsse / Meilleures salutations / Best Regards,<br><br>
+      <strong>oneView</strong><br><br>
+      
+      Dies ist eine vom System generierte Mail. Bitte Antworten Sie nicht darauf. Bei Fragen oder Anliegen wenden Sie sich an den Applikationsverantwortlichen oder an den Service Desk der BKW.									
+      This is an automatically generated message. Please do not reply to this message. For Questions please contact application responsible or BKW service desk.
+      </div>`
     }, function (err, reply) {
       if (err) {
         return done(err);

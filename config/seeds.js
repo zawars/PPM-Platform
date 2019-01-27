@@ -397,7 +397,92 @@ module.exports.seeds = {
         }
       ],
       "field": "Impact"
-    }
+    },
+    {
+      "values": [{
+          "name": "Predictive Maintenance",
+        },
+        {
+          "name": "Pooling",
+        },
+        {
+          "name": "Decentralized energy networks",
+        },
+        {
+          "name": "Micro Grid",
+        },
+        {
+          "name": "Areal Grids"
+        },
+        {
+          "name": "Smart-Grid",
+        },
+        {
+          "name": "Smart Living",
+        },
+        {
+          "name": "Smart Regions",
+        },
+        {
+          "name": "Internal consumption communities",
+        },
+        {
+          "name": "Electric Car, e- Gas Station",
+        },
+        {
+          "name": "Digital customer interface",
+        },
+      ],
+      "field": "Digitalization Topic",
+    },
+    {
+      "values": [{
+          "name": "Data Analytics",
+        },
+        {
+          "name": "Machine Learning, AI",
+        },
+        {
+          "name": "Image recognition",
+        },
+        {
+          "name": "IoT",
+        },
+        {
+          "name": "Bots"
+        },
+        {
+          "name": "BIM",
+        },
+        {
+          "name": "Low Range Communication",
+        }
+      ],
+      "field": "Technology",
+    },
+    {
+      "values": [{
+          "name": "Strengthen platform",
+        },
+        {
+          "name": "New business area",
+        },
+        {
+          "name": "Customer interface",
+        }
+      ],
+      "field": "Digitalization Focus",
+    },
+    {
+      "values": [{
+          "name": "Partial digitization",
+        },
+        {
+          "name": "Complete digitization",
+        }
+      ],
+      "field": "Digitalization Degree",
+    },
   ],
   helpguide: [{
       name: 'Project Outline',
@@ -1251,27 +1336,52 @@ module.exports.seeds = {
       name: 'Project Outline',
       questions: [{
           question: 'Does your project involve any BKW employee, corporate or customer data?',
-          department: 'Compliance'
+          department: 'Compliance',
+          email: 'sample@gmail.com',
+          group: 'Compliance',
+          count: 1
         },
         {
           question: 'Has the financing of your project been clarified with your department controller?',
-          department: 'Controlling'
-        },
-        {
-          question: 'Does your project have an impact on BKW external customer?',
-          department: 'Customer Experience'
+          department: 'Controlling',
+          email: 'sample@gmail.com',
+          group: 'Controlling',
+          count: 1
         },
         {
           question: 'Does your project have any impact on BKW organisation?',
-          department: 'Human Resources'
+          department: 'Human Resources',
+          email: 'sample@gmail.com',
+          group: 'Human Resources',
+          count: 1
         },
         {
-          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
-          department: 'ICT'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces1?',
+          department: 'ICT',
+          email: 'sample@gmail.com',
+          group: 'ICT',
+          count: 1
         },
         {
-          question: 'Will any material, software application or services will be procured from external sources?',
-          department: 'Procurement'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces2?',
+          department: 'ICT',
+          email: '',
+          group: 'ICT',
+          count: 2
+        },
+        {
+          question: 'Will any material, software application or services will be procured from external sources1?',
+          department: 'Procurement',
+          email: 'sample@gmail.com',
+          group: 'Procurement',
+          count: 1
+        },
+        {
+          question: 'Will any material, software application or services will be procured from external sources2?',
+          department: 'Procurement',
+          email: '',
+          group: 'Procurement',
+          count: 2
         }
       ]
     },
@@ -1279,27 +1389,66 @@ module.exports.seeds = {
       name: 'Project Order',
       questions: [{
           question: 'Does your project involve any BKW employee, corporate or customer data?',
-          department: 'Compliance'
+          department: 'Compliance',
+          email: 'sample@gmail.com',
+          group: 'Compliance',
+          count: 1
         },
         {
-          question: 'Has the financing of your project been clarified with your department controller?',
-          department: 'Controlling'
+          question: 'Has the financing of your project been clarified with your department controller1?',
+          department: 'Controlling',
+          email: 'sample@gmail.com',
+          group: 'Controlling',
+          count: 1
         },
         {
-          question: 'Does your project have an impact on BKW external customer?',
-          department: 'Customer Experience'
+          question: 'Has the financing of your project been clarified with your department controller2?',
+          department: 'Controlling',
+          email: 'sample@gmail.com',
+          group: 'Controlling',
+          count: 1
+        },
+        {
+          question: 'Has the financing of your project been clarified with your department controller3?',
+          department: 'Controlling',
+          email: '',
+          group: 'Controlling',
+          count: 2
         },
         {
           question: 'Does your project have any impact on BKW organisation?',
-          department: 'Human Resources'
+          department: 'Human Resources',
+          email: 'sample@gmail.com',
+          group: 'Human Resources',
+          count: 1
         },
         {
-          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
-          department: 'ICT'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces1?',
+          department: 'ICT',
+          email: 'sample@gmail.com',
+          group: 'ICT',
+          count: 1
+        },
+        {
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces2?',
+          department: 'ICT',
+          email: '',
+          group: 'ICT',
+          count: 2
+        },
+        {
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces3?',
+          department: 'ICT',
+          email: '',
+          group: 'ICT',
+          count: 3
         },
         {
           question: 'Will any material, software application or services will be procured from external sources?',
-          department: 'Procurement'
+          department: 'Procurement',
+          email: 'sample@gmail.com',
+          group: 'Procurement',
+          count: 1
         }
       ]
     },
@@ -1307,27 +1456,45 @@ module.exports.seeds = {
       name: 'Change Request',
       questions: [{
           question: 'Does your project involve any BKW employee, corporate or customer data?',
-          department: 'Compliance'
+          department: 'Compliance',
+          email: 'sample@gmail.com',
+          group: 'Compliance',
+          count: 1
         },
         {
           question: 'Has the financing of your project been clarified with your department controller?',
-          department: 'Controlling'
+          department: 'Controlling',
+          email: 'sample@gmail.com',
+          group: 'Controlling',
+          count: 1
         },
         {
-          question: 'Does your project have an impact on BKW external customer?',
-          department: 'Customer Experience'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces1?',
+          department: 'ICT',
+          email: 'sample@gmail.com',
+          group: 'ICT',
+          count: 1
         },
         {
-          question: 'Does your project have any impact on BKW organisation?',
-          department: 'Human Resources'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces2?',
+          department: 'ICT',
+          email: '',
+          group: 'ICT',
+          count: 2
         },
         {
-          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
-          department: 'ICT'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces3?',
+          department: 'ICT',
+          email: '',
+          group: 'ICT',
+          count: 3
         },
         {
           question: 'Will any material, software application or services will be procured from external sources?',
-          department: 'Procurement'
+          department: 'Procurement',
+          email: 'sample@gmail.com',
+          group: 'Procurement',
+          count: 1
         }
       ]
     },
@@ -1335,27 +1502,45 @@ module.exports.seeds = {
       name: 'Closing Report',
       questions: [{
           question: 'Does your project involve any BKW employee, corporate or customer data?',
-          department: 'Compliance'
+          department: 'Compliance',
+          email: 'sample@gmail.com',
+          group: 'Compliance',
+          count: 1
         },
         {
           question: 'Has the financing of your project been clarified with your department controller?',
-          department: 'Controlling'
+          department: 'Controlling',
+          email: 'sample@gmail.com',
+          group: 'Controlling',
+          count: 1
         },
         {
-          question: 'Does your project have an impact on BKW external customer?',
-          department: 'Customer Experience'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces1?',
+          department: 'ICT',
+          email: 'sample@gmail.com',
+          group: 'ICT',
+          count: 1
         },
         {
-          question: 'Does your project have any impact on BKW organisation?',
-          department: 'Human Resources'
+          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces2?',
+          department: 'ICT',
+          email: '',
+          group: 'ICT',
+          count: 2
         },
         {
-          question: 'Does your project involve (external or internal) ICT services, solutions or interfaces?',
-          department: 'ICT'
+          question: 'Will any material, software application or services will be procured from external sources1?',
+          department: 'Procurement',
+          email: 'sample@gmail.com',
+          group: 'Procurement',
+          count: 1
         },
         {
-          question: 'Will any material, software application or services will be procured from external sources?',
-          department: 'Procurement'
+          question: 'Will any material, software application or services will be procured from external sources2?',
+          department: 'Procurement',
+          email: '',
+          group: 'Procurement',
+          count: 2
         }
       ]
     }

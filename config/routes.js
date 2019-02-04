@@ -39,6 +39,8 @@ module.exports.routes = {
     view: '404'
   },
   'GET /login': 'AuthController.login',
+  'GET /authenticate/:id': 'AuthController.getTokenOnLogin',
+  'GET /logout': 'AuthController.logout',
   'POST /saml/consume': 'AuthController.samlConsumeToken',
   'GET /syncUsers': 'UserController.syncUsers',
 

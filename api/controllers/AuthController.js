@@ -8,6 +8,7 @@
 const saml = require('saml-encoder-decoder-js');
 const parseString = require('xml2js').parseString;
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   login: function (req, res) {
@@ -17,8 +18,13 @@ module.exports = {
   },
 
   logout: function (req, res) {
-    req.logout();
-    res.redirect('/');
+    req.session.destroy(function (err) {
+      RedisService.del(req.headers.authorization.split(' ').pop(), (response) => {
+        setTimeout(function () {
+          return res.ok();
+        }, 2500); // redirect wait time 2.5 seconds
+      });
+    });
   },
 
   samlConsumeToken: (req, res) => {
@@ -54,5 +60,27 @@ module.exports = {
         });
       }
     });
+  },
+
+  getTokenOnLogin: async (req, res) => {
+    let userObj = await User.findOne({
+      id: req.params.id
+    });
+    console.log(userObj);
+    if (userObj != undefined) {
+      req.session.user = userObj;
+      jwt.sign({
+        user: userObj
+      }, sails.config.secret, (err, token) => {
+        RedisService.set(token, userObj, () => {
+          res.ok({
+            userObj,
+            token
+          });
+        });
+      });
+    } else {
+      res.forbidden('You are not permitted to perform this action. Unauthorized, user not found.');
+    }
   }
 };

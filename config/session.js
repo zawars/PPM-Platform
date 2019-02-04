@@ -21,7 +21,7 @@ module.exports.session = {
    * of your users, forcing them to log in again.                             *
    *                                                                          *
    ***************************************************************************/
-  secret: 'e7523de3ded2590f8c6bd79ca7ece72a',
+  secret: 'e7523deP3ded2590Pf8c6bd79ca7Mece72a',
 
 
   /***************************************************************************
@@ -74,8 +74,8 @@ module.exports.session = {
    *                                                                          *
    ***************************************************************************/
 
-  // adapter: '@sailshq/connect-mongo',
-  // url: 'mongodb://mongo:27017/pmt', // user, password and port optional
+  adapter: 'connect-mongo',
+  url: 'mongodb://localhost/pmt', // user, password and port optional
 
   /***************************************************************************
    *                                                                          *
@@ -98,6 +98,6 @@ module.exports.session = {
   // }
 
   isSessionDisabled: function () {
-    return true;
+    return false;
   }
 };

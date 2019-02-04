@@ -708,6 +708,13 @@ module.exports.seeds = {
           attachmentId: '',
           originalName: ''
         },
+        {
+          name: 'Outline Questions',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
       ]
     },
     {

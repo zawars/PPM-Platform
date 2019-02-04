@@ -3,6 +3,5 @@
     "modules": {}
   },
   "hooks": {
-      "session": false
   }
 }

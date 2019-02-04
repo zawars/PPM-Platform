@@ -84,7 +84,7 @@
   "Start Date": "Startermin",
   "Start": "Anfang",
   "End Date": "Endtermin",
-  "Original End Date": "Endtermin orginal",
+  "Original End Date": "Endtermin original",
   "End": "Ende",
   "Years": "Jahren",
   "Days": "Tage",
@@ -421,7 +421,7 @@
   "Current Budget vs Original Budget": "Budget aktuell vs Budget original",
   "Current Budget vs Forecast": "Budget aktuell vs Kosten prognose",
   "Current Budget vs Actual Cost": "Budget aktuell vs Kosten aktuell",
-  "End Date vs Planned End Date": "Endtermin orginal vs Endtermin aktuell",
+  "End Date vs Planned End Date": "Endtermin original vs Endtermin aktuell",
   "Planned End Date vs Forecast Date": "Endtermin aktuell vs Endtermin prognose",
   "Time Completed": "Zeit Abgeschlossen",
   "Once approved, no changes are permitted. Do you wish too continue?": "Nach der Genehmigung sind keine Änderungen erlaubt. Möchten Sie fortfahren?",
@@ -771,5 +771,12 @@
   "Closing Report has been saved.": "Der Abschlussbericht wurde gespeichert.",
   "will be partially achieved": "wird teilweise erreicht",
   "Back": "Zurück",
-  "Budgeted": "Budgetiert"
+  "Budgeted": "Budgetiert",
+  "Goals and Deliverables": "Ziele und Lieferobjekte",
+  "Will Be Partially Achieved": "wird teilweise erreicht",
+  "Will Not Be Achieved": "wird nicht erreicht",
+  "Status Report has been saved.": "Statusbericht gespeichert.",
+  "Edit Decisions": "Entscheid bearbeiten",
+  "Execution": "Durchführung",
+  "Closure": "Abschluss"
 }

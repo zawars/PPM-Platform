@@ -1,25 +1,28 @@
-// const passport = require('passport');
-// var SamlStrategy = require('passport-saml').Strategy;
+const passport = require('passport');
+let SamlStrategy = require('passport-saml').Strategy;
+const fs = require('fs');
 
-// passport.serializeUser(function (user, done) {
-//   done(null, user.id);
-// });
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
 
-// passport.deserializeUser(function (id, done) {
-//   User.findOne({ id: id }, function (err, user) {
-//     done(err, user);
-//   });
-// });
-
-// passport.use(new SamlStrategy(
-//   {
-//     callbackUrl: 'https://109.203.126.97:1337/saml/consume',
-//     entryPoint: 'https://login.microsoftonline.com/eb4f0621-3972-4ef0-9843-f918e2abde82/saml2',
-//     issuer: 'passport-saml',
-//     authnRequestBinding: 'HTTP-POST'
-//   },
-//   function (profile, done) {
-//     console.log(profile);
-//     done();
-//   })
-// );
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+passport.use(new SamlStrategy({
+  callbackUrl: config.callbackUrl,
+  entryPoint: config.entryPointUrl,
+  issuer: config.issuer,
+  cert: fs.readFileSync('./api/policies/PPM.cer', 'utf-8'),
+  signatureAlgorithm: 'sha256',
+  logoutUrl: config.logoutUrl
+}, function (profile, done) {
+  return done(null, {
+    id: profile['nameID'],
+    email: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+    displayName: profile['http://schemas.microsoft.com/identity/claims/displayname'],
+    firstName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+    lastName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+  });
+}));

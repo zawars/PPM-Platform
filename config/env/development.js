@@ -28,5 +28,5 @@ module.exports = {
     password: '', //optional => superOwner
     database: 'pmt' //optional
   },
-  secret: 'e7523de3ded2590f8c6bd79ca7ece72a'
+  secret: 'e7523deP3ded2590Pf8c6bd79ca7Mece72a'
 };

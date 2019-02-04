@@ -21,7 +21,9 @@ module.exports = {
     }).set({
       assignedTo: req.body.new
     }).then(() => {
-      res.ok({ message: "Approvals assigned person has been updated." });
+      res.ok({
+        message: "Approvals assigned person has been updated."
+      });
     });
   }
 };

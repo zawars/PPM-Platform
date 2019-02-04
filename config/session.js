@@ -74,8 +74,8 @@ module.exports.session = {
    *                                                                          *
    ***************************************************************************/
 
-  adapter: 'connect-mongo',
-  url: 'mongodb://localhost/pmt', // user, password and port optional
+  // adapter: 'connect-mongo',
+  // url: 'mongodb://localhost/pmt', // user, password and port optional
 
   /***************************************************************************
    *                                                                          *
@@ -98,6 +98,6 @@ module.exports.session = {
   // }
 
   isSessionDisabled: function () {
-    return false;
+    return true;
   }
 };

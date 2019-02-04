@@ -46,10 +46,10 @@ module.exports = {
     port: process.env.OPENSHIFT_MONGODB_DB_PORT || process.env.MONGO_PORT || 27017,
     user: process.env.OPENSHIFT_MONGODB_DB_USERNAME || process.env.MONGODB_USER || '', //optional => superOwner
     password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD || process.env.MONGODB_PASSWORD || '', //optional => superOwner
-    database: 'pmt' 
+    database: 'pmt'
   },
 
   hookTimeout: 40000,
-  secret: 'e7523de3ded2590f8c6bd79ca7ece72a',
+  secret: 'e7523deP3ded2590Pf8c6bd79ca7Mece72a',
 
 };

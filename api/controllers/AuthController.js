@@ -66,7 +66,7 @@ module.exports = {
     let userObj = await User.findOne({
       id: req.params.id
     });
-    console.log(userObj);
+
     if (userObj != undefined) {
       req.session.user = userObj;
       jwt.sign({

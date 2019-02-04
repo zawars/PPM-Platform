@@ -52,6 +52,7 @@ module.exports.policies = {
 
   AuthController: {
     login: ['passport-ldap'],
-    getTokenOnLogin: true
+    samlConsumeToken: true,
+    getTokenOnLogin: true,
   }
 };

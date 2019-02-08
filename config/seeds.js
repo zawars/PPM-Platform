@@ -58,21 +58,27 @@ module.exports.seeds = {
   dropdown: [{
       "values": [{
           "name": "Project",
+          position: 0
         },
         {
           "name": "Time",
+          position: 1
         },
         {
           "name": "Scope",
+          position: 2
         },
         {
           "name": "Technical",
+          position: 3
         },
         {
-          "name": "Resources",
+          "name": "Reources",
+          position: 4
         },
         {
           "name": "Vendor",
+          position: 5
         }
       ],
       "field": "Lesson Category",
@@ -80,18 +86,23 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Business Case",
+          position: 0
         },
         {
           "name": "Project Plan",
+          position: 1
         },
         {
           "name": "Time Sheet",
+          position: 2
         },
         {
           "name": "Contracts",
+          position: 3
         },
         {
           "name": "Others",
+          position: 4
         }
       ],
       "field": "Document Type",
@@ -99,15 +110,19 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Energy",
+          position: 0
         },
         {
           "name": "Grids (Netze)",
+          position: 1
         },
         {
           "name": "Services",
+          position: 2
         },
         {
           "name": "Others",
+          position: 3
         }
       ],
       "field": "Business Area",
@@ -115,15 +130,19 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "BKW AG",
+          position: 0
         },
         {
           "name": "Arnold AG",
+          position: 1
         },
         {
           "name": "ISP AG",
+          position: 2
         },
         {
           "name": "AEK AG",
+          position: 3
         }
       ],
       "field": "Company Name",
@@ -131,21 +150,27 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "P",
+          position: 0
         },
         {
           "name": "N",
+          position: 1
         },
         {
           "name": "E",
+          position: 2
         },
         {
           "name": "M",
+          position: 3
         },
         {
           "name": "KS",
+          position: 4
         },
         {
           "name": "FD",
+          position: 5
         }
       ],
       "field": "Business Unit",
@@ -153,24 +178,31 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Plant / Solution Project",
+          position: 0
         },
         {
           "name": "Infrastructure",
+          position: 1
         },
         {
           "name": "Development Project",
+          position: 2
         },
         {
           "name": "M&A- /Divestment Project",
+          position: 3
         },
         {
           "name": "Optimization Project",
+          position: 4
         },
         {
           "name": "IT Project",
+          position: 5
         },
         {
           "name": "Post-Merger Project",
+          position: 6
         }
       ],
       "field": "Project Type",
@@ -178,12 +210,15 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "KL",
+          position: 0
         },
         {
           "name": "GB",
+          position: 1
         },
         {
           "name": "GE",
+          position: 2
         }
       ],
       "field": "Reporting Level",
@@ -191,12 +226,15 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "A",
+          position: 0
         },
         {
           "name": "B",
+          position: 1
         },
         {
           "name": "C",
+          position: 2
         }
       ],
       "field": "Classification",
@@ -204,12 +242,15 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Low",
+          position: 0
         },
         {
           "name": "Medium",
+          position: 1
         },
         {
           "name": "High",
+          position: 2
         }
       ],
       "field": "Strategic Contribution",
@@ -217,12 +258,15 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Low",
+          position: 0
         },
         {
           "name": "Medium",
+          position: 1
         },
         {
           "name": "High",
+          position: 2
         }
       ],
       "field": "Feasibility",
@@ -230,12 +274,15 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Low",
+          position: 0
         },
         {
           "name": "Medium",
+          position: 1
         },
         {
           "name": "High",
+          position: 2
         }
       ],
       "field": "Profitability",
@@ -243,15 +290,19 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Agile",
+          position: 0
         },
         {
           "name": "Prince 2",
+          position: 1
         },
         {
           "name": "SIA",
+          position: 2
         },
         {
           "name": "PMI",
+          position: 3
         }
       ],
       "field": "Project Methodology",
@@ -259,15 +310,19 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Initiating",
+          position: 0
         },
         {
           "name": "Planning",
+          position: 1
         },
         {
           "name": "Executing",
+          position: 2
         },
         {
           "name": "Closing",
+          position: 3
         }
       ],
       "field": "Project Phase",
@@ -275,18 +330,23 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Compliance",
+          position: 0
         },
         {
           "name": "Financial",
+          position: 1
         },
         {
           "name": "Reputation",
+          position: 2
         },
         {
           "name": "Security",
+          position: 3
         },
         {
           "name": "Operational",
+          position: 4
         }
       ],
       "field": "Risk Category",
@@ -294,24 +354,31 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Phase / Gate",
+          position: 0
         },
         {
           "name": "Budget Increase",
+          position: 1
         },
         {
           "name": "Project Steering",
+          position: 2
         },
         {
           "name": "IT-Architectur",
+          position: 3
         },
         {
           "name": "IT-Security",
+          position: 4
         },
         {
           "name": "Compliance",
+          position: 5
         },
         {
           "name": "Other",
+          position: 6
         }
       ],
       "field": "Decision Type",
@@ -319,15 +386,19 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Avoid",
+          position: 0
         },
         {
           "name": "Reduce",
+          position: 1
         },
         {
           "name": "Shift",
+          position: 2
         },
         {
           "name": "Accept",
+          position: 3
         }
       ],
       "field": "Risk Strategy",
@@ -335,45 +406,59 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "P am Markt",
+          position: 0
         },
         {
           "name": "P KWK",
+          position: 1
         },
         {
           "name": "P Wind",
+          position: 2
         },
         {
           "name": "Wärme & Contracting",
+          position: 3
         },
         {
           "name": "Handel",
+          position: 4
         },
         {
           "name": "Verkauf CH",
+          position: 5
         },
         {
           "name": "Netze",
+          position: 6
         },
         {
           "name": "Infra-Engineering",
+          position: 7
         },
         {
           "name": "Netz-DL",
+          position: 8
         },
         {
           "name": "Wind & Solar DL",
+          position: 9
         },
         {
           "name": "Gebäudetechnik",
+          position: 10
         },
         {
           "name": "Energiebezogene DL",
+          position: 11
         },
         {
           "name": "Steuerung & Support",
+          position: 12
         },
         {
           "name": "F&E",
+          position: 13
         }
       ],
       "field": "Business Segment",
@@ -381,56 +466,71 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Yes",
+          position: 0
         },
         {
           "name": "No",
+          position: 1
         }
       ],
       "field": "Mandatory Projects",
     },
     {
       "values": [{
-          "name": "On"
+          "name": "On",
+          position: 0
         },
         {
-          "name": "From"
+          "name": "From",
+          position: 1
         }
       ],
-      "field": "Impact"
+      "field": "Impact",
     },
     {
       "values": [{
           "name": "Predictive Maintenance",
+          position: 0
         },
         {
           "name": "Pooling",
+          position: 1
         },
         {
           "name": "Decentralized energy networks",
+          position: 2
         },
         {
           "name": "Micro Grid",
+          position: 3
         },
         {
-          "name": "Areal Grids"
+          "name": "Areal Grids",
+          position: 4
         },
         {
           "name": "Smart-Grid",
+          position: 5
         },
         {
           "name": "Smart Living",
+          position: 6
         },
         {
           "name": "Smart Regions",
+          position: 7
         },
         {
           "name": "Internal consumption communities",
+          position: 8
         },
         {
           "name": "Electric Car, e- Gas Station",
+          position: 9
         },
         {
           "name": "Digital customer interface",
+          position: 10
         },
       ],
       "field": "Digitalization Topic",
@@ -438,24 +538,31 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Data Analytics",
+          position: 0
         },
         {
           "name": "Machine Learning, AI",
+          position: 1
         },
         {
           "name": "Image recognition",
+          position: 2
         },
         {
           "name": "IoT",
+          position: 3
         },
         {
-          "name": "Bots"
+          "name": "Bots",
+          position: 4
         },
         {
           "name": "BIM",
+          position: 5
         },
         {
           "name": "Low Range Communication",
+          position: 6
         }
       ],
       "field": "Technology",
@@ -463,12 +570,15 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Strengthen platform",
+          position: 0
         },
         {
           "name": "New business area",
+          position: 1
         },
         {
           "name": "Customer interface",
+          position: 2
         }
       ],
       "field": "Digitalization Focus",
@@ -476,9 +586,11 @@ module.exports.seeds = {
     {
       "values": [{
           "name": "Partial digitization",
+          position: 0
         },
         {
           "name": "Complete digitization",
+          position: 1
         }
       ],
       "field": "Digitalization Degree",

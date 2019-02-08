@@ -10,7 +10,7 @@ const fs = require('fs');
 module.exports = {
   index: (req, res) => {
     Dropdown.find().populate('values', {
-      sort: 'name ASC'
+      sort: 'position ASC'
     }).then(dropdownList => {
       res.ok(dropdownList);
     }).catch(err => {

@@ -88,5 +88,19 @@ module.exports = {
         });
       });
     });
+  },
+
+  positionSort: async (req, res) => {
+    let data = req.body;
+
+    data.forEach(async val => {
+      await DropdownMapper.update({
+        id: val.id
+      }).set({
+        position: val.position
+      });
+    });
+
+    res.ok(data);
   }
 };

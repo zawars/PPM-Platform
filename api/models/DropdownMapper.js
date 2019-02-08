@@ -13,6 +13,9 @@ module.exports = {
     name: {
       type: "string"
     },
+    position: {
+      type: "integer"
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

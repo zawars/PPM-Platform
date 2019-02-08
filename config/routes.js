@@ -83,6 +83,7 @@ module.exports.routes = {
   'GET /user/search/:query': 'UserController.search',
   'PUT /dropdown/:id': 'DropdownController.update',
   'POST /dropdown': 'DropdownController.create',
+  'POST /dropdownMapper/position': 'DropdownMapperController.positionSort',
   'GET /dropdownMapper/:id': 'DropdownMapperController.show',
   'DELETE /dropdownMapper/:id': 'DropdownMapperController.delete',
   'PUT /dropdownMapper/:id': 'DropdownMapperController.update',

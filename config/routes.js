@@ -96,4 +96,6 @@ module.exports.routes = {
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
 
+  'GET /user/login/external/:email': 'AuthController.externalLogin',
+  'POST /user/verify/external': 'AuthController.verifyTokenExternal',
 };

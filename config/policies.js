@@ -54,5 +54,7 @@ module.exports.policies = {
     login: ['passport-ldap'],
     samlConsumeToken: true,
     getTokenOnLogin: true,
+    externalLogin: true,
+    verifyTokenExternal: true,
   }
 };

@@ -38,6 +38,7 @@
     "sails-seed": "^0.5.0",
     "saml-encoder-decoder-js": "^1.0.1",
     "sendmail": "^1.4.1",
+    "speakeasy": "^2.0.0",
     "xml2js": "^0.4.19"
   },
   "scripts": {

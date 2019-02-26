@@ -5,7 +5,6 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 const request = require('request');
-const async = require('async');
 const fs = require('fs');
 
 let usersList = [];
@@ -84,7 +83,7 @@ module.exports = {
     }).catch(err => {
       res.badRequest(err);
     });
-  }
+  },
 };
 
 let syncUsers = async (res) => {

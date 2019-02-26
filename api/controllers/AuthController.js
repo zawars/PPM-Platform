@@ -9,6 +9,7 @@ const saml = require('saml-encoder-decoder-js');
 const parseString = require('xml2js').parseString;
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const speakEasy = require('speakeasy');
 
 module.exports = {
   login: function (req, res) {
@@ -25,6 +26,68 @@ module.exports = {
         }, 2500); // redirect wait time 2.5 seconds
       });
     });
+  },
+
+  externalLogin: async (req, res) => {
+    try {
+      let userObj = await User.findOne({
+        email: req.params.email
+      });
+
+      if (userObj) {
+        let secret = speakEasy.totp({
+          digits: 6,
+          secret: sails.config.secret + userObj.email,
+          encoding: 'base32',
+          step: 300
+        });
+
+        EmailService.sendMail({
+          email: userObj.email,
+          subject: 'Verification',
+          message: `You verification token is: '${secret}'. \n`
+        })
+        res.ok({
+          user: userObj,
+          message: 'Verification token sent to you email.'
+        });
+      } else {
+        req.forbidden('User not found');
+      }
+    } catch (error) {
+      res.badRequest(error)
+    }
+  },
+
+  verifyTokenExternal: async (req, res) => {
+    try {
+      let tokenValidates = speakEasy.totp.verify({
+        secret: sails.config.secret + req.body.email,
+        encoding: 'base32',
+        token: req.body.token,
+        step: 300
+      });
+
+      let user = await User.findOne({
+        email: req.body.email
+      });
+
+      jwt.sign({
+        user
+      }, sails.config.secret, (err, token) => {
+        RedisService.set(token, userObj, () => {
+          res.ok({
+            userObj,
+            token,
+            validate: tokenValidates
+          });
+        });
+      });
+
+
+    } catch (error) {
+      res.badRequest(error)
+    }
   },
 
   samlConsumeToken: (req, res) => {

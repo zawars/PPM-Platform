@@ -46,11 +46,12 @@ module.exports = {
           email: userObj.email,
           subject: 'Verification',
           message: `You verification token is: '${secret}'. \n`
+        }, () => {
+          res.ok({
+            user: userObj,
+            message: 'Verification token sent to you email.'
+          });
         })
-        res.ok({
-          user: userObj,
-          message: 'Verification token sent to you email.'
-        });
       } else {
         req.forbidden('User not found');
       }
@@ -72,19 +73,23 @@ module.exports = {
         email: req.body.email
       });
 
-      jwt.sign({
-        user
-      }, sails.config.secret, (err, token) => {
-        RedisService.set(token, userObj, () => {
-          res.ok({
-            userObj,
-            token,
-            validate: tokenValidates
+      if (tokenValidates) {
+        jwt.sign({
+          user
+        }, sails.config.secret, (err, token) => {
+          RedisService.set(token, user, () => {
+            res.ok({
+              user,
+              token,
+              validate: tokenValidates
+            });
           });
         });
-      });
-
-
+      } else {
+        res.ok({
+          validate: tokenValidates
+        });
+      }
     } catch (error) {
       res.badRequest(error)
     }

@@ -18,7 +18,7 @@ module.exports = {
   get: (key, done) => {
     client.get(key, function (error, result) {
       if (error) {
-        console.log(error);
+        console.log('Redis :: ' + error);
         throw error;
       }
       return done(JSON.parse(result));
@@ -33,6 +33,16 @@ module.exports = {
       } else {
         console.log("Cannot delete");
       }
-    })
+    });
+  },
+
+  query: (query, done) => {
+    client.keys(query, (err, response) => {
+      if (err) {
+        console.log('Redis :: ' + err);
+        throw err;
+      }
+      return done(JSON.parse(response));
+    });
   }
 };

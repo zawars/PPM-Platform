@@ -99,4 +99,7 @@ module.exports.routes = {
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
 
+  'POST /thirdParties/register': 'ThirdPartiesController.register',
+  'GET /thirdParties/agilePlanning': 'ThirdPartiesController.agilePlanning',
+
 };

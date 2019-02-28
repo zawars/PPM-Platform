@@ -49,6 +49,9 @@ module.exports.policies = {
   // feed : ['isNiceToAnimals', 'hasRabbitFood']
   // }
 
+  ThirdPartiesController: {
+    // agilePlanning: ['isAuthorizedThirdParty']
+  },
 
   AuthController: {
     login: ['passport-ldap'],

@@ -39,6 +39,7 @@
     "saml-encoder-decoder-js": "^1.0.1",
     "sendmail": "^1.4.1",
     "speakeasy": "^2.0.0",
+    "uuid": "^3.3.2",
     "xml2js": "^0.4.19"
   },
   "scripts": {

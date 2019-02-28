@@ -151,68 +151,72 @@ let parseUsers = async (options1, res, response) => {
     if (error1) sails.log.error(error1)
 
     // updation and creation of users
-    usersList.push(...JSON.parse(body1).value); //List returned from AD.
-    let localUsersList = await User.find(); // Local Users list
-    for (let item of usersList) {
-      try {
-        let user = localUsersList.filter(val => val.azureId == item.id);
+    if (body1) {
+      usersList.push(...JSON.parse(body1).value); //List returned from AD.
+      let localUsersList = await User.find(); // Local Users list
+      for (let item of usersList) {
+        try {
+          let user = localUsersList.filter(val => val.azureId == item.id);
 
-        if (user.length > 0) {
-          if (user[0].email != item.userPrincipalName || user[0].name != (item.surname + ', ' + item.givenName) || user[0].department != item.department) {
-            user[0].azureId = item.id;
-            user[0].email = item.userPrincipalName;
-            user[0].name = item.surname + ', ' + item.givenName;
-            user[0].department = item.department;
+          if (user.length > 0) {
+            if (user[0].email != item.userPrincipalName || user[0].name != (item.surname + ', ' + item.givenName) || user[0].department != item.department) {
+              user[0].azureId = item.id;
+              user[0].email = item.userPrincipalName;
+              user[0].name = item.surname + ', ' + item.givenName;
+              user[0].department = item.department;
 
-            await user[0].save();
+              await user[0].save();
+            }
+          } else {
+            await User.create({
+              azureId: item.id,
+              email: item.userPrincipalName,
+              name: item.surname + ', ' + item.givenName,
+              department: item.department,
+              role: 'guest'
+            });
           }
-        } else {
-          await User.create({
-            azureId: item.id,
-            email: item.userPrincipalName,
-            name: item.surname + ', ' + item.givenName,
-            department: item.department,
-            role: 'guest'
-          });
-        }
 
-      } catch (error) {
-        sails.log.error(error);
+        } catch (error) {
+          sails.log.error(error);
+        }
       }
     }
 
-    if (JSON.parse(body1)["@odata.nextLink"] != undefined) {
-      let opts = {
-        method: 'GET',
-        url: JSON.parse(body1)["@odata.nextLink"],
-        headers: {
-          Authorization: 'Bearer ' + JSON.parse(response.body).access_token
-        }
-      };
-      parseUsers(opts, res, response);
-    } else {
-      User.find().then(async updatedUsersList => {
-
-        // Synchronize Deleted Users in AD.
-        let ADUsersSet = getEmailSetfromADCollection(new Set(usersList));
-        let updatedUsersSet = getEmailSetfromMongoCollection(new Set(updatedUsersList));
-        let deletedUsersSet = difference(updatedUsersSet, ADUsersSet);
-
-        if (deletedUsersSet.size > 0) {
-          for (let obj of deletedUsersSet) {
-            await User.destroy({
-              azureId: obj
-            });
-            sails.log.info('User Deleted.');
+    if (body1) {
+      if (JSON.parse(body1)["@odata.nextLink"] != undefined) {
+        let opts = {
+          method: 'GET',
+          url: JSON.parse(body1)["@odata.nextLink"],
+          headers: {
+            Authorization: 'Bearer ' + JSON.parse(response.body).access_token
           }
-        }
-        if (res != undefined) {
-          usersList = [];
-          res.ok({
-            message: "Synchronized."
-          })
-        }
-      });
+        };
+        parseUsers(opts, res, response);
+      } else {
+        User.find().then(async updatedUsersList => {
+
+          // Synchronize Deleted Users in AD.
+          let ADUsersSet = getEmailSetfromADCollection(new Set(usersList));
+          let updatedUsersSet = getEmailSetfromMongoCollection(new Set(updatedUsersList));
+          let deletedUsersSet = difference(updatedUsersSet, ADUsersSet);
+
+          if (deletedUsersSet.size > 0) {
+            for (let obj of deletedUsersSet) {
+              await User.destroy({
+                azureId: obj
+              });
+              sails.log.info('User Deleted.');
+            }
+          }
+          if (res != undefined) {
+            usersList = [];
+            res.ok({
+              message: "Synchronized."
+            })
+          }
+        });
+      }
     }
   });
 }

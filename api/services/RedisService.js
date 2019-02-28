@@ -35,14 +35,4 @@ module.exports = {
       }
     });
   },
-
-  query: (query, done) => {
-    client.keys(query, (err, response) => {
-      if (err) {
-        console.log('Redis :: ' + err);
-        throw err;
-      }
-      return done(JSON.parse(response));
-    });
-  }
 };

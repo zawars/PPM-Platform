@@ -21,9 +21,6 @@ module.exports = {
     type: {
       type: "string"
     },
-    attachmentId: {
-      type: "string"
-    },
     originalName: {
       type: "string"
     },
@@ -38,7 +35,10 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     helpGuide: {
       model: "helpGuide"
-    }
+    },
+    attachmentId: {
+      model: "attachment"
+    },
   },
 
 };

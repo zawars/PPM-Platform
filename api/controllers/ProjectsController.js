@@ -172,7 +172,7 @@ module.exports = {
   getRecentActiveProjects: async (req, res) => {
     let projectsList = await Projects.find({
       isClosed: false
-    }).sort('createdAt', 'DESC').limit(100).populate('projectReport').populate('closingReport').populate('changeRequests');
+    }).sort('createdAt', 'DESC').populate('projectReport').populate('closingReport').populate('changeRequests');
 
     res.ok(projectsList);
   }

@@ -13,6 +13,12 @@ module.exports = {
       if (err) {
         return res.send(500, err);
       }
+
+      if (uploadedFiles[0].fd.includes("..")) {
+        while (uploadedFiles[0].fd.includes("..")) {
+          uploadedFiles[0].fd = uploadedFiles[0].fd.replace(`..\\`, ``);
+        }
+      }
       return res.json({
         message: uploadedFiles.length + ' file(s) uploaded successfully!',
         files: uploadedFiles

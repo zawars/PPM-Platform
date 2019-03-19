@@ -40,6 +40,9 @@ module.exports = {
     cert: require('fs').readFileSync(__dirname + '/ssl/cert.pem'),
     // passphrase: "megowork"
   },
+
+  headers: ['content-type', 'authorization'],
+
   mongodbServer: {
     adapter: 'sails-mongo',
     host: process.env.OPENSHIFT_MONGODB_DB_HOST || process.env.MONGO_HOST || 'localhost',

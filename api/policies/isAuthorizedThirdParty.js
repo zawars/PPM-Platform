@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
     });
 
     if (data) {
-      if (data.url == 'https://' + req.get('host')) {
+      if (data.url == 'https://' + req.get('host') || data.url == 'http://' + req.get('host')) {
         return next();
       } else {
         return res.forbidden('Unauthorized, Application URL do not match.');

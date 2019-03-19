@@ -100,6 +100,7 @@ module.exports.routes = {
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
 
   'POST /thirdParties/register': 'ThirdPartiesController.register',
-  'GET /thirdParties/agilePlanning': 'ThirdPartiesController.agilePlanning',
+
+  'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
 };

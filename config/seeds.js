@@ -73,7 +73,7 @@ module.exports.seeds = {
           position: 3
         },
         {
-          "name": "Reources",
+          "name": "Resources",
           position: 4
         },
         {
@@ -1449,6 +1449,280 @@ module.exports.seeds = {
           originalName: ''
         }
       ]
+    },
+    {
+      name: 'Project Status Report',
+      fields: [{
+          name: 'Reporting Period',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Percentage Complete',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Overall Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Management Summary',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Scope Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Scope Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Cost Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Cost Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Financials',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Current Reserves',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Obligation',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Time Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Time Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Start Date',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Original End Date',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Planned End Date',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Forecast End Date',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Risk Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Risks',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Milestones',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Measures',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Decisions',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'PMO Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+      ]
+    },
+    {
+      name: 'Program Status Report',
+      fields: [{
+          name: 'Reporting Period',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Percentage Complete',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Overall Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Overall Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Scope Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Scope Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Cost Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Cost Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Time Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Time Status Comments',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Risk Status',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Risks',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Milestones',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Measures',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+        {
+          name: 'Decisions',
+          value: '',
+          type: '',
+          attachmentId: '',
+          originalName: ''
+        },
+      ]
     }
   ],
   questions: [{
@@ -1525,14 +1799,14 @@ module.exports.seeds = {
           department: 'Controlling',
           email: 'sample@gmail.com',
           group: 'Controlling',
-          count: 1
+          count: 2
         },
         {
           question: 'Has the financing of your project been clarified with your department controller3?',
           department: 'Controlling',
           email: '',
           group: 'Controlling',
-          count: 2
+          count: 3
         },
         {
           question: 'Does your project have any impact on BKW organisation?',
@@ -1664,4 +1938,8 @@ module.exports.seeds = {
       ]
     }
   ],
+  program: [{
+    programName: 'None',
+    status: 'Active'
+  }]
 }

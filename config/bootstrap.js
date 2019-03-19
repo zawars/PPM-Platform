@@ -42,7 +42,7 @@ module.exports.bootstrap = function (cb) {
       EmailService.programCounter = 0;
     }
   });
-  
+
   cronJob();
 
   //Run Server on HTTPS

@@ -34,12 +34,15 @@ module.exports = {
       let agilePlanningData = [];
 
       data.map(obj => {
+        delete (obj.projectManager.projects);
+        delete (obj.projectManager.configuration);
+
         agilePlanningData.push({
           projectName: obj.projectName,
           purpose: obj.purpose,
           startDate: obj.startDate,
           endDate: obj.endDate,
-          phase: obj.statusReports[obj.statusReports.length - 1].phase,
+          phase: obj.statusReports.length > 0 ? obj.statusReports[obj.statusReports.length - 1].projectPhase : '',
           status: obj.status,
           digitalizationTopic: obj.digitalizationTopic,
           digitalizationFocus: obj.digitalizationFocus,
@@ -53,10 +56,12 @@ module.exports = {
       });
 
       res.ok({
-        data: agilePlanningData
+        data: agilePlanningData,
       });
     } catch (error) {
-      res.badRequest
+      res.status(400).json({
+        error
+      });
     }
   }
 

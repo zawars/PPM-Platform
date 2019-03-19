@@ -50,7 +50,7 @@ module.exports.policies = {
   // }
 
   ThirdPartiesController: {
-    // agilePlanning: ['isAuthorizedThirdParty']
+    agilePlanning: ['isAuthorizedThirdParty']
   },
 
   AuthController: {

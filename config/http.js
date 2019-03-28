@@ -10,6 +10,8 @@
  */
 var express = require('express');
 var session = require('express-session');
+const RateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 module.exports.http = {
 
@@ -28,12 +30,16 @@ module.exports.http = {
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
     bootstrapAssets: express.static(process.cwd() + '/uploads'),
-    expressSession: session(
-      {
-        resave: true,
-        saveUninitialized: true,
-        secret: 'e7523deP3ded2590Pf8c6bd79ca7Mece72a'
-      }),
+    expressSession: session({
+      resave: true,
+      saveUninitialized: true,
+      secret: 'e7523deP3ded2590Pf8c6bd79ca7Mece72a'
+    }),
+    apiLimiter: new RateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100,
+    }),
+    helmetGuard: helmet(),
 
     /***************************************************************************
      *                                                                          *
@@ -48,6 +54,8 @@ module.exports.http = {
       'session',
       'expressSession',
       'bootstrapAssets',
+      'apiLimiter',
+      'helmetGuard',
       'passportInit',
       'passportSession',
       'myRequestLogger',

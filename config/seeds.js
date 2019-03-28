@@ -23,37 +23,69 @@ module.exports.seeds = {
       "event": "Project Outline Approval",
     },
     {
-      "text": "Your Project has been approved.",
-      "event": "Approval",
+      event: "Outline Approval Confirmation",
+      text: ""
     },
     {
-      "text": "Project Outline is on hold from the approver.",
-      "event": "On Hold",
+      event: "Order Approval Confirmation",
+      text: ""
     },
     {
-      "text": "Please note that your request has be returned back to you. Kindly contact the concerned person to clarify and resubmit. <br><br><br>  Please follow the link to reply: <a href='http://euk-84842.eukservers.com'>http://euk-84842.eukservers.com</a> <br><br><br><br> Thank You <br><br> MEGOWORK PPM <br><br> Note: This is an automatically generated message. Please do not reply to this message.",
-      "event": "Return to Sender",
+      event: "Change Request Approval Confirmation",
+      text: ""
     },
     {
-      "text": "Project Outline has been rejected by approver.",
-      "event": "Rejected",
+      event: "Closing Report Approval Confirmation",
+      text: ""
     },
     {
-      "text": "Project Change Request is on hold from the approver.",
-      "event": "Project Change Request On Hold",
+      event: "Outline On Hold",
+      text: ""
     },
     {
-      "text": "Project Change Request has been rejected by approver.",
-      "event": "Project Change Request Rejected",
+      event: "Order On Hold",
+      text: ""
     },
     {
-      "text": "Project Closing Report is on hold from the approver..",
-      "event": "Project Closing Report On Hold",
+      event: "Change Request On Hold",
+      text: ""
     },
     {
-      "text": "Project Closing Report has been rejected by approver.",
-      "event": "Project Closing Report Rejected",
-    }
+      event: "Closing Report On Hold",
+      text: ""
+    },
+    {
+      event: "Outline Returned",
+      text: ""
+    },
+    {
+      event: "Order Returned",
+      text: ""
+    },
+    {
+      event: "Change Request Returned",
+      text: ""
+    },
+    {
+      event: "Closing Report Returned",
+      text: ""
+    },
+    {
+      event: "Outline Rejected",
+      text: ""
+    },
+    {
+      event: "Order Rejected",
+      text: ""
+    },
+    {
+      event: "Change Request Rejected",
+      text: ""
+    },
+    {
+      event: "Closing Report Rejected",
+      text: ""
+    },
   ],
   dropdown: [{
       "values": [{

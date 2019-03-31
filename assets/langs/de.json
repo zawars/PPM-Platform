@@ -86,7 +86,7 @@
   "End Date": "Endtermin",
   "Original End Date": "Endtermin original",
   "End": "Ende",
-  "Years": "Jahren",
+  "Years": "Jahre",
   "Days": "Tage",
   "Name": "Name",
   "Form Name": "Formularname",
@@ -818,7 +818,7 @@
   "Sponsor": "PAG",
   "Financial Manager": "FIKO-Verantwortlicher",
   "Current Status": "Aktuelle Status",
-  "Report relevant can be maximum of 3": "Maximum 3 im Statusbericht angezeigt werden.",
+  "Report relevant can be maximum of 3": "Maximum 3 im Statusbericht angxezeigt werden.",
   "Please fill in all the mandatory fields.": "Bitte alle Pflichtfelder ausfüllen",
   "EVA has been saved.": "EVA gespeichert.",
   "Please select reporting date first.": "Das Feld 'Berichtszeitpunkt' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
@@ -836,5 +836,6 @@
   "Step 5: Please enter a valid email address for project fico.": "Schritt 5: Bitte geben Sie eine gültige E-Mail-Adresse für FIKO-Verantworlicher ein.",
   "Step 6: Please enter a valid email address for project fico.": "Schritt 6: Bitte geben Sie eine gültige E-Mail-Adresse für FIKO-Verantworlicher ein.",
   "For best results please use Google Chrome Browser.": "Für beste Ergebnisse verwenden  Sie bitte Google Chrome Browser.",
-  "Step1: Please Enter Project Name First.": "Schritt 1: Das Feld 'Projektname' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein."
+  "Step1: Please Enter Project Name First.": "Schritt 1: Das Feld 'Projektname' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
+  "Payback duration (Discounted)": "Payback-Dauer (Diskontierter)"
 }

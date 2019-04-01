@@ -284,8 +284,8 @@
   "Total Budget": "Gesamtbudget",
   "Projects Per Business Area": "Projekte pro Geschäftsfeld",
   "Projects Per Project type": "Projekte pro Projekttyp",
-  "Projects With Strategic Contribution": "",
-  "Number Of Projects Per Busines Unit": "",
+  "Projects With Strategic Contribution": "Projekte mit Strategiebeitrag",
+  "Number Of Projects Per Business Unit": "Projekte pro Geschäftsbereich",
   "Prioritization View": "Priorisierung",
   "Layout": "",
   "EVA": "",
@@ -837,5 +837,7 @@
   "Step 6: Please enter a valid email address for project fico.": "Schritt 6: Bitte geben Sie eine gültige E-Mail-Adresse für FIKO-Verantworlicher ein.",
   "For best results please use Google Chrome Browser.": "Für beste Ergebnisse verwenden  Sie bitte Google Chrome Browser.",
   "Step1: Please Enter Project Name First.": "Schritt 1: Das Feld 'Projektname' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
-  "Payback duration (Discounted)": "Payback-Dauer (Diskontierter)"
+  "Payback duration (Discounted)": "Payback-Dauer (Diskontierter)",
+  "Projects Per Project Type": "Project pro Projekttyp",
+  "Work": "Arbeit"
 }

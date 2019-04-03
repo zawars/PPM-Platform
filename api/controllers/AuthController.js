@@ -141,6 +141,7 @@ module.exports = {
         user: userObj
       }, sails.config.secret, (err, token) => {
         RedisService.set(token, userObj, () => {
+          sails.log(`${userObj.email} logged in.`);
           res.ok({
             userObj,
             token

@@ -42,7 +42,7 @@ module.exports = {
 
     for (let i = 0; i <= result.length; i += 7) {
       if (result[i]) {
-        Reports.update({
+        await Reports.update({
           uid: result[i].projectId
         }).set({
           budgetPlanningTable2: [{

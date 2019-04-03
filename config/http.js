@@ -54,7 +54,7 @@ module.exports.http = {
       'session',
       'expressSession',
       'bootstrapAssets',
-      'apiLimiter',
+      // 'apiLimiter',
       'helmetGuard',
       'passportInit',
       'passportSession',

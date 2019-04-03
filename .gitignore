@@ -119,3 +119,5 @@ nbproject
 .node_history
 uploads
 DataBaseBackup
+application-logs.log
+errorlog.log

@@ -2,8 +2,8 @@
   "url": "https://login.microsoftonline.com/luftmatrazetoutlook.onmicrosoft.com/oauth2/token",
   "clientId": "42b8cc8e-5a2b-4455-828b-3a8f59aed428",
   "clientSecret": "Q4YvrZxZgynFcUHwbRSRIQnEMx9HHpE+H+6bYx2m6lI=",
-  "callbackRedirectUrl": "http://89.145.164.26/#/auth/",
-  "callbackUrl": "https://89.145.164.26/saml/consume",
+  "callbackRedirectUrl": "http://159.100.254.226/#/auth/",
+  "callbackUrl": "https://159.100.254.226/saml/consume",
   "entryPointUrl": "https://login.microsoftonline.com/eb4f0621-3972-4ef0-9843-f918e2abde82/saml2",
   "issuer": "MYPPM"
 }

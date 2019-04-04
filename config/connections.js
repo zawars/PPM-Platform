@@ -24,10 +24,11 @@ const prod = require('./env/production');
 let mongoConfig;
 
 if (sails.config.environment === 'production') {
-  mongoConfig = prod;
+  mongoConfig = prod.mongodbServer;
 } else {
-  mongoConfig = dev;
+  mongoConfig = dev.mongodbServer;
 }
+console.log(`mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`);
 
 module.exports.connections = {
 
@@ -67,14 +68,14 @@ module.exports.connections = {
    *                                                                          *
    ***************************************************************************/
   mongodbServer: {
-    adapter: mongoConfig.mongodbServer.adapter,
-    // host: mongoConfig.mongodbServer.host,
-    // port: mongoConfig.mongodbServer.port,
-    // user: mongoConfig.mongodbServer.user, //optional => superOwner
-    // password: mongoConfig.mongodbServer.password, //optional => superOwner
-    // database: mongoConfig.mongodbServer.database //optional
-    url: `mongodb://${mongoConfig.mongodbServer.host}:${mongoConfig.mongodbServer.port}/${mongoConfig.mongodbServer.database}`
-    //${mongoConfig.mongodbServer.user}:${mongoConfig.mongodbServer.password}@
+    adapter: mongoConfig.adapter,
+    // host: mongoConfig.host,
+    // port: mongoConfig.port,
+    // user: mongoConfig.user, //optional => superOwner
+    // password: mongoConfig.password, //optional => superOwner
+    // database: mongoConfig.database //optional
+    url: `mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
+    //${mongoConfig.user}:${mongoConfig.password}@
   },
 
   /***************************************************************************

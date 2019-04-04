@@ -44,9 +44,9 @@ module.exports.log = {
    *                                                                          *
    ***************************************************************************/
 
-  custom: logger,
-  level: 'info',
+  // custom: logger,
+  // level: 'info',
 
   // Disable captain's log so it doesn't prefix or stringify our meta data.
-  inspect: false
+  // inspect: false
 };

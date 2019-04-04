@@ -283,7 +283,7 @@
   "View": "",
   "Total Budget": "Gesamtbudget",
   "Projects Per Business Area": "Projekte pro Geschäftsfeld",
-  "Projects Per Project type": "Projekte pro",
+  "Projects Per Project type": "Projekte pro Projekttyp",
   "Projects With Strategic Contribution": "Projekte mit Strategiebeitrag",
   "Number Of Projects Per Business Unit": "Projekte pro Geschäftsbereich",
   "Prioritization View": "Priorisierung",
@@ -839,5 +839,9 @@
   "Step1: Please Enter Project Name First.": "Schritt 1: Das Feld 'Projektname' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
   "Payback duration (Discounted)": "Payback-Dauer (Diskontierter)",
   "Projects Per Project Type": "Project pro Projekttyp",
-  "Work": "Arbeit"
+  "Work": "Arbeit",
+  "Please select overall status first.": "Das Feld 'Gesamt Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
+  "Please select cost status first.": "Das Feld 'Kosten Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
+  "Please select time status first.": "Das Feld 'Zeit Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
+  "Please select risk status first.": "Das Feld 'Risk Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein."
 }

@@ -844,5 +844,9 @@
   "Please select cost status first.": "Das Feld 'Kosten Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
   "Please select time status first.": "Das Feld 'Zeit Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
   "Please select risk status first.": "Das Feld 'Risk Status' ist ein Pflichtfeld. Bitte geben Sie einen Wert ein.",
-  "Project Report has been Deleted.": "Projecktstatusbericht wurde gelöscht."
+  "Project Report has been Deleted.": "Projecktstatusbericht wurde gelöscht.",
+  "Report relevant can be maximum of 5.": "Maximum 5 im Statusbericht angezeigt werden.",
+  "Report relevant can be maximum of 3.": "Maximum 3 im Statusbericht angezeigt werden.",
+  "Report relevant risk cannot be deleted.": "",
+  "Milestone deleted.": "Meilenstein wurde gelöscht."
 }

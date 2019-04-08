@@ -28,7 +28,6 @@ if (sails.config.environment === 'production') {
 } else {
   mongoConfig = dev.mongodbServer;
 }
-console.log(`mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`);
 
 module.exports.connections = {
 
@@ -75,6 +74,7 @@ module.exports.connections = {
     // password: mongoConfig.password, //optional => superOwner
     // database: mongoConfig.database //optional
     url: `mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
+    // url: `mongodb://${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
     //${mongoConfig.user}:${mongoConfig.password}@
   },
 

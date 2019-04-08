@@ -119,5 +119,25 @@ module.exports = {
         message: 'Data Imported successfully.'
       });
     });
+  },
+
+  budgetSwitch: async (req, res) => {
+    let reports = await Reports.find({
+      status: 'Active'
+    });
+
+    reports.map(async report => {
+      await Reports.update({
+        status: 'Active',
+        id: report.id
+      }).set({
+        budgetPlanningTable1: report.budgetPlanningTable2,
+        budgetPlanningTable2: undefined
+      });
+    });
+
+    res.ok({
+      message: 'Budget Switch Completed.'
+    });
   }
 };

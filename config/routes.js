@@ -104,5 +104,6 @@ module.exports.routes = {
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
   'POST /budgetImport': 'ReportsController.budgetImport',
+  'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
 
 };

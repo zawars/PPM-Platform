@@ -847,6 +847,8 @@
   "Project Report has been Deleted.": "Projecktstatusbericht wurde gelöscht.",
   "Report relevant can be maximum of 5.": "Maximum 5 im Statusbericht angezeigt werden.",
   "Report relevant can be maximum of 3.": "Maximum 3 im Statusbericht angezeigt werden.",
-  "Report relevant risk cannot be deleted.": "",
-  "Milestone deleted.": "Meilenstein wurde gelöscht."
+  "Milestone deleted.": "Meilenstein wurde gelöscht.",
+  "Report relevant risk cannot be deleted.": "Berichtsrelevante Risiken können nicht gelöscht werden.",
+  "Report relevant measure cannot be deleted.": "Berichtsrelevante Massnahmen können nicht gelöscht werden.",
+  "Report relevant decision cannot be deleted.": "Berichtsrelevante Entscheidungen können nicht gelöscht werden."
 }

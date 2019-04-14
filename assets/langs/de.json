@@ -850,5 +850,8 @@
   "Milestone deleted.": "Meilenstein wurde gelöscht.",
   "Report relevant risk cannot be deleted.": "Berichtsrelevante Risiken können nicht gelöscht werden.",
   "Report relevant measure cannot be deleted.": "Berichtsrelevante Massnahmen können nicht gelöscht werden.",
-  "Report relevant decision cannot be deleted.": "Berichtsrelevante Entscheidungen können nicht gelöscht werden."
+  "Report relevant decision cannot be deleted.": "Berichtsrelevante Entscheidungen können nicht gelöscht werden.",
+  "Apply": "Anwenden",
+  "Reset": "Zurücksetzen",
+  "Outline is on Hold.": "Projektskizze ist auf Hold gesetzt."
 }

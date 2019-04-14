@@ -49,7 +49,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "prod": "node app.js --production",
+    "prod": "node app.js --prod",
     "inspect": "node --inspect app.js"
   },
   "main": "app.js",

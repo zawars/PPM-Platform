@@ -6,13 +6,14 @@
 
 const nodemailer = require("nodemailer");
 let transporter = nodemailer.createTransport({
+  name: 'www.bkw-oneview.com',
   host: "mail.infomaniak.com",
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
     user: 'project.notification@bkw-oneview.com', // generated ethereal user
     pass: 'kitcHlew2277$$$' // generated ethereal password
-  }
+  },
 });
 
 module.exports = {
@@ -65,7 +66,7 @@ module.exports = {
   // }
 
   sendMail: async (options, done) => {
-    let info = await transporter.sendMail({
+    transporter.sendMail({
       from: 'project.notification@bkw-oneview.com',
       to: options.email,
       subject: options.subject,
@@ -76,9 +77,13 @@ module.exports = {
       Dies ist eine vom System generierte Mail. Bitte Antworten Sie nicht darauf. Bei Fragen oder Anliegen wenden Sie sich an den Applikationsverantwortlichen oder an den Service Desk der BKW.									
       This is an automatically generated message. Please do not reply to this message. For Questions please contact application responsible or BKW service desk.
       </div>`
-    });
+    }, (err, info) => {
+      if (err) {
+        return done(err);
+      }
 
-    console.log(info);
-    return done();
+      console.log("Message sent: %s", info.messageId);
+      return done();
+    });
   }
 };

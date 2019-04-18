@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     name: 'PPM',
     script: "app.js",
-    instances: "2",
+    instances: "1",
     env: {
       NODE_ENV: "development",
     },

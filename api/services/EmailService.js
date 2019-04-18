@@ -35,7 +35,7 @@ module.exports = {
 
   sendMail: (options, done) => {
     sendmail({
-      from: 'project.notifications@megowork.com',
+      from: 'project.notification@bkw-oneview.com',
       to: options.email,
       subject: options.subject,
       html: options.message + `<br><br>

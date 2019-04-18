@@ -1,6 +1,7 @@
 var Email = require('machinepack-email');
 const sendmail = require('sendmail')({
-  silent: false,
+  smtpHost: 'mail.infomaniak.com',
+  smtpPort: 587
 });
 
 module.exports = {

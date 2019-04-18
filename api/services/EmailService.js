@@ -78,7 +78,7 @@ module.exports = {
       </div>`
     });
 
-    console.log("Message sent: %s", info.messageId);
+    console.log(info);
     return done();
   }
 };

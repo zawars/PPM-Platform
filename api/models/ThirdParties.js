@@ -20,7 +20,7 @@ module.exports = {
     name: {
       type: 'string'
     },
-    url: {
+    authCode: {
       type: 'string'
     },
     secret: {

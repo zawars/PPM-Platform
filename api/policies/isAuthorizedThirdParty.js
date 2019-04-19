@@ -4,24 +4,20 @@ module.exports = async (req, res, next) => {
   try {
     const applicationId = req.headers['applicationid'];
     const secret = req.headers['secret'];
+    const authCode = req.headers['authcode'];
 
-    if (applicationId && secret) {
+    if (applicationId && secret && authCode) {
       let data = await ThirdParties.findOne({
         applicationId: applicationId,
-        secret: secret
+        secret: secret,
+        authCode
       });
 
       if (data) {
-        if (data.url == 'https://' + req.get('host') || data.url == 'http://' + req.get('host')) {
-          return next();
-        } else {
-          return res.ok({
-            message: 'Unauthorized, Application URL do not match.'
-          });
-        }
+        return next();
       } else {
         return res.ok({
-          message: 'Unauthorized, You are not permitted to perform this action.'
+          message: 'Unauthorized, You are not permitted to perform this action. Headers mismatch.'
         });
       }
     } else {

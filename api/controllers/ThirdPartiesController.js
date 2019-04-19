@@ -11,16 +11,16 @@ module.exports = {
     try {
       let data = req.body;
       let appId = uuid(data.name + Date.now(), uuid.URL);
-      let secret = uuid(sails.config.secret + data.url, appId);
+      let secret = uuid(sails.config.secret + data.authCode, appId);
 
-      let thirdPartData = await ThirdParties.create({
+      let thirdPartyData = await ThirdParties.create({
         ...data,
         applicationId: appId,
         secret
       });
 
       res.ok({
-        data: thirdPartData,
+        data: thirdPartyData,
         message: 'Application created',
       });
     } catch (error) {

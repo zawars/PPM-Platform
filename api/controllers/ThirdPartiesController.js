@@ -30,7 +30,7 @@ module.exports = {
 
   agilePlanning: async (req, res) => {
     try {
-      let data = await Reports.find().populate('statusReports');
+      let data = await Reports.find().populate('statusReports').populate('businessUnit').populate('businessArea');
       let agilePlanningData = [];
 
       data.map(obj => {

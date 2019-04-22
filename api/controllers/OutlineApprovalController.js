@@ -17,7 +17,8 @@ module.exports = {
   updateApprovalSponsor: (req, res) => {
     OutlineApproval.update({
       assignedTo: req.body.prev,
-      project: req.body.project
+      project: req.body.project,
+      sentTo: 'Sponsor'
     }).set({
       assignedTo: req.body.new
     }).then(() => {

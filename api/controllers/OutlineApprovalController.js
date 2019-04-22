@@ -18,7 +18,7 @@ module.exports = {
     OutlineApproval.update({
       assignedTo: req.body.prev,
       project: req.body.project,
-      // sentTo: 'Sponsor'
+      sentTo: 'Sponsor'
     }).set({
       assignedTo: req.body.new
     }).then(() => {

@@ -75,7 +75,7 @@ module.exports.routes = {
   'GET /getTeamReportsByUser/:id': 'ReportsController.getTeamReportsByUser',
   'GET /getActivePortfolios': 'PortfolioController.getActivePortfolios',
   'GET /getStatusReportsByProgram/:id': 'ProgramStatusReports.getStatusReportsByProgram',
-  'POST /updateApprovalSponsor': 'OutlineApprovalController.updateApprovalSponsor',
+  'POST /updateApprovalOwner': 'OutlineApprovalController.updateApprovalOwner',
   'GET /getDocumentsByReport/:id': 'DocumentsController.getDocumentsByReport',
   'GET /getUserReport': 'ProjectsController.getUserReport',
   'GET /resetCount': 'ProjectsController.resetCount',

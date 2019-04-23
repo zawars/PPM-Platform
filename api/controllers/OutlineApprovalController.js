@@ -14,11 +14,11 @@ module.exports = {
     });
   },
 
-  updateApprovalSponsor: (req, res) => {
+  updateApprovalOwner: (req, res) => {
     OutlineApproval.update({
       assignedTo: req.body.prev,
       project: req.body.project,
-      sentTo: 'Sponsor'
+      sentTo: req.body.sentTo
     }).set({
       assignedTo: req.body.new
     }).then(() => {

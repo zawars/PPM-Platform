@@ -43,8 +43,8 @@ module.exports = {
     fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2), options);
     fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2), options);
 
-    delete(data.de);
-    delete(data.fr);
+    delete (data.de);
+    delete (data.fr);
 
     await Dropdown.update({
       id: req.params.id

@@ -853,5 +853,6 @@
   "Report relevant decision cannot be deleted.": "Berichtsrelevante Entscheidungen können nicht gelöscht werden.",
   "Apply": "Anwenden",
   "Reset": "Zurücksetzen",
-  "Outline is on Hold.": "Projektskizze ist auf Hold gesetzt."
+  "Outline is on Hold.": "Projektskizze ist auf Hold gesetzt.",
+  "Order Relevant" : "Auftragsrelevant"
 }

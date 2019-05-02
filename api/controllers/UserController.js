@@ -6,6 +6,7 @@
  */
 const request = require('request');
 const fs = require('fs');
+const { ObjectID } = require('mongodb');
 
 let usersList = [];
 
@@ -76,15 +77,15 @@ module.exports = {
     let query = req.params.query;
     User.find({
       or: [{
-          name: {
-            'contains': query
-          }
-        },
-        {
-          email: {
-            'contains': query
-          }
+        name: {
+          'contains': query
         }
+      },
+      {
+        email: {
+          'contains': query
+        }
+      }
       ]
     }).then(users => {
       res.ok(users)
@@ -166,6 +167,24 @@ let parseUsers = async (options1, res, response) => {
         try {
           let user = localUsersList.filter(val => val.azureId == item.id);
 
+          let flag = false;
+          if (user.length > 1) {
+            User.native(function (err, collection) {
+              if (err) return res.serverError(err);
+
+              for (let obj of user) {
+                if (flag == false) {
+                  flag = true;
+                  continue;
+                }
+
+                collection.deleteOne({ '_id': new ObjectID(obj.id) }, function (err, result) {
+                  console.log('Deleted duplicate: ' + obj.email);
+                });
+              }
+            });
+          }
+
           if (user.length > 0) {
             if (user[0].email != item.userPrincipalName || user[0].name != (item.surname + ', ' + item.givenName) || user[0].department != item.department) {
               user[0].azureId = item.id;
@@ -210,12 +229,15 @@ let parseUsers = async (options1, res, response) => {
           let deletedUsersSet = difference(updatedUsersSet, ADUsersSet);
 
           if (deletedUsersSet.size > 0) {
-            for (let obj of deletedUsersSet) {
-              await User.destroy({
-                azureId: obj
-              });
-              sails.log.info('User Deleted.');
-            }
+            User.native(function (err, collection) {
+              if (err) return res.serverError(err);
+
+              for (let obj of deletedUsersSet) {
+                collection.deleteOne({ 'azureId': obj }, function (err, result) {
+                  sails.log.info('User Deleted.');
+                });
+              }
+            });
           }
           if (res != undefined) {
             usersList = [];

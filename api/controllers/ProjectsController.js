@@ -32,13 +32,13 @@ module.exports = {
   getSubmittedProjects: (req, res) => {
     Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }
       ]
     }).populate('projectOutline').populate('projectOrder').sort('createdAt DESC').limit(10).then(projects => {
       res.ok(projects);
@@ -52,16 +52,27 @@ module.exports = {
       let n = 0;
       let projects = await Projects.find({
         isCashedOut: false,
-      }).populate('projectOutline').populate('projectOrder');
+      }).populate('projectOutline').populate('projectOrder').populate('changeRequests').populate('closingReport');
       let userArr = new Set();
       projects.forEach(async project => {
         userArr.add(project.projectOutline[0].projectManager.id);
         userArr.add(project.projectOutline[0].pmoOfficer.id);
         userArr.add(project.projectOutline[0].projectSponsor.id);
-        userArr.add(project.projectOrder[0].projectManager.id);
-        userArr.add(project.projectOrder[0].pmoOfficer.id);
-        userArr.add(project.projectOrder[0].projectSponsor.id);
-        userArr.add(project.projectOrder[0].projectFico.id);
+
+        if (project.projectOrder.length > 0) {
+          userArr.add(project.projectOrder[0].projectManager.id);
+          userArr.add(project.projectOrder[0].pmoOfficer.id);
+          userArr.add(project.projectOrder[0].projectSponsor.id);
+          userArr.add(project.projectOrder[0].projectFico.id);
+        }
+
+        if (project.changeRequests.length > 0) {
+          userArr.add(project.changeRequests[0].projectFico.id);
+        }
+
+        if (project.closingReport.length > 0) {
+          userArr.add(project.closingReport[0].projectFico.id);
+        }
 
         let report = await Reports.findOne({
           id: project.projectReport
@@ -96,12 +107,12 @@ module.exports = {
       isClosed: true,
       isCashedOut: false
     }, {
-      isCashedOut: true
-    }).then(projects => {
-      res.ok(projects);
-    }).catch(err => {
-      res.badRequest(err);
-    });
+        isCashedOut: true
+      }).then(projects => {
+        res.ok(projects);
+      }).catch(err => {
+        res.badRequest(err);
+      });
   },
 
   submitOutline: (req, res) => {
@@ -135,7 +146,7 @@ module.exports = {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
-    delete(body.projectOutline);
+    delete (body.projectOutline);
 
     Projects.update({
       id: req.params.id

@@ -9,10 +9,12 @@ module.exports = {
 
   attributes: {
     azureId: {
-      type: 'string'
+      type: 'string',
+      unique: true,
     },
     email: {
-      type: 'string'
+      type: 'string',
+      unique: true
     },
     name: {
       type: 'string'

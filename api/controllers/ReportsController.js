@@ -38,54 +38,122 @@ module.exports = {
 
     let workbook = XLSX.readFile(data.path);
     let sheet_name_list = workbook.SheetNames;
-    let currentYearBudgetResult = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[5]]);
-    let result = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[6]]);
-    let actualCostTableResult = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[7]]);
+    let currentYearBudgetResult = XLSX.utils.sheet_to_json(workbook.Sheets['Project Budget Current Year']);
+    let result = XLSX.utils.sheet_to_json(workbook.Sheets['Project Budget Next Year']);
+    let actualCostTableResult = XLSX.utils.sheet_to_json(workbook.Sheets['Project Actual Budget']);
+    let currentYearSubPortfolioTableResult = XLSX.utils.sheet_to_json(workbook.Sheets['Sub-Port Budget Current Year']);
+    let nextYearSubPortfolioTableResult = XLSX.utils.sheet_to_json(workbook.Sheets[`Sub-Port Budget Next Year`]);
 
-    for (let i = 0; i <= result.length; i += 7) {
+    for (let i = 0; i < result.length; i += 7) {
       if (result[i]) {
-        // Next Year Budget
+        // Project Next Year Budget
         let reportObj1 = await Reports.findOne({ uid: result[i].projectId });
         let budgetPlanningTable2 = reportObj1.budgetPlanningTable2;
 
-        budgetPlanningTable2.forEach((val, idx) => {
-          val.budget = result[idx].budget;
-          val.thereofICT = result[idx].thereofICT
-        });
+        if (budgetPlanningTable2) {
+          budgetPlanningTable2.forEach((val, idx) => {
+            val.budget = result[idx].budget;
+            val.thereofICT = result[idx].thereofICT
+          });
+        } else {
+          budgetPlanningTable2 = [];
+          for (let j = i; j < i + 7; j++) {
+            budgetPlanningTable2.push({
+              costType: result[j].costType,
+              budget: result[j].budget,
+              id: result[j].id,
+              group: result[j].group,
+              thereofICT: result[j].thereofICT,
+            });
+          }
+        }
 
         await Reports.update({
           uid: result[i].projectId
         }).set({ budgetPlanningTable2 });
+      }
+    }
 
-        // Current Year Budget
-        if (currentYearBudgetResult[i]) {
-          let reportObj2 = await Reports.findOne({ uid: currentYearBudgetResult[i].projectId });
-          let budgetPlanningTable1 = reportObj2.budgetPlanningTable1;
+    // Project Current Year Budget
+    for (let i = 0; i <= currentYearBudgetResult.length; i += 7) {
+      if (currentYearBudgetResult[i]) {
+        let reportObj2 = await Reports.findOne({ uid: currentYearBudgetResult[i].projectId });
+        let budgetPlanningTable1 = reportObj2.budgetPlanningTable1;
 
+        if (budgetPlanningTable1) {
           budgetPlanningTable1.forEach((val, idx) => {
             val.actualCost = currentYearBudgetResult[idx].actualCost;
           });
-
-          await Reports.update({
-            uid: currentYearBudgetResult[i].projectId
-          }).set({ budgetPlanningTable1 });
         }
 
-        // Actual Budget
-        if (actualCostTableResult[i]) {
-          let reportObj3 = await Reports.findOne({ uid: actualCostTableResult[i].projectId });
-          let actualCostTable = reportObj3.actualCostTable;
+        await Reports.update({
+          uid: currentYearBudgetResult[i].projectId
+        }).set({ budgetPlanningTable1 });
+      }
+    }
 
+    // Project Actual Budget
+    for (let i = 0; i <= actualCostTableResult.length; i += 7) {
+      if (actualCostTableResult[i]) {
+        let reportObj3 = await Reports.findOne({ uid: actualCostTableResult[i].projectId });
+        let actualCostTable = reportObj3.actualCostTable;
+
+        if (actualCostTable) {
           actualCostTable.forEach((val, idx) => {
             val.actualCost = actualCostTableResult[idx].actualCost;
           });
-
-          await Reports.update({
-            uid: actualCostTableResult[i].projectId
-          }).set({ actualCostTable });
         }
+
+        await Reports.update({
+          uid: actualCostTableResult[i].projectId
+        }).set({ actualCostTable });
       }
     }
+
+    // Sub-Portfolio Current Year Budget
+    for (let i = 0; i <= currentYearSubPortfolioTableResult.length; i += 7) {
+      if (currentYearSubPortfolioTableResult[i]) {
+        let portfolioObj = await Portfolio.findOne({ id: currentYearSubPortfolioTableResult[i].portfolioId });
+        let subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
+
+        if (subPortfolioBudgetingList) {
+          subPortfolioBudgetingList.forEach((val, idx) => {
+            val.pspCurrentYear = currentYearSubPortfolioTableResult[idx].pspCurrentYear;
+            if (val.subPortfolioBudgetCurrentYear) {
+              val.subPortfolioBudgetCurrentYear.forEach(obj => {
+                obj.budget = currentYearSubPortfolioTableResult[idx].budget;
+                obj.thereofICT = currentYearSubPortfolioTableResult[idx].thereofICT;
+              });
+            }
+          });
+        }
+
+        await Portfolio.update({ id: currentYearSubPortfolioTableResult[i].portfolioId }).set({ subPortfolioBudgetingList });
+      }
+    }
+
+    // Sub-Portfolio Next Year Budget
+    for (let i = 0; i <= nextYearSubPortfolioTableResult.length; i += 7) {
+      if (nextYearSubPortfolioTableResult[i]) {
+        let portfolioObj = await Portfolio.findOne({ id: nextYearSubPortfolioTableResult[i].portfolioId });
+        let subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
+
+        if (subPortfolioBudgetingList) {
+          subPortfolioBudgetingList.forEach((val, idx) => {
+            val.pspNextYear = nextYearSubPortfolioTableResult[idx].pspNextYear;
+            if (val.subPortfolioBudgetNextYear) {
+              val.subPortfolioBudgetNextYear.forEach(obj => {
+                obj.budget = nextYearSubPortfolioTableResult[idx].budget;
+                obj.thereofICT = nextYearSubPortfolioTableResult[idx].thereofICT;
+              });
+            }
+          });
+        }
+
+        await Portfolio.update({ id: nextYearSubPortfolioTableResult[i].portfolioId }).set({ subPortfolioBudgetingList });
+      }
+    }
+
 
     fs.unlink(data.path, function (err) {
       if (err) return console.log(err); // handle error as you wish

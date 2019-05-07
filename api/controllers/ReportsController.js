@@ -44,16 +44,17 @@ module.exports = {
     let currentYearSubPortfolioTableResult = XLSX.utils.sheet_to_json(workbook.Sheets['Sub-Port Budget Current Year']);
     let nextYearSubPortfolioTableResult = XLSX.utils.sheet_to_json(workbook.Sheets[`Sub-Port Budget Next Year`]);
 
+    let budgetPlanningTable2;
     for (let i = 0; i < result.length; i += 7) {
       if (result[i]) {
         // Project Next Year Budget
         let reportObj1 = await Reports.findOne({ uid: result[i].projectId });
-        let budgetPlanningTable2 = reportObj1.budgetPlanningTable2;
+        budgetPlanningTable2 = reportObj1.budgetPlanningTable2;
 
         if (budgetPlanningTable2) {
           budgetPlanningTable2.forEach((val, idx) => {
-            val.budget = result[idx].budget;
-            val.thereofICT = result[idx].thereofICT
+            val.budget = result[i + idx].budget;
+            val.thereofICT = result[i + idx].thereofICT
           });
         } else {
           budgetPlanningTable2 = [];
@@ -71,6 +72,7 @@ module.exports = {
         await Reports.update({
           uid: result[i].projectId
         }).set({ budgetPlanningTable2 });
+        budgetPlanningTable2 = [];
       }
     }
 
@@ -82,7 +84,7 @@ module.exports = {
 
         if (budgetPlanningTable1) {
           budgetPlanningTable1.forEach((val, idx) => {
-            val.actualCost = currentYearBudgetResult[idx].actualCost;
+            val.actualCost = currentYearBudgetResult[i + idx].actualCost;
           });
         }
 
@@ -100,7 +102,7 @@ module.exports = {
 
         if (actualCostTable) {
           actualCostTable.forEach((val, idx) => {
-            val.actualCost = actualCostTableResult[idx].actualCost;
+            val.actualCost = actualCostTableResult[i + idx].actualCost;
           });
         }
 
@@ -116,16 +118,21 @@ module.exports = {
         let portfolioObj = await Portfolio.findOne({ id: currentYearSubPortfolioTableResult[i].portfolioId });
         let subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
 
+        let length = subPortfolioBudgetingList.length;
         if (subPortfolioBudgetingList) {
-          subPortfolioBudgetingList.forEach((val, idx) => {
-            val.pspCurrentYear = currentYearSubPortfolioTableResult[idx].pspCurrentYear;
-            if (val.subPortfolioBudgetCurrentYear) {
-              val.subPortfolioBudgetCurrentYear.forEach(obj => {
-                obj.budget = currentYearSubPortfolioTableResult[idx].budget;
-                obj.thereofICT = currentYearSubPortfolioTableResult[idx].thereofICT;
+          for (let j = 0; j < length; j++) {
+            subPortfolioBudgetingList[j].pspCurrentYear = currentYearSubPortfolioTableResult[i].pspCurrentYear;
+            if (subPortfolioBudgetingList[j].subPortfolioBudgetCurrentYear) {
+              subPortfolioBudgetingList[j].subPortfolioBudgetCurrentYear.forEach((obj, index) => {
+                obj.budget = currentYearSubPortfolioTableResult[i + index].budget;
+                obj.thereofICT = currentYearSubPortfolioTableResult[i + index].thereofICT;
               });
             }
-          });
+
+            if (j < length - 1) { // In order to loop for all sub portfolios and also to skip the portion of their data in excel
+              i += 7;
+            }
+          }
         }
 
         await Portfolio.update({ id: currentYearSubPortfolioTableResult[i].portfolioId }).set({ subPortfolioBudgetingList });
@@ -133,27 +140,33 @@ module.exports = {
     }
 
     // Sub-Portfolio Next Year Budget
+    let subPortfolioBudgetingList;
     for (let i = 0; i <= nextYearSubPortfolioTableResult.length; i += 7) {
       if (nextYearSubPortfolioTableResult[i]) {
         let portfolioObj = await Portfolio.findOne({ id: nextYearSubPortfolioTableResult[i].portfolioId });
-        let subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
+        subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
 
+        let length = subPortfolioBudgetingList.length;
         if (subPortfolioBudgetingList) {
-          subPortfolioBudgetingList.forEach((val, idx) => {
-            val.pspNextYear = nextYearSubPortfolioTableResult[idx].pspNextYear;
-            if (val.subPortfolioBudgetNextYear) {
-              val.subPortfolioBudgetNextYear.forEach(obj => {
-                obj.budget = nextYearSubPortfolioTableResult[idx].budget;
-                obj.thereofICT = nextYearSubPortfolioTableResult[idx].thereofICT;
+          for (let j = 0; j < length; j++) {
+            subPortfolioBudgetingList[j].pspNextYear = nextYearSubPortfolioTableResult[i].pspNextYear;
+            if (subPortfolioBudgetingList[j].subPortfolioBudgetNextYear) {
+              subPortfolioBudgetingList[j].subPortfolioBudgetNextYear.forEach((obj, index) => {
+                obj.budget = nextYearSubPortfolioTableResult[i + index].budget;
+                obj.thereofICT = nextYearSubPortfolioTableResult[i + index].thereofICT;
               });
             }
-          });
+
+            if (j < length - 1) { // In order to loop for all sub portfolios and also to skip the portion of their data in excel
+              i += 7;
+            }
+          }
         }
 
         await Portfolio.update({ id: nextYearSubPortfolioTableResult[i].portfolioId }).set({ subPortfolioBudgetingList });
+        subPortfolioBudgetingList = [];
       }
     }
-
 
     fs.unlink(data.path, function (err) {
       if (err) return console.log(err); // handle error as you wish

@@ -29,7 +29,7 @@ module.exports.http = {
 
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
-    bootstrapAssets: express.static(process.cwd() + '/uploads'),
+    bootstrapAssets: express.static(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '/uploads'),
     expressSession: session({
       resave: true,
       saveUninitialized: true,

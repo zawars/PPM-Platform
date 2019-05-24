@@ -68,7 +68,7 @@ module.exports.routes = {
   'GET /getReportsByUser/:id': 'ReportsController.getReportsByUser',
   'GET /getStatusReportsByProjectReport/:id': 'StatusReportsController.getStatusReportsByProjectReport',
   'GET /getOutlineApprovedProjects/:id': 'ProjectsController.getOutlineApprovedProjects',
-  'GET /getSubmittedProjects/:id': 'ProjectsController.getSubmittedProjects',
+  'GET /getSubmittedProjects': 'ProjectsController.getSubmittedProjects',
   'GET /getGlobalConfigurations': 'ConfigurationsController.getGlobalConfigurations',
   'GET /getActivePrograms': 'ProgramController.getActivePrograms',
   'GET /getProgramsByUser/:id': 'ProgramController.getProgramsByUser',

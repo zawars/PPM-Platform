@@ -40,6 +40,11 @@ module.exports = {
     endDate: {
       type: 'string'
     },
+
+    statusReports: {
+      collection: 'programStatusReports',
+      via: 'program'
+    },
   },
 
   beforeCreate: (values, cb) => {

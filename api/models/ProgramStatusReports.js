@@ -65,6 +65,10 @@ module.exports = {
     programId: {
       type: 'string'
     },
+
+    program: {
+      model: 'program'
+    }
   }
 };
 

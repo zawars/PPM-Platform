@@ -55,7 +55,7 @@ module.exports.policies = {
 
   AuthController: {
     login: ['passport-ldap'],
-    samlConsumeToken: true,
+    samlConsumeToken: ['passport-ldap'],
     getTokenOnLogin: true,
     externalLogin: true,
     verifyTokenExternal: true,

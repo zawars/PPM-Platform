@@ -16,6 +16,9 @@ module.exports = {
       type: 'string',
       unique: true
     },
+    format: {
+      type: 'string'
+    },
     name: {
       type: 'string'
     },

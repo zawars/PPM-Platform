@@ -31,14 +31,15 @@ module.exports = {
 
   getSubmittedProjects: (req, res) => {
     Projects.find({
-      or: [{
-        outlineSubmitted: true,
-        outlineApproved: false,
-      },
-      {
-        orderSubmitted: true,
-        orderApproved: false
-      }
+      or: [
+        {
+          outlineSubmitted: true,
+          outlineApproved: false,
+        },
+        {
+          orderSubmitted: true,
+          orderApproved: false
+        }
       ]
     }).populate('projectOutline').populate('projectOrder').sort('createdAt DESC').limit(10).then(projects => {
       res.ok(projects);
@@ -186,5 +187,13 @@ module.exports = {
     }).sort('createdAt', 'DESC').populate('projectReport').populate('closingReport').populate('changeRequests');
 
     res.ok(projectsList);
-  }
+  },
+
+  getClosedProjects: async (req, res) => {
+    let projects = await Projects.find({
+      isClosed: true
+    }).sort('createdAt', 'DESC').populateAll();
+
+    res.ok(projects);
+  },
 };

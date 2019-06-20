@@ -42,6 +42,7 @@ module.exports.routes = {
   'GET /authenticate/:id': 'AuthController.getTokenOnLogin',
   'GET /logout': 'AuthController.logout',
   'POST /saml/consume': 'AuthController.samlConsumeToken',
+  'POST /saml/logout': 'AuthController.samlLogout',
   'GET /syncUsers': 'UserController.syncUsers',
 
   'GET /user/login/external/:email': 'AuthController.externalLogin',
@@ -98,6 +99,7 @@ module.exports.routes = {
   'GET /questionsMapper/:id': 'QuestionsMapperController.show',
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
+  'GET /projects/closed': 'ProjectsController.getClosedProjects',
 
   'POST /thirdParties/register': 'ThirdPartiesController.register',
 

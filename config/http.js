@@ -37,9 +37,12 @@ module.exports.http = {
     }),
     apiLimiter: new RateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100,
+      max: 500,
+      delayMs: 0
     }),
-    helmetGuard: helmet(),
+    helmetGuard: helmet({
+      frameguard: { action: 'deny' }
+    }),
 
     /***************************************************************************
      *                                                                          *
@@ -54,7 +57,7 @@ module.exports.http = {
       'session',
       'expressSession',
       'bootstrapAssets',
-      // 'apiLimiter',
+      'apiLimiter',
       'helmetGuard',
       'passportInit',
       'passportSession',

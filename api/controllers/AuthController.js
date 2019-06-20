@@ -19,12 +19,30 @@ module.exports = {
   },
 
   logout: function (req, res) {
-    req.session.destroy(function (err) {
-      RedisService.del(req.headers.authorization.split(' ').pop(), (response) => {
-        setTimeout(function () {
-          return res.ok();
-        }, 2500); // redirect wait time 2.5 seconds
-      });
+
+    const bearerToken = req.headers['authorization'].split(' ')[1];
+    RedisService.get(bearerToken, async (result) => {
+      if (result) {
+        console.log(`${result.email} is logging out. Deleting session...`);
+        req.user = {};
+        req.user.saml = {};
+        req.user.saml.nameID = result.email;
+        req.user.saml.nameIDFormat = result.format;
+        req.user.id = req.user.saml.nameID;
+        req.user.nameID = req.user.saml.nameID;
+        req.user.nameIDFormat = req.user.saml.nameIDFormat;
+
+        req.session.destroy(function (err) {
+          RedisService.del(bearerToken, (response) => {
+            EmailService.samlStrategy.logout(req, function (err, uri) {
+              if (!err) {
+                //redirect to the IdP Logout URL
+                res.ok({ uri });
+              }
+            });
+          });
+        });
+      }
     });
   },
 
@@ -96,7 +114,12 @@ module.exports = {
   },
 
   samlConsumeToken: (req, res) => {
+    let params = '';
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+    if (req.body.RelayState != '' && req.body.RelayState != undefined) {
+      params = `;redirectTo=${req.body.RelayState}`;
+    }
 
     //save user;
     saml.decodeSamlPost(req.body.SAMLResponse, function (err, xml) {
@@ -105,20 +128,22 @@ module.exports = {
           let email = result['samlp:Response'].Assertion[0].AttributeStatement[0].Attribute.pop().AttributeValue[0];
           User.find({
             email: email
-          }).then(user => {
+          }).then(async user => {
             if (user.length == 0) {
               User.create({
                 email: email,
+                format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format,
                 role: 'guest',
               }).then(createdObj => {
                 res.writeHead(301, {
-                  Location: config.callbackRedirectUrl + createdObj.id
+                  Location: config.callbackRedirectUrl + createdObj.id + params
                 });
                 res.end();
               });
             } else {
+              await User.update({ email: email }).set({ format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format });
               res.writeHead(301, {
-                Location: config.callbackRedirectUrl + user[0].id
+                Location: config.callbackRedirectUrl + user[0].id + params
               });
               res.end();
             }
@@ -128,6 +153,14 @@ module.exports = {
         });
       }
     });
+  },
+
+  samlLogout: async (req, res) => {
+    const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+    res.writeHead(301, {
+      Location: config.callbackRedirectUrl
+    });
+    res.end();
   },
 
   getTokenOnLogin: async (req, res) => {

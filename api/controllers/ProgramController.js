@@ -7,7 +7,7 @@
 
 module.exports = {
   getActivePrograms: (req, res) => {
-    Program.find({ status: 'Active' }).populate('reports').then(programsList => {
+    Program.find({ status: 'Active' }).populateAll().then(programsList => {
       res.ok(programsList);
     }).catch(err => {
       res.badRequest(err);
@@ -17,7 +17,7 @@ module.exports = {
   getProgramsByUser: (req, res) => {
     Program.find({
       programManager: req.params.id
-    }).populate('reports').populate('programManager').then(response => {
+    }).populateAll().then(response => {
       res.ok(response);
     }).catch(err => {
       res.badRequest(err);
@@ -25,3 +25,4 @@ module.exports = {
   },
 };
 
+ 

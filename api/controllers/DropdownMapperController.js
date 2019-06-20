@@ -40,8 +40,8 @@ module.exports = {
     DropdownMapper.findOne({
       id: id
     }).then(dropdownObj => {
-      delete(deFile[dropdownObj.name]);
-      delete(frFile[dropdownObj.name]);
+      delete (deFile[dropdownObj.name]);
+      delete (frFile[dropdownObj.name]);
 
       fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2));
       fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2));
@@ -68,8 +68,8 @@ module.exports = {
     DropdownMapper.findOne({
       id: id
     }).then(dropdownObj => {
-      delete(deFile[dropdownObj.name]);
-      delete(frFile[dropdownObj.name]);
+      delete (deFile[dropdownObj.name]);
+      delete (frFile[dropdownObj.name]);
       deFile[obj.name] = de;
       frFile[obj.name] = fr;
 

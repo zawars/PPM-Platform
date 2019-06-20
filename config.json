@@ -5,5 +5,7 @@
   "callbackRedirectUrl": "https://www.bkw-oneview.com/#/auth/",
   "callbackUrl": "https://be.bkw-oneview.com/saml/consume",
   "entryPointUrl": "https://login.microsoftonline.com/376e33ca-d656-4e46-8bcb-7d5ba898ae66/saml2",
+  "logoutUrl": "https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0",
+  "logoutCallbackUrl": "https://be.bkw-oneview.com/saml/logout",
   "issuer": "MEGOWORKPPM"
 }

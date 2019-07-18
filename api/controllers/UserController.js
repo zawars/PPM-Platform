@@ -117,16 +117,18 @@ let syncUsers = async (res) => {
       sails.log.error(error);
     }
 
-    let options1 = {
-      method: 'GET',
-      url: 'https://graph.microsoft.com/v1.0/users?$select=id,department,mail,displayName,givenName,surname,jobTitle,mobilePhone,officeLocation,preferredLanguage,userPrincipalName',
-      headers: {
-        Authorization: 'Bearer ' + JSON.parse(response.body).access_token
-      }
-    };
+    if (response.body) {
+      let options1 = {
+        method: 'GET',
+        url: 'https://graph.microsoft.com/v1.0/users?$select=id,department,mail,displayName,givenName,surname,jobTitle,mobilePhone,officeLocation,preferredLanguage,userPrincipalName',
+        headers: {
+          Authorization: 'Bearer ' + JSON.parse(response.body).access_token
+        }
+      };
 
-    // Recursive loop for update or create user
-    parseUsers(options1, res, response);
+      // Recursive loop for update or create user
+      parseUsers(options1, res, response);
+    }
   });
 }
 

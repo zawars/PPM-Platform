@@ -36,7 +36,7 @@ module.exports = {
     const fs = require('fs');
     const XLSX = require('xlsx');
 
-    let workbook = XLSX.readFile(data.path);
+    let workbook = XLSX.readFile(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + data.path);
     let sheet_name_list = workbook.SheetNames;
     let currentYearBudgetResult = XLSX.utils.sheet_to_json(workbook.Sheets['Project Budget Current Year']);
     let result = XLSX.utils.sheet_to_json(workbook.Sheets['Project Budget Next Year']);
@@ -48,8 +48,13 @@ module.exports = {
     for (let i = 0; i < result.length; i += 7) {
       if (result[i]) {
         // Project Next Year Budget
-        let reportObj1 = await Reports.findOne({ uid: result[i].projectId });
-        budgetPlanningTable2 = reportObj1.budgetPlanningTable2;
+        let reportObj1 = await Reports.findOne({
+          uid: result[i].projectId
+        });
+
+        if (reportObj1.budgetPlanningTable2) {
+          budgetPlanningTable2 = reportObj1.budgetPlanningTable2;
+        }
 
         if (budgetPlanningTable2) {
           budgetPlanningTable2.forEach((val, idx) => {
@@ -71,7 +76,9 @@ module.exports = {
 
         await Reports.update({
           uid: result[i].projectId
-        }).set({ budgetPlanningTable2 });
+        }).set({
+          budgetPlanningTable2
+        });
         budgetPlanningTable2 = [];
       }
     }
@@ -79,7 +86,9 @@ module.exports = {
     // Project Current Year Budget
     for (let i = 0; i <= currentYearBudgetResult.length; i += 7) {
       if (currentYearBudgetResult[i]) {
-        let reportObj2 = await Reports.findOne({ uid: currentYearBudgetResult[i].projectId });
+        let reportObj2 = await Reports.findOne({
+          uid: currentYearBudgetResult[i].projectId
+        });
         let budgetPlanningTable1 = reportObj2.budgetPlanningTable1;
 
         if (budgetPlanningTable1) {
@@ -90,14 +99,18 @@ module.exports = {
 
         await Reports.update({
           uid: currentYearBudgetResult[i].projectId
-        }).set({ budgetPlanningTable1 });
+        }).set({
+          budgetPlanningTable1
+        });
       }
     }
 
     // Project Actual Budget
     for (let i = 0; i <= actualCostTableResult.length; i += 7) {
       if (actualCostTableResult[i]) {
-        let reportObj3 = await Reports.findOne({ uid: actualCostTableResult[i].projectId });
+        let reportObj3 = await Reports.findOne({
+          uid: actualCostTableResult[i].projectId
+        });
         let actualCostTable = reportObj3.actualCostTable;
 
         if (actualCostTable) {
@@ -108,14 +121,18 @@ module.exports = {
 
         await Reports.update({
           uid: actualCostTableResult[i].projectId
-        }).set({ actualCostTable });
+        }).set({
+          actualCostTable
+        });
       }
     }
 
     // Sub-Portfolio Current Year Budget
     for (let i = 0; i <= currentYearSubPortfolioTableResult.length; i += 7) {
       if (currentYearSubPortfolioTableResult[i]) {
-        let portfolioObj = await Portfolio.findOne({ id: currentYearSubPortfolioTableResult[i].portfolioId });
+        let portfolioObj = await Portfolio.findOne({
+          id: currentYearSubPortfolioTableResult[i].portfolioId
+        });
         let subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
 
         let length = subPortfolioBudgetingList.length;
@@ -135,7 +152,11 @@ module.exports = {
           }
         }
 
-        await Portfolio.update({ id: currentYearSubPortfolioTableResult[i].portfolioId }).set({ subPortfolioBudgetingList });
+        await Portfolio.update({
+          id: currentYearSubPortfolioTableResult[i].portfolioId
+        }).set({
+          subPortfolioBudgetingList
+        });
       }
     }
 
@@ -143,7 +164,9 @@ module.exports = {
     let subPortfolioBudgetingList;
     for (let i = 0; i <= nextYearSubPortfolioTableResult.length; i += 7) {
       if (nextYearSubPortfolioTableResult[i]) {
-        let portfolioObj = await Portfolio.findOne({ id: nextYearSubPortfolioTableResult[i].portfolioId });
+        let portfolioObj = await Portfolio.findOne({
+          id: nextYearSubPortfolioTableResult[i].portfolioId
+        });
         subPortfolioBudgetingList = portfolioObj.subPortfolioBudgetingList;
 
         let length = subPortfolioBudgetingList.length;
@@ -163,12 +186,16 @@ module.exports = {
           }
         }
 
-        await Portfolio.update({ id: nextYearSubPortfolioTableResult[i].portfolioId }).set({ subPortfolioBudgetingList });
+        await Portfolio.update({
+          id: nextYearSubPortfolioTableResult[i].portfolioId
+        }).set({
+          subPortfolioBudgetingList
+        });
         subPortfolioBudgetingList = [];
       }
     }
 
-    fs.unlink(data.path, function (err) {
+    fs.unlink(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + data.path, function (err) {
       if (err) return console.log(err); // handle error as you wish
       res.ok({
         message: 'Data Imported successfully.'
@@ -191,13 +218,17 @@ module.exports = {
       });
     });
 
-    let portfolios = await Portfolio.find({ status: 'Active' });
+    let portfolios = await Portfolio.find({
+      status: 'Active'
+    });
     portfolios.map(async portfolio => {
       if (portfolio.portfolioBudgetingList) {
         if (portfolio.portfolioBudgetingList.portfolioBudgetCurrentYear) {
           portfolio.portfolioBudgetingList.portfolioBudgetCurrentYear.forEach((val, idx) => {
             val.budget = portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].budget;
             portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].budget = '';
+            val.thereofICT = portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].thereofICT;
+            portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].thereofICT = '';
             val.assigned = portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].assigned;
             portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].assigned = '';
             val.remaining = portfolio.portfolioBudgetingList.portfolioBudgetNextYear[idx].remaining;
@@ -216,6 +247,8 @@ module.exports = {
             if (budgetObj.subPortfolioBudgetNextYear) {
               val.budget = budgetObj.subPortfolioBudgetNextYear[idx].budget;
               budgetObj.subPortfolioBudgetNextYear[idx].budget = '';
+              val.thereofICT = budgetObj.subPortfolioBudgetNextYear[idx].thereofICT;
+              budgetObj.subPortfolioBudgetNextYear[idx].thereofICT = '';
               val.assigned = budgetObj.subPortfolioBudgetNextYear[idx].assigned;
               budgetObj.subPortfolioBudgetNextYear[idx].assigned = '';
               val.remaining = budgetObj.subPortfolioBudgetNextYear[idx].remaining;
@@ -236,7 +269,9 @@ module.exports = {
       });
     });
 
-    let programs = await Program.find({ status: 'Active' });
+    let programs = await Program.find({
+      status: 'Active'
+    });
     programs.map(async program => {
       if (program.programBudgetCurrentYear) {
         program.programBudgetCurrentYear.forEach((val, idx) => {

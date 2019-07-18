@@ -27,7 +27,7 @@ module.exports = {
         req.user = {};
         req.user.saml = {};
         req.user.saml.nameID = result.email;
-        req.user.saml.nameIDFormat = result.format;
+        req.user.saml.nameIDFormat = result.format == undefined ? '' : result.format;
         req.user.id = req.user.saml.nameID;
         req.user.nameID = req.user.saml.nameID;
         req.user.nameIDFormat = req.user.saml.nameIDFormat;

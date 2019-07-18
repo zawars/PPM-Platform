@@ -94,6 +94,10 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
+    approvals: {
+      collection: 'outlineApproval',
+      via: 'project'
+    }
   },
 
   beforeCreate: (values, cb) => {

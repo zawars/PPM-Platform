@@ -297,12 +297,12 @@ module.exports = {
 
   projectsByPortfolio: async (req, res) => {
     let projects = await Reports.find({
-      portfolio: req.params.portfolio
+      portfolio: req.BODY.portfolioId
     }).populateAll();
 
     projects = projects.filter(project => {
       if (project.subPortfolio != undefined) {
-        return project.subPortfolio == req.params.subPortfolio;
+        return project.subPortfolio == req.body.subPortfolio;
       }
     });
 

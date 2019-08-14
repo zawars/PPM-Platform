@@ -61,7 +61,4 @@ module.exports.policies = {
     verifyTokenExternal: true,
   },
 
-  ReportsController: {
-    uploadExcelDumpToDrive: true
-  }
 };

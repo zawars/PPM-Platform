@@ -299,12 +299,15 @@ module.exports = {
     let projects = await Reports.find({
       portfolio: req.body.portfolioId
     }).populateAll();
+    console.log(req.body)
+    console.log(projects);
 
     projects = projects.filter(project => {
       if (project.subPortfolio != undefined) {
         return project.subPortfolio == req.body.subPortfolio;
       }
     });
+    console.log(projects)
 
     res.ok(projects);
   },

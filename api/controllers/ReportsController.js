@@ -297,7 +297,7 @@ module.exports = {
 
   projectsByPortfolio: async (req, res) => {
     let projects = await Reports.find({
-      portfolio: req.BODY.portfolioId
+      portfolio: req.body.portfolioId
     }).populateAll();
 
     projects = projects.filter(project => {

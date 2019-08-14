@@ -59,5 +59,9 @@ module.exports.policies = {
     getTokenOnLogin: true,
     externalLogin: true,
     verifyTokenExternal: true,
+  },
+
+  ReportsController: {
+    uploadExcelDumpToDrive: true
   }
 };

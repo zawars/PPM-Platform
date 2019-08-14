@@ -6,7 +6,9 @@
  */
 const request = require('request');
 const fs = require('fs');
-const { ObjectID } = require('mongodb');
+const {
+  ObjectID
+} = require('mongodb');
 
 let usersList = [];
 
@@ -77,15 +79,15 @@ module.exports = {
     let query = req.params.query;
     User.find({
       or: [{
-        name: {
-          'contains': query
+          name: {
+            'contains': query
+          }
+        },
+        {
+          email: {
+            'contains': query
+          }
         }
-      },
-      {
-        email: {
-          'contains': query
-        }
-      }
       ]
     }).then(users => {
       res.ok(users)
@@ -180,7 +182,9 @@ let parseUsers = async (options1, res, response) => {
                   continue;
                 }
 
-                collection.deleteOne({ '_id': new ObjectID(obj.id) }, function (err, result) {
+                collection.deleteOne({
+                  '_id': new ObjectID(obj.id)
+                }, function (err, result) {
                   console.log('Deleted duplicate: ' + obj.email);
                 });
               }
@@ -235,7 +239,9 @@ let parseUsers = async (options1, res, response) => {
               if (err) return res.serverError(err);
 
               for (let obj of deletedUsersSet) {
-                collection.deleteOne({ 'azureId': obj }, function (err, result) {
+                collection.deleteOne({
+                  'azureId': obj
+                }, function (err, result) {
                   sails.log.info('User Deleted.');
                 });
               }

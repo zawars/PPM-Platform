@@ -107,5 +107,7 @@ module.exports.routes = {
 
   'POST /budgetImport': 'ReportsController.budgetImport',
   'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
+  'GET /reports/portfolio/:portfolio/:subPortfolio': 'ReportsController.projectsByPortfolio',
+  'GET /reports/exceldump/upload/sharepoint': 'ReportsController.uploadExcelDumpToDrive',
 
 };

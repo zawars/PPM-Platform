@@ -41,9 +41,7 @@ module.exports.http = {
       delayMs: 0
     }),
     helmetGuard: helmet({
-      frameguard: {
-        action: 'deny'
-      }
+      frameguard: { action: 'deny' }
     }),
 
     /***************************************************************************
@@ -104,12 +102,7 @@ module.exports.http = {
      *                                                                          *
      ***************************************************************************/
 
-    // bodyParser: function () {
-    //   var opts = {
-    //     limit: '20mb'
-    //   }
-    //   return require('skipper')(opts);
-    // }
+    bodyParser: require('skipper')({ strict: true, limit: '50mb' })
 
   },
 

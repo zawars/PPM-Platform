@@ -42,6 +42,7 @@ module.exports = {
   },
 
   headers: ['content-type', 'authorization'],
+  origin: '*',
 
   mongodbServer: {
     adapter: 'sails-mongo',

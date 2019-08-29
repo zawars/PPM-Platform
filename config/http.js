@@ -104,18 +104,12 @@ module.exports.http = {
      *                                                                          *
      ***************************************************************************/
 
-    bodyParser: (function () {
-      let opts = {
-        limit: '50mb'
-      };
-      let fn;
-
-      // Default to built-in bodyParser:
-      fn = require('skipper')({
-        strict: true
-      });
-      return fn(opts);
-    })
+    bodyParser: function () {
+      var opts = {
+        limit: '20mb'
+      }
+      return require('skipper')(opts);
+    }
 
   },
 

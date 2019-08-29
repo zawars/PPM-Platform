@@ -104,12 +104,12 @@ module.exports.http = {
      *                                                                          *
      ***************************************************************************/
 
-    bodyParser: function () {
-      var opts = {
-        limit: '20mb'
-      }
-      return require('skipper')(opts);
-    }
+    // bodyParser: function () {
+    //   var opts = {
+    //     limit: '20mb'
+    //   }
+    //   return require('skipper')(opts);
+    // }
 
   },
 

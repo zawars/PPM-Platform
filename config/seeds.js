@@ -509,6 +509,18 @@ module.exports.seeds = {
     },
     {
       "values": [{
+          "name": "Yes",
+          position: 0
+        },
+        {
+          "name": "No",
+          position: 1
+        }
+      ],
+      "field": "IT Relevant",
+    },
+    {
+      "values": [{
           "name": "On",
           position: 0
         },

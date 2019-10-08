@@ -22,7 +22,7 @@ module.exports = {
       model: 'user'
     },
     programSponsor: {
-      type: 'json'
+      model: 'user'
     },
     uid: {
       type: 'integer',

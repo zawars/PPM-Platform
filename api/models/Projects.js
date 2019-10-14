@@ -67,6 +67,9 @@ module.exports = {
     version: {
       type: 'integer',
     },
+    mode: {
+      type: 'string'
+    },
     projectReport: {
       model: 'reports'
     },

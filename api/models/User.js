@@ -32,8 +32,9 @@ module.exports = {
       collection: 'projects',
       via: 'user'
     },
-    team: {
-      model: 'team'
-    }
+    teams: {
+      collection: 'team',
+      via: 'users'
+    },
   }
 };

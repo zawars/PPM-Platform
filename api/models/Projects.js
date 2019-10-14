@@ -100,7 +100,10 @@ module.exports = {
     approvals: {
       collection: 'outlineApproval',
       via: 'project'
-    }
+    },
+    subPortfolio: {
+      model: 'subPortfolio',
+    },
   },
 
   beforeCreate: (values, cb) => {

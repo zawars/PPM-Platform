@@ -15,9 +15,12 @@ module.exports = {
   },
 
   getProgramsByUser: (req, res) => {
-    Program.find({
+    Program.find({ or: [{
       programManager: req.params.id
-    }).populateAll().then(response => {
+    },
+    {
+      programSponsor: req.params.id
+    }]}).populateAll().then(response => {
       res.ok(response);
     }).catch(err => {
       res.badRequest(err);

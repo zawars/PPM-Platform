@@ -1,7 +1,7 @@
 /**
- * Team.js
+ * PortfolioBudgetYear.js
  *
- * @description :: A model definition.  Represents a database table/collection/etc.
+ * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
@@ -13,22 +13,27 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
+    year: {
+      type: 'string',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
+    subPortfolio: {
+      model: 'subPortfolio',
+    },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    users: {
-      collection: 'user',
-      via: 'teams'
+
+    ProjectBudgetCost: {
+      collection: 'ProjectBudgetCost',
+      via: 'PortfolioBudgetYear'
     },
-    project: {
-      model: 'projects'
-    }
   },
 
 };
+

@@ -12,7 +12,11 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+
     name: {
+      type: 'string',
+    },
+    currentYear: {
       type: 'string',
     },
     bucketName: {
@@ -29,14 +33,13 @@ module.exports = {
       defaultsTo: false
     },
 
-
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
     digitalizationDegree: {
       mdoel: 'dropdownMapper',
     },
-    PortfolioBudgetYear: {
+    costYears: {
       collection: 'PortfolioBudgetYear',
       via: 'subPortfolio'
     },

@@ -21,10 +21,10 @@ module.exports = {
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
-    PortfolioBudgetYear: {
+    portfolioBudgetYear: {
       model: 'PortfolioBudgetYear',
     },
-    projects: {
+    project: {
       model: 'projects',
     },
 

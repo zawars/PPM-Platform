@@ -16,11 +16,14 @@ module.exports = {
     name: {
       type: 'string',
     },
+    currentYear: {
+      type: 'string',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-    
+
     portfolio: {
       model: 'portfolio',
     },

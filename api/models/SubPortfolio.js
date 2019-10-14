@@ -32,7 +32,7 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-    PortfolioBudgetYear: {
+    costYears: {
       collection: 'PortfolioBudgetYear',
       via: 'subPortfolio'
     },

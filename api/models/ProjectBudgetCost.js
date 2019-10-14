@@ -21,7 +21,7 @@ module.exports = {
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
-    PortfolioBudgetYear: {
+    portfolioBudgetYear: {
       model: 'PortfolioBudgetYear',
     },
     project: {

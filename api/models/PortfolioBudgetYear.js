@@ -29,9 +29,9 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-    ProjectBudgetCost: {
+    projectBudgetCost: {
       collection: 'ProjectBudgetCost',
-      via: 'PortfolioBudgetYear'
+      via: 'portfolioBudgetYear'
     },
   },
 

@@ -101,6 +101,9 @@ module.exports = {
       collection: 'outlineApproval',
       via: 'project'
     },
+    portfolio: {
+      model: 'portfolio',
+    },
     subPortfolio: {
       model: 'subPortfolio',
     },

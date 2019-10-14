@@ -12,23 +12,30 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
     name: {
       type: 'string',
     },
+    bucketName: {
+      type: 'string',
+    },
+    budget: {
+      type: 'number',
+    },
+    notes: {
+      type: 'number',
+    },
+    isBucketCreated: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-    
-    portfolio: {
-      model: 'portfolio',
+    digitalizationDegree: {
+      mdoel: 'dropdownMapper',
     },
-
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
     PortfolioBudgetYear: {
       collection: 'PortfolioBudgetYear',
       via: 'subPortfolio'
@@ -36,6 +43,14 @@ module.exports = {
     projects: {
       collection: 'projects',
       via: 'subPortfolio'
+    },
+
+
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    portfolio: {
+      model: 'portfolio',
     },
 
   },

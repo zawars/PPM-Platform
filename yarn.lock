@@ -3000,6 +3000,11 @@ httpreq@>=0.4.22:
   resolved "https://registry.yarnpkg.com/httpreq/-/httpreq-0.4.24.tgz#4335ffd82cd969668a39465c929ac61d6393627f"
   integrity sha1-QzX/2CzZaWaKOUZckprGHWOTYn8=
 
+https@>=1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/https/-/https-1.0.0.tgz#3c37c7ae1a8eeb966904a2ad1e975a194b7ed3a4"
+  integrity sha1-PDfHrhqO65ZpBKKtHpdaGUt+06Q=
+
 i18n@0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/i18n/-/i18n-0.8.1.tgz#9938b42010a8bebae990c69863b2af5f2bea3627"
@@ -5760,6 +5765,13 @@ speakeasy@^2.0.0:
   integrity sha1-hckaBxsJpcuGQlkNmDVmFl9XYTo=
   dependencies:
     base32.js "0.0.1"
+
+sprestlib@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/sprestlib/-/sprestlib-1.9.0.tgz#668edb6fbecab61fe6c5951e7a64c4a387be3c25"
+  integrity sha512-J2ePoR1Ksg00HvKOsYdLKBtU9RkBNyWeHARhzi3HeUXot0HcJfLmZULILRVltLryDvpaAH5UkCxMLa/WGbOOHg==
+  dependencies:
+    https ">=1.0.0"
 
 sprintf-js@>=1.0.3, sprintf-js@^1.0.3:
   version "1.1.2"

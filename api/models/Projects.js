@@ -67,6 +67,9 @@ module.exports = {
     version: {
       type: 'integer',
     },
+    mode: {
+      type: 'string'
+    },
     projectReport: {
       model: 'reports'
     },
@@ -97,6 +100,9 @@ module.exports = {
     approvals: {
       collection: 'outlineApproval',
       via: 'project'
+    },
+    portfolio: {
+      model: 'portfolio',
     },
     subPortfolio: {
       model: 'subPortfolio',

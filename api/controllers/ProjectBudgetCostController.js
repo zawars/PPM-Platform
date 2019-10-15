@@ -7,28 +7,37 @@
 
 module.exports = {
 
-    deleteProjectBudget: async (req, res) => {
-        try {
-            let id = req.params.id;
-            await ProjectBudgetCost.destroy({ 'project': id });
-            console.log('Deleted Project Budget Cost');
-            res.ok({message: 'Deleted Project Budget Cost'});
-        } catch (e) {
-            res.badRequest(e);
-            console.log(e);
-        }
-    },
+  deleteProjectBudget: async (req, res) => {
+    try {
+      let id = req.params.id;
+      await ProjectBudgetCost.destroy({ 'project': id });
+      res.ok({ message: 'Deleted Project Budget Cost' });
+    } catch (e) {
+      res.badRequest(e);
+    }
+  },
 
-    getProjectBudget: async (req, res) => {
-        try {
-            let id = req.params.id;
-            let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
-            res.ok(budget);
-        } catch (e) {
-            res.badRequest(e);
-            console.log(e);
-        }
-    },
+  getProjectBudget: async (req, res) => {
+    try {
+      let id = req.params.id;
+      let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
+      res.ok(budget);
+    } catch (e) {
+      res.badRequest(e);
+    }
+  },
+
+  budgetsByYear: async (req, res) => {
+    try {
+      let results = await ProjectBudgetCost.find({
+        portfolioBudgetYear: req.params.id
+      }).populateAll();
+
+      res.ok(results);
+    } catch (error) {
+      res.ok({ error });
+    }
+  }
 
 };
 

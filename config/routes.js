@@ -118,8 +118,8 @@ module.exports.routes = {
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
 
   // ProjectBudgetCost Api
-  'DELETE /projectsBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
-  'GET /projectsBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
-  'GET /projectsBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
+  'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
+  'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
+  'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
 
 };

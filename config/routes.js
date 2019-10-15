@@ -119,5 +119,6 @@ module.exports.routes = {
 
   // ProjectBudgetCost Api
   'GET /delete/project/budget/:id': 'ProjectBudgetCostController.deleteProjectBudget',
+  'GET /project/budget/:id': 'ProjectBudgetCostController.getProjectBudget',
 
 };

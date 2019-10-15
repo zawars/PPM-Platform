@@ -19,5 +19,16 @@ module.exports = {
         }
     },
 
+    getProjectBudget: async (req, res) => {
+        try {
+            let id = req.params.id;
+            let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
+            res.ok(budget);
+        } catch (e) {
+            res.badRequest(e);
+            console.log(e);
+        }
+    },
+
 };
 

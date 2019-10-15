@@ -117,4 +117,7 @@ module.exports.routes = {
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
 
+  // ProjectBudgetCost Api
+  'GET /delete/project/budget/:id': 'ProjectBudgetCostController.deleteProjectBudget',
+
 };

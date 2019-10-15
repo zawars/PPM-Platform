@@ -68,7 +68,11 @@ module.exports = {
       type: 'integer',
     },
     mode: {
-      type: 'string'
+      type: 'string',
+      defaultsTo: 'project'
+    },
+    digitalizationDegree: {
+      model: 'dropdownMapper',
     },
     projectReport: {
       model: 'reports'

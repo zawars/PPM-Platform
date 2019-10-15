@@ -16,6 +16,9 @@ module.exports = {
     budget: {
       type: 'json',
     },
+    notes: {
+      type: 'string'
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

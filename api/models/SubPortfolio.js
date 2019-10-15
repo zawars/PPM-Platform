@@ -19,26 +19,10 @@ module.exports = {
     currentYear: {
       type: 'string',
     },
-    bucketName: {
-      type: 'string',
-    },
-    budget: {
-      type: 'number',
-    },
-    notes: {
-      type: 'number',
-    },
-    isBucketCreated: {
-      type: 'boolean',
-      defaultsTo: false
-    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-    digitalizationDegree: {
-      mdoel: 'dropdownMapper',
-    },
     costYears: {
       collection: 'PortfolioBudgetYear',
       via: 'subPortfolio'

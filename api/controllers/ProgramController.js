@@ -14,6 +14,7 @@ module.exports = {
     });
   },
 
+  /* Excel Point No 3 */
   getProgramsByUser: (req, res) => {
     Program.find({ or: [{
       programManager: req.params.id
@@ -26,6 +27,7 @@ module.exports = {
       res.badRequest(err);
     });
   },
+  /* Excel Point No 3 */
 };
 
  

@@ -28,6 +28,9 @@ module.exports = {
     },
     project: {
       model: 'projects'
+    },
+    report: {
+      model: 'reports'
     }
   },
 

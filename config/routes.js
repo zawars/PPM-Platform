@@ -110,4 +110,16 @@ module.exports.routes = {
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
   'GET /reports/exceldump/upload/sharepoint': 'ReportsController.uploadExcelDumpToDrive',
 
+  // Team Api
+  'GET /getTeamByProject/:id': 'TeamController.projectTeam',
+  'GET /getUserTeamProjects/:id': 'TeamController.userTeamProjects',
+
+  // Rights Api
+  'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
+
+  // ProjectBudgetCost Api
+  'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
+  'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
+  'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
+
 };

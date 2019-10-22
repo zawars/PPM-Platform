@@ -32,14 +32,13 @@ module.exports = {
   getSubmittedProjects: (req, res) => {
     Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
-      ]
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }]
     }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
@@ -77,7 +76,7 @@ module.exports = {
         let report = await Reports.findOne({
           id: project.projectReport
         }).populateAll();
-        
+
         if (report.team) {
           let team = report.team;
           team.forEach(member => {
@@ -149,7 +148,7 @@ module.exports = {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
-    delete(body.projectOutline);
+    delete (body.projectOutline);
 
     Projects.update({
       id: req.params.id

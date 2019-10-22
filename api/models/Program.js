@@ -21,9 +21,11 @@ module.exports = {
     programManager: {
       model: 'user'
     },
+    /* Excel Point No 3 */
     programSponsor: {
-      type: 'json'
+      model: 'user'
     },
+    /* Excel Point No 3 */
     uid: {
       type: 'integer',
       unique: true

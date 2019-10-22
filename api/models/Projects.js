@@ -67,6 +67,13 @@ module.exports = {
     version: {
       type: 'integer',
     },
+    mode: {
+      type: 'string',
+      defaultsTo: 'project'
+    },
+    digitalizationDegree: {
+      model: 'dropdownMapper',
+    },
     projectReport: {
       model: 'reports'
     },
@@ -97,7 +104,13 @@ module.exports = {
     approvals: {
       collection: 'outlineApproval',
       via: 'project'
-    }
+    },
+    portfolio: {
+      model: 'portfolio',
+    },
+    subPortfolio: {
+      model: 'subPortfolio',
+    },
   },
 
   beforeCreate: (values, cb) => {

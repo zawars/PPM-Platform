@@ -1,7 +1,7 @@
 /**
- * Team.js
+ * SubPortfolio.js
  *
- * @description :: A model definition.  Represents a database table/collection/etc.
+ * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
@@ -13,22 +13,34 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
+    name: {
+      type: 'string',
+    },
+    currentYear: {
+      type: 'string',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+    costYears: {
+      collection: 'PortfolioBudgetYear',
+      via: 'subPortfolio'
+    },
+    projects: {
+      collection: 'projects',
+      via: 'subPortfolio'
+    },
 
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    users: {
-      collection: 'user',
-      via: 'teams'
+    portfolio: {
+      model: 'portfolio',
     },
-    project: {
-      model: 'projects'
-    }
+
   },
 
 };
+

@@ -1,4 +1,4 @@
 # PMT-Server
-# Live Server
+# Megowork Server
 
 a [Sails](http://sailsjs.org) application

@@ -981,6 +981,16 @@ module.exports = {
     });
   },
 
+  getProjectsBySubPortfolio: async (req, res) => {
+    let data = req.body;
+
+    let subportfolioProjects = await Reports.findOne({
+      portfolio: data.portfolioId,
+      subPortfolio: data.report.subPortfolio
+    }).populateAll();
+
+    res.ok(subportfolioProjects);
+  }
 };
 
 toCamelCase = (str) => {

@@ -982,14 +982,340 @@ module.exports = {
   },
 
   getProjectsBySubPortfolio: async (req, res) => {
-    let data = req.body;
+    let data = req.params;
 
-    let subportfolioProjects = await Reports.findOne({
-      portfolio: data.portfolioId,
-      subPortfolio: data.report.subPortfolio
+    let subportfolioProjects = await Reports.find({
+      portfolio: data.id,
+      subPortfolio: data.subPortfolio
     }).populateAll();
 
     res.ok(subportfolioProjects);
+  },
+
+  update: async (req, res) => {
+    let data = req.body;
+    let subportfolioBudget = data.portfolio
+
+    // Update Subportfolio Budget
+    if (data.subPortfolio != undefined && data.subPortfolio != "") {
+      if (data.isSubportfolioChanged != undefined) {
+        if (data.isSubportfolioChanged == true) {
+
+          // ################################################################################################################
+          // Updating budget in old subportfolio
+          let subportfolioProjects = await Reports.find({
+            subPortfolio: data.oldSubportfolio
+          }).populateAll();
+
+          let subPortfolioBudgetCurrentYear = [{
+            costType: "External Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 0,
+            group: "CAPEX",
+          }, {
+            costType: "Internal Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 1,
+            group: "CAPEX",
+          }, {
+            costType: "External Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 2,
+            group: "OPEX"
+          }, {
+            costType: "Internal Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 3,
+            group: "OPEX"
+          }, {
+            costType: "Revenues",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 4,
+            group: "Sonstiges",
+          }, {
+            costType: "Reserves",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            group: "Sonstiges",
+            id: 5,
+          }, {
+            costType: "Total",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 6,
+            group: "Sonstiges",
+          }, ];
+          let subPortfolioBudgetNextYear = JSON.parse(JSON.stringify(subPortfolioBudgetCurrentYear));
+
+          for (let i = 0; i <= 6; i++) {
+            subPortfolioBudgetCurrentYear[i].assigned = 0;
+            subPortfolioBudgetCurrentYear[i].actualCost = 0;
+            subPortfolioBudgetCurrentYear[i].forecast = 0;
+
+            subPortfolioBudgetNextYear[i].assigned = 0;
+            subPortfolioBudgetNextYear[i].actualCost = 0;
+            subPortfolioBudgetNextYear[i].forecast = 0;
+          }
+
+          subportfolioProjects.map(project => {
+            if (data.id != project.id) {
+              for (let i = 0; i <= 6; i++) {
+                // Current Year
+                if (project.budgetPlanningTable1 != undefined) {
+                  subPortfolioBudgetCurrentYear[i].assigned = (subPortfolioBudgetCurrentYear[i].assigned * 1) +
+                    (project.budgetPlanningTable1[i].budget * 1);
+
+                  subPortfolioBudgetCurrentYear[i].actualCost = (subPortfolioBudgetCurrentYear[i].actualCost * 1) +
+                    (project.budgetPlanningTable1[i].actualCost * 1);
+
+                  subPortfolioBudgetCurrentYear[i].forecast = (subPortfolioBudgetCurrentYear[i].forecast * 1) +
+                    (project.budgetPlanningTable1[i].forecast * 1);
+                }
+
+                // Next Year
+                if (project.budgetPlanningTable2 != undefined) {
+                  subPortfolioBudgetNextYear[i].assigned = (subPortfolioBudgetNextYear[i].assigned * 1) +
+                    (project.budgetPlanningTable2[i].budget * 1);
+                }
+              }
+            }
+          });
+
+          let portfolioObj = await Portfolio.findOne({
+            id: data.oldPortfolioId
+          }).populateAll();
+
+          let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
+          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
+          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+
+          await Portfolio.update({
+            id: data.oldPortfolioId
+          }).set({
+            subPortfolioBudgetingList: portfolioObj.subPortfolioBudgetingList
+          });
+
+          delete(data.oldSubportfolio);
+          delete(data.oldPortfolioId);
+
+          // ################################################################################################################
+
+          // Update budget in new Subportfolio
+          idx = data.portfolio.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.subPortfolio);
+          subPortfolioBudgetCurrentYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear;
+          subPortfolioBudgetNextYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear;
+
+          subportfolioProjects = await Reports.find({
+            portfolio: data.portfolio.id,
+            subPortfolio: data.subPortfolio
+          }).populateAll();
+
+          subportfolioProjects.map(project => {
+            if (data.id != project.id) {
+              for (let i = 0; i <= 6; i++) {
+                // Current Year
+                if (project.budgetPlanningTable1 != undefined) {
+                  subPortfolioBudgetCurrentYear[i].assigned = (subPortfolioBudgetCurrentYear[i].assigned * 1) +
+                    (project.budgetPlanningTable1[i].budget * 1);
+
+                  subPortfolioBudgetCurrentYear[i].actualCost = (subPortfolioBudgetCurrentYear[i].actualCost * 1) +
+                    (project.budgetPlanningTable1[i].actualCost * 1);
+
+                  subPortfolioBudgetCurrentYear[i].forecast = (subPortfolioBudgetCurrentYear[i].forecast * 1) +
+                    (project.budgetPlanningTable1[i].forecast * 1);
+                }
+
+                // Next Year
+                if (project.budgetPlanningTable2 != undefined) {
+                  subPortfolioBudgetNextYear[i].assigned = (subPortfolioBudgetNextYear[i].assigned * 1) +
+                    (project.budgetPlanningTable2[i].budget * 1);
+                }
+              }
+            }
+          });
+          // It will be updated automatically with the Report Model using association
+        }
+      } else {
+        // Case: Subportfolio has not been updated
+        // Nothing to do for now
+      }
+    } else {
+      // Case: No new subportfolio is selected
+      if (data.isSubportfolioChanged != undefined) {
+        if (data.isSubportfolioChanged == true) {
+          // Updating budget in old subportfolio
+          let subportfolioProjects = await Reports.find({
+            subPortfolio: data.oldSubportfolio
+          }).populateAll();
+
+          let subPortfolioBudgetCurrentYear = [{
+            costType: "External Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 0,
+            group: "CAPEX",
+          }, {
+            costType: "Internal Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 1,
+            group: "CAPEX",
+          }, {
+            costType: "External Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 2,
+            group: "OPEX"
+          }, {
+            costType: "Internal Costs",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 3,
+            group: "OPEX"
+          }, {
+            costType: "Revenues",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 4,
+            group: "Sonstiges",
+          }, {
+            costType: "Reserves",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            group: "Sonstiges",
+            id: 5,
+          }, {
+            costType: "Total",
+            budget: "",
+            assigned: "",
+            remaining: "",
+            remainingPercent: "",
+            actualCost: "",
+            forecast: "",
+            id: 6,
+            group: "Sonstiges",
+          }, ];
+          let subPortfolioBudgetNextYear = JSON.parse(JSON.stringify(subPortfolioBudgetCurrentYear));
+
+          for (let i = 0; i <= 6; i++) {
+            subPortfolioBudgetCurrentYear[i].assigned = 0;
+            subPortfolioBudgetCurrentYear[i].actualCost = 0;
+            subPortfolioBudgetCurrentYear[i].forecast = 0;
+
+            subPortfolioBudgetNextYear[i].assigned = 0;
+            subPortfolioBudgetNextYear[i].actualCost = 0;
+            subPortfolioBudgetNextYear[i].forecast = 0;
+          }
+
+          subportfolioProjects.map(project => {
+            if (data.id != project.id) {
+              for (let i = 0; i <= 6; i++) {
+                // Current Year
+                if (project.budgetPlanningTable1 != undefined) {
+                  subPortfolioBudgetCurrentYear[i].assigned = (subPortfolioBudgetCurrentYear[i].assigned * 1) +
+                    (project.budgetPlanningTable1[i].budget * 1);
+
+                  subPortfolioBudgetCurrentYear[i].actualCost = (subPortfolioBudgetCurrentYear[i].actualCost * 1) +
+                    (project.budgetPlanningTable1[i].actualCost * 1);
+
+                  subPortfolioBudgetCurrentYear[i].forecast = (subPortfolioBudgetCurrentYear[i].forecast * 1) +
+                    (project.budgetPlanningTable1[i].forecast * 1);
+                }
+
+                // Next Year
+                if (project.budgetPlanningTable2 != undefined) {
+                  subPortfolioBudgetNextYear[i].assigned = (subPortfolioBudgetNextYear[i].assigned * 1) +
+                    (project.budgetPlanningTable2[i].budget * 1);
+                }
+              }
+            }
+          });
+
+          let portfolioObj = await Portfolio.findOne({
+            id: data.oldPortfolioId
+          }).populateAll();
+
+          let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
+          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
+          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+          await Portfolio.update({
+            id: data.oldPortfolioId
+          }).set(portfolioObj);
+
+          delete(data.oldSubportfolio);
+          delete(data.oldPortfolioId);
+        }
+      }
+    }
+
+    delete(data.isSubportfolioChanged);
+
+    await Reports.update({
+      id: req.params.id
+    }).set(data);
+
+    let report = await Reports.findOne({
+      id: req.params.id
+    }).populateAll();
+
+    res.ok(report);
   }
 };
 

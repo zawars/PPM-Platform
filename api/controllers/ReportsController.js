@@ -1118,15 +1118,17 @@ module.exports = {
             id: data.oldPortfolioId
           }).populateAll();
 
-          let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
-          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+          if (portfolioObj != undefined) {
+            let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
+            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
+            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
 
-          await Portfolio.update({
-            id: data.oldPortfolioId
-          }).set({
-            subPortfolioBudgetingList: portfolioObj.subPortfolioBudgetingList
-          });
+            await Portfolio.update({
+              id: data.oldPortfolioId
+            }).set({
+              subPortfolioBudgetingList: portfolioObj.subPortfolioBudgetingList
+            });
+          }
 
           delete(data.oldSubportfolio);
           delete(data.oldPortfolioId);
@@ -1292,12 +1294,14 @@ module.exports = {
             id: data.oldPortfolioId
           }).populateAll();
 
-          let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
-          portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
-          await Portfolio.update({
-            id: data.oldPortfolioId
-          }).set(portfolioObj);
+          if (portfolioObj != undefined) {
+            let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
+            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
+            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+            await Portfolio.update({
+              id: data.oldPortfolioId
+            }).set(portfolioObj);
+          }
 
           delete(data.oldSubportfolio);
           delete(data.oldPortfolioId);

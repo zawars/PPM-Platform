@@ -1120,8 +1120,8 @@ module.exports = {
 
           if (portfolioObj != undefined) {
             let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
             portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
 
             await Portfolio.update({
               id: data.oldPortfolioId
@@ -1138,7 +1138,7 @@ module.exports = {
           // Update budget in new Subportfolio
           idx = data.portfolio.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.subPortfolio);
           subPortfolioBudgetCurrentYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear;
-          subPortfolioBudgetNextYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear;
+          subPortfolioBudgetNextYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear;
 
           subportfolioProjects = await Reports.find({
             portfolio: data.portfolio.id,
@@ -1296,8 +1296,8 @@ module.exports = {
 
           if (portfolioObj != undefined) {
             let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
             portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
             await Portfolio.update({
               id: data.oldPortfolioId
             }).set(portfolioObj);

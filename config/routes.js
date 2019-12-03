@@ -100,7 +100,7 @@ module.exports.routes = {
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
-
+  'POST /updatepreviousapproval': 'OutlineApprovalController.updatePreviousApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',

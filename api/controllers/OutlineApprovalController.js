@@ -9,7 +9,7 @@ module.exports = {
   getOutlinesByUser: (req, res) => {
     OutlineApproval.find({
       assignedTo: req.params.id
-    }).populate('assignedTo').populate('project').sort('createdAt DESC').then(projects => {
+    }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     });
   },
@@ -26,5 +26,16 @@ module.exports = {
         message: "Approvals assigned person has been updated."
       });
     });
+  },
+
+  updatePreviousApproval: (req, resp) => {
+    let query = req.body.query;
+    let projectItem = req.body.projectItem;
+    OutlineApproval.update(query).set(projectItem)
+      .then(() => {
+        resp.ok({
+          message: "Previous Approval has been updated."
+        });
+      });
   }
 };

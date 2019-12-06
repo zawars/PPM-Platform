@@ -1296,8 +1296,14 @@ module.exports = {
 
           if (portfolioObj != undefined) {
             let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
-            portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
+            if (idx > 0) {
+              if (portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear != undefined) {
+                portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
+              }
+              if (portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear != undefined) {
+                portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
+              }
+            }
             await Portfolio.update({
               id: data.oldPortfolioId
             }).set(portfolioObj);

@@ -4,5 +4,5 @@ a [Sails](http://sailsjs.org) application
 
 
 # Changes
-## Date: 27th November, 2019 
-## Commit ID: 37406d0
+## Date: 6th December, 2019 
+## Commit ID: 3c4b9ce

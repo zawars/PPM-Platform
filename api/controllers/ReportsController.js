@@ -5,6 +5,23 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+sails.hooks.sockets.load(() => {
+  const io = sails.io;
+
+  io.on('connection', socket => {
+    socket.on('reportsCount', async data => {
+      let count = await Reports.count();
+      socket.emit('reportsCount', count);
+    });
+
+    socket.on('reportsIndex', async data => {
+      // TODO :: Need to poginate it
+      let projects = await Reports.find().populateAll();
+      socket.emit('reportsIndex', projects);
+    });
+  });
+});
+
 module.exports = {
   getReportsByUser: (req, res) => {
     Reports.find({

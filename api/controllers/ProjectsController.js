@@ -5,7 +5,22 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var Email = require('machinepack-email');
+// sails.hooks.sockets.load(() => {
+//   const io = sails.io;
+
+//   io.on('connection', socket => {
+//     socket.on('projectsCount', async data => {
+//       let count = await Projects.count();
+//       socket.emit('projectsCount', count);
+//     });
+
+//     socket.on('projectsIndex', async data => {
+//       // TODO :: Need to poginate it
+//       let projects = await Projects.find().populateAll();
+//       socket.emit('projectsIndex', projects);
+//     });
+//   });
+// });
 
 module.exports = {
   userProjects: (req, res) => {
@@ -77,7 +92,7 @@ module.exports = {
         let report = await Reports.findOne({
           id: project.projectReport
         }).populateAll();
-        
+
         if (report.team) {
           let team = report.team;
           team.forEach(member => {

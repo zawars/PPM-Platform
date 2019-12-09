@@ -41,6 +41,7 @@
     "sails-seed": "^0.5.0",
     "saml-encoder-decoder-js": "git+https://github.com/zawars/saml-encoder-decoder-js.git",
     "sendmail": "^1.4.1",
+    "socket.io": "^2.3.0",
     "speakeasy": "^2.0.0",
     "sprestlib": "^1.9.0",
     "uuid": "^3.3.2",

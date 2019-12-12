@@ -5,7 +5,7 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
-const io = require('socket.io')(1338);
+const io = SocketService.io;
 
 io.on('connection', socket => {
 

@@ -9,7 +9,6 @@ module.exports = {
 
   attributes: {
     projectId: {
-      type: 'string',
       model: 'projects',
       required: true
     },
@@ -23,7 +22,6 @@ module.exports = {
       required: true
     },
     actor: {
-      type: 'string',
       model: 'user',
       required: true
     },
@@ -32,21 +30,6 @@ module.exports = {
       defaultsTo: false
     },
   },
-
-  afterCreate: function (entry, cb) {
-    NotificationsHistory.findOne({ id: entry.id })
-      .populateAll()
-      .then(notification => {
-        let desc = NotificationsService.getTemplate(notification.projectItem, notification.action, notification.actor.name);
-        let notifItem = {
-          projectId: notification.projectId.uid,
-          description: desc,
-          date: new Date(notification.createdAt).toDateString() + ', ' + new Date(notification.createdAt).toLocaleTimeString()
-        }
-        sails.sockets.blast('notification', notifItem);
-      })
-    cb();
-  }
 
 };
 

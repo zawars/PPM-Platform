@@ -5,6 +5,25 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+sails.hooks.sockets.load(() => {
+  const io = sails.io;
+
+  io.on('connection', socket => {
+    socket.on('approvalsCount', async data => {
+      let count = await OutlineApproval.count();
+      socket.emit('approvalsCount', count);
+    });
+
+    socket.on('approvalsIndexByUser', async data => {
+      // TODO :: Need to poginate it
+      let approvals = await OutlineApproval.find({
+        assignedTo: data.userId
+      }).populateAll().sort('createdAt DESC');
+      socket.emit('approvalsIndexByUser', approvals);
+    });
+  });
+});
+
 module.exports = {
   getOutlinesByUser: (req, res) => {
     OutlineApproval.find({

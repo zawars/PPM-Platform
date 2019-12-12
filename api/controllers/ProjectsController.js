@@ -5,13 +5,87 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+const io = SocketService.io;
 var Email = require('machinepack-email');
+
+
+io.on('connection', socket => {
+
+  socket.on('projectsIndex', data => {
+    console.log('hit')
+    Projects.find({ user: data.userId })
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().sort('uid DESC').then(projects => {
+        socket.emit('projectsIndex', projects);
+        console.log('respppppppp')
+      }).catch(error => {
+        socket.emit('projectsIndex', error);
+      });
+  });
+
+  socket.on('projectsCount', async data => {
+    let count = await Projects.count({ user: data.userId });
+    socket.emit('projectsCount', count);
+  });
+
+  //To search in data table of Projects
+  socket.on('projectsSearch', async data => {
+    let search = data.search;
+    try {
+      let count = await Projects.count({
+        user: data.userId,
+        or: [
+          { uid: parseInt(search) },
+          { docType: { contains: search } },
+          { status: { contains: search } },
+          { projectName: { contains: search } }
+        ]
+      });
+
+      Projects.find({
+        user: data.userId,
+        or: [
+          { uid: parseInt(search) },
+          { docType: { contains: search } },
+          { status: { contains: search } },
+          { projectName: { contains: search } }
+        ]
+      }).limit(10).populateAll().sort('uid DESC').then(projects => {
+        socket.emit('projectsSearch', { count: count, projects: projects });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  //To paginate search results of projects
+  socket.on('projectsSearchIndex', data => {
+    let search = data.search;
+    Projects.find({
+      user: data.userId,
+      or: [
+        { uid: parseInt(search) },
+        { docType: { contains: search } },
+        { status: { contains: search } },
+        { projectName: { contains: search } }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(projects => {
+      socket.emit('projectsSearchIndex', projects);
+      console.log('projects search index', projects)
+    });
+  });
+})
+
 
 module.exports = {
   userProjects: (req, res) => {
+    let limit = 0;
+    if (req.param('limit')) {
+      limit = req.param('limit');
+    }
     Projects.find({
       user: req.params.id
-    }).populateAll().sort('uid DESC').then(projects => {
+    }).limit(limit).populateAll().sort('uid DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
       res.badRequest(error);

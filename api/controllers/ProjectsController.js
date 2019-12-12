@@ -12,12 +12,10 @@ var Email = require('machinepack-email');
 io.on('connection', socket => {
 
   socket.on('projectsIndex', data => {
-    console.log('hit')
     Projects.find({ user: data.userId })
       .paginate({ page: data.pageIndex, limit: data.pageSize })
       .populateAll().sort('uid DESC').then(projects => {
         socket.emit('projectsIndex', projects);
-        console.log('respppppppp')
       }).catch(error => {
         socket.emit('projectsIndex', error);
       });
@@ -71,7 +69,6 @@ io.on('connection', socket => {
       ]
     }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(projects => {
       socket.emit('projectsSearchIndex', projects);
-      console.log('projects search index', projects)
     });
   });
 })

@@ -15,14 +15,11 @@ io.on('connection', socket => {
   socket.on('portfolioProjectsCount', async data => {
     let count = await Reports.count({ user: data.userId });
     socket.emit('portfolioProjectsCount', count);
-    console.log('count', count)
   });
 
   //To paginate
   socket.on('portfolioProjectsIndex', data => {
-    Reports.find({
-      user: data.userId
-    })
+    Reports.find({ user: data.userId })
       .paginate({ page: data.pageIndex, limit: data.pageSize })
       .populateAll().then(projects => {
         socket.emit('portfolioProjectsIndex', projects);
@@ -36,7 +33,6 @@ io.on('connection', socket => {
   socket.on('portfolioProjectsSearch', async data => {
     let search = data.search.toLowerCase();
     let count = 0;
-
     try {
       await Reports.find({ user: data.userId }).populateAll().then(projects => {
         let filteredProjects = projects.filter(project => {
@@ -48,7 +44,7 @@ io.on('connection', socket => {
             || project.status.toLowerCase().includes(search);
 
           return check;
-        })
+        });
         count = filteredProjects.length;
       });
 
@@ -74,7 +70,6 @@ io.on('connection', socket => {
   //To paginate search results of projects
   socket.on('portfolioProjectsSearchIndex', data => {
     let search = data.search;
-
     Reports.find({ user: data.userId }).populateAll().then(projects => {
       let filteredProjects = projects.filter(project => {
         let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search)
@@ -94,7 +89,6 @@ io.on('connection', socket => {
   socket.on('portfolioProjectsFilter', data => {
     let filters = data.filtersArray;
     let filtersObj = {};
-    let count = 0;
     filters.forEach(filter => {
       let key = Object.keys(filter)[0];
       filtersObj[key] = filter[key];
@@ -118,7 +112,6 @@ io.on('connection', socket => {
       socket.emit('portfolioProjectsFilterIndex', paginatedProjects);
     })
   });
-
 });
 
 

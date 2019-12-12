@@ -110,11 +110,13 @@ module.exports.sockets = {
   beforeConnect: function (handshake, cb) {
     // `true` allows the connection
 
-    jwt.verify(handshake._query.token, sails.config.secret, (err, authData) => {
+    let token = handshake._query.token;
+
+    jwt.verify(token, sails.config.secret, (err, authData) => {
       if (err) {
         return cb(undefined, false);
       } else {
-        RedisService.get(handshake._query.token, (result) => {
+        RedisService.get(token, (result) => {
           if (result != undefined) {
             if (authData.user.azureId == result.azureId) {
               console.log('Client Connected');

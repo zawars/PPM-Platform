@@ -19,6 +19,23 @@ sails.hooks.sockets.load(() => {
       let projects = await Reports.find().populateAll();
       socket.emit('reportsIndex', projects);
     });
+
+    socket.on('projectsIndexByUser', async data => {
+      // TODO :: Need to poginate it
+      let projects = await Projects.find({
+        user: data.userId
+      }).populateAll();
+      socket.emit('projectsIndexByUser', projects);
+    });
+
+    socket.on('approvalsIndexByUser', async data => {
+      // TODO :: Need to poginate it
+      let approvals = await OutlineApproval.find({
+        assignedTo: data.userId
+      }).populateAll().sort('createdAt DESC');
+      socket.emit('approvalsIndexByUser', approvals);
+    });
+
   });
 });
 

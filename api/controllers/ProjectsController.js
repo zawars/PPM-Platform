@@ -5,24 +5,16 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-sails.hooks.sockets.load(() => {
-  const io = sails.io;
+// sails.hooks.sockets.load(() => {
+//   const io = sails.io;
 
-  io.on('connection', socket => {
-    socket.on('projectsCount', async data => {
-      let count = await Projects.count();
-      socket.emit('projectsCount', count);
-    });
-
-    socket.on('projectsIndexByUser', async data => {
-      // TODO :: Need to poginate it
-      let projects = await Projects.find({
-        user: data.userId
-      }).populateAll();
-      socket.emit('projectsIndex', projects);
-    });
-  });
-});
+//   io.on('connection', socket => {
+//     socket.on('projectsCount', async data => {
+//       let count = await Projects.count();
+//       socket.emit('projectsCount', count);
+//     });
+//   });
+// });
 
 module.exports = {
   userProjects: (req, res) => {

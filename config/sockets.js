@@ -112,6 +112,7 @@ module.exports.sockets = {
 
     let token = handshake._query.token;
 
+    console.log(token)
     jwt.verify(token, sails.config.secret, (err, authData) => {
       if (err) {
         return cb(undefined, false);

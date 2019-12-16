@@ -122,4 +122,6 @@ module.exports.routes = {
   'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
   'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
 
+  //News
+  'GET /getNews': 'NewsController.getNews'
 };

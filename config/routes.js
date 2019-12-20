@@ -123,5 +123,9 @@ module.exports.routes = {
   'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
 
   //News
-  'GET /getNews': 'NewsController.getNews'
+  'GET /getNews': 'NewsController.getNews',
+  
+  //Notifications
+  'GET /getNotifications': 'NotificationsHistoryController.getAllNotifications',
+  'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications'
 };

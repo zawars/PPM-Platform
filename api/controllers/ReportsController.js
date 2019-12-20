@@ -9,15 +9,96 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
-  console.log('socket', socket.id)
+  socket.on('selectiveReportsIndex', data => {
+    let selectionIds = data.ids;
+    Reports.find({
+      id: selectionIds
+    }).paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().then(projects => {
+        socket.emit('selectiveReportsIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('selectiveReportsIndex', error);
+      });
+  });
 
-  //To get count
+  socket.on('selectiveReportsSearch', async data => {
+    let search = data.search;
+    let selectionIds = data.ids;
+
+    let count = await Reports.count({
+      or: [
+        { uid: parseInt(search), id: selectionIds },
+        { projectName: { contains: search }, id: selectionIds },
+        { 'projectSponsor.name': { contains: search }, id: selectionIds },
+        { 'projectManager.name': { contains: search }, id: selectionIds },
+        { status: { contains: search }, id: selectionIds }
+      ]
+    });
+
+    Reports.find({
+      or: [
+        { uid: parseInt(search), id: selectionIds },
+        { projectName: { contains: search }, id: selectionIds },
+        { 'projectSponsor.name': { contains: search }, id: selectionIds },
+        { 'projectManager.name': { contains: search }, id: selectionIds },
+        { status: { contains: search }, id: selectionIds }
+      ]
+    }).limit(10)
+      .populateAll().then(projects => {
+        socket.emit('selectiveReportsSearch', { count, projects });
+      })
+      .catch(error => {
+        socket.emit('selectiveReportsSearch', error);
+      });
+  });
+
+  socket.on('selectiveReportsSearchIndex', async data => {
+    let search = data.search;
+    let selectionIds = data.ids;
+
+    Reports.find({
+      or: [
+        { uid: parseInt(search), id: selectionIds },
+        { projectName: { contains: search }, id: selectionIds },
+        { 'projectSponsor.name': { contains: search }, id: selectionIds },
+        { 'projectManager.name': { contains: search }, id: selectionIds },
+        { status: { contains: search }, id: selectionIds }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().then(projects => {
+        socket.emit('selectiveReportsSearchIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('selectiveReportsSearchIndex', error);
+      });
+  });
+
+  //To get count for all records
+  socket.on('allReportsCount', async data => {
+    let count = await Reports.count();
+    socket.emit('allReportsCount', count);
+  });
+
+  //To paginate all records
+  socket.on('allReportsIndex', data => {
+    Reports.find()
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().then(projects => {
+        socket.emit('allReportsIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('allReportsIndex', error);
+      });
+  });
+
+  //To get count for a user
   socket.on('portfolioProjectsCount', async data => {
     let count = await Reports.count({ user: data.userId });
     socket.emit('portfolioProjectsCount', count);
   });
 
-  //To paginate
+  //To paginate current user records
   socket.on('portfolioProjectsIndex', data => {
     Reports.find({ user: data.userId })
       .paginate({ page: data.pageIndex, limit: data.pageSize })

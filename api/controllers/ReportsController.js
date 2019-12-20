@@ -9,8 +9,6 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
-  console.log('socket', socket.id)
-
   //To get count
   socket.on('portfolioProjectsCount', async data => {
     let count = await Reports.count({ user: data.userId });

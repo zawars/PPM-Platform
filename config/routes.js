@@ -124,7 +124,8 @@ module.exports.routes = {
 
   //News
   'GET /news': 'NewsController.index',
-  
+  'POST /news': 'NewsController.create',
+
   //Notifications
   'GET /getNotifications': 'NotificationsHistoryController.getAllNotifications',
   'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications',

@@ -142,6 +142,13 @@ module.exports = {
       .catch(err => {
         resp.badRequest(err);
       })
-  }
+  },
+
+  create: (req, res) => {
+    let data = req.body;
+    News.create(data).then(response => {
+      res.ok(response);
+    });
+  },
 };
 

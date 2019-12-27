@@ -8,13 +8,13 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
-    socket.on('emailConfig', data => {
-        EmailConfig.find().populateAll().then(emailConfigs => {
-            socket.emit('emailConfig', emailConfigs)
-        }).catch(err => {
-            console.log(err);
-        })
+  socket.on('emailConfig', data => {
+    EmailConfig.find().populateAll().then(emailConfigs => {
+      socket.emit('emailConfig', emailConfigs)
+    }).catch(err => {
+      console.log(err);
     })
+  })
 })
 
 module.exports = {

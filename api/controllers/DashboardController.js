@@ -29,9 +29,9 @@ let opexVsCapexChart = [{
   budget: 0,
   forecast: 0,
 }];
-let businessUnitOptions;
-let businessAreaOptions;
-let projectTypeOptions;
+let businessUnitOptions = [];
+let businessAreaOptions = [];
+let projectTypeOptions = [];
 let configuration;
 let strategicContributionOptions;
 let socketObj;

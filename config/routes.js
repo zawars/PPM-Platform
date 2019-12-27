@@ -127,5 +127,8 @@ module.exports.routes = {
   
   //Notifications
   'GET /getNotifications': 'NotificationsHistoryController.getAllNotifications',
-  'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications'
+  'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications',
+
+  //Dashboard
+  'GET /getDashboardData': 'DashboardController.getDashboard'
 };

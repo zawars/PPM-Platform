@@ -92,7 +92,7 @@ io.on('connection', socket => {
       });
   });
 
-  //To get count for a user
+  //To get count
   socket.on('portfolioProjectsCount', async data => {
     let count = await Reports.count({ user: data.userId });
     socket.emit('portfolioProjectsCount', count);

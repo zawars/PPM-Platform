@@ -7,11 +7,12 @@
 
 module.exports = {
   getActivePortfolios: (req, res) => {
-    Portfolio.find({ status: "Active" }).populateAll().then(response => {
+    Portfolio.find({
+      status: "Active"
+    }).populateAll().then(response => {
       res.ok(response);
     }).catch(err => {
       res.badRequest(err);
     });
   },
 };
-

@@ -24,7 +24,8 @@ sails.hooks.sockets.load(() => {
       // TODO :: Need to poginate it
       let projects = await Projects.find({
         user: data.userId
-      }).populateAll();
+      }).populateAll().sort('uid DESC');
+
       socket.emit('projectsIndexByUser', projects);
     });
 

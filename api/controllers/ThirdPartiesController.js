@@ -47,14 +47,15 @@ module.exports = {
 
   agilePlanning: async (req, res) => {
     try {
-      let data = await Reports.find().populate('statusReports').populate('businessUnit').populate('businessArea');
+      let data = await Reports.find().populateAll();
       let agilePlanningData = [];
 
       data.map(obj => {
-        delete (obj.projectManager.projects);
-        delete (obj.projectManager.configuration);
+        delete(obj.projectManager.projects);
+        delete(obj.projectManager.configuration);
 
         agilePlanningData.push({
+          uid: obj.uid,
           projectName: obj.projectName,
           purpose: obj.purpose,
           startDate: obj.startDate,

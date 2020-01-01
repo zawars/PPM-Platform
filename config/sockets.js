@@ -9,36 +9,37 @@
  * For more information on sockets configuration, including advanced config options, see:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.sockets.html
  */
+const jwt = require('jsonwebtoken');
 
 module.exports.sockets = {
 
 
   /***************************************************************************
-  *                                                                          *
-  * Node.js (and consequently Sails.js) apps scale horizontally. It's a      *
-  * powerful, efficient approach, but it involves a tiny bit of planning. At *
-  * scale, you'll want to be able to copy your app onto multiple Sails.js    *
-  * servers and throw them behind a load balancer.                           *
-  *                                                                          *
-  * One of the big challenges of scaling an application is that these sorts  *
-  * of clustered deployments cannot share memory, since they are on          *
-  * physically different machines. On top of that, there is no guarantee     *
-  * that a user will "stick" with the same server between requests (whether  *
-  * HTTP or sockets), since the load balancer will route each request to the *
-  * Sails server with the most available resources. However that means that  *
-  * all room/pubsub/socket processing and shared memory has to be offloaded  *
-  * to a shared, remote messaging queue (usually Redis)                      *
-  *                                                                          *
-  * Luckily, Socket.io (and consequently Sails.js) apps support Redis for    *
-  * sockets by default. To enable a remote redis pubsub server, uncomment    *
-  * the config below.                                                        *
-  *                                                                          *
-  * Worth mentioning is that, if `adapter` config is `redis`, but host/port  *
-  * is left unset, Sails will try to connect to redis running on localhost   *
-  * via port 6379                                                            *
-  *                                                                          *
-  ***************************************************************************/
-  // adapter: 'memory',
+   *                                                                          *
+   * Node.js (and consequently Sails.js) apps scale horizontally. It's a      *
+   * powerful, efficient approach, but it involves a tiny bit of planning. At *
+   * scale, you'll want to be able to copy your app onto multiple Sails.js    *
+   * servers and throw them behind a load balancer.                           *
+   *                                                                          *
+   * One of the big challenges of scaling an application is that these sorts  *
+   * of clustered deployments cannot share memory, since they are on          *
+   * physically different machines. On top of that, there is no guarantee     *
+   * that a user will "stick" with the same server between requests (whether  *
+   * HTTP or sockets), since the load balancer will route each request to the *
+   * Sails server with the most available resources. However that means that  *
+   * all room/pubsub/socket processing and shared memory has to be offloaded  *
+   * to a shared, remote messaging queue (usually Redis)                      *
+   *                                                                          *
+   * Luckily, Socket.io (and consequently Sails.js) apps support Redis for    *
+   * sockets by default. To enable a remote redis pubsub server, uncomment    *
+   * the config below.                                                        *
+   *                                                                          *
+   * Worth mentioning is that, if `adapter` config is `redis`, but host/port  *
+   * is left unset, Sails will try to connect to redis running on localhost   *
+   * via port 6379                                                            *
+   *                                                                          *
+   ***************************************************************************/
+  adapter: 'memory',
 
   //
   // -OR-
@@ -52,18 +53,18 @@ module.exports.sockets = {
 
 
 
-  /***************************************************************************
-   *                                                                          *
-   * Whether to expose a 'get /__getcookie' route with CORS support that sets *
-   * a cookie (this is used by the sails.io.js socket client to get access to *
-   * a 3rd party cookie and to enable sessions).                              *
-   *                                                                          *
-   * Warning: Currently in this scenario, CORS settings apply to interpreted  *
-   * requests sent via a socket.io connection that used this cookie to        *
-   * connect, even for non-browser clients! (e.g. iOS apps, toasters, node.js *
-   * unit tests)                                                              *
-   *                                                                          *
-   ***************************************************************************/
+ /***************************************************************************
+  *                                                                          *
+  * Whether to expose a 'get /__getcookie' route with CORS support that sets *
+  * a cookie (this is used by the sails.io.js socket client to get access to *
+  * a 3rd party cookie and to enable sessions).                              *
+  *                                                                          *
+  * Warning: Currently in this scenario, CORS settings apply to interpreted  *
+  * requests sent via a socket.io connection that used this cookie to        *
+  * connect, even for non-browser clients! (e.g. iOS apps, toasters, node.js *
+  * unit tests)                                                              *
+  *                                                                          *
+  ***************************************************************************/
 
   // grant3rdPartyCookie: true,
 
@@ -115,13 +116,13 @@ module.exports.sockets = {
 
 
   /***************************************************************************
-  *                                                                          *
-  * `afterDisconnect`                                                        *
-  *                                                                          *
-  * This custom afterDisconnect function will be run each time a socket      *
-  * disconnects                                                              *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * `afterDisconnect`                                                        *
+   *                                                                          *
+   * This custom afterDisconnect function will be run each time a socket      *
+   * disconnects                                                              *
+   *                                                                          *
+   ***************************************************************************/
   // afterDisconnect: function(session, socket, cb) {
   //   // By default: do nothing.
   //   return cb();

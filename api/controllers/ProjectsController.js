@@ -280,13 +280,9 @@ io.on('connection', socket => {
 
 module.exports = {
   userProjects: (req, res) => {
-    let limit = 0;
-    if (req.param('limit')) {
-      limit = req.param('limit');
-    }
     Projects.find({
       user: req.params.id
-    }).limit(limit).populateAll().sort('uid DESC').then(projects => {
+    }).limit(req.param('limit') || 10).populateAll().sort('uid DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
       res.badRequest(error);

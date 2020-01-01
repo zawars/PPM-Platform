@@ -107,13 +107,9 @@ io.on('connection', socket => {
 
 module.exports = {
   getOutlinesByUser: (req, res) => {
-    let limit = 0;
-    if (req.param('limit')) {
-      limit = req.param('limit');
-    }
     OutlineApproval.find({
       assignedTo: req.params.id
-    }).limit(limit).populateAll().sort('createdAt DESC').then(projects => {
+    }).limit(req.query.limit || 10).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     });
   },

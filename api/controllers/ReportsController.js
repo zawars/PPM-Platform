@@ -50,8 +50,7 @@ module.exports = {
   },
 
   getTeamReportsByUser: (req, res) => {
-    Reports.find().populate('user').populate('project').populate('team').then(reports => {
-      // res.ok(reports);
+    Reports.find().populateAll().then(reports => {
       let resultReports = [];
       reports.forEach((report, index) => {
         if (report.team) {

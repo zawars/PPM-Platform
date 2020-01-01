@@ -97,7 +97,11 @@ module.exports = {
     approvals: {
       collection: 'outlineApproval',
       via: 'project'
-    }
+    },
+    team: {
+      collection: 'team',
+      via: 'project'
+    },
   },
 
   beforeCreate: (values, cb) => {

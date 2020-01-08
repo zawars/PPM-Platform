@@ -248,7 +248,7 @@
   "Decision": "Entscheidungen",
   "Lessons": "Unterricht",
   "Documents": "Unterlagen",
-  "Team": "Mannschaft",
+  "Team": "Projektteam",
   "Sub-Projects": "Teilprojekte",
   "Project Status Report": "Projektstatusbericht",
   "Purpose": "Zweck",
@@ -854,6 +854,6 @@
   "Apply": "Anwenden",
   "Reset": "Zurücksetzen",
   "Outline is on Hold.": "Projektskizze ist auf Hold gesetzt.",
-  "Order Relevant" : "Auftragsrelevant",
+  "Order Relevant": "Auftragsrelevant",
   "Copy Link": "Link kopieren"
 }

@@ -633,7 +633,7 @@ module.exports.seeds = {
           position: 1
         }
       ],
-      "field": "Digitalization Degree",
+      "field": "IT Platform",
     },
   ],
   helpguide: [{

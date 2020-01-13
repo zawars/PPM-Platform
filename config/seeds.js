@@ -345,16 +345,12 @@ module.exports.seeds = {
           position: 0
         },
         {
-          "name": "Planning",
+          "name": "Executing",
           position: 1
         },
         {
-          "name": "Executing",
-          position: 2
-        },
-        {
           "name": "Closing",
-          position: 3
+          position: 2
         }
       ],
       "field": "Project Phase",
@@ -637,7 +633,7 @@ module.exports.seeds = {
           position: 1
         }
       ],
-      "field": "Digitalization Degree",
+      "field": "IT Platform",
     },
   ],
   helpguide: [{

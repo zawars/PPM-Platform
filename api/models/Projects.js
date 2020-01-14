@@ -111,6 +111,9 @@ module.exports = {
     subPortfolio: {
       model: 'subPortfolio',
     },
+    ganttChart: {
+      type: 'json'
+    }
   },
 
   beforeCreate: (values, cb) => {

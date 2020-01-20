@@ -36,5 +36,8 @@ module.exports = {
       collection: 'team',
       via: 'users'
     },
+    tablesState : {
+      type: 'json'
+    }
   }
 };

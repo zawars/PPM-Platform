@@ -10,6 +10,7 @@
     "express": "^4.16.4",
     "express-rate-limit": "^3.4.0",
     "express-session": "^1.15.6",
+    "express-status-monitor": "^1.2.8",
     "grunt": "^1.0.4",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "^2.1.0",

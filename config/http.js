@@ -12,7 +12,6 @@ var express = require('express');
 var session = require('express-session');
 const RateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const statusMonitor = require('express-status-monitor');
 
 module.exports.http = {
 
@@ -27,9 +26,6 @@ module.exports.http = {
    ****************************************************************************/
 
   middleware: {
-    statusMonitor: statusMonitor({
-      title: 'Sails Status'
-    }),
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
     bootstrapAssets: express.static(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '/uploads'),
@@ -57,7 +53,6 @@ module.exports.http = {
      ***************************************************************************/
 
     order: [
-      'statusMonitor',
       'startRequestTimer',
       'cookieParser',
       'session',

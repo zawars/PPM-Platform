@@ -123,6 +123,8 @@ module.exports.routes = {
   'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
   'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
   'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
+  'POST /createProjectBudgetCostbyYear': 'ProjectBudgetCostController.createBudgetByYear',
+  'POST /updateMultipleProjectsBudget': 'ProjectBudgetCostController.updateMultipleProjectsBudget',
 
   //News
   'GET /news': 'NewsController.index',
@@ -133,5 +135,8 @@ module.exports.routes = {
   'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications',
 
   //Dashboard
-  'GET /getDashboardData': 'DashboardController.getDashboard'
+  'GET /getDashboardData': 'DashboardController.getDashboard',
+
+  //Subportfolio budget
+  'GET /getBudgetYears/:id': 'PortfolioBudgetYearController.getBudgetYears'
 };

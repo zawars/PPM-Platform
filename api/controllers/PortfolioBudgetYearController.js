@@ -6,7 +6,13 @@
  */
 
 module.exports = {
-  
-
+  getBudgetYears: async (req, res) => {
+    try {
+      let budgetYears = await PortfolioBudgetYear.find({ subPortfolio: req.params.id });
+      res.ok(budgetYears);
+    } catch (error) {
+      res.badRequest(error);
+    }
+  },
 };
 

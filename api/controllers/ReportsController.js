@@ -9,6 +9,13 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
+  socket.on('updateFicoApprovalStatus', async data => {
+    let result = await Reports.update({ project: data.project }).set({
+      ficoApprovedClosingReportDate: data.ficoApprovedClosingReportDate,
+      isFicoApprovedClosingReport: data.isFicoApprovedClosingReport
+    });
+  });
+
   socket.on('selectiveReportsIndex', data => {
     let selectionIds = data.ids;
     Reports.find({

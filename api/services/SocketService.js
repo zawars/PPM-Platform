@@ -1,4 +1,4 @@
-const io = require('socket.io')(1338);
+const io = require('socket.io')(5000);
 
 module.exports.io = io;
 

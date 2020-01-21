@@ -19,14 +19,18 @@ io.on('connection', socket => {
         socket.emit('approvalsIndex', projects);
       })
       .catch(error => {
-        socket.emit('approvalsIndex', error);
+        ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsIndex', '', socket.user.id);
       });
   });
 
   //To get count of total Aprovals for user
   socket.on('approvalsCount', async data => {
-    let count = await OutlineApproval.count({ assignedTo: data.userId });
-    socket.emit('approvalsCount', count);
+    try {
+      let count = await OutlineApproval.count({ assignedTo: data.userId });
+      socket.emit('approvalsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsCount', '', socket.user.id);
+    }
   });
 
   //To search in data table of Approvals
@@ -71,9 +75,11 @@ io.on('connection', socket => {
         ]
       }).limit(10).populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('approvalsSearch', { count: count, approvals: projects });
-      });
+      }).catch(error => {
+        ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
+      })
     } catch (error) {
-      console.log(error);
+      ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
     }
   });
 
@@ -99,7 +105,9 @@ io.on('connection', socket => {
       ]
     }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('createdAt DESC').then(projects => {
       socket.emit('approvalsSearchIndex', projects);
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
+    })
   });
 
 })
@@ -111,7 +119,9 @@ module.exports = {
       assignedTo: req.params.id
     }).limit(req.query.limit || 10).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('Outline Approval', `id: ${req.params.id}, ` + error.toString(), 'getOutlinesByUser', req);
+    })
   },
 
   updateApprovalOwner: (req, res) => {
@@ -125,7 +135,9 @@ module.exports = {
       res.ok({
         message: "Approvals assigned person has been updated."
       });
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('Outline Approval', error.toString(), 'updateApprovalOwner', req);
+    })
   },
 
   updatePreviousApproval: (req, resp) => {
@@ -135,6 +147,8 @@ module.exports = {
       resp.ok({
         message: "Previous Approval has been updated."
       });
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('Outline Approval', `query: ${query}, ` + error.toString(), 'updatePreviousApproval', req);
+    })
   }
 };

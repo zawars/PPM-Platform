@@ -6,13 +6,13 @@
  */
 
 module.exports = {
-  
+
     projectRights: async (req, res) => {
         try {
-            const right = await Rights.findOne({ project: req.params.projectId, user: req.params.userId}).populateAll();
+            const right = await Rights.findOne({ project: req.params.projectId, user: req.params.userId }).populateAll();
             res.ok(right);
-        } catch (e) {
-            res.badRequest(e);
+        } catch (error) {
+            ErrorsLogService.logError('Projects', `projectId: ${req.params.projectId}, userId: ${req.params.userId} ` + error.toString(), 'projectRights', req);
         }
     },
 

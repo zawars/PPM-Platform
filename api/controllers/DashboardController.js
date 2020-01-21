@@ -43,8 +43,12 @@ io.on('connection', socket => {
   socketObj = socket;
 
   socket.on('dashboardProjectsIndex', data => {
-    let paginated = SocketService.paginateArray(projectsList, data.pageSize, data.pageIndex);
-    socket.emit('dashboardProjectsIndex', paginated)
+    try {
+      let paginated = SocketService.paginateArray(projectsList, data.pageSize, data.pageIndex);
+      socket.emit('dashboardProjectsIndex', paginated)
+    } catch (error) {
+      ErrorsLogService.logError('Dasboard', error.toString(), 'dashboardProjectsIndex', '', socket.user.id);
+    }
   });
 
   socket.on('dashboardProjectsFilter', async data => {
@@ -75,37 +79,47 @@ io.on('connection', socket => {
         projectsList: SocketService.paginateArray(projectsList, 10, 1),
         projectsCount: projectsList.length
       });
-    });
+    }).catch(err => {
+      ErrorsLogService.logError('Dasboard', err.toString(), 'dashboardProjectsFilter', '', socket.user.id);
+    })
   });
 });
 
 
 module.exports = {
   getDashboard: async (req, res) => {
-    await updateDropdownsValues();
-    Reports.find().populateAll().then(reports => {
-      Configurations.findOne({ uid: 1 }).then(response => {
-        configuration = response;
-        projectsList = reports;
-        calculateValues();
-        calculateProjectsStatusValue();
-        res.ok({
-          overallStatusChart,
-          numberOfProjectsPerBusinessUnitWithOverallStatus,
-          numberOfProjectsPerBusinessAreaWithOverallStatus,
-          opexVsCapexChart,
-          projectsWithStrategicContribution,
-          projectsPerProjectTypeChart,
-          activeProjects,
-          onHoldProjects,
-          totalBudget,
-          totalActualCosts,
-          totalForecast,
-          projectsCount: projectsList.length
-        });
-        socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
+    try {
+      await updateDropdownsValues();
+      Reports.find().populateAll().then(reports => {
+        Configurations.findOne({ uid: 1 }).then(response => {
+          configuration = response;
+          projectsList = reports;
+          calculateValues();
+          calculateProjectsStatusValue();
+          res.ok({
+            overallStatusChart,
+            numberOfProjectsPerBusinessUnitWithOverallStatus,
+            numberOfProjectsPerBusinessAreaWithOverallStatus,
+            opexVsCapexChart,
+            projectsWithStrategicContribution,
+            projectsPerProjectTypeChart,
+            activeProjects,
+            onHoldProjects,
+            totalBudget,
+            totalActualCosts,
+            totalForecast,
+            projectsCount: projectsList.length
+          });
+          socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
+        }).catch(error => {
+          ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
+        })
+      }).catch(error => {
+        ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
       });
-    });
+    } catch (error) {
+      ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
+    }
   }
 }
 
@@ -474,7 +488,9 @@ function updateDropdownsValues() {
         value: 0
       });
     });
-  });
+  }).catch(error => {
+    ErrorsLogService.logError('Dasboard', error.toString(), 'dashboardProjectsFilter');
+  })
 }
 
 function calculateOverallStatusStacked(reports, idx) {

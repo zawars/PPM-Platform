@@ -23,10 +23,12 @@ module.exports = {
           isPmoAlso: true
         }).then(adminUsers => {
           res.ok([...users, ...adminUsers]);
-        }).catch(err => {
-          res.badRequest(err);
+        }).catch(error => {
+          ErrorsLogService.logError('User', `role: ${req.params.role}, ` + error.toString(), 'getUsersFromRoles', req);
+          res.badRequest(error);
         });
       }).catch(error => {
+        ErrorsLogService.logError('User', `role: ${req.params.role}, ` + error.toString(), 'getUsersFromRoles', req);
         res.badRequest(error);
       });
     } else {
@@ -35,6 +37,7 @@ module.exports = {
       }).then(users => {
         res.ok(users);
       }).catch(error => {
+        ErrorsLogService.logError('User', `role: ${req.params.role}, ` + error.toString(), 'getUsersFromRoles', req);
         res.badRequest(error);
       });
     }
@@ -45,7 +48,9 @@ module.exports = {
       email: req.params.email
     }).then(user => {
       res.ok(user);
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('User', error.toString(), 'getUserByEmail', req);
+    })
   },
 
   sendEmail: (req, res) => {
@@ -55,6 +60,7 @@ module.exports = {
       subject: req.body.subject
     }, (err) => {
       if (err) {
+        ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'sendEmail', req);
         console.log(err);
         res.forbidden({
           message: "Error sending email."
@@ -79,19 +85,20 @@ module.exports = {
     let query = req.params.query;
     User.find({
       or: [{
-          name: {
-            'contains': query
-          }
-        },
-        {
-          email: {
-            'contains': query
-          }
+        name: {
+          'contains': query
         }
+      },
+      {
+        email: {
+          'contains': query
+        }
+      }
       ]
     }).then(users => {
       res.ok(users)
     }).catch(err => {
+      ErrorsLogService.logError('User', err.toString(), 'search', req);
       res.badRequest(err);
     });
   },
@@ -213,6 +220,7 @@ let parseUsers = async (options1, res, response) => {
           }
 
         } catch (error) {
+          ErrorsLogService.logError('User', error.toString(), 'parseUsers', req);
           sails.log.error(error);
         }
       }

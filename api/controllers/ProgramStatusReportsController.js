@@ -13,8 +13,8 @@ io.on('connection', socket => {
       program: data.id
     }).then(reports => {
       socket.emit('programStatusReports', reports);
-    }).catch(err => {
-      console.log(err);
+    }).catch(error => {
+      ErrorsLogService.logError('Program Status Reports', `id: ${data.id}, ` + error.toString(), 'programStatusReports', '', socket.user.id);
     });
   });
 })
@@ -26,6 +26,7 @@ module.exports = {
     }).then(reports => {
       res.ok(reports);
     }).catch(err => {
+      ErrorsLogService.logError('Program Status Reports', `id: ${req.params.id}, ` + err.toString(), 'getStatusReportsByProgram', req);
       res.badRequest(err);
     });
   },

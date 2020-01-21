@@ -17,6 +17,7 @@ module.exports = {
 
       res.ok(helpGuideObj);
     } catch (error) {
+      ErrorsLogService.logError('HelpGuide', `query : ${req.params.query}, ` + error.toString(), 'getHelpGuideByFormName', req);
       res.ok({
         message: 'Not found.',
         error

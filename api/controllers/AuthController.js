@@ -38,6 +38,8 @@ module.exports = {
               if (!err) {
                 //redirect to the IdP Logout URL
                 res.ok({ uri });
+              } else {
+                ErrorsLogService.logError('Auth', err.toString(), 'logout', req);
               }
             });
           });
@@ -74,6 +76,7 @@ module.exports = {
         req.forbidden('User not found');
       }
     } catch (error) {
+      ErrorsLogService.logError('Auth', error.toString(), 'externalLogin', req);
       res.badRequest(error)
     }
   },
@@ -109,6 +112,7 @@ module.exports = {
         });
       }
     } catch (error) {
+      ErrorsLogService.logError('Auth', error.toString(), 'verifyTokenExternal', req);
       res.badRequest(error)
     }
   },
@@ -139,7 +143,9 @@ module.exports = {
                   Location: config.callbackRedirectUrl + createdObj.id + params
                 });
                 res.end();
-              });
+              }).catch(error => {
+                ErrorsLogService.logError('Auth', error.toString(), 'samlConsumeToken', req);
+              })
             } else {
               await User.update({ email: email }).set({ format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format });
               res.writeHead(301, {
@@ -148,7 +154,7 @@ module.exports = {
               res.end();
             }
           }).catch(err => {
-            console.log(err);
+            ErrorsLogService.logError('Auth', err.toString(), 'samlConsumeToken', req);
           });
         });
       }

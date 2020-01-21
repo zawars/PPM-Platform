@@ -9,22 +9,26 @@ const fs = require('fs');
 
 module.exports = {
   show: async (req, res) => {
-    let id = req.params.id;
+    try {
+      let id = req.params.id;
 
-    let questionObj = await QuestionsMapper.findOne({
-      id: id
-    });
+      let questionObj = await QuestionsMapper.findOne({
+        id: id
+      });
 
-    let deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
-    let frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
-    let de = deFile[questionObj.question];
-    let fr = frFile[questionObj.question];
+      let deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
+      let frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
+      let de = deFile[questionObj.question];
+      let fr = frFile[questionObj.question];
 
-    res.ok({
-      data: questionObj,
-      de: de || '',
-      fr: fr || ''
-    });
+      res.ok({
+        data: questionObj,
+        de: de || '',
+        fr: fr || ''
+      });
+    } catch (error) {
+      ErrorsLogService.logError('QuestionsMapper', `id: ${req.params.id}, ` + error.toString(), 'show', req);
+    }
   },
 
   update: async (req, res) => {
@@ -39,8 +43,8 @@ module.exports = {
     let oldObj = await QuestionsMapper.findOne({
       id: id
     });
-    delete(deFile[oldObj.question]);
-    delete(frFile[oldObj.question]);
+    delete (deFile[oldObj.question]);
+    delete (frFile[oldObj.question]);
 
     deFile[questionObj.question] = de;
     frFile[questionObj.question] = fr;

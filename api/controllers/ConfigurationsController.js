@@ -10,6 +10,7 @@ module.exports = {
     Configurations.findOne({ uid: 1 }).then(response => {
       res.ok(response);
     }).catch(error => {
+      ErrorsLogService.logError('Configuration', error.toString(), 'getGlobalConfigurations', req);
       res.forbidden(error);
     });
   },
@@ -18,6 +19,7 @@ module.exports = {
     Configurations.findOne({ user: req.params.id }).then(response => {
       res.ok(response);
     }).catch(error => {
+      ErrorsLogService.logError('Configuration', error.toString(), 'getConfigurationsByUser', req);
       res.badRequest(error);
     });
   }

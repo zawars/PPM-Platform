@@ -17,6 +17,7 @@ module.exports = {
 
       res.ok(questionsObj);
     } catch (error) {
+      ErrorsLogService.logError('Questions', `query: ${req.params.query}, `+ error.toString(), 'getQuestionsByFormName', req);
       res.ok({
         message: 'Not found.',
         error

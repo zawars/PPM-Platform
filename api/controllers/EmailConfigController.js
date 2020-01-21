@@ -12,7 +12,7 @@ io.on('connection', socket => {
     EmailConfig.find().populateAll().then(emailConfigs => {
       socket.emit('emailConfig', emailConfigs)
     }).catch(err => {
-      console.log(err);
+      ErrorsLogService.logError('EMailConfig', err.toString(), 'emailConfig', '', socket.user.id);
     })
   })
 })

@@ -6,12 +6,13 @@
  */
 
 module.exports = {
-  
+
     projectTeam: async (req, res) => {
         try {
             const team = await Team.findOne({ project: req.params.id }).populateAll();
             res.ok(team);
         } catch (e) {
+            ErrorsLogService.logError('Team', `id: ${req.params.id}` + e.toString(), 'projectTeam', req);
             res.badRequest(e);
         }
     },
@@ -42,6 +43,7 @@ module.exports = {
                 res.ok([]);
             }
         } catch (e) {
+            ErrorsLogService.logError('Team', e.toString(), 'userTeamProjects', req);
             res.badRequest(e);
         }
     },

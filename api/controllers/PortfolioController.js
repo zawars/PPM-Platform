@@ -10,8 +10,12 @@ io.on('connection', socket => {
 
   //To get count for all records
   socket.on('portfoliosCount', async data => {
-    let count = await Portfolio.count();
-    socket.emit('portfoliosCount', count);
+    try {
+      let count = await Portfolio.count();
+      socket.emit('portfoliosCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosCount', '', socket.user.id);
+    }
   });
 
   //To paginate all records
@@ -22,7 +26,7 @@ io.on('connection', socket => {
         socket.emit('portfoliosIndex', portfolios);
       })
       .catch(error => {
-        socket.emit('portfoliosIndex', error);
+        ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosIndex', '', socket.user.id);
       });
   });
 
@@ -30,6 +34,7 @@ io.on('connection', socket => {
     Portfolio.find({ status: "Active" }).populateAll().then(response => {
       socket.emit('activePortfolios', response);
     }).catch(err => {
+      ErrorsLogService.logError('Portfolio', err.toString(), 'activePortfolios', '', socket.user.id);
       socket.emit('activePortfolios', err);
     });
   })
@@ -55,7 +60,7 @@ io.on('connection', socket => {
       socket.emit('portfoliosSearch', { count, portfolios });
     })
       .catch(error => {
-        socket.emit('portfoliosSearch', error);
+        ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosSearch', '', socket.user.id);
       });
   });
 
@@ -73,7 +78,7 @@ io.on('connection', socket => {
         socket.emit('portfoliosSearchIndex', portfolios);
       })
       .catch(error => {
-        socket.emit('portfoliosSearchIndex', error);
+        ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosSearchIndex', '', socket.user.id);
       });
   });
 });
@@ -85,8 +90,8 @@ module.exports = {
       status: "Active"
     }).populateAll().then(response => {
       res.ok(response);
-    }).catch(err => {
-      res.badRequest(err);
+    }).catch(error => {
+      ErrorsLogService.logError('Project Outline', error.toString(), 'getActivePortfolios', req);
     });
   },
 };

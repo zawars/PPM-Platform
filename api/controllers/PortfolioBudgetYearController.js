@@ -11,6 +11,7 @@ module.exports = {
       let budgetYears = await PortfolioBudgetYear.find({ subPortfolio: req.params.id });
       res.ok(budgetYears);
     } catch (error) {
+      ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'getBudgetYears', req);
       res.badRequest(error);
     }
   },

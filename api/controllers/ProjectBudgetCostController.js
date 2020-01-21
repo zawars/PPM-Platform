@@ -13,8 +13,8 @@ io.on('connection', socket => {
       let id = data.id;
       let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
       socket.emit('projectBudget', budget);
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      ErrorsLogService.logError('Project Budget Cost', `id: ${data.id}, ` + err.toString(), 'projectBudget', '', socket.user.id);
     }
   })
 
@@ -100,6 +100,7 @@ module.exports = {
       await ProjectBudgetCost.destroy({ 'project': id });
       res.ok({ message: 'Deleted Project Budget Cost' });
     } catch (e) {
+      ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'deleteProjectBudget', req);
       res.badRequest(e);
     }
   },
@@ -110,11 +111,12 @@ module.exports = {
       let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
       res.ok(budget);
     } catch (e) {
+      ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'getProjectBudget', req);
       res.badRequest(e);
     }
   },
 
-  //It retrieves all projects' budget cost for a selected Budget Year
+//It retrieves all projects' budget cost for a selected Budget Year
   budgetsByYear: async (req, res) => {
     ProjectBudgetCost.native(async function (err, collection) {
       if (err) return res.serverError(err);
@@ -153,7 +155,8 @@ module.exports = {
           $unwind: { path: '$report', preserveNullAndEmptyArrays: true }
         }
       ]).toArray(function (err, results = []) {
-        if (err) return res.ok(err);
+        if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
+
         let finalResult = results.filter(result => {
           return result.portfolioBudgetYear == req.params.id;
         })
@@ -163,15 +166,19 @@ module.exports = {
   },
 
   updateMultipleProjectsBudget: (req, res) => {
-    let projectsBudget = req.body.projectsBudget;
-    projectsBudget.forEach(async (project, index) => {
-      let result = await ProjectBudgetCost.update({ id: project.id })
-        .set({ budget: project.budget })
+    try {
+      let projectsBudget = req.body.projectsBudget;
+      projectsBudget.forEach(async (project, index) => {
+        let result = await ProjectBudgetCost.update({ id: project.id })
+          .set({ budget: project.budget })
 
-      if (index == projectsBudget.length - 1) {
-        res.ok(result);
-      }
-    });
+        if (index == projectsBudget.length - 1) {
+          res.ok(result);
+        }
+      });
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'updateMultipleProjectsBudget', req);
+    }
   },
 
   createBudgetByYear: async (req, res) => {
@@ -238,26 +245,31 @@ module.exports = {
       },
     ];
 
-    let subportfolioProjects = await Reports.find({
-      or: [
-        { status: 'Active', 'subPortfolio.id': subPortfolio },
-        { status: 'Closed', isFicoApprovedClosingReport: true, ficoApprovedClosingReportDate: { contains: year }, 'subPortfolio.id': subPortfolio }
-      ]
-    });
-
-    subportfolioProjects.forEach((project, index) => {
-      ProjectBudgetCost.create({
-        portfolioBudgetYear: portfolioBudgetYear,
-        project: project.projectId,
-        budget: budget
-      }).then(result => {
-        if (index == subportfolioProjects.length - 1) {
-          res.ok(result);
-        }
-      }).catch(error => {
-        res.ok({ error });
+    try {
+      let subportfolioProjects = await Reports.find({
+        or: [
+          { status: 'Active', 'subPortfolio.id': subPortfolio },
+          { status: 'Closed', isFicoApprovedClosingReport: true, ficoApprovedClosingReportDate: { contains: year }, 'subPortfolio.id': subPortfolio }
+        ]
       });
-    });
+
+      subportfolioProjects.forEach((project, index) => {
+        ProjectBudgetCost.create({
+          portfolioBudgetYear: portfolioBudgetYear,
+          project: project.projectId,
+          budget: budget
+        }).then(result => {
+          if (index == subportfolioProjects.length - 1) {
+            res.ok(result);
+          }
+        }).catch(error => {
+          ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
+          res.badRequest({ error });
+        });
+      });
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
+    }
   }
 
 };

@@ -138,5 +138,8 @@ module.exports.routes = {
   'GET /getDashboardData': 'DashboardController.getDashboard',
 
   //Subportfolio budget
-  'GET /getBudgetYears/:id': 'PortfolioBudgetYearController.getBudgetYears'
+  'GET /getBudgetYears/:id': 'PortfolioBudgetYearController.getBudgetYears',
+
+  //Subportfolio
+  'POST /createSubportfolio': 'SubPortfolioController.createSubportfolio'
 };

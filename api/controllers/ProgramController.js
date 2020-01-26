@@ -7,7 +7,9 @@
 
 module.exports = {
   getActivePrograms: (req, res) => {
-    Program.find({ status: 'Active' }).populateAll().then(programsList => {
+    Program.find({
+      status: 'Active'
+    }).populateAll().then(programsList => {
       res.ok(programsList);
     }).catch(err => {
       res.badRequest(err);
@@ -16,12 +18,15 @@ module.exports = {
 
   /* Excel Point No 3 */
   getProgramsByUser: (req, res) => {
-    Program.find({ or: [{
-      programManager: req.params.id
-    },
-    {
-      programSponsor: req.params.id
-    }]}).populateAll().then(response => {
+    Program.find({
+      or: [{
+          programManager: req.params.id
+        },
+        {
+          programSponsor: req.params.id
+        }
+      ]
+    }).populateAll().then(response => {
       res.ok(response);
     }).catch(err => {
       res.badRequest(err);
@@ -29,5 +34,3 @@ module.exports = {
   },
   /* Excel Point No 3 */
 };
-
- 

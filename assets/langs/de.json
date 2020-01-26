@@ -248,7 +248,7 @@
   "Decision": "Entscheidungen",
   "Lessons": "Unterricht",
   "Documents": "Unterlagen",
-  "Team": "Mannschaft",
+  "Team": "Projektteam",
   "Sub-Projects": "Teilprojekte",
   "Project Status Report": "Projektstatusbericht",
   "Purpose": "Zweck",
@@ -854,6 +854,9 @@
   "Apply": "Anwenden",
   "Reset": "Zurücksetzen",
   "Outline is on Hold.": "Projektskizze ist auf Hold gesetzt.",
-  "Order Relevant" : "Auftragsrelevant",
-  "Copy Link": "Link kopieren"
+  "Order Relevant": "Auftragsrelevant",
+  "Copy Link": "Link kopieren",
+  "I am Project Manager for:": "Hier bin ich Projektleiter/in für:",
+  "I am Project Team Member for:": "Hier bin ich Projektmitglied für:",
+  "Mark to show the information on the document.": "Markieren um die Werte auf den Dokument anzuzeigen."
 }

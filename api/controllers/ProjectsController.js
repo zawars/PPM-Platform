@@ -5,7 +5,16 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var Email = require('machinepack-email');
+// sails.hooks.sockets.load(() => {
+//   const io = sails.io;
+
+//   io.on('connection', socket => {
+//     socket.on('projectsCount', async data => {
+//       let count = await Projects.count();
+//       socket.emit('projectsCount', count);
+//     });
+//   });
+// });
 
 module.exports = {
   userProjects: (req, res) => {

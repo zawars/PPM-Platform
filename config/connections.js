@@ -73,8 +73,8 @@ module.exports.connections = {
     // user: mongoConfig.user, //optional => superOwner
     // password: mongoConfig.password, //optional => superOwner
     // database: mongoConfig.database //optional
-    // url: `mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
-    url: `mongodb://${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
+    //url: `mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
+     url: `mongodb://${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.database}`
     //${mongoConfig.user}:${mongoConfig.password}@
   },
 

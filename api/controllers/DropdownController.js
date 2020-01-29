@@ -6,6 +6,23 @@
  */
 
 const fs = require('fs');
+const io = SocketService.io;
+
+io.on('connection', socket => {
+
+  socket.on('dropdownResolver', async data => {
+    let count = await Dropdown.count();
+
+    Dropdown.find().paginate({ page: data.pageNumber, limit: 10 }).populate('values', {
+      sort: 'position ASC'
+    }).then(dropdownList => {
+      socket.emit('dropdownResolver', { count, data: dropdownList });
+    }).catch(err => {
+      console.log('dropdownResolver Error', err);
+    });
+  });
+
+});
 
 module.exports = {
   index: (req, res) => {

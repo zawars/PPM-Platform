@@ -5,22 +5,284 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-// sails.hooks.sockets.load(() => {
-//   const io = sails.io;
+const io = SocketService.io;
+var Email = require('machinepack-email');
 
-//   io.on('connection', socket => {
-//     socket.on('projectsCount', async data => {
-//       let count = await Projects.count();
-//       socket.emit('projectsCount', count);
-//     });
-//   });
-// });
+
+io.on('connection', socket => {
+
+  socket.on('getAllProjects', data => {
+    Projects.find()
+      .populateAll().then(projects => {
+        socket.emit('getAllProjects', projects);
+      }).catch(err => {
+        console.log(err);
+      })
+  });
+
+  socket.on('activeProjectsCount', async data => {
+    let count = await Projects.count({ isClosed: false });
+    socket.emit('activeProjectsCount', count);
+  });
+
+  socket.on('activeProjectsIndex', async data => {
+    let projectsList = await Projects.find({ isClosed: false })
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .sort('createdAt', 'DESC').populateAll();
+    socket.emit('activeProjectsIndex', projectsList);
+  });
+
+  socket.on('closedProjectsCount', async data => {
+    let count = await Projects.count({ isClosed: true });
+    socket.emit('closedProjectsCount', count);
+  });
+
+  socket.on('closedProjectsIndex', async data => {
+    let projectsList = await Projects.find({ isClosed: true })
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .sort('createdAt', 'DESC').populateAll();
+
+    socket.emit('closedProjectsIndex', projectsList);
+  });
+
+  socket.on('activeProjectsSearch', async data => {
+    let search = data.search;
+    let count = await Projects.count({
+      or: [
+        { projectName: { contains: search }, isClosed: false },
+        { docType: { contains: search }, isClosed: false }
+      ]
+    });
+
+    Projects.find({
+      or: [
+        { projectName: { contains: search }, isClosed: false },
+        { docType: { contains: search }, isClosed: false }
+      ]
+    }).limit(10).sort('createdAt', 'DESC').populateAll().then(projects => {
+      socket.emit('activeProjectsSearch', { count, projects });
+    });
+  });
+
+  socket.on('activeProjectsSearchIndex', async data => {
+    let search = data.search;
+    let projectsList = await Projects.find({
+      or: [
+        { projectName: { contains: search }, isClosed: false },
+        { docType: { contains: search }, isClosed: false }
+      ]
+    })
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .sort('createdAt', 'DESC').populateAll();
+    socket.emit('activeProjectsSearchIndex', projectsList);
+  });
+
+  socket.on('closedProjectsSearch', async data => {
+    let search = data.search;
+    let count = await Projects.count({
+      or: [
+        { uid: parseInt(search), isClosed: true },
+        { projectName: { contains: search }, isClosed: true },
+        { status: { contains: search }, isClosed: true },
+        { docType: { contains: search }, isClosed: true }
+      ]
+    });
+
+    Projects.find({
+      or: [
+        { uid: parseInt(search), isClosed: true },
+        { projectName: { contains: search }, isClosed: true },
+        { status: { contains: search }, isClosed: true },
+        { docType: { contains: search }, isClosed: true }
+      ]
+    }).limit(10).sort('createdAt', 'DESC').populateAll().then(projects => {
+      socket.emit('closedProjectsSearch', { count, projects });
+    });
+  });
+
+  socket.on('closedProjectsSearchIndex', async data => {
+    let search = data.search;
+    let projectsList = await Projects.find({
+      or: [
+        { uid: parseInt(search), isClosed: true },
+        { projectName: { contains: search }, isClosed: true },
+        { status: { contains: search }, isClosed: true },
+        { docType: { contains: search }, isClosed: true }
+      ]
+    })
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .sort('createdAt', 'DESC').populateAll();
+
+    socket.emit('closedProjectsSearchIndex', projectsList);
+  });
+
+  socket.on('submittedProjectsIndex', data => {
+    Projects.find({
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().sort('createdAt DESC').then(projects => {
+        socket.emit('submittedProjectsIndex', projects);
+      }).catch(error => {
+        socket.emit('submittedProjectsIndex', error);
+      });
+  });
+
+  socket.on('submittedProjectsCount', async data => {
+    let count = await Projects.count({
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }]
+    });
+    socket.emit('submittedProjectsCount', count);
+  });
+
+  socket.on('submittedProjectsSearchIndex', data => {
+    let search = data.search;
+
+    Projects.find({
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }],
+      or: [
+        { uid: parseInt(search) },
+        { docType: { contains: search } },
+        { status: { contains: search } },
+        { projectName: { contains: search } }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().sort('createdAt DESC').then(projects => {
+        socket.emit('submittedProjectsSearchIndex', projects);
+      }).catch(error => {
+        socket.emit('submittedProjectsSearchIndex', error);
+      });
+  });
+
+  socket.on('submittedProjectsSearch', async data => {
+    let search = data.search;
+    let count = await Projects.count({
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }],
+      or: [
+        { uid: parseInt(search) },
+        { docType: { contains: search } },
+        { status: { contains: search } },
+        { projectName: { contains: search } }
+      ]
+    });
+
+    Projects.find({
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }],
+      or: [
+        { uid: parseInt(search) },
+        { docType: { contains: search } },
+        { status: { contains: search } },
+        { projectName: { contains: search } }
+      ]
+    }).populateAll().sort('createdAt DESC').then(projects => {
+      socket.emit('submittedProjectsSearch', { count, projects });
+    }).catch(error => {
+      socket.emit('submittedProjectsSearch', error);
+    });
+  });
+
+  socket.on('projectsIndex', data => {
+    Projects.find({ user: data.userId })
+      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .populateAll().sort('uid DESC').then(projects => {
+        socket.emit('projectsIndex', projects);
+      }).catch(error => {
+        socket.emit('projectsIndex', error);
+      });
+  });
+
+  socket.on('projectsCount', async data => {
+    let count = await Projects.count({ user: data.userId });
+    socket.emit('projectsCount', count);
+  });
+
+  //To search in data table of Projects
+  socket.on('projectsSearch', async data => {
+    let search = data.search;
+    try {
+      let count = await Projects.count({
+        user: data.userId,
+        or: [
+          { uid: parseInt(search) },
+          { docType: { contains: search } },
+          { status: { contains: search } },
+          { projectName: { contains: search } }
+        ]
+      });
+
+      Projects.find({
+        user: data.userId,
+        or: [
+          { uid: parseInt(search) },
+          { docType: { contains: search } },
+          { status: { contains: search } },
+          { projectName: { contains: search } }
+        ]
+      }).limit(10).populateAll().sort('uid DESC').then(projects => {
+        socket.emit('projectsSearch', { count: count, projects: projects });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  //To paginate search results of projects
+  socket.on('projectsSearchIndex', data => {
+    let search = data.search;
+    Projects.find({
+      user: data.userId,
+      or: [
+        { uid: parseInt(search) },
+        { docType: { contains: search } },
+        { status: { contains: search } },
+        { projectName: { contains: search } }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(projects => {
+      socket.emit('projectsSearchIndex', projects);
+    });
+  });
+})
+
 
 module.exports = {
   userProjects: (req, res) => {
     Projects.find({
       user: req.params.id
-    }).populateAll().sort('uid DESC').then(projects => {
+    }).limit(req.param('limit') || 10).populateAll().sort('uid DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
       res.badRequest(error);
@@ -41,14 +303,13 @@ module.exports = {
   getSubmittedProjects: (req, res) => {
     Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
-      ]
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }]
     }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
@@ -158,7 +419,7 @@ module.exports = {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
-    delete(body.projectOutline);
+    delete (body.projectOutline);
 
     Projects.update({
       id: req.params.id

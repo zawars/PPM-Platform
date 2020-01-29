@@ -100,7 +100,7 @@ module.exports.routes = {
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
-
+  'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
@@ -119,4 +119,19 @@ module.exports.routes = {
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
 
+  // ProjectBudgetCost Api
+  'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
+  'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
+  'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
+
+  //News
+  'GET /news': 'NewsController.index',
+  'POST /news': 'NewsController.create',
+
+  //Notifications
+  'GET /getNotifications': 'NotificationsHistoryController.getAllNotifications',
+  'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications',
+
+  //Dashboard
+  'GET /getDashboardData': 'DashboardController.getDashboard'
 };

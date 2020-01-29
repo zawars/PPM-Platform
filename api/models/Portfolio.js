@@ -29,6 +29,10 @@ module.exports = {
     reports: {
       collection: 'Reports',
       via: 'portfolio'
-    }
+    },
+    // subPortfolio: {
+    //   collection: 'subPortfolio',
+    //   via: 'portfolio'
+    // },
   }
 };

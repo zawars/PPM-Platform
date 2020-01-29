@@ -173,6 +173,7 @@ module.exports = {
     });
   },
 
+  /* Excel Point No 3 */
   getProgramsByUser: (req, res) => {
     Program.find({
       or: [{
@@ -187,6 +188,7 @@ module.exports = {
       res.badRequest(err);
     });
   },
+  /* Excel Point No 3 */
 };
 
  

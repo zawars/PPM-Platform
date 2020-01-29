@@ -67,6 +67,13 @@ module.exports = {
     version: {
       type: 'integer',
     },
+    mode: {
+      type: 'string',
+      defaultsTo: 'project'
+    },
+    digitalizationDegree: {
+      model: 'dropdownMapper',
+    },
     projectReport: {
       model: 'reports'
     },
@@ -101,6 +108,9 @@ module.exports = {
     team: {
       collection: 'team',
       via: 'project'
+    },
+    portfolio: {
+      model: 'portfolio',
     },
   },
 

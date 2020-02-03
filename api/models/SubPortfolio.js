@@ -19,6 +19,9 @@ module.exports = {
     currentYear: {
       type: 'string',
     },
+    documentLink: {
+      type: 'string',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

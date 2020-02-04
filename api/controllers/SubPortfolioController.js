@@ -6,29 +6,24 @@
  */
 
 module.exports = {
-  createSubportfolio: (req, res) => {
-    SubPortfolio.create({
-      name: req.body.name,
-      portfolio: req.body.portfolio
-    }).then(createdSubportfolio => {
-      PortfolioBudgetYear.create({
+  create: async (req, res) => {
+    try {
+      let createdSubportfolio = await SubPortfolio.create({
+        name: req.body.name,
+        portfolio: req.body.portfolio
+      })
+      let createdPortfolioBudgetYear = await PortfolioBudgetYear.create({
         year: new Date().getFullYear(),
         subPortfolio: createdSubportfolio.id
-      }).then(createdPortfolioBudgetYear => {
-        SubPortfolio.update({
-          id: createdSubportfolio.id
-        }).set({
-          currentYear: createdPortfolioBudgetYear.id
-        }).then(response => {
-          res.ok(response[0]);
-        }).catch(error => {
-          ErrorsLogService.logError('Subportfolio', error.toString(), 'createSubportfolio', req);
-        })
-      }).catch(error => {
-        ErrorsLogService.logError('Subportfolio', error.toString(), 'createSubportfolio', req);
       })
-    }).catch(error => {
+      let response = await SubPortfolio.update({
+        id: createdSubportfolio.id
+      }).set({
+        currentYear: createdPortfolioBudgetYear.id
+      });
+      res.ok(response[0]);
+    } catch (error) {
       ErrorsLogService.logError('Subportfolio', error.toString(), 'createSubportfolio', req);
-    })
+    }
   }
 };

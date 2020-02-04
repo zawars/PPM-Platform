@@ -11,6 +11,9 @@ module.exports = {
     status: {
       type: 'string'
     },
+    overallStatus: {
+      type: 'string'
+    },
     projectOutline: {
       type: 'json'
     },

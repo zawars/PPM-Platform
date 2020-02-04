@@ -439,6 +439,7 @@ module.exports = {
         let temp = {
           projectOutline: project.projectOutline[0],
           status: "Open",
+          overallStatus: "Submitted",
           assignedTo: body.projectOutline.pmoOfficer.id,
           project: projectResponse.id,
           docType: "Outline",
@@ -484,6 +485,7 @@ module.exports = {
           OutlineApproval.create({
             projectOutline: backup,
             status: "Open",
+            overallStatus: "Submitted",
             assignedTo: outline.pmoOfficer.id,
             project: projectResponse[0].id,
             docType: "Outline",

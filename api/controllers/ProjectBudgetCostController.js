@@ -168,11 +168,17 @@ module.exports = {
   updateMultipleProjectsBudget: (req, res) => {
     try {
       let projectsBudget = req.body.projectsBudget;
+      let docLink = req.body.documentLink;
+      let subPortfolioId = req.body.subPortfolioId;
       projectsBudget.forEach(async (project, index) => {
         let result = await ProjectBudgetCost.update({ id: project.id })
           .set({ budget: project.budget })
 
         if (index == projectsBudget.length - 1) {
+          if (docLink) {
+            // update SubPortfolio with document link
+            await SubPortfolio.update({ id: subPortfolioId }).set({ documentLink: docLink });
+          }
           res.ok(result);
         }
       });

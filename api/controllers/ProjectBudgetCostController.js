@@ -170,6 +170,7 @@ module.exports = {
       let projectsBudget = req.body.projectsBudget;
       let docLink = req.body.documentLink;
       let subPortfolioId = req.body.subPortfolioId;
+      
       projectsBudget.forEach(async (project, index) => {
         let result = await ProjectBudgetCost.update({ id: project.id })
           .set({ budget: project.budget })

@@ -113,8 +113,8 @@ module.exports.routes = {
   'PUT /reports/:id': 'ReportsController.update',
 
   // Team Api
-  'GET /getTeamByProject/:id': 'TeamController.projectTeam',
-  'GET /getUserTeamProjects/:id': 'TeamController.userTeamProjects',
+  'GET /project/team/:id': 'TeamController.projectTeam',
+  'GET /user/team/project/:id': 'TeamController.userTeamProjects',
 
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',

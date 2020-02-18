@@ -17,7 +17,10 @@ io.on('connection', socket => {
   //To paginate all records
   socket.on('portfoliosIndex', data => {
     Portfolio.find()
-      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
       .populateAll().then(portfolios => {
         socket.emit('portfoliosIndex', portfolios);
       })
@@ -27,7 +30,9 @@ io.on('connection', socket => {
   });
 
   socket.on('activePortfolios', data => {
-    Portfolio.find({ status: "Active" }).populateAll().then(response => {
+    Portfolio.find({
+      status: "Active"
+    }).populateAll().then(response => {
       socket.emit('activePortfolios', response);
     }).catch(err => {
       socket.emit('activePortfolios', err);
@@ -38,22 +43,47 @@ io.on('connection', socket => {
     let search = data.search;
 
     let count = await Portfolio.count({
-      or: [
-        { name: { contains: search } },
-        { status: { contains: search } },
-        { 'businessUnit.name': { contains: search } }
+      or: [{
+          name: {
+            contains: search
+          }
+        },
+        {
+          status: {
+            contains: search
+          }
+        },
+        {
+          'businessUnit.name': {
+            contains: search
+          }
+        }
       ]
     });
 
     Portfolio.find({
-      or: [
-        { name: { contains: search } },
-        { status: { contains: search } },
-        { 'businessUnit.name': { contains: search } }
-      ]
-    }).limit(10).populateAll().then(portfolios => {
-      socket.emit('portfoliosSearch', { count, portfolios });
-    })
+        or: [{
+            name: {
+              contains: search
+            }
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            'businessUnit.name': {
+              contains: search
+            }
+          }
+        ]
+      }).limit(10).populateAll().then(portfolios => {
+        socket.emit('portfoliosSearch', {
+          count,
+          portfolios
+        });
+      })
       .catch(error => {
         socket.emit('portfoliosSearch', error);
       });
@@ -63,12 +93,26 @@ io.on('connection', socket => {
     let search = data.search;
 
     Portfolio.find({
-      or: [
-        { name: { contains: search } },
-        { status: { contains: search } },
-        { 'businessUnit.name': { contains: search } }
-      ]
-    }).paginate({ page: data.pageIndex, limit: data.pageSize })
+        or: [{
+            name: {
+              contains: search
+            }
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            'businessUnit.name': {
+              contains: search
+            }
+          }
+        ]
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
       .populateAll().then(portfolios => {
         socket.emit('portfoliosSearchIndex', portfolios);
       })
@@ -83,11 +127,10 @@ module.exports = {
   getActivePortfolios: (req, res) => {
     Portfolio.find({
       status: "Active"
-    }).populateAll().then(response => {
+    }).sort('name').populateAll().then(response => {
       res.ok(response);
     }).catch(err => {
       res.badRequest(err);
     });
   },
 };
-

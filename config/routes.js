@@ -147,5 +147,5 @@ module.exports.routes = {
   'GET /translation': 'TranslationController.index',
   'POST /translation': 'TranslationController.create',
   'PUT /translation': 'TranslationController.update',
-  'POST /translation/delete': 'TranslationController.delete',
+  'DELETE /translation/:en': 'TranslationController.delete',
 };

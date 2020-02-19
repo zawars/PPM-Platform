@@ -96,8 +96,7 @@ module.exports = {
 
 	delete: async (req, res) => {
 		try {
-			let data = req.body;
-			let en = data.en;
+			let en = req.params.en;
 
 			let deFile = JSON.parse(fs.readFileSync('assets/langs/de.json', 'utf8'));
 			let frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json', 'utf8'));

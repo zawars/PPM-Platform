@@ -230,6 +230,15 @@ io.on('connection', socket => {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilterIndex', '', socket.user.id);
     }
   });
+
+  socket.on('fetchReport', async data => {
+    try {
+      let report = await Reports.findOne({ id: data.id }).populateAll();
+      socket.emit('fetchReport', report);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', error.toString(), 'fetchReport', '', socket.user.id);
+    }
+  });
 });
 
 

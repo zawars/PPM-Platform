@@ -37,8 +37,8 @@ module.exports = {
   // },
 
   ssl: {
-    key: require('fs').readFileSync(__dirname + '/ssl/megowork-key.pem'),
-    cert: require('fs').readFileSync(__dirname + '/ssl/megowork-cert.pem'),
+    key: require('fs').readFileSync(__dirname + '/ssl/test2-key.pem'),
+    cert: require('fs').readFileSync(__dirname + '/ssl/test2-cert.pem'),
     // passphrase: "megowork"
   },
 

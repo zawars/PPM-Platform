@@ -142,5 +142,11 @@ module.exports.routes = {
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
 
   //Subportfolio
-  'POST /subPortfolio': 'SubPortfolioController.create'
+  'POST /subPortfolio': 'SubPortfolioController.create',
+
+  // Translation Api
+  'GET /translation': 'TranslationController.index',
+  'POST /translation': 'TranslationController.create',
+  'PUT /translation': 'TranslationController.update',
+  'DELETE /translation/:en': 'TranslationController.delete',
 };

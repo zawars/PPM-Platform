@@ -102,6 +102,7 @@ module.exports.routes = {
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
   'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
+  'GET /projects/search/:query': 'ProjectsController.search',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 

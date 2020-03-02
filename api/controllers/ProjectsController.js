@@ -532,4 +532,19 @@ module.exports = {
       ErrorsLogService.logError('Projects', error.toString(), 'getClosedProjects', req);
     }
   },
+
+  search: (req, res) => {
+    let query = req.params.query;
+    Projects.find({
+      or: [{
+        projectName: {
+          'contains': query
+        }
+      }], isClosed: false}).then(projects => {
+      res.ok(projects)
+    }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'search', req);
+      res.badRequest(err);
+    });
+  },
 };

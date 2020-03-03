@@ -200,9 +200,7 @@ io.on('connection', socket => {
     let search = data.search.toLowerCase();
     let count = 0;
     try {
-      let projects = await Reports.find({
-        user: data.userId
-      }).populateAll()
+      let projects = await Reports.find().populateAll()
       let filteredProjects = projects.filter(project => {
         let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search) ||
           (project.projectManager.name && project.projectManager.name.toLowerCase().includes(search)) ||
@@ -219,9 +217,7 @@ io.on('connection', socket => {
       });
       count = filteredProjects.length;
 
-      Reports.find({
-        user: data.userId
-      }).populateAll().then(projects => {
+      Reports.find().populateAll().then(projects => {
         let filteredProjects = projects.filter(project => {
           let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search) ||
             (project.projectManager.name && project.projectManager.name.toLowerCase().includes(search)) ||

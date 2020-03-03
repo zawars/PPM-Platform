@@ -172,17 +172,13 @@ io.on('connection', socket => {
 
   //To get count
   socket.on('portfolioProjectsCount', async data => {
-    let count = await Reports.count({
-      user: data.userId
-    });
+    let count = await Reports.count();
     socket.emit('portfolioProjectsCount', count);
   });
 
   //To paginate current user records
   socket.on('portfolioProjectsIndex', data => {
-    Reports.find({
-        user: data.userId
-      })
+    Reports.find()
       .paginate({
         page: data.pageIndex,
         limit: data.pageSize
@@ -247,9 +243,7 @@ io.on('connection', socket => {
   //To paginate search results of projects
   socket.on('portfolioProjectsSearchIndex', data => {
     let search = data.search;
-    Reports.find({
-      user: data.userId
-    }).populateAll().then(projects => {
+    Reports.find().populateAll().then(projects => {
       let filteredProjects = projects.filter(project => {
         let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search) ||
           (project.projectManager.name && project.projectManager.name.toLowerCase().includes(search)) || (project.projectSponsor.name && project.projectSponsor.name.toLowerCase().includes(search)) ||
@@ -259,7 +253,8 @@ io.on('connection', socket => {
           project.status.toLowerCase().includes(search);
 
         return check;
-      })
+      });
+
       let paginatedProjects = SocketService.paginateArray(filteredProjects, data.pageSize, data.pageIndex);
       socket.emit('portfolioProjectsSearchIndex', paginatedProjects);
     });

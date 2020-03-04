@@ -5,41 +5,295 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-sails.hooks.sockets.load(() => {
-  const io = sails.io;
+const io = SocketService.io;
 
-  io.on('connection', socket => {
-    socket.on('reportsCount', async data => {
-      let count = await Reports.count();
-      socket.emit('reportsCount', count);
+io.on('connection', socket => {
+
+  socket.on('selectiveReportsIndex', data => {
+    let selectionIds = data.ids;
+    Reports.find({
+        id: selectionIds
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
+      .populateAll().then(projects => {
+        socket.emit('selectiveReportsIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('selectiveReportsIndex', error);
+      });
+  });
+
+  socket.on('selectiveReportsSearch', async data => {
+    let search = data.search;
+    let selectionIds = data.ids;
+
+    let count = await Reports.count({
+      or: [{
+          uid: parseInt(search),
+          id: selectionIds
+        },
+        {
+          projectName: {
+            contains: search
+          },
+          id: selectionIds
+        },
+        {
+          'projectSponsor.name': {
+            contains: search
+          },
+          id: selectionIds
+        },
+        {
+          'projectManager.name': {
+            contains: search
+          },
+          id: selectionIds
+        },
+        {
+          status: {
+            contains: search
+          },
+          id: selectionIds
+        }
+      ]
     });
 
-    socket.on('reportsIndex', async data => {
-      // TODO :: Need to poginate it
-      let projects = await Reports.find().populateAll();
-      socket.emit('reportsIndex', projects);
+    Reports.find({
+        or: [{
+            uid: parseInt(search),
+            id: selectionIds
+          },
+          {
+            projectName: {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            'projectSponsor.name': {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            'projectManager.name': {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            status: {
+              contains: search
+            },
+            id: selectionIds
+          }
+        ]
+      }).limit(10)
+      .populateAll().then(projects => {
+        socket.emit('selectiveReportsSearch', {
+          count,
+          projects
+        });
+      })
+      .catch(error => {
+        socket.emit('selectiveReportsSearch', error);
+      });
+  });
+
+  socket.on('selectiveReportsSearchIndex', async data => {
+    let search = data.search;
+    let selectionIds = data.ids;
+
+    Reports.find({
+        or: [{
+            uid: parseInt(search),
+            id: selectionIds
+          },
+          {
+            projectName: {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            'projectSponsor.name': {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            'projectManager.name': {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            status: {
+              contains: search
+            },
+            id: selectionIds
+          }
+        ]
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
+      .populateAll().then(projects => {
+        socket.emit('selectiveReportsSearchIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('selectiveReportsSearchIndex', error);
+      });
+  });
+
+  //To get count for all records
+  socket.on('allReportsCount', async data => {
+    let count = await Reports.count();
+    socket.emit('allReportsCount', count);
+  });
+
+  //To paginate all records
+  socket.on('allReportsIndex', data => {
+    Reports.find()
+      .paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
+      .populateAll().then(projects => {
+        socket.emit('allReportsIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('allReportsIndex', error);
+      });
+  });
+
+  //To get count
+  socket.on('portfolioProjectsCount', async data => {
+    let count = await Reports.count();
+    socket.emit('portfolioProjectsCount', count);
+  });
+
+  //To paginate current user records
+  socket.on('portfolioProjectsIndex', data => {
+    Reports.find()
+      .paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
+      .populateAll().then(projects => {
+        socket.emit('portfolioProjectsIndex', projects);
+      })
+      .catch(error => {
+        socket.emit('portfolioProjectsIndex', error);
+      });
+  });
+
+  //To search in data table of Projects
+  socket.on('portfolioProjectsSearch', async data => {
+    let search = data.search.toLowerCase();
+    let count = 0;
+    try {
+      let projects = await Reports.find().populateAll()
+      let filteredProjects = projects.filter(project => {
+        let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search) ||
+          (project.projectManager.name && project.projectManager.name.toLowerCase().includes(search)) ||
+          (project.projectSponsor.name && project.projectSponsor.name.toLowerCase().includes(search)) ||
+          (project.projectPhase ? project.projectPhase.name && project.projectPhase.name.toLowerCase().includes(search) : undefined) ||
+          (project.businessArea.name && project.businessArea.name.toLowerCase().includes(search)) ||
+          (project.businessSegment.name && project.businessSegment.name.toLowerCase().includes(search)) ||
+          (project.reportingLevel.name && project.reportingLevel.name.toLowerCase().includes(search)) ||
+          (project.portfolio ? project.portfolio.name && project.portfolio.name.toLowerCase().includes(search) : undefined) ||
+          (project.strategicContribution.name && project.strategicContribution.name.toLowerCase().includes(search)) ||
+          project.status.toLowerCase().includes(search);
+
+        return check;
+      });
+      count = filteredProjects.length;
+
+      Reports.find().populateAll().then(projects => {
+        let filteredProjects = projects.filter(project => {
+          let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search) ||
+            (project.projectManager.name && project.projectManager.name.toLowerCase().includes(search)) ||
+            (project.projectSponsor.name && project.projectSponsor.name.toLowerCase().includes(search)) ||
+            (project.projectPhase ? project.projectPhase.name && project.projectPhase.name.toLowerCase().includes(search) : undefined) ||
+            (project.businessArea.name && project.businessArea.name.toLowerCase().includes(search)) ||
+            (project.businessSegment.name && project.businessSegment.name.toLowerCase().includes(search)) ||
+            (project.reportingLevel.name && project.reportingLevel.name.toLowerCase().includes(search)) ||
+            (project.portfolio ? project.portfolio.name && project.portfolio.name.toLowerCase().includes(search) : undefined) ||
+            (project.strategicContribution.name && project.strategicContribution.name.toLowerCase().includes(search)) ||
+            project.status.toLowerCase().includes(search);
+
+          return check;
+        });
+
+        let paginatedProjects = SocketService.paginateArray(filteredProjects, 20, 1);
+        socket.emit('portfolioProjectsSearch', {
+          count: count,
+          projects: paginatedProjects
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  //To paginate search results of projects
+  socket.on('portfolioProjectsSearchIndex', data => {
+    let search = data.search;
+    Reports.find().populateAll().then(projects => {
+      let filteredProjects = projects.filter(project => {
+        let check = project.uid == parseInt(search) || project.projectName.toLowerCase().includes(search) ||
+          (project.projectManager.name && project.projectManager.name.toLowerCase().includes(search)) || (project.projectSponsor.name && project.projectSponsor.name.toLowerCase().includes(search)) ||
+          (project.projectPhase.name && project.projectPhase.name.toLowerCase().includes(search)) || (project.businessArea.name && project.businessArea.name.toLowerCase().includes(search)) ||
+          (project.businessSegment.name && project.businessSegment.name.toLowerCase().includes(search)) || (project.reportingLevel.name && project.reportingLevel.name.toLowerCase().includes(search)) ||
+          (project.portfolio.name && project.portfolio.name.toLowerCase().includes(search)) || (project.strategicContribution.name && project.strategicContribution.name.toLowerCase().includes(search)) ||
+          project.status.toLowerCase().includes(search);
+
+        return check;
+      });
+
+      let paginatedProjects = SocketService.paginateArray(filteredProjects, data.pageSize, data.pageIndex);
+      socket.emit('portfolioProjectsSearchIndex', paginatedProjects);
     });
+  });
 
-    socket.on('projectsIndexByUser', async data => {
-      // TODO :: Need to poginate it
-      let projects = await Projects.find({
-        user: data.userId
-      }).populateAll().sort('uid DESC');
+  socket.on('portfolioProjectsFilter', data => {
+    let filters = data.filtersArray;
+    let filtersObj = {};
+    filters.forEach(filter => {
+      let key = Object.keys(filter)[0];
+      filtersObj[key] = filter[key];
+    })
 
-      socket.emit('projectsIndexByUser', projects);
-    });
+    Reports.find({
+      user: data.userId
+    }).where(filtersObj).populateAll().then(projects => {
+      let paginatedProjects = SocketService.paginateArray(projects, 20, 1);
+      socket.emit('portfolioProjectsFilter', {
+        count: projects.length,
+        projects: paginatedProjects
+      });
+    })
+  });
 
-    socket.on('approvalsIndexByUser', async data => {
-      // TODO :: Need to poginate it
-      let approvals = await OutlineApproval.find({
-        assignedTo: data.userId
-      }).populateAll().sort('createdAt DESC');
-      socket.emit('approvalsIndexByUser', approvals);
-    });
-
+  socket.on('portfolioProjectsFilterIndex', data => {
+    let filters = data.filtersArray;
+    let filtersObj = {}
+    filters.forEach(filter => {
+      let key = Object.keys(filter)[0];
+      filtersObj[key] = filter[key];
+    })
+    Reports.find({
+      user: data.userId
+    }).where(filtersObj).populateAll().then(projects => {
+      let paginatedProjects = SocketService.paginateArray(projects, data.pageSize, data.pageIndex);
+      socket.emit('portfolioProjectsFilterIndex', paginatedProjects);
+    })
   });
 });
-
 module.exports = {
   getReportsByUser: (req, res) => {
     Reports.find({

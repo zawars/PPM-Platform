@@ -102,6 +102,45 @@ module.exports = {
       res.badRequest(err);
     });
   },
+
+  emailReminderOrderCreation: async (req, res) => {
+    try {
+      const moment = require('moment');
+
+      let projects = await Projects.find({ outlineApproved: true, orderSubmitted: false }).populateAll();
+      
+      if (projects.length > 0) {
+        let emailConfig = await EmailConfig.find({ event: 'Email Reminder Project Order' });
+
+        projects.forEach(async (project, index) => {
+          let dateDiffDays = moment(project.projectOutline[0].initiationApprovalDate).diff(moment(new Date()), 'days');
+          ++dateDiffDays;
+          
+          if(dateDiffDays == 14 || dateDiffDays == 1) {
+            EmailService.sendMail({
+              email: project.user.email,
+              message: emailConfig.text,
+              subject: 'Reminder: oneView Project Order Creation'
+            }, (err) => {
+              if (err) {
+                ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderProjectOrder', req);
+                console.log(err);
+                res.forbidden({
+                  message: "Error sending email."
+                });
+              } else {
+                res.send({
+                  message: "Email sent."
+                });
+              }
+            })
+          }
+        });
+      }
+    } catch (error) {
+      ErrorsLogService.logError('User', error.toString(), 'emailReminderProjectOrder', req);
+    }
+  }
 };
 
 let syncUsers = async (res) => {

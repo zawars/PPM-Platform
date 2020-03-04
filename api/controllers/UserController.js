@@ -102,6 +102,41 @@ module.exports = {
       res.badRequest(err);
     });
   },
+
+  emailReminderPendingApprovals: async (req, res) => {
+    try {
+      let approvals = await OutlineApproval.find({ status: "Open" }).populateAll();
+  
+      if (approvals.length > 0) {
+        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Pending Approval' });
+        let date = new Date().getDate();
+  
+        approvals.forEach(async (approval, index) => {
+          if (date == 10 || date == 20 || date == 28) {
+            EmailService.sendMail({
+              email: approval.assignedTo.email,
+              message: emailConfig.text,
+              subject: 'Reminder: oneView Pending Workflow Approval'
+            }, (err) => {
+              if (err) {
+                ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderPendingApprovals', req);
+                console.log(err);
+                res.forbidden({
+                  message: "Error sending email."
+                });
+              } else {
+                res.send({
+                  message: "Email sent."
+                });
+              }
+            })
+          }
+        });
+      }
+    } catch (error) {
+      ErrorsLogService.logError('User', error.toString(), 'emailReminderPendingApprovals', req);
+    }
+  },
 };
 
 let syncUsers = async (res) => {

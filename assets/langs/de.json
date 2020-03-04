@@ -863,5 +863,8 @@
   "Mark to show the information on the document.": "Markieren um die Werte auf dem Dokument anzuzeigen.",
   "Die Status-Ampel für den Gesamtstatus wird vom System automatisch gesetzt.": "Die Status-Ampel für den Gesamtstatus wird vom System automatisch gesetzt.",
   "Yearly Budget": "Jahresbudget",
-  "Programs": "Programme"
+  "Programs": "Programme",
+  "Upcoming": "Ausblick",
+  "Past" : "Rückblick",
+  "News": "Neuigkeiten"
 }

@@ -110,7 +110,7 @@ module.exports = {
       let projects = await Projects.find({ outlineApproved: true, orderSubmitted: false }).populateAll();
       
       if (projects.length > 0) {
-        let emailConfig = await EmailConfig.find({ event: 'Email Reminder Project Order' });
+        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Project Order' });
 
         projects.forEach(async (project, index) => {
           let dateDiffDays = moment(project.projectOutline[0].initiationApprovalDate).diff(moment(new Date()), 'days');

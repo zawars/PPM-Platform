@@ -10,7 +10,8 @@ module.exports = {
     try {
       let createdSubportfolio = await SubPortfolio.create({
         name: req.body.name,
-        portfolio: req.body.portfolio
+        portfolio: req.body.portfolio,
+        statusReportReminder: req.body.statusReportReminder
       })
       let createdPortfolioBudgetYear = await PortfolioBudgetYear.create({
         year: new Date().getFullYear(),

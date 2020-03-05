@@ -102,6 +102,69 @@ module.exports = {
       res.badRequest(err);
     });
   },
+
+  emailReminderStatusReport: async (req, res) => {
+    try {
+      const moment = require('moment');
+
+      let projects = await Projects.find({ orderApproved: true }).populateAll();
+      let detailIds = [];
+
+      projects.forEach(project => {
+        detailIds.push(project.projectReport.id);
+      });
+
+      let details = await Reports.find({ id: { $in: detailIds } }).populateAll();
+
+      if (details.length > 0) {
+        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Status Report' });
+
+        details.forEach(async (detail, index) => {
+          if (projects[index].subPortfolio) {
+            if (projects[index].subPortfolio.statusReportReminder && detail.status != 'Closed') {
+              let dateDiffDays;
+              if (detail.statusReports.length > 0) {
+                if((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted') 
+                   || detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
+                  dateDiffDays = moment(new Date()).diff(moment(detail.statusReports[detail.statusReports.length - 1].submittedDate), 'days');
+                  ++dateDiffDays;
+                } else {
+                  dateDiffDays = moment(new Date()).diff(moment(projects[index].ficoApprovedOrderDate), 'days');
+                  ++dateDiffDays;
+                }
+              } else {
+                dateDiffDays = moment(new Date()).diff(moment(projects[index].ficoApprovedOrderDate), 'days');
+                ++dateDiffDays;
+              }
+              if ((projects[index].subPortfolio.statusReportReminder == 'Every 35 days' && dateDiffDays >= 35) ||
+                (projects[index].subPortfolio.statusReportReminder == 'Every 65 days' && dateDiffDays >= 65) ||
+                (projects[index].subPortfolio.statusReportReminder == 'Every 95 days' && dateDiffDays >= 95)) {
+                EmailService.sendMail({
+                  email: projects[index].user.email,
+                  message: emailConfig.text,
+                  subject: 'Reminder: oneView Project Status Report Creation'
+                }, (err) => {
+                  if (err) {
+                    ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderStatusReport', req);
+                    console.log(err);
+                    res.forbidden({
+                      message: "Error sending email."
+                    });
+                  } else {
+                    res.send({
+                      message: "Email sent."
+                    });
+                  }
+                })
+              }
+            }
+          }
+        });
+      }
+    } catch (error) {
+      ErrorsLogService.logError('User', error.toString(), 'emailReminderStatusReport', req);
+    }
+  },
 };
 
 let syncUsers = async (res) => {

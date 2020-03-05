@@ -1,4 +1,16 @@
-const io = require('socket.io')(5000);
+const fs = require('fs');
+const app = require('express');
+const https = require('https');
+const server = https.createServer({
+  cert: fs.readFileSync('config/env/ssl/cert.pem'),
+  key: fs.readFileSync('config/env/ssl/key.pem'),
+  requestCert: false,
+  rejectUnauthorized: false
+}, app);
+server.listen(5000, () => {
+  console.log('Socket server started on port 5000.')
+});
+const io = require('socket.io')(server);
 
 module.exports.io = io;
 

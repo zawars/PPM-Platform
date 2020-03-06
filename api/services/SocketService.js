@@ -7,6 +7,7 @@ const server = https.createServer({
   requestCert: false,
   rejectUnauthorized: false
 }, app);
+
 server.listen(5000, () => {
   console.log('Socket server started on port 5000.')
 });

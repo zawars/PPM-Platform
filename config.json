@@ -1,11 +1,11 @@
 {
   "url": "https://login.microsoftonline.com/376e33ca-d656-4e46-8bcb-7d5ba898ae66/oauth2/token",
-  "clientId": "021101b5-404f-421b-9e44-dc8a32fed34a",
-  "clientSecret": "LZ6oeuaYiq7GPH0WPIcA+6t4wcJBxb9Y/q8YnsUMiw0=",
-  "callbackRedirectUrl": "https://www.bkw-oneview.com/#/auth/",
-  "callbackUrl": "https://be.bkw-oneview.com:1337/saml/consume",
+  "clientId": "5ac79e3a-7a81-413c-985c-a07d390c7911",
+  "clientSecret": "6LRoozXamtpmz3kazTZZIelAMPjoLQIHveEqauMDau8=",
+  "callbackRedirectUrl": "http://euk-84842.eukservers.com/#/auth/",
+  "callbackUrl": "https://megowork.co.uk:1337/saml/consume",
   "entryPointUrl": "https://login.microsoftonline.com/376e33ca-d656-4e46-8bcb-7d5ba898ae66/saml2",
   "logoutUrl": "https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0",
-  "logoutCallbackUrl": "https://be.bkw-oneview.com:1337/saml/logout",
-  "issuer": "MEGOWORKPPM"
+  "logoutCallbackUrl": "https://megowork.co.uk:1337/saml/logout",
+  "issuer": "MEGAWORKPPMTEST"
 }

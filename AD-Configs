@@ -3,10 +3,10 @@
     "clientId": "021101b5-404f-421b-9e44-dc8a32fed34a",
     "clientSecret": "LZ6oeuaYiq7GPH0WPIcA+6t4wcJBxb9Y/q8YnsUMiw0=",
     "callbackRedirectUrl": "https://www.bkw-oneview.com/#/auth/",
-    "callbackUrl": "https://be.bkw-oneview.com/saml/consume",
+    "callbackUrl": "https://be.bkw-oneview.com:1337/saml/consume",
     "entryPointUrl": "https://login.microsoftonline.com/376e33ca-d656-4e46-8bcb-7d5ba898ae66/saml2",
     "logoutUrl": "https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0",
-    "logoutCallbackUrl": "https://be.bkw-oneview.com/saml/logout",
+    "logoutCallbackUrl": "https://be.bkw-oneview.com:1337/saml/logout",
     "issuer": "MEGOWORKPPM"
   },
   {

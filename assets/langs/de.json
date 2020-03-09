@@ -1,7 +1,6 @@
 {
   "Projects": "Projekte",
   "Msgs": "MSG",
-  "Notify": "benachrichtigen",
   "Tasks": "Aufgaben",
   "Recent projects": "Neueste Projekte",
   "Find reports and more": "Finden Sie Berichte und mehr",
@@ -19,7 +18,6 @@
   "Tables": "Tische",
   "Normal Tables": "Normale Tabellen",
   "Data Tables": "Datentabellen",
-  "Forms": "Formulare",
   "Smart Form Elements": "Smart Form-Elemente",
   "Smart Form Layouts": "Smart Form Layouts",
   "Smart Form Validation": "Smart Form Validation",
@@ -854,6 +852,9 @@
   "Apply": "Anwenden",
   "Reset": "Zurücksetzen",
   "Outline is on Hold.": "Projektskizze ist auf Hold gesetzt.",
-  "Order Relevant" : "Auftragsrelevant",
-  "Copy Link": "Link kopieren"
+  "Order Relevant": "Auftragsrelevant",
+  "Copy Link": "Link kopieren",
+  "Translation": "Übersetzung",
+  "Notify": "benachrichtigen",
+  "Forms": "Formulare"
 }

@@ -9,11 +9,11 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
-  socket.on('oneProgram', data => {
+  socket.on('fetchProgram', data => {
     Program.findOne({ id: data.programId }).populateAll().then(program => {
-      socket.emit('oneProgram', program);
+      socket.emit('fetchProgram', program);
     }).catch(error => {
-      ErrorsLogService.logError('Program', `id: ${data.programId}, ` + error.toString(), 'oneProgram', '', socket.user.id);
+      ErrorsLogService.logError('Program', `id: ${data.programId}, ` + error.toString(), 'fetchProgram', '', socket.user.id);
     });
   });
 

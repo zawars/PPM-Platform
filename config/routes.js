@@ -102,6 +102,7 @@ module.exports.routes = {
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
   'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
+  'GET /projects/search/:query': 'ProjectsController.search',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
@@ -113,8 +114,8 @@ module.exports.routes = {
   'PUT /reports/:id': 'ReportsController.update',
 
   // Team Api
-  'GET /getTeamByProject/:id': 'TeamController.projectTeam',
-  'GET /getUserTeamProjects/:id': 'TeamController.userTeamProjects',
+  'GET /project/team/:id': 'TeamController.projectTeam',
+  'GET /user/team/project/:id': 'TeamController.userTeamProjects',
 
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
@@ -141,5 +142,11 @@ module.exports.routes = {
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
 
   //Subportfolio
-  'POST /subPortfolio': 'SubPortfolioController.create'
+  'POST /subPortfolio': 'SubPortfolioController.create',
+
+  // Translation Api
+  'GET /translation': 'TranslationController.index',
+  'POST /translation': 'TranslationController.create',
+  'PUT /translation': 'TranslationController.update',
+  'DELETE /translation/:en': 'TranslationController.delete',
 };

@@ -14,6 +14,7 @@ io.on('connection', socket => {
       let project = await Projects.findOne({ id: data.id }).populateAll();
       let detail;
       let order;
+      
       if (project.projectOrder.length == 0) {
         detail = await Reports.findOne({ id: project.projectReport.id }).populateAll();
       } else {

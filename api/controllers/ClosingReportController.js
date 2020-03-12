@@ -27,7 +27,6 @@ io.on('connection', socket => {
 });
 
 module.exports = {
-
   submitClosingReport: async (req, res) => {
     try {
       let body = req.body;

@@ -29,7 +29,6 @@ io.on('connection', socket => {
 });
 
 module.exports = {
-
   submitChangeRequest: async (req, res) => {
     try {
       let body = req.body;
@@ -74,7 +73,6 @@ module.exports = {
       }).set(body.obj);
 
       let changeRequest = await ChangeRequest.findOne({ id: body.changeRequestId }).populateAll();
-
       let projectObj = {
         changeRequestMade: true,
         docType: 'Change Request',

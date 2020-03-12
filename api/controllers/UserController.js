@@ -124,8 +124,8 @@ module.exports = {
               let dateDiffDays;
 
               if (detail.statusReports.length > 0) {
-                if((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted') 
-                   || detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
+                if ((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted')
+                  || detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
                   dateDiffDays = moment(new Date()).diff(moment(detail.statusReports[detail.statusReports.length - 1].submittedDate), 'days');
                   ++dateDiffDays;
                 } else {
@@ -140,9 +140,9 @@ module.exports = {
               if ((projects[index].subPortfolio.statusReportReminder == 'Every 35 days' && dateDiffDays >= 35) ||
                 (projects[index].subPortfolio.statusReportReminder == 'Every 65 days' && dateDiffDays >= 65) ||
                 (projects[index].subPortfolio.statusReportReminder == 'Every 95 days' && dateDiffDays >= 95)) {
-                  if(projects[index].user) {
-                    emailIds.push(projects[index].user.email);
-                  }
+                if (projects[index].user) {
+                  emailIds.push(projects[index].user.email);
+                }
               }
             }
           }

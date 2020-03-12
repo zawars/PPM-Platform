@@ -484,6 +484,11 @@ io.on('connection', socket => {
       socket.emit('projectsSearchIndex', projects);
     });
   });
+
+  socket.on('fetchMultipleUsers', async data => {
+    let users = await User.find({ id: { $in: data.userIds }});
+    socket.emit('fetchMultipleUsers', users);
+  });
 })
 
 

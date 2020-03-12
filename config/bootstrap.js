@@ -11,7 +11,7 @@
 var http = require('http');
 const cronJob = require('./cronJob').cronJob;
 
-module.exports.bootstrap = function (cb) {
+module.exports.bootstrap = async function (cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
@@ -40,6 +40,30 @@ module.exports.bootstrap = function (cb) {
       EmailService.programCounter = uid;
     } else {
       EmailService.programCounter = 0;
+    }
+  });
+
+  // script to change itPlatform to array of ids of Project Outline
+  let outlines = await ProjectOutline.find().populateAll();
+  outlines.forEach(async outline => {
+    if (outline.itPlatform.id) {
+      await ProjectOutline.update({
+        id: outline.id
+      }).set({
+        itPlatform: [outline.itPlatform.id]
+      });
+    }
+  });
+
+  // script to change itPlatform to array of ids of Project Order
+  let orders = await ProjectOrder.find().populateAll();
+  orders.forEach(async order => {
+    if (order.itPlatform.id) {
+      await ProjectOrder.update({
+        id: order.id
+      }).set({
+        itPlatform: [order.itPlatform.id]
+      });
     }
   });
 

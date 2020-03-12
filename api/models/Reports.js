@@ -108,6 +108,12 @@ module.exports = {
     projectMethodology: {
       model: 'dropdownMapper'
     },
+    itRelevant: {
+      model: 'dropdownMapper'
+    },
+    itPlatform: {
+      model: 'dropdownMapper'
+    },
     currentReserveHistory: {
       type: 'json'
     },

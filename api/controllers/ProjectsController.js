@@ -313,6 +313,22 @@ io.on('connection', socket => {
       ErrorsLogService.logError('Projects', error.toString(), 'projectsSearch', '', socket.user.id);
     })
   });
+
+  // To send email
+  socket.on('sendEmail', data => {
+    EmailService.sendMail({
+      email: data.email,
+      message: data.message,
+      subject: data.subject
+    }, (err) => {
+      if (err) {
+        ErrorsLogService.logError('Projects', `email: ${email}, ` + error.toString(), 'sendEmail', socket.user.id);
+        console.log(err);
+      } else {
+        socket.emit('sendEmail', {message: "Email sent."});
+      }
+    });
+  });
 })
 
 
@@ -435,9 +451,11 @@ module.exports = {
     Projects.create(body).then(projectResponse => {
       Projects.findOne({
         id: projectResponse.id
-      }).populate('projectOutline').then(project => {
+      }).populate('projectOutline').then(async project => {
+        let projectOutline = await ProjectOutline.findOne({ id: project.projectOutline[0].id }).populateAll();
+
         let temp = {
-          projectOutline: project.projectOutline[0],
+          projectOutline: projectOutline,
           status: "Open",
           overallStatus: "Submitted",
           assignedTo: body.projectOutline.pmoOfficer.id,
@@ -464,7 +482,7 @@ module.exports = {
     })
   },
 
-  submitOutlineUpdateCase: (req, res) => {
+  submitOutlineUpdateCase: async (req, res) => {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
@@ -478,12 +496,14 @@ module.exports = {
       }, outline).then(outlineObj => {
         ProjectOutline.findOne({
           id: outline.id
-        }).populate('projectId').then(populatedObj => {
+        }).populate('projectId').then(async populatedObj => {
           backup.projectId = populatedObj.projectId;
           backup.createdAt = populatedObj.createdAt;
 
+          let projectOutline = await ProjectOutline.findOne({ id: outline.id }).populateAll();
+
           OutlineApproval.create({
-            projectOutline: backup,
+            projectOutline: projectOutline,
             status: "Open",
             overallStatus: "Submitted",
             assignedTo: outline.pmoOfficer.id,

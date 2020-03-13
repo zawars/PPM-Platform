@@ -143,8 +143,23 @@ module.exports.routes = {
 
   //Subportfolio
   'POST /subPortfolio': 'SubPortfolioController.create',
+  //ProjectOutline
+  'PUT /project/outline': 'ProjectOutlineController.updateProjectOutline',
 
-  // Translation Api
+  //ProjectOrder
+  'PUT /project/order': 'ProjectOrderController.updateProjectOrder',
+  'POST /project/order/approval': 'ProjectOrderController.submitOrder',
+  'PUT /project/order/approval': 'ProjectOrderController.submitOrderUpdateCase',
+
+  //ChangeRequest
+  'POST /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequest',
+  'PUT /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequestUpdateCase',
+
+   //ClosingReport
+   'POST /project/closingReport/approval': 'ClosingReportController.submitClosingReport',
+   'PUT /project/closingReport/approval': 'ClosingReportController.submitClosingReportUpdateCase',
+   
+   // Translation Api
   'GET /translation': 'TranslationController.index',
   'POST /translation': 'TranslationController.create',
   'PUT /translation': 'TranslationController.update',

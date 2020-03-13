@@ -7,10 +7,10 @@ function cronJob(cb) {
 
   // Email Reminder For Project Order Creation
   userController.emailReminderOrderCreation();
-  
+
   // sent email reminder for project closing report creation
   userController.emailReminderClosingReport();
-  
+
   //send email reminder for those approval which are pending
   userController.emailReminderPendingApprovals();
 
@@ -23,11 +23,11 @@ function cronJob(cb) {
     userController.syncUsers();
 
     userController.emailReminderOrderCreation();
-    
+
     userController.emailReminderClosingReport();
-    
+
     userController.emailReminderPendingApprovals();
-    
+
     userController.emailReminderStatusReport();
   }, intervalTimer);
 
@@ -564,17 +564,17 @@ async function uploadExcelDumpToDrive(req, res) {
         projectManager = val.projectOrder.projectManager.name;
         link = `${FrontEndPATH}/view/order/${val.id}`;
       } else if (val.docType == 'Change Request') {
-        if (val.changeRequest.businessArea.name == undefined) {
+        if (val.changeRequest.businessArea == undefined) {
           businessArea = dropdowns.businessAreaValues.values.find(value => value.id == val.changeRequest.businessArea)
           businessUnit = dropdowns.businessUnitValues.values.find(value => value.id == val.changeRequest.businessUnit)
         } else {
           businessArea = val.changeRequest.businessArea;
           businessUnit = val.changeRequest.businessUnit;
         }
-        projectManager = val.changeRequest.projectManager.name;
+        projectManager = val.changeRequest.projectManager ? val.changeRequest.projectManager.name : '';
         link = `${FrontEndPATH}/view/changeRequest/${val.id}`;
       } else if (val.docType == 'Closing Report') {
-        projectManager = val.closingReport.projectManager.name;
+        projectManager = val.closingReport.projectManager ? val.closingReport.projectManager.name : '';
         link = `${FrontEndPATH}/view/closingReport/${val.id}`;
       }
 

@@ -322,22 +322,28 @@ module.exports = {
         ]
       });
 
-      subportfolioProjects.forEach((project, index) => {
-        ProjectBudgetCost.create({
-          portfolioBudgetYear: portfolioBudgetYear,
-          project: project.projectId,
-          budget: budget
-        }).then(result => {
-          if (index == subportfolioProjects.length - 1) {
-            res.ok(result);
-          }
-        }).catch(error => {
-          ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
-          res.badRequest({
-            error
+      if (subportfolioProjects.length > 0) {
+        subportfolioProjects.forEach((project, index) => {
+          ProjectBudgetCost.create({
+            portfolioBudgetYear: portfolioBudgetYear,
+            project: project.projectId,
+            budget: budget
+          }).then(result => {
+            if (index == subportfolioProjects.length - 1) {
+              res.ok(result);
+            }
+          }).catch(error => {
+            ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
+            res.badRequest({
+              error
+            });
           });
         });
-      });
+      } else {
+        res.ok({
+          message: "Year Added with no projects"
+        });
+      }
     } catch (error) {
       ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
     }

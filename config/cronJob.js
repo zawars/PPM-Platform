@@ -10,6 +10,9 @@ function cronJob(cb) {
   
   // sent email reminder for project closing report creation
   userController.emailReminderClosingReport();
+  
+  //send email reminder for those approval which are pending
+  userController.emailReminderPendingApprovals();
 
   //Synchronize Users Cycle after every 24 Hours
   let intervalTimer = 1000 * 60 * 60 * 24;
@@ -19,6 +22,8 @@ function cronJob(cb) {
     userController.emailReminderOrderCreation();
     
     userController.emailReminderClosingReport();
+    
+    userController.emailReminderPendingApprovals();
   }, intervalTimer);
 
   // Excel Export

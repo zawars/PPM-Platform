@@ -207,6 +207,49 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderClosingReport', req);
     }
   },
+  
+  emailReminderPendingApprovals: async (req, res) => {
+    try {
+      let emailIds = [];
+      let approvals = await OutlineApproval.find({ status: "Open" }).populateAll();
+  
+      if (approvals.length > 0) {
+        let date = new Date().getDate();
+  
+        approvals.forEach(async (approval, index) => {
+          if (date == 10 || date == 20 || date == 28) {
+            if(approval.assignedTo) {
+              emailIds.push(approval.assignedTo.email);
+            }
+          }
+        });
+      }
+
+      if (emailIds.length > 0) {
+        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Pending Approval' });
+
+        EmailService.sendMail({
+          email: emailIds,
+          message: emailConfig.text,
+          subject: 'Reminder: oneView Pending Workflow Approval'
+        }, (err) => {
+          if (err) {
+            ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderPendingApprovals', req);
+            console.log(err);
+            res.forbidden({
+              message: "Error sending email."
+            });
+          } else {
+            res.send({
+              message: "Email sent."
+            });
+          }
+        })
+      }
+    } catch (error) {
+      ErrorsLogService.logError('User', error.toString(), 'emailReminderPendingApprovals', req);
+    }
+  },
 };
 
 let syncUsers = async (res) => {

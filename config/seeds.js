@@ -86,6 +86,26 @@ module.exports.seeds = {
       event: "Closing Report Rejected",
       text: ""
     },
+    {
+      event: "Closing Report Rejected",
+      text: ""
+    },
+    {
+      event: "Email Reminder Project Order",
+      text: ""
+    },
+    {
+      event: "Email Reminder Pending Approval",
+      text: ""
+    },
+    {
+      event: "Email Reminder Status Report",
+      text: ""
+    },
+    {
+      event: "Email Reminder Closing Report",
+      text: ""
+    }
   ],
   dropdown: [{
       "values": [{

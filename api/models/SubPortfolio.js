@@ -22,6 +22,9 @@ module.exports = {
     documentLink: {
       type: 'string',
     },
+    statusReportReminder: {
+      type: 'string'
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

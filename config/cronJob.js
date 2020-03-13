@@ -14,6 +14,9 @@ function cronJob(cb) {
   //send email reminder for those approval which are pending
   userController.emailReminderPendingApprovals();
 
+  //Email Reminder for Status Report Creation
+  userController.emailReminderStatusReport();
+
   //Synchronize Users Cycle after every 24 Hours
   let intervalTimer = 1000 * 60 * 60 * 24;
   setInterval(() => {
@@ -24,6 +27,8 @@ function cronJob(cb) {
     userController.emailReminderClosingReport();
     
     userController.emailReminderPendingApprovals();
+    
+    userController.emailReminderStatusReport();
   }, intervalTimer);
 
   // Excel Export

@@ -10,7 +10,8 @@ module.exports = {
     try {
       let createdSubportfolio = await SubPortfolio.create({
         name: req.body.name,
-        portfolio: req.body.portfolio
+        portfolio: req.body.portfolio,
+        statusReportReminder: req.body.statusReportReminder   // statusReportReminder value is used to how many days after send email reminder those project managers whose do not create a status report according to current date  
       })
       let createdPortfolioBudgetYear = await PortfolioBudgetYear.create({
         year: new Date().getFullYear(),

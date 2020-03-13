@@ -63,6 +63,7 @@ module.exports.routes = {
   'GET /getOutlinesByUser/:id': 'OutlineApprovalController.getOutlinesByUser',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
+  'POST /notifyAdmins' : 'UserController.notifyAdminsbyEmail',
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
@@ -106,6 +107,7 @@ module.exports.routes = {
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
+  'GET /reports/search/:query': 'ReportsController.searchProjectsReports',
   'POST /budgetImport': 'ReportsController.budgetImport',
   'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
@@ -140,6 +142,11 @@ module.exports.routes = {
 
   //Subportfolio budget
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
+  'POST /portfolioBudgetYear/fixYearlyBudget': 'PortfolioBudgetYearController.fixYearlyBudget',
+  'POST /portfolioBudgetYear/fixAllYearlyBudget': 'PortfolioBudgetYearController.fixAllYearlyBudget',
+
+  //Subportfolio status report
+  'GET /subportfolio/statusReports/:subportfolioId': 'SubportfolioStatusReportController.statusReportsbySubportfolio',
 
   //Subportfolio
   'POST /subPortfolio': 'SubPortfolioController.create',

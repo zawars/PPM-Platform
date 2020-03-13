@@ -73,6 +73,47 @@ module.exports = {
     })
   },
 
+  notifyAdminsbyEmail: async (req, res) => {
+    let user = req.body.user;
+    let message = req.body.message;
+
+    let admins = await User.find({
+      role: 'admin'
+    });
+
+    let recepientsEmails = [];
+
+    if (admins.length > 0) {
+      admins.forEach((admin, index) => {
+        recepientsEmails.push(admin.email);
+      })
+
+      EmailService.sendMail({
+        email: recepientsEmails,
+        message: message,
+        subject: user.name + ` (${user.email}) Reported an Issue`
+      }, (err) => {
+        if (err) {
+          ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'notifyAdminsbyEmail', req);
+          console.log(err);
+          res.forbidden({
+            message: "Error sending email."
+          });
+        } else {
+          if (index == admins.length - 1) {
+            res.send({
+              message: "Email sent."
+            });
+          }
+        }
+      })
+    } else {
+      res.send({
+        message: "No Admins found."
+      });
+    }
+  },
+
   login: (req, res) => {
     res.redirect('/');
   },

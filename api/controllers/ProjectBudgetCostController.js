@@ -11,7 +11,9 @@ io.on('connection', socket => {
   socket.on('projectBudget', async data => {
     try {
       let id = data.id;
-      let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
+      let budget = await ProjectBudgetCost.find({
+        'project': id
+      }).populateAll();
       socket.emit('projectBudget', budget);
     } catch (err) {
       ErrorsLogService.logError('Project Budget Cost', `id: ${data.id}, ` + err.toString(), 'projectBudget', '', socket.user.id);
@@ -97,8 +99,12 @@ module.exports = {
   deleteProjectBudget: async (req, res) => {
     try {
       let id = req.params.id;
-      await ProjectBudgetCost.destroy({ 'project': id });
-      res.ok({ message: 'Deleted Project Budget Cost' });
+      await ProjectBudgetCost.destroy({
+        'project': id
+      });
+      res.ok({
+        message: 'Deleted Project Budget Cost'
+      });
     } catch (e) {
       ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'deleteProjectBudget', req);
       res.badRequest(e);
@@ -108,7 +114,9 @@ module.exports = {
   getProjectBudget: async (req, res) => {
     try {
       let id = req.params.id;
-      let budget = await ProjectBudgetCost.find({ 'project': id }).populateAll();
+      let budget = await ProjectBudgetCost.find({
+        'project': id
+      }).populateAll();
       res.ok(budget);
     } catch (e) {
       ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'getProjectBudget', req);
@@ -116,14 +124,12 @@ module.exports = {
     }
   },
 
-//It retrieves all projects' budget cost for a selected Budget Year
+  //It retrieves all projects' budget cost for a selected Budget Year
   budgetsByYear: async (req, res) => {
     ProjectBudgetCost.native(async function (err, collection) {
       if (err) return res.serverError(err);
-      collection.aggregate([
-        {
-          $lookup:
-          {
+      collection.aggregate([{
+          $lookup: {
             from: "projects",
             localField: 'project',
             foreignField: '_id',
@@ -134,25 +140,35 @@ module.exports = {
           $unwind: '$projectitem'
         },
         {
-          $lookup:
-          {
+          $lookup: {
             from: "reports",
-            let: { project: '$project' },
-            pipeline: [
-              {
-                $match:
-                {
-                  $expr:
-                    { $eq: ["$project", "$$project"] },
+            let: {
+              project: '$project'
+            },
+            pipeline: [{
+                $match: {
+                  $expr: {
+                    $eq: ["$project", "$$project"]
+                  },
                 }
               },
-              { $project: { status: 1, digitalizationDegree: 1, plannedEndDate: 1 } }
+              {
+                $project: {
+                  status: 1,
+                  itPlatform: 1,
+                  plannedEndDate: 1,
+                  costTypeTable: 1
+                }
+              }
             ],
             as: "report"
           }
         },
         {
-          $unwind: { path: '$report', preserveNullAndEmptyArrays: true }
+          $unwind: {
+            path: '$report',
+            preserveNullAndEmptyArrays: true
+          }
         }
       ]).toArray(function (err, results = []) {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
@@ -160,6 +176,16 @@ module.exports = {
         let finalResult = results.filter(result => {
           return result.portfolioBudgetYear == req.params.id;
         })
+
+        finalResult.forEach(result => {
+          if (result.report && result.report.costTypeTable) {
+            for (let i = 0; i < 7; i++) {
+              result.budget[i].remainingProjectBudget = parseInt(result.report.costTypeTable[i].currentBudget || 0) - parseInt(result.report.costTypeTable[i].actualCost || 0);
+              result.budget[i].currentBudget = parseInt(result.report.costTypeTable[i].currentBudget || 0);
+            }
+          }
+        });
+
         res.ok(finalResult);
       })
     });
@@ -170,15 +196,23 @@ module.exports = {
       let projectsBudget = req.body.projectsBudget;
       let docLink = req.body.documentLink;
       let subPortfolioId = req.body.subPortfolioId;
-      
+
       projectsBudget.forEach(async (project, index) => {
-        let result = await ProjectBudgetCost.update({ id: project.id })
-          .set({ budget: project.budget })
+        let result = await ProjectBudgetCost.update({
+            id: project.id
+          })
+          .set({
+            budget: project.budget
+          })
 
         if (index == projectsBudget.length - 1) {
           if (docLink) {
             // update SubPortfolio with document link
-            await SubPortfolio.update({ id: subPortfolioId }).set({ documentLink: docLink });
+            await SubPortfolio.update({
+              id: subPortfolioId
+            }).set({
+              documentLink: docLink
+            });
           }
           res.ok(result);
         }
@@ -192,71 +226,99 @@ module.exports = {
     let subPortfolio = req.body.subPortfolio;
     let portfolioBudgetYear = req.body.portfolioBudgetYear;
     let year = req.body.year;
-    let budget = [
-      {
-        costType: "External Costs",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        id: 0,
-        group: "CAPEX",
-      }, {
-        costType: "Internal Costs",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        id: 1,
-        group: "CAPEX",
-      }, {
-        costType: "External Costs",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        id: 2,
-        group: "OPEX"
-      }, {
-        costType: "Internal Costs",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        id: 3,
-        group: "OPEX"
-      }, {
-        costType: "Revenues",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        id: 4,
-        group: "Sonstiges",
-      }, {
-        costType: "Reserves",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        group: "Sonstiges",
-        id: 5,
-      }, {
-        costType: "Total",
-        budget: '',
-        thereofICT: '',
-        actualCost: "",
-        forecast: "",
-        id: 6,
-        group: "Sonstiges",
-      },
-    ];
+    let budget = [{
+      costType: "External Costs",
+      budget: '',
+      thereofICT: '',
+      currentBudget: '',
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      id: 0,
+      group: "CAPEX",
+    }, {
+      costType: "Internal Costs",
+      budget: '',
+      thereofICT: '',
+      currentBudget: '',
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      id: 1,
+      group: "CAPEX",
+    }, {
+      costType: "External Costs",
+      budget: '',
+      thereofICT: '',
+      currentBudget: "",
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      id: 2,
+      group: "OPEX"
+    }, {
+      costType: "Internal Costs",
+      budget: '',
+      thereofICT: '',
+      currentBudget: '',
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      id: 3,
+      group: "OPEX"
+    }, {
+      costType: "Revenues",
+      budget: '',
+      thereofICT: '',
+      currentBudget: '',
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      id: 4,
+      group: "Sonstiges",
+    }, {
+      costType: "Reserves",
+      budget: '',
+      thereofICT: '',
+      currentBudget: '',
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      group: "Sonstiges",
+      id: 5,
+    }, {
+      costType: "Total",
+      budget: '',
+      thereofICT: '',
+      currentBudget: '',
+      remainingProjectBudget: '',
+      ownGB: '',
+      ownIT: '',
+      externalIT: '',
+      id: 6,
+      group: "Sonstiges",
+    }, ];
 
     try {
       let subportfolioProjects = await Reports.find({
-        or: [
-          { status: 'Active', 'subPortfolio.id': subPortfolio },
-          { status: 'Closed', isFicoApprovedClosingReport: true, ficoApprovedClosingReportDate: { contains: year }, 'subPortfolio.id': subPortfolio }
+        or: [{
+            status: 'Active',
+            'subPortfolio.id': subPortfolio
+          },
+          {
+            status: 'Closed',
+            isFicoApprovedClosingReport: true,
+            ficoApprovedClosingReportDate: {
+              contains: year
+            },
+            'subPortfolio.id': subPortfolio
+          }
         ]
       });
 
@@ -271,7 +333,9 @@ module.exports = {
           }
         }).catch(error => {
           ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
-          res.badRequest({ error });
+          res.badRequest({
+            error
+          });
         });
       });
     } catch (error) {
@@ -280,4 +344,3 @@ module.exports = {
   }
 
 };
-

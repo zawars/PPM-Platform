@@ -1353,6 +1353,33 @@ module.exports = {
     res.ok(subportfolioProjects);
   },
 
+  searchProjectsReports: async (req, res) => {
+    let search = req.params.query;
+
+    try {
+      let projects = await Reports.find({
+        or: [{
+            uid: parseInt(search)
+          },
+          {
+            projectName: {
+              contains: search
+            }
+          }
+        ]
+      }, {
+        fields: {
+          uid: 1,
+          projectName: 1
+        }
+      }).limit(10).sort('uid DESC');
+
+      res.send(projects);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', error.toString(), 'searchProjectsReports', req);
+    }
+  },
+
   update: async (req, res) => {
     let data = req.body;
     let subportfolioBudget = data.portfolio

@@ -43,6 +43,18 @@ module.exports.bootstrap = function (cb) {
     }
   });
 
+  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report'];
+
+  emailConfigEvents.forEach(async event => {
+    let emailConfig = await EmailConfig.findOne({ event: event });
+    if (!emailConfig) {
+      await EmailConfig.create({
+        event: event,
+        text: ""
+      });
+    }
+  });
+
   cronJob();
 
   //Run Server on HTTPS

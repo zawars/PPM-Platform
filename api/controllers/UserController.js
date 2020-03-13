@@ -103,6 +103,111 @@ module.exports = {
     });
   },
 
+  emailReminderOrderCreation: async (req, res) => {
+    try {
+      const moment = require('moment');
+
+      let emailIds = [];
+      let projects = await Projects.find({ outlineApproved: true, orderSubmitted: false }).populateAll();
+      
+      if (projects.length > 0) {
+        projects.forEach(async (project, index) => {
+          let dateDiffDays = moment(project.projectOutline[0].initiationApprovalDate).diff(moment(new Date()), 'days');
+          ++dateDiffDays;
+          
+          if(dateDiffDays == 14 || dateDiffDays == 1) {
+            if(project.user) {
+              emailIds.push(project.user.email);
+            }
+          }
+        });
+      }
+
+      if(emailIds.length > 0) {
+        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Project Order' });
+        
+        EmailService.sendMail({
+          email: emailIds,
+          message: emailConfig.text,
+          subject: 'Reminder: oneView Project Order Creation'
+        }, (err) => {
+          if (err) {
+            ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderProjectOrder', req);
+            console.log(err);
+            res.forbidden({
+              message: "Error sending email."
+            });
+          } else {
+            res.send({
+              message: "Email sent."
+            });
+          }
+        })
+      }
+    } catch (error) {
+      ErrorsLogService.logError('User', error.toString(), 'emailReminderProjectOrder', req);
+    }
+  },
+  
+  emailReminderClosingReport: async (req, res) => {
+    try {
+      const moment = require('moment');
+
+      let projects = await Projects.find({ orderApproved: true }).populateAll();
+      let detailIds = [];
+      let emailIds = [];
+
+      projects.forEach(project => {
+        detailIds.push(project.projectReport.id);
+      });
+
+      let details = await Reports.find({ id: { $in: detailIds } }).populateAll();
+
+      if (details.length > 0) {
+        details.forEach(async (detail, index) => {
+          if (detail.statusReports.length > 0 && detail.status != 'Closed') {
+            if (projects[index].docType == 'Closing Report' && (projects[index].status == 'Submitted' || projects[index].status == 'Approved' || projects[index].status == 'On Hold')) {
+              // those whose do not send email reminder
+            } else {
+              // those whose send email reminder
+              let dateDiffDays = moment(detail.forecastEndDate).diff(moment(new Date()), 'days');
+
+              if ((dateDiffDays <= 14 && dateDiffDays % 7) == 0) {
+                if (projects[index].user) {
+                  emailIds.push(projects[index].user.email);
+                }
+              }
+            }
+          }
+        });
+      }
+
+      if (emailIds.length > 0) {
+        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Closing Report' });
+
+        EmailService.sendMail({
+          email: emailIds,
+          message: emailConfig.text,
+          subject: 'Reminder: oneView Project Closing Report Creation'
+        }, (err) => {
+          if (err) {
+            ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderClosingReport', req);
+            console.log(err);
+            res.forbidden({
+              message: "Error sending email."
+            });
+          } else {
+            res.send({
+              message: "Email sent."
+            });
+          }
+        })
+      }
+    } catch (error) {
+      ErrorsLogService.logError('User', error.toString(), 'emailReminderClosingReport', req);
+    }
+  },
+  
   emailReminderPendingApprovals: async (req, res) => {
     try {
       let emailIds = [];

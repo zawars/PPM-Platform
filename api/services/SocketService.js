@@ -2,8 +2,8 @@ const fs = require('fs');
 const app = require('express');
 const https = require('https');
 const server = https.createServer({
-  cert: fs.readFileSync('config/env/ssl/megowork-cert.pem'),
-  key: fs.readFileSync('config/env/ssl/megowork-key.pem'),
+  cert: fs.readFileSync('config/env/ssl/cert.pem'),
+  key: fs.readFileSync('config/env/ssl/key.pem'),
   requestCert: false,
   rejectUnauthorized: false
 }, app);

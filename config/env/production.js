@@ -37,8 +37,8 @@ module.exports = {
   // },
 
   ssl: {
-    key: require('fs').readFileSync(__dirname + '/ssl/megowork-key.pem'),
-    cert: require('fs').readFileSync(__dirname + '/ssl/megowork-cert.pem'),
+    key: require('fs').readFileSync(__dirname + '/ssl/key.pem'),
+    cert: require('fs').readFileSync(__dirname + '/ssl/cert.pem'),
     // passphrase: "megowork"
   },
 
@@ -47,8 +47,8 @@ module.exports = {
 
   mongodbServer: {
     adapter: 'sails-mongo',
-    // host: '89.145.165.55',
-    host: 'localhost',
+    host: '89.145.165.55',
+    // host: 'localhost',
     port: 27017,
     user: 'admin', //optional => superOwner
     password: 'kitchlew2019$$', //optional => superOwner

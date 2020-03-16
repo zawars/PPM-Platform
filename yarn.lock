@@ -98,11 +98,6 @@
   resolved "https://registry.yarnpkg.com/@sailshq/lodash/-/lodash-3.10.3.tgz#61b6fa3a5db3fe802409b0ba152bcc99e7d27a58"
   integrity sha512-XTF5BtsTSiSpTnfqrCGS5Q8FvSHWCywA0oRxFAZo8E1a8k1MMFUvk3VlRk3q/SusEYwy7gvVdyt9vvNlTa2VuA==
 
-"@sailshq/lodash@^3.10.3":
-  version "3.10.4"
-  resolved "https://registry.yarnpkg.com/@sailshq/lodash/-/lodash-3.10.4.tgz#2299648a81a67f4c6ee222c6cf8e261bd9c3fa50"
-  integrity sha512-YXJqp9gdHcZKAmBY/WnwFpPtNQp2huD/ME2YMurH2YHJvxrVzYsmpKw/pb7yINArRpp8E++fwbQd3ajYXGA45Q==
-
 "@sailshq/qs@^4.0.1":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@sailshq/qs/-/qs-4.0.2.tgz#a0013321b0dfd89894d9feef2db02d27d6af2f04"
@@ -895,7 +890,7 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
-cfb@^1.1.2:
+cfb@^1.1.2, cfb@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/cfb/-/cfb-1.1.3.tgz#05de6816259c8e8bc32713aba905608ee385df66"
   integrity sha512-joXBW0nMuwV9no7UTMiyVJnQL6XIU3ThXVjFUDHgl9MpILPOomyfaGqC290VELZ48bbQKZXnQ81UT5HouTxHsw==
@@ -1532,7 +1527,7 @@ debug@2.6.1:
   dependencies:
     ms "0.7.2"
 
-debug@2.6.9, debug@^2.1.1, debug@^2.1.2, debug@~2.6.4, debug@~2.6.6:
+debug@2.6.9, debug@^2.1.1, debug@^2.1.2:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
@@ -1826,23 +1821,6 @@ engine.io-client@1.8.3:
     xmlhttprequest-ssl "1.5.3"
     yeast "0.1.2"
 
-engine.io-client@~3.1.0:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-3.1.6.tgz#5bdeb130f8b94a50ac5cbeb72583e7a4a063ddfd"
-  integrity sha512-hnuHsFluXnsKOndS4Hv6SvUrgdYx1pk2NqfaDMW+GWdgfU3+/V25Cj7I8a0x92idSpa5PIhJRKxPvp9mnoLsfg==
-  dependencies:
-    component-emitter "1.2.1"
-    component-inherit "0.0.3"
-    debug "~3.1.0"
-    engine.io-parser "~2.1.1"
-    has-cors "1.1.0"
-    indexof "0.0.1"
-    parseqs "0.0.5"
-    parseuri "0.0.5"
-    ws "~3.3.1"
-    xmlhttprequest-ssl "~1.5.4"
-    yeast "0.1.2"
-
 engine.io-client@~3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-3.4.0.tgz#82a642b42862a9b3f7a188f41776b2deab643700"
@@ -1872,17 +1850,6 @@ engine.io-parser@1.3.2:
     has-binary "0.1.7"
     wtf-8 "1.0.0"
 
-engine.io-parser@~2.1.0, engine.io-parser@~2.1.1:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/engine.io-parser/-/engine.io-parser-2.1.3.tgz#757ab970fbf2dfb32c7b74b033216d5739ef79a6"
-  integrity sha512-6HXPre2O4Houl7c4g7Ic/XzPnHBvaEmN90vtRO9uLmwtRqQmTOw0QMevL1TOfL2Cpu1VzsaTmMotQgMdkzGkVA==
-  dependencies:
-    after "0.8.2"
-    arraybuffer.slice "~0.0.7"
-    base64-arraybuffer "0.1.5"
-    blob "0.0.5"
-    has-binary2 "~1.0.2"
-
 engine.io-parser@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/engine.io-parser/-/engine.io-parser-2.2.0.tgz#312c4894f57d52a02b420868da7b5c1c84af80ed"
@@ -1905,20 +1872,6 @@ engine.io@1.8.3:
     debug "2.3.3"
     engine.io-parser "1.3.2"
     ws "1.1.2"
-
-engine.io@~3.1.0:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/engine.io/-/engine.io-3.1.5.tgz#0e7ef9d690eb0b35597f1d4ad02a26ca2dba3845"
-  integrity sha512-D06ivJkYxyRrcEe0bTpNnBQNgP9d3xog+qZlLbui8EsMr/DouQpf5o9FzJnWYHEYE0YsFHllUv2R1dkgYZXHcA==
-  dependencies:
-    accepts "~1.3.4"
-    base64id "1.0.0"
-    cookie "0.3.1"
-    debug "~3.1.0"
-    engine.io-parser "~2.1.0"
-    ws "~3.3.1"
-  optionalDependencies:
-    uws "~9.14.0"
 
 engine.io@~3.4.0:
   version "3.4.0"
@@ -2352,7 +2305,7 @@ findup-sync@~0.3.0:
   dependencies:
     glob "~5.0.0"
 
-flaverr@^1.0.0, flaverr@^1.1.1:
+flaverr@^1.0.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/flaverr/-/flaverr-1.10.0.tgz#99240b430d0d52a3720efd0e70bef31a04357f9f"
   integrity sha512-POaguCzNjWKEKsBkks4YGgNv1LVUqTX4MTudca5ArQAxtBrPswQLAW8la4Hbo0EZy9tpU3a9WwsKdAACqZnE/Q==
@@ -3196,7 +3149,12 @@ image-size@~0.4.0:
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.4.0.tgz#d4b4e1f61952e4cbc1cea9a6b0c915fecb707510"
   integrity sha1-1LTh9hlS5MvBzqmmsMkV/stwdRA=
 
-include-all@^1.0.0, include-all@^1.0.5:
+immediate@~3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+  integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
+
+include-all@^1.0.0:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/include-all/-/include-all-1.0.8.tgz#e8bb84b057278a22cf944319037d9700c18a4379"
   integrity sha1-6LuEsFcniiLPlEMZA32XAMGKQ3k=
@@ -3269,11 +3227,6 @@ ipaddr.js@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.0.5.tgz#5fa78cf301b825c78abc3042d812723049ea23c7"
   integrity sha1-X6eM8wG4JceKvDBC2BJyMEnqI8c=
-
-ipaddr.js@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.4.0.tgz#296aca878a821816e5b85d0a285a99bcff4582f0"
-  integrity sha1-KWrKh4qCGBbluF0KKFqZvP9FgvA=
 
 ipaddr.js@1.8.0:
   version "1.8.0"
@@ -3463,6 +3416,16 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jszip@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/jszip/-/jszip-3.2.2.tgz#b143816df7e106a9597a94c77493385adca5bd1d"
+  integrity sha512-NmKajvAFQpbg3taXQXr/ccS2wcucR1AZ+NtyWp2Nq7HHVsXhcJFR8p0Baf32C2yVvBylFWVeKf+WI2AnvlPhpA==
+  dependencies:
+    lie "~3.3.0"
+    pako "~1.0.2"
+    readable-stream "~2.3.6"
+    set-immediate-shim "~1.0.1"
+
 juice@^1.0.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/juice/-/juice-1.11.0.tgz#4a7ff6bef3f3fa4b610f824aeb27ed8f3601ad73"
@@ -3581,6 +3544,13 @@ libqp@1.1.0, libqp@^1.1.0:
   resolved "https://registry.yarnpkg.com/libqp/-/libqp-1.1.0.tgz#f5e6e06ad74b794fb5b5b66988bf728ef1dedbe8"
   integrity sha1-9ebgatdLeU+1tbZpiL9yjvHe2+g=
 
+lie@~3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/lie/-/lie-3.3.0.tgz#dcf82dee545f46074daf200c7c1c5a08e0f40f6a"
+  integrity sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==
+  dependencies:
+    immediate "~3.0.5"
+
 livereload-js@^2.2.0, livereload-js@^2.3.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/livereload-js/-/livereload-js-2.4.0.tgz#447c31cf1ea9ab52fc20db615c5ddf678f78009c"
@@ -3657,7 +3627,7 @@ lodash@^2.4.1, lodash@~2.4.0, lodash@~2.4.1:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
   integrity sha1-+t2DS5aDBz2hebPq5tnA0VBT9z4=
 
-lodash@^4.12.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.14, lodash@^4.17.4:
+lodash@^4.12.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -3749,18 +3719,6 @@ machine@^12.2.5:
     rttc "^9.7.2"
     switchback "2.0.0"
 
-machine@^13.0.0-11:
-  version "13.0.0-24"
-  resolved "https://registry.yarnpkg.com/machine/-/machine-13.0.0-24.tgz#50b0fa4a71db571fcddda5b1c5e2605a83144087"
-  integrity sha512-M4jMQbHlAgPklsGdCxP6udDgeOEABlYxwSV0oybcgt4bZ5hz0CLIIpJUtBNtpDNe29K9u6qFHQrGAAIkEiNa7w==
-  dependencies:
-    "@sailshq/lodash" "^3.10.2"
-    convert-to-ecmascript-compatible-varname "0.1.4"
-    debug "3.1.0"
-    include-all "^1.0.5"
-    rttc "^9.8.1"
-    switchback "^2.0.1"
-
 machine@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/machine/-/machine-4.1.1.tgz#ef2ecab9d4aac2dbc3978502978a36e71fe59fd7"
@@ -3781,17 +3739,6 @@ machinepack-email@^0.1.3:
     email-templates "1.3.0"
     machine "^12.2.5"
     nodemailer "1.11.0"
-
-machinepack-redis@^1.1.1:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/machinepack-redis/-/machinepack-redis-1.3.0.tgz#79731150a26cf2b0b00b0eb7577ff268e5bf75b8"
-  integrity sha1-eXMRUKJs8rCwCw63V3/yaOW/dbg=
-  dependencies:
-    "@sailshq/lodash" "^3.10.2"
-    async "2.0.1"
-    flaverr "^1.1.1"
-    machine "^13.0.0-11"
-    redis "2.6.3"
 
 machinepack-urls@^3.1.1:
   version "3.1.1"
@@ -4442,7 +4389,7 @@ object-assign@4.1.0:
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.0.tgz#7a3b3d0e98063d43f4c03f2e8ae6cd51a86883a0"
   integrity sha1-ejs9DpgGPUP0wD8uiubNUahog6A=
 
-object-assign@^4.0.1, object-assign@^4.1.0, object-assign@~4.1.1:
+object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
@@ -4525,6 +4472,11 @@ pako@~0.2.0:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"
   integrity sha1-8/dSL073gjSNqBYbrZ7P1Rv4OnU=
+
+pako@~1.0.2:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
+  integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
 
 parse-json@^2.2.0:
   version "2.2.0"
@@ -4769,14 +4721,6 @@ prompt@0.2.14:
     revalidator "0.1.x"
     utile "0.2.x"
     winston "0.8.x"
-
-proxy-addr@1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-1.1.5.tgz#71c0ee3b102de3f202f3b64f608d173fcba1a918"
-  integrity sha1-ccDuOxAt4/IC87ZPYI0XP8uhqRg=
-  dependencies:
-    forwarded "~0.1.0"
-    ipaddr.js "1.4.0"
 
 proxy-addr@~1.0.8:
   version "1.0.10"
@@ -5025,6 +4969,19 @@ readable-stream@~2.0.0:
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
+readable-stream@~2.3.6:
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
+  integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.3"
+    isarray "~1.0.0"
+    process-nextick-args "~2.0.0"
+    safe-buffer "~5.1.1"
+    string_decoder "~1.1.1"
+    util-deprecate "~1.0.1"
+
 redent@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/redent/-/redent-1.0.0.tgz#cf916ab1fd5f1f16dfb20822dd6ec7f730c2afde"
@@ -5038,19 +4995,10 @@ redis-commands@^1.2.0:
   resolved "https://registry.yarnpkg.com/redis-commands/-/redis-commands-1.4.0.tgz#52f9cf99153efcce56a8f86af986bd04e988602f"
   integrity sha512-cu8EF+MtkwI4DLIT0x9P8qNTLFhQD4jLfxLR0cCNkeGzs87FN6879JOJwNQR/1zD7aSYNbU0hgsV9zGY71Itvw==
 
-redis-parser@^2.0.0, redis-parser@^2.6.0:
+redis-parser@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/redis-parser/-/redis-parser-2.6.0.tgz#52ed09dacac108f1a631c07e9b69941e7a19504b"
   integrity sha1-Uu0J2srBCPGmMcB+m2mUHnoZUEs=
-
-redis@2.6.3:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/redis/-/redis-2.6.3.tgz#84305b92553c6a1f09c7c47c30b11ace7dbb7ad4"
-  integrity sha1-hDBbklU8ah8Jx8R8MLEazn27etQ=
-  dependencies:
-    double-ended-queue "^2.1.0-0"
-    redis-commands "^1.2.0"
-    redis-parser "^2.0.0"
 
 redis@^2.8.0:
   version "2.8.0"
@@ -5232,7 +5180,7 @@ rttc@^1.0.2:
   dependencies:
     lodash "~2.4.1"
 
-rttc@^9.7.2, rttc@^9.8.1:
+rttc@^9.7.2:
   version "9.8.2"
   resolved "https://registry.yarnpkg.com/rttc/-/rttc-9.8.2.tgz#2337d21d413f4a34fff88177f95eae7edfbd26bf"
   integrity sha1-IzfSHUE/SjT/+IF3+V6uft+9Jr8=
@@ -5462,21 +5410,6 @@ sails-hook-sockets@^0.13.9:
     socket.io "1.7.3"
     uid2 "0.0.3"
 
-sails-hook-sockets@^1.5.5:
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/sails-hook-sockets/-/sails-hook-sockets-1.5.5.tgz#fec8048c5aacbacef7886d2f975347f19e132968"
-  integrity sha512-HS5D+yyQw00ByEUjIeEsExG7AdU3eFh+4xq5vCTZTz81aBmXalJ/vNJmDwmT4IPAoL7+vhimH4xuNXeSyQKPow==
-  dependencies:
-    "@sailshq/lodash" "^3.10.2"
-    async "2.0.1"
-    flaverr "^1.0.0"
-    machinepack-redis "^1.1.1"
-    machinepack-urls "^3.1.1"
-    proxy-addr "1.1.5"
-    semver "4.3.6"
-    socket.io "2.0.3"
-    uid2 "0.0.3"
-
 sails-mongo@^0.12.2:
   version "0.12.3"
   resolved "https://registry.yarnpkg.com/sails-mongo/-/sails-mongo-0.12.3.tgz#366577ffdb1ce7db64425023d66caf603b653d0f"
@@ -5598,7 +5531,7 @@ sails@~0.12.14:
   version "1.0.1"
   resolved "git+https://github.com/zawars/saml-encoder-decoder-js.git#b64f99e69c8c60a6d56c5fad526f3c4d056ea7ce"
 
-sax@>=0.6.0:
+sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
@@ -5779,6 +5712,11 @@ serve-static@~1.10.0:
     parseurl "~1.3.1"
     send "0.13.2"
 
+set-immediate-shim@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz#4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
+  integrity sha1-SysbJ+uAip+NzEgaWOXlb1mfP2E=
+
 setheaders@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/setheaders/-/setheaders-0.1.7.tgz#d67b064436b1f946d7a5578da6df2a39d2f72cfd"
@@ -5904,25 +5842,6 @@ socket.io-client@2.3.0:
     socket.io-parser "~3.3.0"
     to-array "0.1.4"
 
-socket.io-client@~2.0.2:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.0.4.tgz#0918a552406dc5e540b380dcd97afc4a64332f8e"
-  integrity sha1-CRilUkBtxeVAs4Dc2Xr8SmQzL44=
-  dependencies:
-    backo2 "1.0.2"
-    base64-arraybuffer "0.1.5"
-    component-bind "1.0.0"
-    component-emitter "1.2.1"
-    debug "~2.6.4"
-    engine.io-client "~3.1.0"
-    has-cors "1.1.0"
-    indexof "0.0.1"
-    object-component "0.0.3"
-    parseqs "0.0.5"
-    parseuri "0.0.5"
-    socket.io-parser "~3.1.1"
-    to-array "0.1.4"
-
 socket.io-parser@2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-2.3.1.tgz#dd532025103ce429697326befd64005fcfe5b4a0"
@@ -5932,16 +5851,6 @@ socket.io-parser@2.3.1:
     debug "2.2.0"
     isarray "0.0.1"
     json3 "3.3.2"
-
-socket.io-parser@~3.1.1:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-3.1.3.tgz#ed2da5ee79f10955036e3da413bfd7f1e4d86c8e"
-  integrity sha512-g0a2HPqLguqAczs3dMECuA1RgoGFPyvDqcbaDEdCWY9g59kdUAz3YRmaJBNKXflrHNwB7Q12Gkf/0CZXfdHR7g==
-  dependencies:
-    component-emitter "1.2.1"
-    debug "~3.1.0"
-    has-binary2 "~1.0.2"
-    isarray "2.0.1"
 
 socket.io-parser@~3.3.0:
   version "3.3.0"
@@ -5974,19 +5883,7 @@ socket.io@1.7.3:
     socket.io-client "1.7.3"
     socket.io-parser "2.3.1"
 
-socket.io@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-2.0.3.tgz#4359f06a24933ae6bd087798af78c680eae345e3"
-  integrity sha1-Q1nwaiSTOua9CHeYr3jGgOrjReM=
-  dependencies:
-    debug "~2.6.6"
-    engine.io "~3.1.0"
-    object-assign "~4.1.1"
-    socket.io-adapter "~1.1.0"
-    socket.io-client "~2.0.2"
-    socket.io-parser "~3.1.1"
-
-socket.io@^2.2.0:
+socket.io@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-2.3.0.tgz#cd762ed6a4faeca59bc1f3e243c0969311eb73fb"
   integrity sha512-2A892lrj0GcgR/9Qk81EaY2gYhCBxurV0PfmmESO6p27QPrUK1J3zdns+5QPqvUYK2q657nSj0guoIil9+7eFg==
@@ -6286,13 +6183,6 @@ switchback@^1.1.3, switchback@~1.1.1:
   dependencies:
     lodash "~2.4.1"
 
-switchback@^2.0.1:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/switchback/-/switchback-2.0.5.tgz#2f50c91118f659c42e03c0f2bdb094f868c45336"
-  integrity sha512-w9gnsTxR5geOKt45QUryhDP9KTLcOAqje9usR2VQ2ng8DfhaF+mkIcArxioMP/p6Z/ecKE58i2/B0DDlMJK1jw==
-  dependencies:
-    "@sailshq/lodash" "^3.10.3"
-
 tar@2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/tar/-/tar-2.2.1.tgz#8e4d2a256c0e2185c6b18ad694aec968b83cb1d1"
@@ -6534,11 +6424,6 @@ ultron@1.0.x:
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
   integrity sha1-rOEWq1V80Zc4ak6I9GhTeMiy5Po=
 
-ultron@~1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
-  integrity sha512-UIEXBNeYmKptWH6z8ZnqTeS8fV74zG0/eRU9VGkpzz+LIJNs8W/zM/L+7ctCkRrgbNnnR0xxw4bKOr0cW0N0Og==
-
 underscore.string@~2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-2.3.3.tgz#71c08bf6b428b1133f37e78fa3a21c82f7329b0d"
@@ -6630,11 +6515,6 @@ uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
-
-uws@~9.14.0:
-  version "9.14.0"
-  resolved "https://registry.yarnpkg.com/uws/-/uws-9.14.0.tgz#fac8386befc33a7a3705cbd58dc47b430ca4dd95"
-  integrity sha512-HNMztPP5A1sKuVFmdZ6BPVpBQd5bUjNC8EFMFiICK+oho/OQsAJy5hnIx4btMHiOk8j04f/DbIlqnEZ9d72dqg==
 
 valid-url@^1.0.6:
   version "1.0.9"
@@ -6921,15 +6801,6 @@ ws@^7.1.2:
   dependencies:
     async-limiter "^1.0.0"
 
-ws@~3.3.1:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
-  integrity sha512-nnWLa/NwZSt4KQJu51MYlCcSQ5g7INpOrOMt4XV8j4dqTXdmlUmSHQ8/oLC069ckre0fRsgfvsKwbTdtKLCDkA==
-  dependencies:
-    async-limiter "~1.0.0"
-    safe-buffer "~5.1.0"
-    ultron "~1.1.0"
-
 ws@~6.1.0:
   version "6.1.4"
   resolved "https://registry.yarnpkg.com/ws/-/ws-6.1.4.tgz#5b5c8800afab925e94ccb29d153c8d02c1776ef9"
@@ -6951,6 +6822,16 @@ x-xss-protection@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/x-xss-protection/-/x-xss-protection-1.2.0.tgz#3170498ff8e7e8159f4896b27fa4d4810c2ff486"
   integrity sha512-xN0kV+8XfOQM2OPPBdEbGtbvJNNP1pvZR7sE6d44cjJFQG4OiGDdienPg5iOUGswBTiGbBvtYDURd30BMJwwqg==
+
+xlsx-populate@^1.21.0:
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/xlsx-populate/-/xlsx-populate-1.21.0.tgz#f6cd02401f4cd3d055e81f2b6983ddfeeb60ffe6"
+  integrity sha512-8v2Gm8BehXo6LU7KT802QoXTPkYY1SKk5V8g/UuYZnNB3JzXqud/P99Pxr2yXeKyt+sKlCatmidz6jQNie1hRw==
+  dependencies:
+    cfb "^1.1.3"
+    jszip "^3.2.2"
+    lodash "^4.17.15"
+    sax "^1.2.4"
 
 xlsx@^0.14.1:
   version "0.14.5"

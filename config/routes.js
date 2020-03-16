@@ -63,6 +63,7 @@ module.exports.routes = {
   'GET /getOutlinesByUser/:id': 'OutlineApprovalController.getOutlinesByUser',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
+  'POST /notifyAdmins' : 'UserController.notifyAdminsbyEmail',
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
@@ -106,10 +107,10 @@ module.exports.routes = {
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
+  'GET /reports/search/:query': 'ReportsController.searchProjectsReports',
   'POST /budgetImport': 'ReportsController.budgetImport',
   'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
-  'GET /reports/exceldump/upload/sharepoint': 'ReportsController.uploadExcelDumpToDrive',
   'GET /reports/portfolio/:id/:subPortfolio': 'ReportsController.getProjectsBySubPortfolio',
   'PUT /reports/:id': 'ReportsController.update',
 
@@ -140,11 +141,31 @@ module.exports.routes = {
 
   //Subportfolio budget
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
+  'POST /portfolioBudgetYear/fixYearlyBudget': 'PortfolioBudgetYearController.fixYearlyBudget',
+  'POST /portfolioBudgetYear/fixAllYearlyBudget': 'PortfolioBudgetYearController.fixAllYearlyBudget',
+
+  //Subportfolio status report
+  'GET /subportfolio/statusReports/:subportfolioId': 'SubportfolioStatusReportController.statusReportsbySubportfolio',
 
   //Subportfolio
   'POST /subPortfolio': 'SubPortfolioController.create',
+  //ProjectOutline
+  'PUT /project/outline': 'ProjectOutlineController.updateProjectOutline',
 
-  // Translation Api
+  //ProjectOrder
+  'PUT /project/order': 'ProjectOrderController.updateProjectOrder',
+  'POST /project/order/approval': 'ProjectOrderController.submitOrder',
+  'PUT /project/order/approval': 'ProjectOrderController.submitOrderUpdateCase',
+
+  //ChangeRequest
+  'POST /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequest',
+  'PUT /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequestUpdateCase',
+
+   //ClosingReport
+   'POST /project/closingReport/approval': 'ClosingReportController.submitClosingReport',
+   'PUT /project/closingReport/approval': 'ClosingReportController.submitClosingReportUpdateCase',
+   
+   // Translation Api
   'GET /translation': 'TranslationController.index',
   'POST /translation': 'TranslationController.create',
   'PUT /translation': 'TranslationController.update',

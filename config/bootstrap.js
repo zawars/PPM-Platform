@@ -43,6 +43,18 @@ module.exports.bootstrap = async function (cb) {
     }
   });
 
+  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report'];
+
+  emailConfigEvents.forEach(async event => {
+    let emailConfig = await EmailConfig.findOne({ event: event });
+    if (!emailConfig) {
+      await EmailConfig.create({
+        event: event,
+        text: ""
+      });
+    }
+  });
+  
   // script to change itPlatform to array of ids of Project Outline
   let outlines = await ProjectOutline.find().populateAll();
   outlines.forEach(async outline => {

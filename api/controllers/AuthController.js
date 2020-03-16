@@ -181,6 +181,8 @@ module.exports = {
     });
 
     if (userObj != undefined) {
+      delete(userObj.tablesState);
+
       req.session.user = userObj;
       jwt.sign({
         user: userObj

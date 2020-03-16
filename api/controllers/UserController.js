@@ -100,11 +100,9 @@ module.exports = {
             message: "Error sending email."
           });
         } else {
-          if (index == admins.length - 1) {
-            res.send({
-              message: "Email sent."
-            });
-          }
+          res.send({
+            message: "Email sent."
+          });
         }
       })
     } else {
@@ -126,15 +124,15 @@ module.exports = {
     let query = req.params.query;
     User.find({
       or: [{
-        name: {
-          'contains': query
+          name: {
+            'contains': query
+          }
+        },
+        {
+          email: {
+            'contains': query
+          }
         }
-      },
-      {
-        email: {
-          'contains': query
-        }
-      }
       ]
     }).then(users => {
       res.ok(users)
@@ -149,24 +147,29 @@ module.exports = {
       const moment = require('moment');
 
       let emailIds = [];
-      let projects = await Projects.find({ outlineApproved: true, orderSubmitted: false }).populateAll();
-      
+      let projects = await Projects.find({
+        outlineApproved: true,
+        orderSubmitted: false
+      }).populateAll();
+
       if (projects.length > 0) {
         projects.forEach(async (project, index) => {
           let dateDiffDays = moment(project.projectOutline[0].initiationApprovalDate).diff(moment(new Date()), 'days');
           ++dateDiffDays;
-          
-          if(dateDiffDays == 14 || dateDiffDays == 1) {
-            if(project.user) {
+
+          if (dateDiffDays == 14 || dateDiffDays == 1) {
+            if (project.user) {
               emailIds.push(project.user.email);
             }
           }
         });
       }
 
-      if(emailIds.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Project Order' });
-        
+      if (emailIds.length > 0) {
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Project Order'
+        });
+
         EmailService.sendMail({
           email: emailIds,
           message: emailConfig.text,
@@ -189,12 +192,14 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderProjectOrder', req);
     }
   },
-  
+
   emailReminderClosingReport: async (req, res) => {
     try {
       const moment = require('moment');
 
-      let projects = await Projects.find({ orderApproved: true }).populateAll();
+      let projects = await Projects.find({
+        orderApproved: true
+      }).populateAll();
       let detailIds = [];
       let emailIds = [];
 
@@ -202,7 +207,11 @@ module.exports = {
         detailIds.push(project.projectReport.id);
       });
 
-      let details = await Reports.find({ id: { $in: detailIds } }).populateAll();
+      let details = await Reports.find({
+        id: {
+          $in: detailIds
+        }
+      }).populateAll();
 
       if (details.length > 0) {
         details.forEach(async (detail, index) => {
@@ -224,7 +233,9 @@ module.exports = {
       }
 
       if (emailIds.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Closing Report' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Closing Report'
+        });
 
         EmailService.sendMail({
           email: emailIds,
@@ -248,18 +259,20 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderClosingReport', req);
     }
   },
-  
+
   emailReminderPendingApprovals: async (req, res) => {
     try {
       let emailIds = [];
-      let approvals = await OutlineApproval.find({ status: "Open" }).populateAll();
-  
+      let approvals = await OutlineApproval.find({
+        status: "Open"
+      }).populateAll();
+
       if (approvals.length > 0) {
         let date = new Date().getDate();
-  
+
         approvals.forEach(async (approval, index) => {
           if (date == 10 || date == 20 || date == 28) {
-            if(approval.assignedTo) {
+            if (approval.assignedTo) {
               emailIds.push(approval.assignedTo.email);
             }
           }
@@ -267,7 +280,9 @@ module.exports = {
       }
 
       if (emailIds.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Pending Approval' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Pending Approval'
+        });
 
         EmailService.sendMail({
           email: emailIds,
@@ -291,12 +306,14 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderPendingApprovals', req);
     }
   },
-  
+
   emailReminderStatusReport: async (req, res) => {
     try {
       const moment = require('moment');
 
-      let projects = await Projects.find({ orderApproved: true }).populateAll();
+      let projects = await Projects.find({
+        orderApproved: true
+      }).populateAll();
       let detailIds = [];
       let emailIds = [];
 
@@ -304,7 +321,11 @@ module.exports = {
         detailIds.push(project.projectReport.id);
       });
 
-      let details = await Reports.find({ id: { $in: detailIds } }).populateAll();
+      let details = await Reports.find({
+        id: {
+          $in: detailIds
+        }
+      }).populateAll();
 
       if (details.length > 0) {
         details.forEach(async (detail, index) => {
@@ -313,8 +334,8 @@ module.exports = {
               let dateDiffDays;
 
               if (detail.statusReports.length > 0) {
-                if ((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted')
-                  || detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
+                if ((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted') ||
+                  detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
                   dateDiffDays = moment(new Date()).diff(moment(detail.statusReports[detail.statusReports.length - 1].submittedDate), 'days');
                   ++dateDiffDays;
                 } else {
@@ -339,7 +360,9 @@ module.exports = {
       }
 
       if (emailIds.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Status Report' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Status Report'
+        });
 
         EmailService.sendMail({
           email: emailIds,

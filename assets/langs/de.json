@@ -877,9 +877,10 @@
   "Current Project Budget": "Aktuelles Projektbudget",
   "I need help!": "Ich brauche Hilfe!",
   "Send": "Senden",
-  "Report Issue": "Problem melden",
+  "Report an Issue": "Problem melden",
   "Describe the problem": "Problem beschreiben",
   "Translation": "Übersetzung",
   "Notify": "benachrichtigen",
-  "Forms": "Formulare"
+  "Forms": "Formulare",
+  "Report an issue!": "Problem melden!"
 }

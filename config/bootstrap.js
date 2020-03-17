@@ -79,6 +79,40 @@ module.exports.bootstrap = async function (cb) {
     }
   });
 
+  // script to change itPlatform to array of ids of Project Closing Report
+  let changeRequests = await ChangeRequest.find().populateAll();
+  changeRequests.forEach(async changeRequest => {
+    if (changeRequest.itPlatform.id) {
+      await ChangeRequest.update({
+        id: changeRequest.id
+      }).set({
+        itPlatform: [changeRequest.itPlatform.id]
+      });
+    }
+  });
+
+  // script to change itPlatform to array of ids of Project Details
+  let details = await Reports.find().populateAll();
+  details.forEach(async detail => {
+    if (detail.itPlatform) {
+      if (!detail.itPlatform.length) {
+        if(detail.itPlatform.id) {
+          await Reports.update({
+            id: detail.id
+          }).set({
+            itPlatform: [detail.itPlatform.id]
+          });
+        } else {
+          await Reports.update({
+            id: detail.id
+          }).set({
+            itPlatform: [detail.itPlatform]
+          });
+        }
+      }
+    }
+  });
+
   cronJob();
 
   //Run Server on HTTPS

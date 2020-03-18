@@ -72,7 +72,6 @@ io.on('connection', socket => {
         totalBudget,
         totalActualCosts,
         totalForecast,
-        projectsList: SocketService.paginateArray(projectsList, 10, 1),
         projectsCount: projectsList.length
       });
     });
@@ -105,7 +104,6 @@ module.exports = {
           totalForecast,
           projectsCount: projectsList.length
         });
-        socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
       });
     });
   }

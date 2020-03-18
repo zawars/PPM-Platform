@@ -28,6 +28,6 @@ module.exports = {
       res.ok(reports);
     }).catch(err => {
       ErrorsLogService.logError('Status Reports', `id: ${req.params.id}, ` + err.toString(), 'getStatusReportsByProjectReport', req);
-    })
+    });
   },
 };

@@ -25,8 +25,8 @@ module.exports = {
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  port: 443,
-  // port: 1337,
+  // port: 443,
+  port: 1337,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
@@ -37,8 +37,8 @@ module.exports = {
   // },
 
   ssl: {
-    key: require('fs').readFileSync(__dirname + '/ssl/key.pem'),
-    cert: require('fs').readFileSync(__dirname + '/ssl/cert.pem'),
+    key: require('fs').readFileSync(__dirname + '/ssl/megowork-key.pem'),
+    cert: require('fs').readFileSync(__dirname + '/ssl/megowork-cert.pem'),
     // passphrase: "megowork"
   },
 
@@ -47,7 +47,7 @@ module.exports = {
 
   mongodbServer: {
     adapter: 'sails-mongo',
-    //host: '89.145.165.55',
+    // host: '89.145.165.55',
     host: 'localhost',
     port: 27017,
     user: 'admin', //optional => superOwner

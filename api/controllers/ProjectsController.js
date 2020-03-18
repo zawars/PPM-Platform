@@ -327,7 +327,11 @@ io.on('connection', socket => {
       } else {
         socket.emit('sendEmail', {message: "Email sent."});
       }
-    });
+  });
+
+  socket.on('fetchMultipleUsers', async data => {
+    let users = await User.find({ id: { $in: data.userIds }});
+    socket.emit('fetchMultipleUsers', users);
   });
 })
 
@@ -364,7 +368,8 @@ module.exports = {
       {
         orderSubmitted: true,
         orderApproved: false
-      }]
+      }],
+      status: 'Submitted'
     }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
@@ -458,6 +463,7 @@ module.exports = {
           projectOutline: projectOutline,
           status: "Open",
           overallStatus: "Submitted",
+          projectStatus: 'Submitted',
           assignedTo: body.projectOutline.pmoOfficer.id,
           project: projectResponse.id,
           docType: "Outline",
@@ -505,6 +511,7 @@ module.exports = {
           OutlineApproval.create({
             projectOutline: projectOutline,
             status: "Open",
+            projectStatus: 'Submitted',
             overallStatus: "Submitted",
             assignedTo: outline.pmoOfficer.id,
             project: projectResponse[0].id,

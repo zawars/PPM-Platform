@@ -11,9 +11,9 @@ module.exports = {
     name: {
       type: 'string',
     },
-    // subPortfolio: {
-    //   type: 'json'
-    // },
+    subPortfolio: {
+      type: 'json'
+    },
     department: {
       type: 'string',
     },
@@ -30,9 +30,9 @@ module.exports = {
       collection: 'Reports',
       via: 'portfolio'
     },
-    subPortfolio: {
-      collection: 'subPortfolio',
-      via: 'portfolio'
-    },
+    // subPortfolio: {
+    //   collection: 'subPortfolio',
+    //   via: 'portfolio'
+    // },
   }
 };

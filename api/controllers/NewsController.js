@@ -92,7 +92,7 @@ io.on('connection', socket => {
       socket.emit('newsSearchIndex', newsArray);
     }).catch(error => {
       ErrorsLogService.logError('News', error.toString(), 'newsSearchIndex', '', socket.user.id);
-    })
+    });
   });
 
   socket.on('newsByType', async data => {
@@ -160,7 +160,7 @@ module.exports = {
       res.ok(response);
     }).catch(error => {
       ErrorsLogService.logError('News', error.toString(), 'create', req);
-    })
+    });
   },
 };
 

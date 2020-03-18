@@ -44,8 +44,8 @@ module.exports = {
 
   deleteFile: (req, res) => {
     const fs = require('fs');
-    fs.unlink(req.body.path, function (err) {
-      if (err) return ErrorsLogService.logError('Attachment', err.toString(), 'deleteFile', req);
+    fs.unlink(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + req.body.path, function (err) {
+      if (err) return console.log(err); // handle error as you wish
       return res.json({
         message: 'file(s) deleted successfully!',
       });

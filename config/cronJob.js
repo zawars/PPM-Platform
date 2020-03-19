@@ -109,7 +109,7 @@ async function uploadExcelDumpToDrive(req, res) {
     approvals = approvals.filter(val => val.sentTo == 'PMO');
 
     // Reports
-    reports.forEach(reportObj => {
+    reports.forEach(async reportObj => {
       let milestones = reportObj.mileStonesValues;
       if (Array.isArray(milestones)) {
         milestones.forEach((val, idx) => {
@@ -238,6 +238,16 @@ async function uploadExcelDumpToDrive(req, res) {
         }
       }
 
+      let itPlatformName = '';
+      if (reportObj.itPlatform) {
+        if (reportObj.itPlatform.length > 0) {
+          let itPlatform = await DropdownMapper.findOne({ id: reportObj.itPlatform[0] });
+          if (itPlatform) {
+            itPlatformName = itPlatform.name;
+          }
+        }
+      }
+
       multiProjectReport.push({
         id: reportObj.uid,
         projectName: reportObj.projectName,
@@ -255,7 +265,7 @@ async function uploadExcelDumpToDrive(req, res) {
         strategicContribution: reportObj.strategicContribution ? reportObj.strategicContribution.name : '',
         profitability: reportObj.profitability ? reportObj.profitability.name : '',
         itRelevant: reportObj.itRelevant ? reportObj.itRelevant.name : '',
-        itPlatform: reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',
+        itPlatform: itPlatformName,/*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
         projectMethodology: reportObj.projectMethodology ? reportObj.projectMethodology.name : '',
         confidential: reportObj.confidential,
         reportStatus: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].status : '',

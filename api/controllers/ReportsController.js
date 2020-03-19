@@ -205,9 +205,7 @@ io.on('connection', socket => {
 
   //To paginate current user records
   socket.on('portfolioProjectsIndex', data => {
-    Reports.find({
-      user: data.userId
-    })
+    Reports.find()
       .paginate({
         page: data.pageIndex,
         limit: data.pageSize

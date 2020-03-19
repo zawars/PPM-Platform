@@ -194,9 +194,7 @@ io.on('connection', socket => {
   //To get count
   socket.on('portfolioProjectsCount', async data => {
     try {
-      let count = await Reports.count({
-        user: data.userId
-      });
+      let count = await Reports.count({});
       socket.emit('portfolioProjectsCount', count);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsCount', '', socket.user.id);

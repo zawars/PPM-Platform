@@ -11,7 +11,7 @@
 var http = require('http');
 const cronJob = require('./cronJob').cronJob;
 
-module.exports.bootstrap = function (cb) {
+module.exports.bootstrap = async function (cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
@@ -52,6 +52,64 @@ module.exports.bootstrap = function (cb) {
         event: event,
         text: ""
       });
+    }
+  });
+  
+  // script to change itPlatform to array of ids of Project Outline
+  let outlines = await ProjectOutline.find().populateAll();
+  outlines.forEach(async outline => {
+    if (outline.itPlatform.id) {
+      await ProjectOutline.update({
+        id: outline.id
+      }).set({
+        itPlatform: [outline.itPlatform.id]
+      });
+    }
+  });
+
+  // script to change itPlatform to array of ids of Project Order
+  let orders = await ProjectOrder.find().populateAll();
+  orders.forEach(async order => {
+    if (order.itPlatform.id) {
+      await ProjectOrder.update({
+        id: order.id
+      }).set({
+        itPlatform: [order.itPlatform.id]
+      });
+    }
+  });
+
+  // script to change itPlatform to array of ids of Project Closing Report
+  let changeRequests = await ChangeRequest.find().populateAll();
+  changeRequests.forEach(async changeRequest => {
+    if (changeRequest.itPlatform.id) {
+      await ChangeRequest.update({
+        id: changeRequest.id
+      }).set({
+        itPlatform: [changeRequest.itPlatform.id]
+      });
+    }
+  });
+
+  // script to change itPlatform to array of ids of Project Details
+  let details = await Reports.find().populateAll();
+  details.forEach(async detail => {
+    if (detail.itPlatform) {
+      if (!detail.itPlatform.length) {
+        if(detail.itPlatform.id) {
+          await Reports.update({
+            id: detail.id
+          }).set({
+            itPlatform: [detail.itPlatform.id]
+          });
+        } else {
+          await Reports.update({
+            id: detail.id
+          }).set({
+            itPlatform: [detail.itPlatform]
+          });
+        }
+      }
     }
   });
 

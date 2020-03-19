@@ -26,7 +26,6 @@ module.exports.http = {
    ****************************************************************************/
 
   middleware: {
-
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
     bootstrapAssets: express.static(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '/uploads'),
@@ -41,7 +40,9 @@ module.exports.http = {
       delayMs: 0
     }),
     helmetGuard: helmet({
-      frameguard: { action: 'deny' }
+      frameguard: {
+        action: 'deny'
+      }
     }),
 
     /***************************************************************************
@@ -102,7 +103,10 @@ module.exports.http = {
      *                                                                          *
      ***************************************************************************/
 
-    bodyParser: require('skipper')({ strict: true, limit: '50mb' })
+    bodyParser: require('skipper')({
+      strict: true,
+      limit: '50mb'
+    })
 
   },
 

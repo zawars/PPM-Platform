@@ -169,9 +169,12 @@ module.exports = {
                     message: "Error sending email."
                   });
                 } else {
-                  res.send({
-                    message: "Email sent."
-                  });
+                  if (index == projects.length - 1) {
+                    console.log('Project Order Reminder Emails Sent.');
+                    res.send({
+                      message: "Project Order Reminder Emails Sent."
+                    });
+                  }
                 }
               })
             }
@@ -228,9 +231,12 @@ module.exports = {
                         message: "Error sending email."
                       });
                     } else {
-                      res.send({
-                        message: "Email sent."
-                      });
+                      if (index == details.length - 1) {
+                        console.log('Closing Report Reminder Emails Sent.');
+                        res.send({
+                          message: "Closing Report Reminder Emails Sent."
+                        });
+                      }
                     }
                   })
                 }
@@ -267,9 +273,12 @@ module.exports = {
                     message: "Error sending email."
                   });
                 } else {
-                  res.send({
-                    message: "Email sent."
-                  });
+                  if (index == approvals.length - 1) {
+                    console.log('Pending Approvals Reminder Emails Sent.');
+                    res.send({
+                      message: "Pending Approvals Reminder Emails Sent."
+                    });
+                  }
                 }
               })
             }
@@ -340,9 +349,12 @@ module.exports = {
                         message: "Error sending email."
                       });
                     } else {
-                      res.send({
-                        message: "Email sent."
-                      });
+                      if (index == details.length - 1) {
+                        console.log('Status Report Reminder Emails Sent.');
+                        res.send({
+                          message: "Status Report Reminder Emails Sent."
+                        });
+                      }
                     }
                   })
                 }

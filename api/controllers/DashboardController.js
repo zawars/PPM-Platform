@@ -81,7 +81,7 @@ io.on('connection', socket => {
       });
     }).catch(err => {
       ErrorsLogService.logError('Dasboard', err.toString(), 'dashboardProjectsFilter', '', socket.user.id);
-    })
+    });
   });
 });
 
@@ -113,7 +113,7 @@ module.exports = {
           socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
         }).catch(error => {
           ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
-        })
+        });
       }).catch(error => {
         ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
       });

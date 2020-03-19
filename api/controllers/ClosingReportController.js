@@ -11,15 +11,25 @@ io.on('connection', socket => {
 
   socket.on('fetchClosingReport', async data => {
     try {
-      let project = await Projects.findOne({ id: data.projectId }).populateAll();
-      let detail = await Reports.findOne({ id: project.projectReport.id }).populateAll();
+      let project = await Projects.findOne({
+        id: data.projectId
+      }).populateAll();
+      let detail = await Reports.findOne({
+        id: project.projectReport.id
+      }).populateAll();
       let closingReport;
 
       if (data.closingReportId != undefined && data.closingReportId != 0) {
-        closingReport = await ClosingReport.findOne({ id: data.closingReportId }).populateAll();
+        closingReport = await ClosingReport.findOne({
+          id: data.closingReportId
+        }).populateAll();
       }
 
-      socket.emit('fetchClosingReport', { project, detail, closingReport });
+      socket.emit('fetchClosingReport', {
+        project,
+        detail,
+        closingReport
+      });
     } catch (error) {
       ErrorsLogService.logError('Closing Report', error.toString(), 'fetchClosingReport', socket.user.id);
     }
@@ -37,8 +47,12 @@ module.exports = {
         id: body.projectId
       }).set(body.projectObj);
 
-      let project = await Projects.findOne({ id: body.projectId }).populateAll();
-      let closingReport = await ClosingReport.findOne({ id: closingReportObj.id }).populateAll();
+      let project = await Projects.findOne({
+        id: body.projectId
+      }).populateAll();
+      let closingReport = await ClosingReport.findOne({
+        id: closingReportObj.id
+      }).populateAll();
 
       let temp = {
         closingReport: closingReport,
@@ -46,6 +60,7 @@ module.exports = {
         overallStatus: "Submitted",
         docType: "Closing Report",
         sentTo: "PMO",
+        projectStatus: 'Submitted',
         assignedTo: body.formObject.pmoOfficer.id,
         project: project.id,
         isFreezed: false,
@@ -70,13 +85,17 @@ module.exports = {
         id: body.closingReportId
       }).set(body.obj);
 
-      let closingReport = await ClosingReport.findOne({ id: body.closingReportId }).populateAll();
+      let closingReport = await ClosingReport.findOne({
+        id: body.closingReportId
+      }).populateAll();
 
       let projectObj = {
         closingReportApproved: false,
         docType: 'Closing Report',
         status: "Submitted",
         workflowStatus: 'Closing Report has been sent to PMO for approval.',
+        isPMOApprovedClosingReport: false,
+        isSponsorApprovedClosingReport: false,
         version: closingReport.version,
         closingReportSubmitted: true
       }
@@ -85,7 +104,9 @@ module.exports = {
         id: body.projectId
       }).set(projectObj);
 
-      let project = await Projects.findOne({ id: body.projectId }).populateAll();
+      let project = await Projects.findOne({
+        id: body.projectId
+      }).populateAll();
 
       let temp = {
         closingReport: closingReport,
@@ -93,6 +114,7 @@ module.exports = {
         overallStatus: "Submitted",
         docType: "Closing Report",
         sentTo: "PMO",
+        projectStatus: 'Submitted',
         assignedTo: body.formObject.pmoOfficer.id,
         project: project.id,
         isFreezed: false,
@@ -109,4 +131,3 @@ module.exports = {
     }
   },
 };
-

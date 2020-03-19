@@ -76,7 +76,6 @@ io.on('connection', socket => {
         totalBudget,
         totalActualCosts,
         totalForecast,
-        projectsList: SocketService.paginateArray(projectsList, 10, 1),
         projectsCount: projectsList.length
       });
     }).catch(err => {

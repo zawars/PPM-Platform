@@ -100,7 +100,7 @@ module.exports = {
     try {
       let id = req.params.id;
       await ProjectBudgetCost.destroy({
-        'project': id
+        project: id
       });
       res.ok({
         message: 'Deleted Project Budget Cost'
@@ -115,7 +115,7 @@ module.exports = {
     try {
       let id = req.params.id;
       let budget = await ProjectBudgetCost.find({
-        'project': id
+        project: id
       }).populateAll();
       res.ok(budget);
     } catch (e) {
@@ -350,3 +350,4 @@ module.exports = {
   }
 
 };
+

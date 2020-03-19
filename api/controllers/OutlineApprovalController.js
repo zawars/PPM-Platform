@@ -107,7 +107,7 @@ io.on('connection', socket => {
       socket.emit('approvalsSearchIndex', projects);
     }).catch(error => {
       ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
-    })
+    });
   });
 
 })
@@ -137,7 +137,7 @@ module.exports = {
       });
     }).catch(error => {
       ErrorsLogService.logError('Outline Approval', error.toString(), 'updateApprovalOwner', req);
-    })
+    });
   },
 
   updatePreviousApproval: (req, resp) => {
@@ -149,6 +149,6 @@ module.exports = {
       });
     }).catch(error => {
       ErrorsLogService.logError('Outline Approval', `query: ${query}, ` + error.toString(), 'updatePreviousApproval', req);
-    })
+    });
   }
 };

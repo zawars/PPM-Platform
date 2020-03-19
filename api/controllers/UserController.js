@@ -100,11 +100,9 @@ module.exports = {
             message: "Error sending email."
           });
         } else {
-          if (index == admins.length - 1) {
-            res.send({
-              message: "Email sent."
-            });
-          }
+          res.send({
+            message: "Email sent."
+          });
         }
       })
     } else {
@@ -126,15 +124,15 @@ module.exports = {
     let query = req.params.query;
     User.find({
       or: [{
-        name: {
-          'contains': query
+          name: {
+            'contains': query
+          }
+        },
+        {
+          email: {
+            'contains': query
+          }
         }
-      },
-      {
-        email: {
-          'contains': query
-        }
-      }
       ]
     }).then(users => {
       res.ok(users)
@@ -187,7 +185,7 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderProjectOrder', req);
     }
   },
-  
+
   emailReminderClosingReport: async (req, res) => {
     try {
       const moment = require('moment');
@@ -203,7 +201,11 @@ module.exports = {
         }
       });
 
-      let details = await Reports.find({ id: { $in: detailIds } }).populateAll();
+      let details = await Reports.find({
+        id: {
+          $in: detailIds
+        }
+      }).populateAll();
 
       if (details.length > 0) {
         let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Closing Report' });
@@ -247,7 +249,7 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderClosingReport', req);
     }
   },
-  
+
   emailReminderPendingApprovals: async (req, res) => {
     try {
       let approvals = await OutlineApproval.find({ status: "Open" }).populateAll();
@@ -255,7 +257,7 @@ module.exports = {
       if (approvals.length > 0) {
         let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Pending Approval' });
         let date = new Date().getDate();
-  
+
         approvals.forEach(async (approval, index) => {
           if (date == 10 || date == 20 || date == 28) {
             if(approval.assignedTo) {
@@ -287,7 +289,7 @@ module.exports = {
       ErrorsLogService.logError('User', error.toString(), 'emailReminderPendingApprovals', req);
     }
   },
-  
+
   emailReminderStatusReport: async (req, res) => {
     try {
       const moment = require('moment');
@@ -303,7 +305,11 @@ module.exports = {
         }
       });
 
-      let details = await Reports.find({ id: { $in: detailIds } }).populateAll();
+      let details = await Reports.find({
+        id: {
+          $in: detailIds
+        }
+      }).populateAll();
 
       if (details.length > 0) {
         let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Status Report' });
@@ -314,8 +320,8 @@ module.exports = {
               let dateDiffDays;
 
               if (detail.statusReports.length > 0) {
-                if ((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted')
-                  || detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
+                if ((detail.statusReports.length > 1 && detail.statusReports[detail.statusReports.length - 2].status == 'Submitted') ||
+                  detail.statusReports[detail.statusReports.length - 1].status == 'Submitted') {
                   dateDiffDays = moment(new Date()).diff(moment(detail.statusReports[detail.statusReports.length - 1].submittedDate), 'days');
                   ++dateDiffDays;
                 } else {

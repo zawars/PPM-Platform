@@ -76,12 +76,11 @@ io.on('connection', socket => {
         totalBudget,
         totalActualCosts,
         totalForecast,
-        projectsList: SocketService.paginateArray(projectsList, 10, 1),
         projectsCount: projectsList.length
       });
     }).catch(err => {
       ErrorsLogService.logError('Dasboard', err.toString(), 'dashboardProjectsFilter', '', socket.user.id);
-    })
+    });
   });
 });
 
@@ -113,7 +112,7 @@ module.exports = {
           socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
         }).catch(error => {
           ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
-        })
+        });
       }).catch(error => {
         ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
       });

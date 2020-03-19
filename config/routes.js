@@ -63,7 +63,7 @@ module.exports.routes = {
   'GET /getOutlinesByUser/:id': 'OutlineApprovalController.getOutlinesByUser',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
-  'POST /notifyAdmins' : 'UserController.notifyAdminsbyEmail',
+  'POST /notifyAdmins': 'UserController.notifyAdminsbyEmail',
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
@@ -161,11 +161,11 @@ module.exports.routes = {
   'POST /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequest',
   'PUT /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequestUpdateCase',
 
-   //ClosingReport
-   'POST /project/closingReport/approval': 'ClosingReportController.submitClosingReport',
-   'PUT /project/closingReport/approval': 'ClosingReportController.submitClosingReportUpdateCase',
-   
-   // Translation Api
+  //ClosingReport
+  'POST /project/closingReport/approval': 'ClosingReportController.submitClosingReport',
+  'PUT /project/closingReport/approval': 'ClosingReportController.submitClosingReportUpdateCase',
+
+  // Translation Api
   'GET /translation': 'TranslationController.index',
   'POST /translation': 'TranslationController.create',
   'PUT /translation': 'TranslationController.update',

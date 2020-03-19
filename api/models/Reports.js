@@ -56,10 +56,10 @@ module.exports = {
       collection: 'subProjects',
       via: 'parentProject'
     },
-    team: {
-      collection: 'team',
-      via: 'report'
-    },
+    // team: {
+    //   collection: 'team',
+    //   via: 'report'
+    // },
     project: {
       model: 'projects'
     },
@@ -106,6 +106,9 @@ module.exports = {
       model: 'dropdownMapper'
     },
     projectMethodology: {
+      model: 'dropdownMapper'
+    },
+    itRelevant: {
       model: 'dropdownMapper'
     },
     currentReserveHistory: {

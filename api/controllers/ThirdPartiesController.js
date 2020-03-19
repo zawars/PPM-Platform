@@ -25,8 +25,8 @@ io.on('connection', socket => {
         socket.emit('thirdPartiesIndex', parties);
       }).catch(error => {
         ErrorsLogService.logError('Third Parties', error.toString(), 'thirdPartiesIndex', '', socket.user.id);
-      })
-  })
+      });
+  });
 });
 
 module.exports = {

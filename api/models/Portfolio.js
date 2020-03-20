@@ -30,9 +30,9 @@ module.exports = {
       collection: 'Reports',
       via: 'portfolio'
     },
-    // subPortfolio: {
-    //   collection: 'subPortfolio',
-    //   via: 'portfolio'
-    // },
+    subPortfolio: {
+      collection: 'subPortfolio',
+      via: 'portfolio'
+    },
   }
 };

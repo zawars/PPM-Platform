@@ -33,10 +33,10 @@ module.exports = {
       collection: 'PortfolioBudgetYear',
       via: 'subPortfolio'
     },
-    // projects: {
-    //   collection: 'projects',
-    //   via: 'subPortfolio'
-    // },
+    projects: {
+      collection: 'projects',
+      via: 'subPortfolio'
+    },
 
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

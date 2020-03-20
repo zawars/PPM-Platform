@@ -253,10 +253,12 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: { not: 'Rejected' }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: { not: 'Rejected' }
           }
         ]
       }).paginate({
@@ -276,10 +278,12 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: { not: 'Rejected' }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: { not: 'Rejected' }
           }
         ]
       });
@@ -296,10 +300,12 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: { not: 'Rejected' }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: { not: 'Rejected' }
           }
         ],
         or: [{
@@ -338,10 +344,12 @@ io.on('connection', socket => {
       or: [{
           outlineSubmitted: true,
           outlineApproved: false,
+          status: { not: 'Rejected' }
         },
         {
           orderSubmitted: true,
-          orderApproved: false
+          orderApproved: false,
+          status: { not: 'Rejected' }
         }
       ],
       or: [{
@@ -369,10 +377,12 @@ io.on('connection', socket => {
       or: [{
           outlineSubmitted: true,
           outlineApproved: false,
+          status: { not: 'Rejected' }
         },
         {
           orderSubmitted: true,
-          orderApproved: false
+          orderApproved: false,
+          status: { not: 'Rejected' }
         }
       ],
       or: [{
@@ -539,16 +549,16 @@ io.on('connection', socket => {
         });
       }
     });
+  });
 
-    socket.on('fetchMultipleUsers', async data => {
-      let users = await User.find({
-        id: {
-          $in: data.userIds
-        }
-      });
-      socket.emit('fetchMultipleUsers', users);
+  socket.on('fetchMultipleUsers', async data => {
+    let users = await User.find({
+      id: {
+        $in: data.userIds
+      }
     });
-  })
+    socket.emit('fetchMultipleUsers', users);
+  });
 });
 
 module.exports = {

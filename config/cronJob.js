@@ -48,7 +48,7 @@ async function uploadExcelDumpToDrive(req, res) {
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
     let generalList = [{
-      date: moment().format('dd.MMMM.yyyy'),
+      date: moment().format('DD.MMM.YYYY'),
       time: moment().format('h:mm:ss a')
     }];
 
@@ -115,7 +115,7 @@ async function uploadExcelDumpToDrive(req, res) {
         milestones.forEach((val, idx) => {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
-          val.dueDate = moment(val.dueDate).format('dd.MMMM.yyyy')
+          val.dueDate = moment(val.dueDate).format('DD.MMM.YYYY')
         });
         milestonesList.push(...milestones);
       }
@@ -134,7 +134,7 @@ async function uploadExcelDumpToDrive(req, res) {
         decisions.forEach((val, idx) => {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
-          val.date = moment(val.date).format('dd.MMMM.yyyy');
+          val.date = moment(val.date).format('DD.MMM.YYYY');
         });
         decisionsList.push(...decisions);
       }
@@ -241,7 +241,9 @@ async function uploadExcelDumpToDrive(req, res) {
       let itPlatformName = '';
       if (reportObj.itPlatform) {
         if (reportObj.itPlatform.length > 0) {
-          let itPlatform = await DropdownMapper.findOne({ id: reportObj.itPlatform[0] });
+          let itPlatform = await DropdownMapper.findOne({
+            id: reportObj.itPlatform[0]
+          });
           if (itPlatform) {
             itPlatformName = itPlatform.name;
           }
@@ -265,7 +267,8 @@ async function uploadExcelDumpToDrive(req, res) {
         strategicContribution: reportObj.strategicContribution ? reportObj.strategicContribution.name : '',
         profitability: reportObj.profitability ? reportObj.profitability.name : '',
         itRelevant: reportObj.itRelevant ? reportObj.itRelevant.name : '',
-        itPlatform: itPlatformName,/*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
+        itPlatform: itPlatformName,
+        /*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
         projectMethodology: reportObj.projectMethodology ? reportObj.projectMethodology.name : '',
         confidential: reportObj.confidential,
         reportStatus: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].status : '',
@@ -298,16 +301,16 @@ async function uploadExcelDumpToDrive(req, res) {
         scopeStatusComments: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].scopeStatusComments : '',
         costStatusComments: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].costStatusComments : '',
         timeStatusComments: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].timeStatusComments : '',
-        forecastEndDate: moment(reportObj.forecastEndDate).format('dd.MMMM.yyyy'),
-        plannedEndDate: moment(reportObj.plannedEndDate).format('dd.MMMM.yyyy'),
-        startDate: moment(reportObj.startDate).format('dd.MMMM.yyyy'),
-        endDate: moment(reportObj.endDate).format('dd.MMMM.yyyy'),
+        forecastEndDate: moment(reportObj.forecastEndDate).format('DD.MMM.YYYY'),
+        plannedEndDate: moment(reportObj.plannedEndDate).format('DD.MMM.YYYY'),
+        startDate: moment(reportObj.startDate).format('DD.MMM.YYYY'),
+        endDate: moment(reportObj.endDate).format('DD.MMM.YYYY'),
         forecast: reportObj.costTypeTable[6].forecast,
         currentBudget: reportObj.costTypeTable[6].currentBudget,
         originalBudget: reportObj.costTypeTable[6].originalBudget,
         actualCost: reportObj.costTypeTable[6].actualCost,
         programName: reportObj.program ? reportObj.program.programName : '',
-        reportingDate: reportObj.statusReports.length > 0 ? moment(reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate).format('dd.MMMM.yyyy') : '',
+        reportingDate: reportObj.statusReports.length > 0 ? moment(reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '',
       });
 
       if (reportObj.statusReports != undefined) {
@@ -316,8 +319,8 @@ async function uploadExcelDumpToDrive(req, res) {
             projectStatusReports.push({
               projectId: reportObj.uid,
               projectName: reportObj.projectName,
-              reportingDate: moment(statusReportObj.reportingDate).format('dd.MMMM.yyyy'),
-              submittedDate: statusReportObj.submittedDate != undefined ? moment(statusReportObj.submittedDate).format('dd.MMMM.yyyy') : '',
+              reportingDate: moment(statusReportObj.reportingDate).format('DD.MMM.YYYY'),
+              submittedDate: statusReportObj.submittedDate != undefined ? moment(statusReportObj.submittedDate).format('DD.MMM.YYYY') : '',
               actualCost: statusReportObj.costTypeTable[6].actualCost,
               forecast: statusReportObj.costTypeTable[6].forecast,
               originalBudget: statusReportObj.costTypeTable[6].originalBudget,
@@ -329,10 +332,10 @@ async function uploadExcelDumpToDrive(req, res) {
 
       if (reportObj.milestoneTable) {
         reportObj.milestoneTable.map(obj => {
-          obj.reportingDate = moment(obj.reportingDate).format('dd.MMMM.yyyy');
+          obj.reportingDate = moment(obj.reportingDate).format('DD.MMM.YYYY');
           if (Object.keys(obj).length > 1) {
             for (let i = 1; i < Object.keys(obj).length; i++) {
-              obj[`milestone${i}`] = moment(obj[`milestone${i}`]).format('dd.MMMM.yyyy');
+              obj[`milestone${i}`] = moment(obj[`milestone${i}`]).format('DD.MMM.YYYY');
             }
           }
 
@@ -346,7 +349,7 @@ async function uploadExcelDumpToDrive(req, res) {
 
       reportObj.currentReserveHistory.map(obj => {
         currentReservesTrendAnalysis.push({
-          reportingDate: moment(obj.date).format('dd.MMMM.yyyy'),
+          reportingDate: moment(obj.date).format('DD.MMM.YYYY'),
           currentReserve: obj.value,
           projectId: reportObj.uid,
           projectName: reportObj.projectName
@@ -496,8 +499,8 @@ async function uploadExcelDumpToDrive(req, res) {
       programDetails.push({
         programName: program.programName,
         purpose: program.purpose,
-        startDate: moment(program.startDate).format('dd.MMMM.yyyy'),
-        endDate: moment(program.startDate).format('dd.MMMM.yyyy'),
+        startDate: moment(program.startDate).format('DD.MMM.YYYY'),
+        endDate: moment(program.startDate).format('DD.MMM.YYYY'),
         overallStatus: program.statusReports ? program.statusReports.length > 0 ? statusConverter(program.statusReports[program.statusReports.length - 1].overallStatus) : '' : '',
         overallStatusComments: program.statusReports ? program.statusReports.length > 0 ? program.statusReports[program.statusReports.length - 1].overallStatusComments : '' : '',
         scopeStatus: program.statusReports ? program.statusReports.length > 0 ? statusConverter(program.statusReports[program.statusReports.length - 1].scopeStatus) : '' : '',

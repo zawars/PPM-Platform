@@ -58,36 +58,42 @@ module.exports.bootstrap = async function (cb) {
   // script to change itPlatform to array of ids of Project Outline
   let outlines = await ProjectOutline.find().populateAll();
   outlines.forEach(async outline => {
-    if (outline.itPlatform.id) {
-      await ProjectOutline.update({
-        id: outline.id
-      }).set({
-        itPlatform: [outline.itPlatform.id]
-      });
+    if (outline.itPlatform) {
+      if (outline.itPlatform.id) {
+        await ProjectOutline.update({
+          id: outline.id
+        }).set({
+          itPlatform: [outline.itPlatform.id]
+        });
+      }
     }
   });
 
   // script to change itPlatform to array of ids of Project Order
   let orders = await ProjectOrder.find().populateAll();
   orders.forEach(async order => {
-    if (order.itPlatform.id) {
-      await ProjectOrder.update({
-        id: order.id
-      }).set({
-        itPlatform: [order.itPlatform.id]
-      });
+    if (order.itPlatform) { 
+      if (order.itPlatform.id) {
+        await ProjectOrder.update({
+          id: order.id
+        }).set({
+          itPlatform: [order.itPlatform.id]
+        });
+      }
     }
   });
 
   // script to change itPlatform to array of ids of Project Closing Report
   let changeRequests = await ChangeRequest.find().populateAll();
   changeRequests.forEach(async changeRequest => {
-    if (changeRequest.itPlatform.id) {
-      await ChangeRequest.update({
-        id: changeRequest.id
-      }).set({
-        itPlatform: [changeRequest.itPlatform.id]
-      });
+    if (changeRequest.itPlatform) {
+      if (changeRequest.itPlatform.id) {
+        await ChangeRequest.update({
+          id: changeRequest.id
+        }).set({
+          itPlatform: [changeRequest.itPlatform.id]
+        });
+      }
     }
   });
 

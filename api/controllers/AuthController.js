@@ -37,7 +37,9 @@ module.exports = {
             EmailService.samlStrategy.logout(req, function (err, uri) {
               if (!err) {
                 //redirect to the IdP Logout URL
-                res.ok({ uri });
+                res.ok({
+                  uri
+                });
               } else {
                 ErrorsLogService.logError('Auth', err.toString(), 'logout', req);
               }
@@ -147,7 +149,11 @@ module.exports = {
                 ErrorsLogService.logError('Auth', error.toString(), 'samlConsumeToken', req);
               })
             } else {
-              await User.update({ email: email }).set({ format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format });
+              await User.update({
+                email: email
+              }).set({
+                format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format
+              });
               res.writeHead(301, {
                 Location: config.callbackRedirectUrl + user[0].id + params
               });
@@ -175,6 +181,8 @@ module.exports = {
     });
 
     if (userObj != undefined) {
+      delete(userObj.tablesState);
+
       req.session.user = userObj;
       jwt.sign({
         user: userObj

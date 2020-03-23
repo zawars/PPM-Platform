@@ -54,9 +54,6 @@ io.on('connection', socket => {
       socket.emit('getRecentActiveProjects', projectsList);
     } catch (error) {
       ErrorsLogService.logError('Projects', error.toString(), 'getRecentActiveProjects', '', socket.user.id);
-    }
-  });
-
   socket.on('activeProjectsIndex', async data => {
     try {
       let projectsList = await Projects.find({
@@ -279,10 +276,12 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: { not: 'Rejected' }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: { not: 'Rejected' }
           }
         ]
       }).paginate({
@@ -302,10 +301,12 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: { not: 'Rejected' }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: { not: 'Rejected' }
           }
         ]
       });
@@ -322,10 +323,12 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: { not: 'Rejected' }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: { not: 'Rejected' }
           }
         ],
         or: [{
@@ -364,10 +367,12 @@ io.on('connection', socket => {
       or: [{
           outlineSubmitted: true,
           outlineApproved: false,
+          status: { not: 'Rejected' }
         },
         {
           orderSubmitted: true,
-          orderApproved: false
+          orderApproved: false,
+          status: { not: 'Rejected' }
         }
       ],
       or: [{
@@ -395,10 +400,12 @@ io.on('connection', socket => {
       or: [{
           outlineSubmitted: true,
           outlineApproved: false,
+          status: { not: 'Rejected' }
         },
         {
           orderSubmitted: true,
-          orderApproved: false
+          orderApproved: false,
+          status: { not: 'Rejected' }
         }
       ],
       or: [{
@@ -548,8 +555,34 @@ io.on('connection', socket => {
       ErrorsLogService.logError('Projects', error.toString(), 'projectsSearch', '', socket.user.id);
     })
   });
-})
 
+  // To send email
+  socket.on('sendEmail', data => {
+    EmailService.sendMail({
+      email: data.email,
+      message: data.message,
+      subject: data.subject
+    }, (err) => {
+      if (err) {
+        ErrorsLogService.logError('Projects', `email: ${email}, ` + error.toString(), 'sendEmail', socket.user.id);
+        console.log(err);
+      } else {
+        socket.emit('sendEmail', {
+          message: "Email sent."
+        });
+      }
+    });
+  });
+
+  socket.on('fetchMultipleUsers', async data => {
+    let users = await User.find({
+      id: {
+        $in: data.userIds
+      }
+    });
+    socket.emit('fetchMultipleUsers', users);
+  });
+});
 
 module.exports = {
   userProjects: (req, res) => {
@@ -584,7 +617,8 @@ module.exports = {
           orderSubmitted: true,
           orderApproved: false
         }
-      ]
+      ],
+      status: 'Submitted'
     }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
@@ -671,10 +705,16 @@ module.exports = {
     Projects.create(body).then(projectResponse => {
       Projects.findOne({
         id: projectResponse.id
-      }).populate('projectOutline').then(project => {
+      }).populate('projectOutline').then(async project => {
+        let projectOutline = await ProjectOutline.findOne({
+          id: project.projectOutline[0].id
+        }).populateAll();
+
         let temp = {
-          projectOutline: project.projectOutline[0],
+          projectOutline: projectOutline,
           status: "Open",
+          overallStatus: "Submitted",
+          projectStatus: 'Submitted',
           assignedTo: body.projectOutline.pmoOfficer.id,
           project: projectResponse.id,
           docType: "Outline",
@@ -699,11 +739,11 @@ module.exports = {
     })
   },
 
-  submitOutlineUpdateCase: (req, res) => {
+  submitOutlineUpdateCase: async (req, res) => {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
-    delete(body.projectOutline);
+    delete (body.projectOutline);
 
     Projects.update({
       id: req.params.id
@@ -713,13 +753,19 @@ module.exports = {
       }, outline).then(outlineObj => {
         ProjectOutline.findOne({
           id: outline.id
-        }).populate('projectId').then(populatedObj => {
+        }).populate('projectId').then(async populatedObj => {
           backup.projectId = populatedObj.projectId;
           backup.createdAt = populatedObj.createdAt;
 
+          let projectOutline = await ProjectOutline.findOne({
+            id: outline.id
+          }).populateAll();
+
           OutlineApproval.create({
-            projectOutline: backup,
+            projectOutline: projectOutline,
             status: "Open",
+            projectStatus: 'Submitted',
+            overallStatus: "Submitted",
             assignedTo: outline.pmoOfficer.id,
             project: projectResponse[0].id,
             docType: "Outline",
@@ -766,7 +812,6 @@ module.exports = {
       ErrorsLogService.logError('Projects', error.toString(), 'getClosedProjects', req);
     }
   },
-
   activeProjectsSearch: async (req, res) => {
     let search = req.params.search;
     try {
@@ -780,5 +825,22 @@ module.exports = {
     } catch (error) {
       ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearch', req);
     }
-  }
+  },
+  
+    search: (req, res) => {
+    let query = req.params.query;
+    Projects.find({
+      or: [{
+        projectName: {
+          'contains': query
+        }
+      }],
+      isClosed: false
+    }).then(projects => {
+      res.ok(projects)
+    }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'search', req);
+      res.badRequest(err);
+    });
+  },
 };

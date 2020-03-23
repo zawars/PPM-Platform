@@ -1,7 +1,6 @@
 {
   "Projects": "Projets",
   "Msgs": "MSG",
-  "Notify": "Notifier",
   "Tasks": "Tâches",
   "Recent projects": "Projets Récents",
   "Find reports and more": "Trouver rapports et plus",
@@ -19,7 +18,6 @@
   "Tables": "Tableaux",
   "Normal Tables": "Tables normales",
   "Data Tables": "Tableaux de données",
-  "Forms": "Forme géométrique",
   "Smart Form Elements": "Éléments Smart Form",
   "Smart Form Layouts": "Intelligents modèles de formulaire",
   "Smart Form Validation": "Smart Form Validation",
@@ -199,5 +197,10 @@
   "Project Sponsor - Approval": "Commanditaire du projet - Approbation",
   "Submit": "Soumettre",
   "Preview": "Aperçu",
-  "Initiation Approval": "Initiation Approbation"
+  "Initiation Approval": "Initiation Approbation",
+  "Notify": "Notifier",
+  "Forms": "Forme géométrique",
+  "IT-Anteil (Restliche Systeme)": "IT-Anteil (Restliche Systeme)",
+  "SAP CCE": "SAP CCE",
+  "Bucket": "Topf"
 }

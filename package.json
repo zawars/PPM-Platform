@@ -47,6 +47,7 @@
     "uuid": "^3.3.2",
     "winston": "^3.1.0",
     "xlsx": "^0.14.1",
+    "xlsx-populate": "^1.21.0",
     "xml2js": "^0.4.19"
   },
   "scripts": {

@@ -86,6 +86,26 @@ module.exports.seeds = {
       event: "Closing Report Rejected",
       text: ""
     },
+    {
+      event: "Closing Report Rejected",
+      text: ""
+    },
+    {
+      event: "Email Reminder Project Order",
+      text: ""
+    },
+    {
+      event: "Email Reminder Pending Approval",
+      text: ""
+    },
+    {
+      event: "Email Reminder Status Report",
+      text: ""
+    },
+    {
+      event: "Email Reminder Closing Report",
+      text: ""
+    }
   ],
   dropdown: [{
       "values": [{
@@ -345,16 +365,12 @@ module.exports.seeds = {
           position: 0
         },
         {
-          "name": "Planning",
+          "name": "Executing",
           position: 1
         },
         {
-          "name": "Executing",
-          position: 2
-        },
-        {
           "name": "Closing",
-          position: 3
+          position: 2
         }
       ],
       "field": "Project Phase",
@@ -637,7 +653,7 @@ module.exports.seeds = {
           position: 1
         }
       ],
-      "field": "Digitalization Degree",
+      "field": "IT Platform",
     },
   ],
   helpguide: [{

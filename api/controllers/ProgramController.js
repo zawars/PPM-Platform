@@ -43,7 +43,7 @@ io.on('connection', socket => {
           page: data.pageIndex,
           limit: data.pageSize
         })
-        .populateAll().sort('createdAt DESC').then(programs => {
+        .populateAll().then(programs => {
           socket.emit('programsIndex', programs);
         }).catch(error => {
           ErrorsLogService.logError('Program', error.toString(), 'programsIndex', '', socket.user.id);
@@ -54,7 +54,7 @@ io.on('connection', socket => {
           page: data.pageIndex,
           limit: data.pageSize
         })
-        .populateAll().sort('createdAt DESC').then(programs => {
+        .populateAll().then(programs => {
           socket.emit('programsIndex', programs);
         }).catch(error => {
           ErrorsLogService.logError('Program', `id: ${data.userId}, ` + error.toString(), 'programsIndex', '', socket.user.id);

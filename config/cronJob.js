@@ -238,14 +238,24 @@ async function uploadExcelDumpToDrive(req, res) {
         }
       }
 
-      let itPlatformName = '';
+      let itPlatformsName = '';
       if (reportObj.itPlatform) {
         if (reportObj.itPlatform.length > 0) {
-          let itPlatform = await DropdownMapper.findOne({
-            id: reportObj.itPlatform[0]
+          let itPlatforms = await DropdownMapper.find({
+            id: {
+              $in: reportObj.itPlatform
+            }
           });
-          if (itPlatform) {
-            itPlatformName = itPlatform.name;
+          if (itPlatforms) {
+            if(itPlatforms.length > 0) {
+              itPlatforms.forEach((itPlatform, idx) => {
+                if (idx == 0) {
+                  itPlatformsName = itPlatform.name;
+                } else {
+                  itPlatformsName = itPlatformsName + ', ' + itPlatform.name;
+                }
+              });
+            }
           }
         }
       }
@@ -267,7 +277,7 @@ async function uploadExcelDumpToDrive(req, res) {
         strategicContribution: reportObj.strategicContribution ? reportObj.strategicContribution.name : '',
         profitability: reportObj.profitability ? reportObj.profitability.name : '',
         itRelevant: reportObj.itRelevant ? reportObj.itRelevant.name : '',
-        itPlatform: itPlatformName,
+        itPlatform: itPlatformsName,
         /*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
         projectMethodology: reportObj.projectMethodology ? reportObj.projectMethodology.name : '',
         confidential: reportObj.confidential,

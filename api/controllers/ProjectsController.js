@@ -814,9 +814,13 @@ module.exports = {
 
   getRecentActiveProjects: async (req, res) => {
     try {
+      let limit = 0;
+      if (req.param('limit')) {
+        limit = req.param('limit');
+      }
       let projectsList = await Projects.find({
         isClosed: false
-      }).sort('createdAt', 'DESC').populateAll();
+      }).limit(limit).populateAll();
 
       res.ok(projectsList);
     } catch (error) {
@@ -826,9 +830,13 @@ module.exports = {
 
   getClosedProjects: async (req, res) => {
     try {
+      let limit = 0;
+      if (req.param('limit')) {
+        limit = req.param('limit');
+      }
       let projects = await Projects.find({
         isClosed: true
-      }).sort('createdAt', 'DESC').populateAll();
+      }).limit(limit).populateAll();
 
       res.ok(projects);
     } catch (error) {

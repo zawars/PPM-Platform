@@ -605,7 +605,7 @@ async function uploadExcelDumpToDrive(req, res) {
         uid: val.uid,
         projectName: val.project ? val.project.projectName : '',
         docType: val.docType,
-        status: val.status,
+        status: val.overallStatus,
         version: val.version,
         businessArea: businessArea ? businessArea.name : '',
         businessUnit: businessUnit ? businessUnit.name : '',

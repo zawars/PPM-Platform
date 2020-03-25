@@ -110,6 +110,16 @@ io.on('connection', socket => {
     });
   });
 
+  //To get outlines by PMO
+  socket.on('getOutlinesByPMO', async data => {
+    try {
+      let approvals = await OutlineApproval.find({ sentTo: 'PMO' }).populateAll();
+      socket.emit('getOutlinesByPMO', approvals);
+    } catch (error) {
+      ErrorsLogService.logError('Outline Approval', error.toString(), 'getOutlinesByPMO', '', socket.user.id);
+    }
+  });
+
 })
 
 

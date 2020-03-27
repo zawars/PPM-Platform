@@ -39,6 +39,14 @@ module.exports = {
           totalExternalIT += parseInt(project.budget[6].externalIT || 0);
         })
 
+        let fixedColumns = [{
+          caption: 'Yearly Budget Fixed',
+          dataField: 'Yearly_Budget_Fixed'
+        }, {
+          caption: 'thereof IT Fixed',
+          dataField: 'thereof_IT_Fixed'
+        }];
+
         let PortfolioBudgetYearUpdated = await PortfolioBudgetYear.update({
           id: budgetYear
         }).set({
@@ -46,6 +54,54 @@ module.exports = {
           totalFixedOwnIT: totalOwnIT,
           totalFixedThereofICT: totalThereofICT,
           totalFixedExternalIT: totalExternalIT
+        });
+
+        let isdavonGEFixed = false;
+        let additionalColumns = PortfolioBudgetYearUpdated[0].additionalColumns ? PortfolioBudgetYearUpdated[0].additionalColumns : [];
+
+        if (additionalColumns.length > 0) {
+          additionalColumns.forEach(additionalColumn => {
+            if (additionalColumn.caption.includes('davon GE ICT')) {
+              isdavonGEFixed = true;
+              let davonGEFixed = {
+                caption: 'davon GE ICT Fixed',
+                dataField: 'davon_GE_ICT_Fixed'
+              }
+              fixedColumns.push(davonGEFixed);
+            }
+          })
+        }
+
+        let PortfolioBudgetYearUpdatedAgain = await PortfolioBudgetYear.update({
+          id: budgetYear
+        }).set({
+          fixedColumns: fixedColumns
+        });
+
+        projectBudgetCost.forEach(async project => {
+          for (let i = 0; i < 6; i++) {
+            let temp = Object.assign({}, project.budget[i]);
+            delete temp.Yearly_Budget_Fixed;
+            delete temp.thereof_IT_Fixed;
+            delete temp.davon_GE_ICT_Fixed;
+
+            let davonGEFixedObj = isdavonGEFixed ? {
+              davon_GE_ICT_Fixed: project.budget[i].davon_GE_ICT
+            } : {};
+
+            project.budget[i] = Object.assign({}, {
+              Yearly_Budget_Fixed: project.budget[i].budget
+            }, {
+              thereof_IT_Fixed: project.budget[i].thereofIT
+            }, davonGEFixedObj, temp);
+          }
+
+          let result = await ProjectBudgetCost.update({
+              id: project.id
+            })
+            .set({
+              budget: project.budget
+            })
         });
 
         res.ok(PortfolioBudgetYearUpdated);
@@ -80,13 +136,69 @@ module.exports = {
             totalExternalIT += parseInt(project.budget[6].externalIT || 0);
           })
 
-          await PortfolioBudgetYear.update({
+          let PortfolioBudgetYearUpdated = await PortfolioBudgetYear.update({
             id: budgetYears[i].id
           }).set({
             totalFixedBudget: totalBudget,
             totalFixedOwnIT: totalOwnIT,
             totalFixedThereofICT: totalThereofICT,
             totalFixedExternalIT: totalExternalIT
+          });
+
+          let fixedColumns = [{
+            caption: 'Yearly Budget Fixed',
+            dataField: 'Yearly_Budget_Fixed'
+          }, {
+            caption: 'thereof IT Fixed',
+            dataField: 'thereof_IT_Fixed'
+          }];
+
+          let isdavonGEFixed = false;
+          let additionalColumns = PortfolioBudgetYearUpdated[0].additionalColumns ? PortfolioBudgetYearUpdated[0].additionalColumns : [];
+
+          if (additionalColumns.length > 0) {
+            additionalColumns.forEach(additionalColumn => {
+              if (additionalColumn.caption.includes('davon GE ICT')) {
+                isdavonGEFixed = true;
+                let davonGEFixed = {
+                  caption: 'davon GE ICT Fixed',
+                  dataField: 'davon_GE_ICT_Fixed'
+                }
+                fixedColumns.push(davonGEFixed);
+              }
+            })
+          }
+
+          await PortfolioBudgetYear.update({
+            id: budgetYears[i].id
+          }).set({
+            fixedColumns: fixedColumns
+          });
+
+          projectBudgetCost.forEach(async project => {
+            for (let i = 0; i < 6; i++) {
+              let temp = Object.assign({}, project.budget[i]);
+              delete temp.Yearly_Budget_Fixed;
+              delete temp.thereof_IT_Fixed;
+              delete temp.davon_GE_ICT_Fixed;
+
+              let davonGEFixedObj = isdavonGEFixed ? {
+                davon_GE_ICT_Fixed: project.budget[i].davon_GE_ICT
+              } : {};
+
+              project.budget[i] = Object.assign({}, {
+                Yearly_Budget_Fixed: project.budget[i].budget
+              }, {
+                thereof_IT_Fixed: project.budget[i].thereofIT
+              }, davonGEFixedObj, temp);
+            }
+
+            let result = await ProjectBudgetCost.update({
+                id: project.id
+              })
+              .set({
+                budget: project.budget
+              })
           });
         }
 

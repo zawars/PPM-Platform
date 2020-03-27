@@ -71,7 +71,7 @@ module.exports = {
       type: 'string',
       defaultsTo: 'project'
     },
-    digitalizationDegree: {
+    itPlatform: {
       model: 'dropdownMapper',
     },
     projectReport: {

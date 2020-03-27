@@ -56,10 +56,6 @@ module.exports = {
       collection: 'subProjects',
       via: 'parentProject'
     },
-    // team: {
-    //   collection: 'team',
-    //   via: 'report'
-    // },
     project: {
       model: 'projects'
     },

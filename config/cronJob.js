@@ -70,8 +70,6 @@ async function uploadExcelDumpToDrive(req, res) {
     let decisionsList = [];
     let measuresList = [];
     let evaList = [];
-    let projectBudgetCurrentYearList = [];
-    let projectBudgetNextYearList = [];
     let projectActualBudgetList = [];
     let lessonsLearned = [];
     let multiProjectReport = [];
@@ -82,8 +80,7 @@ async function uploadExcelDumpToDrive(req, res) {
     let dependenciesList = [];
     let portfolioBudgetCurrentYearList = [];
     let portfolioBudgetNextYearList = [];
-    let subPortfolioBudgetCurrentYearList = [];
-    let subPortfolioBudgetNextYearList = [];
+    let subportfolioBudgetList = [];
     let programBudgetCurrentYearList = [];
     let programBudgetNextYearList = [];
     let programDetails = [];
@@ -107,6 +104,7 @@ async function uploadExcelDumpToDrive(req, res) {
     }).populateAll().sort('createdAt DESC');
     let approvals = await OutlineApproval.find().populateAll();
     approvals = approvals.filter(val => val.sentTo == 'PMO');
+    let subportfolioBudgetCollection = await PortfolioBudgetYear.find().populateAll();
 
     // Reports
     reports.forEach(async reportObj => {
@@ -157,49 +155,6 @@ async function uploadExcelDumpToDrive(req, res) {
         evaList.push(...eva);
       }
 
-      let projectBudgetCurrentYear = reportObj.budgetPlanningTable1;
-      if (projectBudgetCurrentYear != undefined) {
-        projectBudgetCurrentYear.forEach((val, idx) => {
-          val.reportId = reportObj.id;
-          val.projectId = reportObj.uid;
-          val.projectName = reportObj.projectName;
-          if (reportObj.psp) {
-            val.psp1 = reportObj.psp[0].psp;
-            val.psp2 = reportObj.psp[1].psp;
-            val.psp3 = reportObj.psp[2].psp;
-          }
-          val.businessArea = reportObj.businessArea ? reportObj.businessArea.name : '';
-          val.businessUnit = reportObj.businessUnit ? reportObj.businessUnit.name : '';
-          val.businessSegment = reportObj.businessSegment ? reportObj.businessSegment.name : '';
-          val.portfolioName = reportObj.portfolio ? reportObj.portfolio.name : '';
-          val.subPortfolio = reportObj.subPortfolio;
-        });
-        projectBudgetCurrentYearList.push(...projectBudgetCurrentYear);
-      }
-
-      let projectBudgetNextYear = reportObj.budgetPlanningTable2;
-      if (projectBudgetNextYear != undefined) {
-        projectBudgetNextYear.forEach((val, idx) => {
-          delete(val.actualCost);
-          delete(val.forecast);
-          val.reportId = reportObj.id;
-          val.projectId = reportObj.uid;
-          val.projectName = reportObj.projectName;
-          val.status = reportObj.status;
-          if (reportObj.psp) {
-            val.psp1 = reportObj.psp[0].psp;
-            val.psp2 = reportObj.psp[1].psp;
-            val.psp3 = reportObj.psp[2].psp;
-          }
-          val.businessArea = reportObj.businessArea ? reportObj.businessArea.name : '';
-          val.businessUnit = reportObj.businessUnit ? reportObj.businessUnit.name : '';
-          val.businessSegment = reportObj.businessSegment ? reportObj.businessSegment.name : '';
-          val.portfolioName = reportObj.portfolio ? reportObj.portfolio.name : '';
-          val.subPortfolio = reportObj.subPortfolio;
-        });
-        projectBudgetNextYearList.push(...projectBudgetNextYear);
-      }
-
       let projectActualBudget = reportObj.actualCostTable;
       if (projectActualBudget != undefined) {
         projectActualBudget.forEach((val, idx) => {
@@ -247,7 +202,7 @@ async function uploadExcelDumpToDrive(req, res) {
             }
           });
           if (itPlatforms) {
-            if(itPlatforms.length > 0) {
+            if (itPlatforms.length > 0) {
               itPlatforms.forEach((itPlatform, idx) => {
                 if (idx == 0) {
                   itPlatformsName = itPlatform.name;
@@ -450,38 +405,6 @@ async function uploadExcelDumpToDrive(req, res) {
         });
         portfolioBudgetNextYearList.push(...portfolioBudgetNextYear);
       }
-
-      // Current Year
-      if (portfolio.subPortfolioBudgetingList != undefined) {
-        portfolio.subPortfolioBudgetingList.forEach(subPortBudgetObj => {
-          let subPortfolioBudgetCurrentYear = subPortBudgetObj.subPortfolioBudgetCurrentYear;
-          if (subPortfolioBudgetCurrentYear != undefined) {
-            subPortfolioBudgetCurrentYear.forEach((val, idx) => {
-              val.portfolioId = portfolio.id;
-              val.portfolioName = portfolio.name;
-              val.subPortfolio = subPortBudgetObj.subPortfolio;
-              val.pspCurrentYear = subPortBudgetObj.pspCurrentYear;
-            });
-            subPortfolioBudgetCurrentYearList.push(...subPortfolioBudgetCurrentYear);
-          }
-        });
-
-        // Next Year
-        portfolio.subPortfolioBudgetingList.forEach(subPortBudgetObj => {
-          let subPortfolioBudgetNextYear = subPortBudgetObj.subPortfolioBudgetNextYear;
-          if (subPortfolioBudgetNextYear != undefined) {
-            subPortfolioBudgetNextYear.forEach((val, idx) => {
-              delete(val.actualCost);
-              delete(val.forecast);
-              val.portfolioId = portfolio.id;
-              val.portfolioName = portfolio.name;
-              val.subPortfolio = subPortBudgetObj.subPortfolio;
-              val.pspNextYear = subPortBudgetObj.pspNextYear;
-            });
-            subPortfolioBudgetNextYearList.push(...subPortfolioBudgetNextYear);
-          }
-        });
-      }
     });
 
     // Programs
@@ -614,6 +537,42 @@ async function uploadExcelDumpToDrive(req, res) {
       });
     });
 
+    // Yearly Budget
+    let projectBudgetGroupedByYears = _.groupBy(subportfolioBudgetCollection, 'year');
+    let yearsKeys = Object.keys(projectBudgetGroupedByYears);
+    let currentYear = moment().year();
+    let yearIndex = yearsKeys.indexOf(currentYear.toString());
+
+    if (yearIndex > 0) {
+      let indexes = [yearIndex - 1, yearIndex, yearIndex + 1];
+      let temp = [];
+      indexes.map(val => {
+        if (val > -1) {
+          if (yearsKeys[val] != undefined) {
+            temp.push(yearsKeys[val])
+          }
+        }
+      });
+      yearsKeys = temp;
+    }
+
+    yearsKeys.map(year => {
+      subportfolioBudgetList[`${year}`] = [];
+
+      projectBudgetGroupedByYears[year].map(yearlyBudgetObj => {
+        yearlyBudgetObj.projectBudgetCost.forEach(budgetObj => {
+          budgetObj.budget.forEach(obj => {
+            delete(obj.id);
+            obj.portfolioId = yearlyBudgetObj.subPortfolio.portfolio;
+            obj.subPortfolioId = yearlyBudgetObj.subPortfolio.id;
+            obj.subPortfolioName = yearlyBudgetObj.subPortfolio.name;
+          });
+
+          subportfolioBudgetList[year].push(...budgetObj.budget)
+        });
+      });
+    });
+
     const workbook = XLSX.utils.book_new();
 
     const generalsheet = XLSX.utils.json_to_sheet(generalList, {
@@ -646,16 +605,6 @@ async function uploadExcelDumpToDrive(req, res) {
     });
     XLSX.utils.book_append_sheet(workbook, evaSheet, 'EVA');
 
-    const projectBudgetCurrentYearSheet = XLSX.utils.json_to_sheet(projectBudgetCurrentYearList, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, projectBudgetCurrentYearSheet, 'Project Budget Current Year');
-
-    const projectBudgetNextYearSheet = XLSX.utils.json_to_sheet(projectBudgetNextYearList, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, projectBudgetNextYearSheet, 'Project Budget Next Year');
-
     const projectActualBudgetSheet = XLSX.utils.json_to_sheet(projectActualBudgetList, {
       cellDates: true
     });
@@ -676,15 +625,12 @@ async function uploadExcelDumpToDrive(req, res) {
     });
     XLSX.utils.book_append_sheet(workbook, portfolioBudgetNextYearSheet, 'Portfolio Budget Next Year');
 
-    const subPortfolioBudgetCurrentYearSheet = XLSX.utils.json_to_sheet(subPortfolioBudgetCurrentYearList, {
-      cellDates: true
+    yearsKeys.forEach(year => {
+      let subPortfolioBudgetSheet = XLSX.utils.json_to_sheet(subportfolioBudgetList[year], {
+        cellDates: true
+      });
+      XLSX.utils.book_append_sheet(workbook, subPortfolioBudgetSheet, `Sub-Port Budget ${year}`);
     });
-    XLSX.utils.book_append_sheet(workbook, subPortfolioBudgetCurrentYearSheet, 'Sub-Port Budget Current Year');
-
-    const subPortfolioBudgetNextYearSheet = XLSX.utils.json_to_sheet(subPortfolioBudgetNextYearList, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, subPortfolioBudgetNextYearSheet, 'Sub-Port Budget Next Year');
 
     const programBudgetCurrentYearSheet = XLSX.utils.json_to_sheet(programBudgetCurrentYearList, {
       cellDates: true

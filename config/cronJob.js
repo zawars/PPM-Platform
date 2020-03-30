@@ -49,7 +49,7 @@ async function uploadExcelDumpToDrive(req, res) {
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
     let generalList = [{
       date: moment().format('DD.MMM.YYYY'),
-      time: moment().format('h:mm:ss a')
+      time: moment().format('HH:mm:ss a')
     }];
 
     let dropdownsList = await Dropdown.find().populateAll();
@@ -459,14 +459,14 @@ async function uploadExcelDumpToDrive(req, res) {
       let businessUnit;
       let businessArea;
       if (pipelineProject.docType == 'Outline') {
-        budget = pipelineProject.projectOutline[0].estimatedProjectTable[6].budget;
-        totalBudget = pipelineProject.projectOutline[0].fundsApprovedForInitiationTable[6].budget;
-        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOutline[0].businessArea).name || ''
-        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOutline[0].businessUnit).name || '';
+        budget = pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].estimatedProjectTable[6].budget : 0;
+        totalBudget = pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].fundsApprovedForInitiationTable[6].budget : 0;
+        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].businessArea : '').name
+        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].businessUnit : '').name;
       } else {
-        totalBudget = pipelineProject.projectOrder[0].costTypeTable[6].budget;
-        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOrder[0].businessArea).name || '';
-        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOrder[0].businessUnit).name || '';
+        totalBudget = pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].costTypeTable[6].budget : 0;
+        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].businessArea : '').name;
+        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].businessUnit : '').name;
         fico = pipelineProject.projectOrder[0].projectFico.name;
       }
 

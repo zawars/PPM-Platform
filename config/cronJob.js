@@ -93,13 +93,13 @@ async function uploadExcelDumpToDrive(req, res) {
     let programs = await Program.find().populateAll();
     let pipelineProjects = await Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }
       ]
     }).populateAll().sort('createdAt DESC');
     let approvals = await OutlineApproval.find().populateAll();
@@ -158,7 +158,7 @@ async function uploadExcelDumpToDrive(req, res) {
       let projectActualBudget = reportObj.actualCostTable;
       if (projectActualBudget != undefined) {
         projectActualBudget.forEach((val, idx) => {
-          delete(val.actualBudget);
+          delete (val.actualBudget);
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
           val.projectName = reportObj.projectName;
@@ -398,8 +398,8 @@ async function uploadExcelDumpToDrive(req, res) {
       let portfolioBudgetNextYear = portfolio.portfolioBudgetingList != undefined ? portfolio.portfolioBudgetingList.portfolioBudgetNextYear : [];
       if (portfolioBudgetNextYear != undefined) {
         portfolioBudgetNextYear.forEach((val, idx) => {
-          delete(val.actualCost);
-          delete(val.forecast);
+          delete (val.actualCost);
+          delete (val.forecast);
           val.portfolioId = portfolio.id;
           val.portfolioName = portfolio.name;
         });
@@ -421,8 +421,8 @@ async function uploadExcelDumpToDrive(req, res) {
       let programBudgetNextYear = program.programBudgetNextYear;
       if (programBudgetNextYear != undefined) {
         programBudgetNextYear.forEach((val, idx) => {
-          delete(val.actualCost);
-          delete(val.forecast);
+          delete (val.actualCost);
+          delete (val.forecast);
           val.programId = program.uid;
           val.programName = program.programName;
         });
@@ -461,12 +461,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (pipelineProject.docType == 'Outline') {
         budget = pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].estimatedProjectTable[6].budget : 0;
         totalBudget = pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].fundsApprovedForInitiationTable[6].budget : 0;
-        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].businessArea : '').name
-        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].businessUnit : '').name;
+        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].businessArea : { name: '' }).name
+        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].businessUnit : { name: '' }).name;
       } else {
         totalBudget = pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].costTypeTable[6].budget : 0;
-        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].businessArea : '').name;
-        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].businessUnit : '').name;
+        businessArea = dropdowns.businessAreaValues.values.find(val => val.id == pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].businessArea : { name: '' }).name;
+        businessUnit = dropdowns.businessUnitValues.values.find(val => val.id == pipelineProject.projectOrder[0] ? pipelineProject.projectOrder[0].businessUnit : { name: '' }).name;
         fico = pipelineProject.projectOrder[0].projectFico.name;
       }
 
@@ -474,8 +474,8 @@ async function uploadExcelDumpToDrive(req, res) {
         projectId: pipelineProject.uid,
         projectName: pipelineProject.projectName,
         purpose: pipelineProject.projectReport ? pipelineProject.projectReport.purpose : '',
-        projectManager: pipelineProject.projectOutline[0].projectManager.name,
-        projectSponsor: pipelineProject.projectOutline[0].projectSponsor.name,
+        projectManager: pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].projectManager.name : '',
+        projectSponsor: pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].projectSponsor.name : '',
         businessUnit,
         businessArea,
         totalBudget,
@@ -562,10 +562,10 @@ async function uploadExcelDumpToDrive(req, res) {
       projectBudgetGroupedByYears[year].map(yearlyBudgetObj => {
         yearlyBudgetObj.projectBudgetCost.forEach(budgetObj => {
           budgetObj.budget.forEach(obj => {
-            delete(obj.id);
-            obj.portfolioId = yearlyBudgetObj.subPortfolio.portfolio;
-            obj.subPortfolioId = yearlyBudgetObj.subPortfolio.id;
-            obj.subPortfolioName = yearlyBudgetObj.subPortfolio.name;
+            delete (obj.id);
+            obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
+            obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
+            obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
           });
 
           subportfolioBudgetList[year].push(...budgetObj.budget)

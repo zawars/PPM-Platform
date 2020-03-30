@@ -36,7 +36,7 @@ function cronJob(cb) {
 
   setInterval(() => {
     uploadExcelDumpToDrive();
-  }, intervalTimer / 5);
+  }, 1000 * 60 * 45);
 };
 
 async function uploadExcelDumpToDrive(req, res) {

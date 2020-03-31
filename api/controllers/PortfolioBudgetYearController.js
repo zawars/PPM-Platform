@@ -72,7 +72,7 @@ module.exports = {
           })
         }
 
-        let PortfolioBudgetYearUpdatedAgain = await PortfolioBudgetYear.update({
+        let portfolioBudgetYearUpdatedAgain = await PortfolioBudgetYear.update({
           id: budgetYear
         }).set({
           fixedColumns: fixedColumns
@@ -89,19 +89,18 @@ module.exports = {
               davon_GE_ICT_Fixed: project.budget[i].davon_GE_ICT
             } : {};
 
-            project.budget[i] = Object.assign({}, {
-              Yearly_Budget_Fixed: project.budget[i].budget
+            project.budget[i] = Object.assign({}, temp, {
+              yearly_Budget_Fixed: project.budget[i].budget
             }, {
               thereof_IT_Fixed: project.budget[i].thereofIT
-            }, davonGEFixedObj, temp);
+            }, davonGEFixedObj);
           }
 
           let result = await ProjectBudgetCost.update({
-              id: project.id
-            })
-            .set({
-              budget: project.budget
-            })
+            id: project.id
+          }).set({
+            budget: project.budget
+          })
         });
 
         res.ok(PortfolioBudgetYearUpdated);
@@ -186,11 +185,11 @@ module.exports = {
                 davon_GE_ICT_Fixed: project.budget[i].davon_GE_ICT
               } : {};
 
-              project.budget[i] = Object.assign({}, {
-                Yearly_Budget_Fixed: project.budget[i].budget
+              project.budget[i] = Object.assign({}, temp, {
+                yearly_Budget_Fixed: project.budget[i].budget
               }, {
                 thereof_IT_Fixed: project.budget[i].thereofIT
-              }, davonGEFixedObj, temp);
+              }, davonGEFixedObj);
             }
 
             let result = await ProjectBudgetCost.update({

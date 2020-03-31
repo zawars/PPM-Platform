@@ -19,7 +19,8 @@ io.on('connection', socket => {
             id: element.id,
             eventDate: new Date(element.eventDate).toDateString(),
             description: element.description,
-            type: element.isPast ? 'Past' : 'Upcoming'
+            type: element.isPast ? 'Past' : 'Upcoming',
+            link: element.link
           }
           newsArray.push(newsItem);
         });
@@ -60,7 +61,8 @@ io.on('connection', socket => {
           id: element.id,
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
-          type: element.isPast ? 'Past' : 'Upcoming'
+          type: element.isPast ? 'Past' : 'Upcoming',
+          link: element.link
         }
         newsArray.push(newsItem);
       });
@@ -85,7 +87,8 @@ io.on('connection', socket => {
           id: element.id,
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
-          type: element.isPast ? 'Past' : 'Upcoming'
+          type: element.isPast ? 'Past' : 'Upcoming',
+          link: element.link
         }
         newsArray.push(newsItem);
       });
@@ -104,6 +107,7 @@ io.on('connection', socket => {
         let newsItem = {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
+          link: element.link
         }
         pastNews.push(newsItem);
       });
@@ -116,6 +120,7 @@ io.on('connection', socket => {
         let newsItem = {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
+          link: element.link
         }
         upcomingNews.push(newsItem);
       });
@@ -142,7 +147,8 @@ module.exports = {
             id: element.id,
             eventDate: new Date(element.eventDate).toDateString(),
             description: element.description,
-            type: element.isPast ? 'Past' : 'Upcoming'
+            type: element.isPast ? 'Past' : 'Upcoming',
+            link: element.link
           }
           newsArray.push(newsItem);
         });

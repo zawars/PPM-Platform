@@ -43,7 +43,15 @@ module.exports.bootstrap = async function (cb) {
     }
   });
 
-  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report'];
+  if (await SmallOrder.count() > 0) {
+    let smallOrders = await SmallOrder.find();
+    let uidStr = smallOrders[smallOrders.length - 1].uid;
+    let uid = uidStr.match(/\d/g)
+    uid = uid.join("");
+    EmailService.smallOrderCounter = uid;
+  }
+
+  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report', 'Small Order Started', 'Small Order Closed'];
 
   emailConfigEvents.forEach(async event => {
     let emailConfig = await EmailConfig.findOne({ event: event });

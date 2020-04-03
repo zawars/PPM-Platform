@@ -96,6 +96,12 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
+    plannedEndDate: {
+      type: 'string'
+    },
+    plannedDateVSForecastDate: {
+      type: 'string'
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

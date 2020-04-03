@@ -22,7 +22,7 @@ module.exports = {
     overallStatus: {
       type: 'string'
     },
-    overallStatusComments: {
+    managementSummary: {
       type: 'string'
     },
     scopeStatus: {
@@ -89,6 +89,9 @@ module.exports = {
       type: 'string'
     },
     profitability: {
+      type: 'string'
+    },
+    plannedDateVSForecastDate: {
       type: 'string'
     },
 

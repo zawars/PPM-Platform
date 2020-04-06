@@ -90,7 +90,7 @@ module.exports = {
             } : {};
 
             project.budget[i] = Object.assign({}, temp, {
-              yearly_Budget_Fixed: project.budget[i].budget
+              Yearly_Budget_Fixed: project.budget[i].budget
             }, {
               thereof_IT_Fixed: project.budget[i].thereofIT
             }, davonGEFixedObj);
@@ -186,7 +186,7 @@ module.exports = {
               } : {};
 
               project.budget[i] = Object.assign({}, temp, {
-                yearly_Budget_Fixed: project.budget[i].budget
+                Yearly_Budget_Fixed: project.budget[i].budget
               }, {
                 thereof_IT_Fixed: project.budget[i].thereofIT
               }, davonGEFixedObj);

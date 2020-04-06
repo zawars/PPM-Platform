@@ -72,7 +72,7 @@ module.exports = {
       defaultsTo: 'project'
     },
     itPlatform: {
-      model: 'dropdownMapper',
+      type: 'json',
     },
     projectReport: {
       model: 'reports'

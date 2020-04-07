@@ -32,7 +32,7 @@ module.exports = {
             userObj.isEdit = right.isEdit;
             teamUsers.push(userObj);
 
-            if (index == team.users.length - 1) {
+            if (teamUsers.length == team.users.length) {
               res.ok({
                 teamId: team.id,
                 teamUsers: teamUsers

@@ -108,6 +108,9 @@ module.exports = {
         id: body.projectId
       }).populateAll();
 
+      closingReport.project.isPMOApprovedClosingReport = false;
+      closingReport.project.isSponsorApprovedClosingReport = false;
+
       let temp = {
         closingReport: closingReport,
         status: "Open",

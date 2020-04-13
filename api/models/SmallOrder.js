@@ -131,9 +131,9 @@ module.exports = {
     classification: {
       model: 'dropdownMapper'
     },
-    projectType: {
-      model: 'dropdownMapper'
-    },
+    // projectType: {
+    //   model: 'dropdownMapper'
+    // },
     program: {
       model: 'program'
     },
@@ -149,9 +149,9 @@ module.exports = {
     itRelevant: {
       model: 'dropdownMapper'
     },
-    projectMethodology: {
-      model: 'dropdownMapper'
-    },
+    // projectMethodology: {
+    //   model: 'dropdownMapper'
+    // },
     user: {
       model: 'user',
     },

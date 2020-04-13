@@ -108,7 +108,7 @@ io.on('connection', socket => {
 
 module.exports = {
   
-  index: async (req, res) => {
+  getSmallOrders: async (req, res) => {
     try {
       let smallOrders = await SmallOrder.find().limit(req.query.limit || 10).populateAll();
       res.ok(smallOrders);

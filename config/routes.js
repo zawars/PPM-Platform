@@ -173,7 +173,7 @@ module.exports.routes = {
   'DELETE /translation/:en': 'TranslationController.delete',
 
   // SmallOrder Api
-  'GET /smallOrder': 'SmallOrderController.index',
+  'GET /smallOrder': 'SmallOrderController.getSmallOrders',
   'GET /smallOrder/user/:id': 'SmallOrderController.getSmallOrdersByUser',
   'GET /smallOrder/sponsor/:id': 'SmallOrderController.getSmallOrdersBySponsor',
 

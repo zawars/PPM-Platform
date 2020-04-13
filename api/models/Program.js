@@ -47,6 +47,10 @@ module.exports = {
       collection: 'programStatusReports',
       via: 'program'
     },
+    smallOrders: {
+      collection: 'smallOrder',
+      via: 'program'
+    },
   },
 
   beforeCreate: (values, cb) => {

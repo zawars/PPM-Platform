@@ -52,6 +52,7 @@ module.exports = {
         project: project.id,
         isFreezed: false,
         version: 1,
+        crNo: changeRequest.crNo,
         uid: project.uid
       };
 
@@ -99,6 +100,7 @@ module.exports = {
         project: project.id,
         isFreezed: false,
         version: changeRequest.version,
+        crNo: changeRequest.crNo,
         uid: project.uid
       };
 

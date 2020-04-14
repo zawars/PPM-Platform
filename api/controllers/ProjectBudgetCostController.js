@@ -114,10 +114,35 @@ module.exports = {
   getProjectBudget: async (req, res) => {
     try {
       let id = req.params.id;
-      let budget = await ProjectBudgetCost.find({
+      let results = await ProjectBudgetCost.find({
         project: id
       }).populateAll();
-      res.ok(budget);
+
+      if (results.length > 0) {
+        let report;
+
+        for (let i = 0; i < results.length; i++) {
+          if (i == 0) {
+            report = await Reports.findOne({
+              where: {
+                project: id
+              },
+              select: ['costTypeTable']
+            });
+          }
+
+          if (report && report.costTypeTable) {
+            for (let j = 0; j < 7; j++) {
+              results[i].budget[j].remainingProjectBudget = parseInt(report.costTypeTable[j].currentBudget || 0) - parseInt(report.costTypeTable[j].actualCost || 0);
+            }
+          }
+        }
+
+        res.ok(results);
+
+      } else {
+        res.ok([]);
+      }
     } catch (e) {
       ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'getProjectBudget', req);
       res.badRequest(e);

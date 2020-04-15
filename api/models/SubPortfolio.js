@@ -44,6 +44,10 @@ module.exports = {
       collection: 'projects',
       via: 'subPortfolio'
     },
+    smallOrders: {
+      collection: 'SmallOrder',
+      via: 'subPortfolio'
+    },
 
   },
 

@@ -20,6 +20,7 @@ module.exports = {
   counter: 0,
   programCounter: 0,
   subProjectCounter: 0,
+  smallOrderCounter: 0,
   samlStrategy: {},
 
   // sendMail: (options, done) => {

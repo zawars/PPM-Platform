@@ -171,4 +171,13 @@ module.exports.routes = {
   'POST /translation': 'TranslationController.create',
   'PUT /translation': 'TranslationController.update',
   'DELETE /translation/:en': 'TranslationController.delete',
+
+  // SmallOrder Api
+  'GET /smallOrder': 'SmallOrderController.getSmallOrders',
+  'GET /smallOrder/user/:id': 'SmallOrderController.getSmallOrdersByUser',
+  'GET /smallOrder/sponsor/:id': 'SmallOrderController.getSmallOrdersBySponsor',
+
+  // SmallOrderStatusReport Api
+  'GET /smallOrder/statusReport/:id/:prev/:current': 'SmallOrderStatusReportController.getPreviousCurrentOrderReport',
+  'GET /smallOrder/statusReport/:id/:reportId': 'SmallOrderStatusReportController.getOrderReport',
 };

@@ -20,6 +20,7 @@ io.on('connection', socket => {
             eventDate: new Date(element.eventDate).toDateString(),
             description: element.description,
             type: element.isPast ? 'Past' : 'Upcoming',
+            linkText: element.linkText,
             link: element.link
           }
           newsArray.push(newsItem);
@@ -62,6 +63,7 @@ io.on('connection', socket => {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
           type: element.isPast ? 'Past' : 'Upcoming',
+          linkText: element.linkText,
           link: element.link
         }
         newsArray.push(newsItem);
@@ -88,6 +90,7 @@ io.on('connection', socket => {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
           type: element.isPast ? 'Past' : 'Upcoming',
+          linkText: element.linkText,
           link: element.link
         }
         newsArray.push(newsItem);
@@ -107,6 +110,7 @@ io.on('connection', socket => {
         let newsItem = {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
+          linkText: element.linkText,
           link: element.link
         }
         pastNews.push(newsItem);
@@ -120,6 +124,7 @@ io.on('connection', socket => {
         let newsItem = {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
+          linkText: element.linkText,
           link: element.link
         }
         upcomingNews.push(newsItem);
@@ -148,6 +153,7 @@ module.exports = {
             eventDate: new Date(element.eventDate).toDateString(),
             description: element.description,
             type: element.isPast ? 'Past' : 'Upcoming',
+            linkText: element.linkText,
             link: element.link
           }
           newsArray.push(newsItem);

@@ -184,5 +184,6 @@ module.exports.routes = {
   //Program Budget
   'POST /createProgramBudget': 'ProgramBudgetCostController.createProgramBudget',
   'POST /createNewProgramBudgetYear': 'ProgramBudgetCostController.createNewBudgetYear',
+  'GET /getBudgetCostByProgram/:id': 'ProgramBudgetCostController.getBudgetCostByProgram'
 
 };

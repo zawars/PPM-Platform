@@ -149,5 +149,13 @@ module.exports = {
       message: "Year Added",
       programBudgetCost: programBudgetCost
     });
+  },
+
+  getBudgetCostByProgram: async (req, res) => {
+    let programBudgetCost = await ProgramBudgetCost.find({
+      program: req.params.id
+    });
+
+    res.ok(programBudgetCost);
   }
 };

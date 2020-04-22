@@ -154,7 +154,7 @@ module.exports = {
   getBudgetCostByProgram: async (req, res) => {
     let programBudgetCost = await ProgramBudgetCost.find({
       program: req.params.id
-    });
+    }).populateAll();
 
     res.ok(programBudgetCost);
   }

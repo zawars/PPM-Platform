@@ -139,11 +139,15 @@ module.exports = {
       group: "Sonstiges",
     }];
 
-    let programBudgetCost = await ProgramBudgetCost.create({
+    let createdBudgetCost = await ProgramBudgetCost.create({
       budget: budget,
       programBudgetYear: programBudgetYear.id,
       program: req.body.programId
     });
+
+    let programBudgetCost = await ProgramBudgetCost.findOne({
+      id: createdBudgetCost.id
+    }).populateAll();
 
     res.ok({
       message: "Year Added",

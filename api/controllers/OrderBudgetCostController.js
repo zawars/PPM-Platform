@@ -79,6 +79,14 @@ module.exports = {
     res.ok({
       result: "Success"
     });
+  },
+
+  budgetsByYear: async (req, res) => {
+    let orderBudgetCosts = await OrderBudgetCost.find({
+      portfolioBudgetYear: req.params.id
+    }).populateAll();
+
+    res.ok(orderBudgetCosts);
   }
 
 };

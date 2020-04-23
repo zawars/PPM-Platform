@@ -188,5 +188,6 @@ module.exports.routes = {
 
   //Small Order BudgetCost
   'POST /createOrderBudget': 'OrderBudgetCostController.createOrderBudgetCost',
+  'GET /orderBudgetCost/year/:id': 'OrderBudgetCostController.budgetsByYear',
 
 };

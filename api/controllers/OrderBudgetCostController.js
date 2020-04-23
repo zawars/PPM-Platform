@@ -9,7 +9,7 @@ module.exports = {
   createOrderBudgetCost: async (req, res) => {
     let portfolioBudgetYear = await PortfolioBudgetYear.findOne({
       subPortfolio: req.body.subPortfolioId,
-      year: req.body.year
+      year: `${req.body.year}`
     });
 
     if (portfolioBudgetYear == undefined) {

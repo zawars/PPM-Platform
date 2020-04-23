@@ -76,7 +76,9 @@ module.exports = {
       order: req.body.orderId
     });
 
-    res.ok("Success");
+    res.ok({
+      result: "Success"
+    });
   }
 
 };

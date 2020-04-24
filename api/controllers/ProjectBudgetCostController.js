@@ -216,7 +216,7 @@ module.exports = {
     });
   },
 
-  updateMultipleProjectsBudget: (req, res) => {
+  updateMultipleProjectsBudget: async (req, res) => {
     try {
       let projectsBudget = req.body.projectsBudget;
       let docLink = req.body.documentLink;

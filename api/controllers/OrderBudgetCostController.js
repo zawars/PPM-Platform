@@ -87,6 +87,27 @@ module.exports = {
     }).populateAll();
 
     res.ok(orderBudgetCosts);
+  },
+
+  updateMultipleOrdersBudget: (req, res) => {
+    try {
+      let ordersBudget = req.body.ordersBudget;
+
+      ordersBudget.forEach(async (order, index) => {
+        let result = await OrderBudgetCost.update({
+            id: order.id
+          })
+          .set({
+            budget: order.budget
+          })
+
+        if (index == ordersBudget.length - 1) {
+          res.ok(result);
+        }
+      });
+    } catch (error) {
+      ErrorsLogService.logError('Order Budget Cost', error.toString(), 'updateMultipleOrdersBudget', req);
+    }
   }
 
 };

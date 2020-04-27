@@ -322,6 +322,38 @@ module.exports = {
     }, ];
 
     try {
+      let smallOrders = await SmallOrder.find({
+        or: [{
+            status: 'Start',
+            subPortfolio: subPortfolio
+          },
+          {
+            status: 'Closed',
+            subPortfolio: subPortfolio,
+            endDate: {
+              contains: year
+            }
+          }
+        ]
+      });
+
+      if (smallOrders.length > 0) {
+        smallOrders.forEach(async (order, index) => {
+          await OrderBudgetCost.create({
+            portfolioBudgetYear: portfolioBudgetYear,
+            order: order.id,
+            budget: budget
+          }).then(result => {
+            //
+          }).catch(error => {
+            ErrorsLogService.logError('Order Budget Cost', error.toString(), 'createBudgetByYear', req);
+            res.badRequest({
+              error
+            });
+          });
+        });
+      }
+
       let subportfolioProjects = await Reports.find({
         or: [{
             status: 'Active',
@@ -357,7 +389,7 @@ module.exports = {
         });
       } else {
         res.ok({
-          message: "Year Added with no projects"
+          message: "Year Added"
         });
       }
     } catch (error) {

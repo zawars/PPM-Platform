@@ -90,7 +90,6 @@ module.exports = {
       if (result.order.costTypes) {
         for (let i = 0; i < 7; i++) {
           result.budget[i].remainingProjectBudget = parseInt(result.order.costTypes[i].currentBudget || 0) - parseInt(result.order.costTypes[i].actualCost || 0);
-          result.budget[i].currentBudget = parseInt(result.order.costTypes[i].currentBudget || 0);
         }
       }
     });

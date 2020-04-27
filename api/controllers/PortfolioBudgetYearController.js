@@ -26,17 +26,28 @@ module.exports = {
         portfolioBudgetYear: budgetYear
       });
 
+      let orderBudgetCost = await OrderBudgetCost.find({
+        portfolioBudgetYear: budgetYear
+      });
+
       let totalBudget = 0;
       let totalOwnIT = 0;
       let totalThereofICT = 0;
       let totalExternalIT = 0;
 
-      if (projectBudgetCost.length > 0) {
+      if (projectBudgetCost.length > 0 || orderBudgetCost.length > 0) {
         projectBudgetCost.forEach(project => {
           totalBudget += parseInt(project.budget[6].budget || 0);
           totalOwnIT += parseInt(project.budget[6].ownIT || 0);
           totalThereofICT += parseInt(project.budget[6].thereofICT || 0);
           totalExternalIT += parseInt(project.budget[6].externalIT || 0);
+        })
+
+        orderBudgetCost.forEach(order => {
+          totalBudget += parseInt(order.budget[6].budget || 0);
+          totalOwnIT += parseInt(order.budget[6].ownIT || 0);
+          totalThereofICT += parseInt(order.budget[6].thereofICT || 0);
+          totalExternalIT += parseInt(order.budget[6].externalIT || 0);
         })
 
         let fixedColumns = [{
@@ -76,6 +87,31 @@ module.exports = {
           id: budgetYear
         }).set({
           fixedColumns: fixedColumns
+        });
+
+        orderBudgetCost.forEach(async order => {
+          for (let i = 0; i < 6; i++) {
+            let temp = Object.assign({}, order.budget[i]);
+            delete temp.Yearly_Budget_Fixed;
+            delete temp.thereof_IT_Fixed;
+            delete temp.davon_GE_ICT_Fixed;
+
+            let davonGEFixedObj = isdavonGEFixed ? {
+              davon_GE_ICT_Fixed: order.budget[i].davon_GE_ICT
+            } : {};
+
+            order.budget[i] = Object.assign({}, temp, {
+              Yearly_Budget_Fixed: order.budget[i].budget
+            }, {
+              thereof_IT_Fixed: order.budget[i].thereofIT
+            }, davonGEFixedObj);
+          }
+
+          let result = await OrderBudgetCost.update({
+            id: order.id
+          }).set({
+            budget: order.budget
+          })
         });
 
         projectBudgetCost.forEach(async project => {
@@ -122,6 +158,11 @@ module.exports = {
           portfolioBudgetYear: budgetYears[i].id
         });
 
+        
+      let orderBudgetCost = await OrderBudgetCost.find({
+        portfolioBudgetYear: budgetYears[i].id
+      });
+
         let totalBudget = 0;
         let totalOwnIT = 0;
         let totalThereofICT = 0;
@@ -134,6 +175,14 @@ module.exports = {
             totalThereofICT += parseInt(project.budget[6].thereofICT || 0);
             totalExternalIT += parseInt(project.budget[6].externalIT || 0);
           })
+
+          orderBudgetCost.forEach(order => {
+            totalBudget += parseInt(order.budget[6].budget || 0);
+            totalOwnIT += parseInt(order.budget[6].ownIT || 0);
+            totalThereofICT += parseInt(order.budget[6].thereofICT || 0);
+            totalExternalIT += parseInt(order.budget[6].externalIT || 0);
+          })
+  
 
           let PortfolioBudgetYearUpdated = await PortfolioBudgetYear.update({
             id: budgetYears[i].id
@@ -172,6 +221,31 @@ module.exports = {
             id: budgetYears[i].id
           }).set({
             fixedColumns: fixedColumns
+          });
+
+          orderBudgetCost.forEach(async order => {
+            for (let i = 0; i < 6; i++) {
+              let temp = Object.assign({}, order.budget[i]);
+              delete temp.Yearly_Budget_Fixed;
+              delete temp.thereof_IT_Fixed;
+              delete temp.davon_GE_ICT_Fixed;
+  
+              let davonGEFixedObj = isdavonGEFixed ? {
+                davon_GE_ICT_Fixed: order.budget[i].davon_GE_ICT
+              } : {};
+  
+              order.budget[i] = Object.assign({}, temp, {
+                Yearly_Budget_Fixed: order.budget[i].budget
+              }, {
+                thereof_IT_Fixed: order.budget[i].thereofIT
+              }, davonGEFixedObj);
+            }
+  
+            let result = await OrderBudgetCost.update({
+              id: order.id
+            }).set({
+              budget: order.budget
+            })
           });
 
           projectBudgetCost.forEach(async project => {

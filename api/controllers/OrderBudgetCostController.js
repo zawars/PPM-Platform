@@ -86,6 +86,15 @@ module.exports = {
       portfolioBudgetYear: req.params.id
     }).populateAll();
 
+    orderBudgetCosts.forEach(result => {
+      if (result.costTypes) {
+        for (let i = 0; i < 7; i++) {
+          result.budget[i].remainingProjectBudget = parseInt(result.costTypes[i].currentBudget || 0) - parseInt(result.costTypes[i].actualCost || 0);
+          result.budget[i].currentBudget = parseInt(result.costTypes[i].currentBudget || 0);
+        }
+      }
+    });
+
     res.ok(orderBudgetCosts);
   },
 

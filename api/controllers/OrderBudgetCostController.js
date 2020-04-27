@@ -87,10 +87,10 @@ module.exports = {
     }).populateAll();
 
     orderBudgetCosts.forEach(result => {
-      if (result.costTypes) {
+      if (result.order.costTypes) {
         for (let i = 0; i < 7; i++) {
-          result.budget[i].remainingProjectBudget = parseInt(result.costTypes[i].currentBudget || 0) - parseInt(result.costTypes[i].actualCost || 0);
-          result.budget[i].currentBudget = parseInt(result.costTypes[i].currentBudget || 0);
+          result.budget[i].remainingProjectBudget = parseInt(result.order.costTypes[i].currentBudget || 0) - parseInt(result.order.costTypes[i].actualCost || 0);
+          result.budget[i].currentBudget = parseInt(result.order.costTypes[i].currentBudget || 0);
         }
       }
     });

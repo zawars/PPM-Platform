@@ -116,6 +116,21 @@ module.exports = {
     } catch (error) {
       ErrorsLogService.logError('Order Budget Cost', error.toString(), 'updateMultipleOrdersBudget', req);
     }
-  }
+  },
+
+  getOrderBudget: async (req, res) => {
+    try {
+      let id = req.params.id;
+      let results = await OrderBudgetCost.find({
+        order: id
+      }).populateAll();
+
+      res.ok(results);
+    } catch (e) {
+      ErrorsLogService.logError('Order Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'getOrderBudget', req);
+      res.badRequest(e);
+    }
+  },
+
 
 };

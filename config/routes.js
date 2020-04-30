@@ -190,5 +190,6 @@ module.exports.routes = {
   'POST /createOrderBudget': 'OrderBudgetCostController.createOrderBudgetCost',
   'GET /orderBudgetCost/year/:id': 'OrderBudgetCostController.budgetsByYear',
   'POST /updateMultipleOrdersBudget': 'OrderBudgetCostController.updateMultipleOrdersBudget',
+  'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget'
 
 };

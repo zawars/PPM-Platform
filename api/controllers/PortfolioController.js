@@ -31,7 +31,7 @@ io.on('connection', socket => {
   });
 
   socket.on('activePortfolios', data => {
-    Portfolio.find({ status: "Active" }).populateAll().then(response => {
+    Portfolio.find({ status: "Active" }).sort({ name: 'ASC' }).populateAll().then(response => {
       socket.emit('activePortfolios', response);
     }).catch(err => {
       ErrorsLogService.logError('Portfolio', err.toString(), 'activePortfolios', '', socket.user.id);

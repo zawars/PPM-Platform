@@ -22,7 +22,7 @@ io.on('connection', socket => {
   socket.on('activePrograms', data => {
     Program.find({
       status: 'Active'
-    }).populateAll().then(programsList => {
+    }).sort({ programName: 'ASC' }).populateAll().then(programsList => {
       socket.emit('activePrograms', programsList);
     }).catch(error => {
       ErrorsLogService.logError('Program', error.toString(), 'activePrograms', '', socket.user.id);

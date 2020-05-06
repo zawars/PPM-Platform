@@ -29,6 +29,14 @@ io.on('connection', socket => {
     });
   });
 
+  socket.on('allPrograms', data => {
+    Program.find().sort({ programName: 'ASC' }).populateAll().then(programsList => {
+      socket.emit('allPrograms', programsList);
+    }).catch(error => {
+      ErrorsLogService.logError('Program', error.toString(), 'allPrograms', '', socket.user.id);
+    });
+  });
+
   socket.on('programsIndex', data => {
     if (data.userId) {
       Program.find({

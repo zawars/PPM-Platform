@@ -8,6 +8,18 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
+  socket.on('allPortfolios', async data => {
+    try {
+      let portfolios = await Portfolio.find().sort({
+        name: 'ASC'
+      }).populateAll();
+
+      socket.emit('allPortfolios', portfolios);
+    } catch (error) {
+      ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosCount', '', socket.user.id);
+    }
+  })
+
   //To get count for all records
   socket.on('portfoliosCount', async data => {
     try {
@@ -21,7 +33,10 @@ io.on('connection', socket => {
   //To paginate all records
   socket.on('portfoliosIndex', data => {
     Portfolio.find()
-      .paginate({ page: data.pageIndex, limit: data.pageSize })
+      .paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
       .populateAll().then(portfolios => {
         socket.emit('portfoliosIndex', portfolios);
       })
@@ -31,7 +46,11 @@ io.on('connection', socket => {
   });
 
   socket.on('activePortfolios', data => {
-    Portfolio.find({ status: "Active" }).sort({ name: 'ASC' }).populateAll().then(response => {
+    Portfolio.find({
+      status: "Active"
+    }).sort({
+      name: 'ASC'
+    }).populateAll().then(response => {
       socket.emit('activePortfolios', response);
     }).catch(err => {
       ErrorsLogService.logError('Portfolio', err.toString(), 'activePortfolios', '', socket.user.id);
@@ -43,22 +62,47 @@ io.on('connection', socket => {
     let search = data.search;
 
     let count = await Portfolio.count({
-      or: [
-        { name: { contains: search } },
-        { status: { contains: search } },
-        { 'businessUnit.name': { contains: search } }
+      or: [{
+          name: {
+            contains: search
+          }
+        },
+        {
+          status: {
+            contains: search
+          }
+        },
+        {
+          'businessUnit.name': {
+            contains: search
+          }
+        }
       ]
     });
 
     Portfolio.find({
-      or: [
-        { name: { contains: search } },
-        { status: { contains: search } },
-        { 'businessUnit.name': { contains: search } }
-      ]
-    }).limit(10).populateAll().then(portfolios => {
-      socket.emit('portfoliosSearch', { count, portfolios });
-    })
+        or: [{
+            name: {
+              contains: search
+            }
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            'businessUnit.name': {
+              contains: search
+            }
+          }
+        ]
+      }).limit(10).populateAll().then(portfolios => {
+        socket.emit('portfoliosSearch', {
+          count,
+          portfolios
+        });
+      })
       .catch(error => {
         ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosSearch', '', socket.user.id);
       });
@@ -68,12 +112,26 @@ io.on('connection', socket => {
     let search = data.search;
 
     Portfolio.find({
-      or: [
-        { name: { contains: search } },
-        { status: { contains: search } },
-        { 'businessUnit.name': { contains: search } }
-      ]
-    }).paginate({ page: data.pageIndex, limit: data.pageSize })
+        or: [{
+            name: {
+              contains: search
+            }
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            'businessUnit.name': {
+              contains: search
+            }
+          }
+        ]
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
       .populateAll().then(portfolios => {
         socket.emit('portfoliosSearchIndex', portfolios);
       })
@@ -95,4 +153,3 @@ module.exports = {
     });
   },
 };
-

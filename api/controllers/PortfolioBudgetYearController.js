@@ -38,16 +38,16 @@ module.exports = {
       if (projectBudgetCost.length > 0 || orderBudgetCost.length > 0) {
         projectBudgetCost.forEach(project => {
           totalBudget += parseInt(project.budget[6].budget || 0);
-          totalOwnIT += parseInt(project.budget[6].ownIT || 0);
-          totalThereofICT += parseInt(project.budget[6].thereofICT || 0);
-          totalExternalIT += parseInt(project.budget[6].externalIT || 0);
+          totalOwnIT += parseInt(project.budget[1].thereofIT || 0) + parseInt(project.budget[3].thereofIT || 0);
+          totalThereofICT += parseInt(project.budget[1].davon_GE_ICT || 0) + parseInt(project.budget[3].davon_GE_ICT || 0);
+          totalExternalIT += parseInt(project.budget[0].thereofIT || 0) + parseInt(project.budget[2].thereofIT || 0);
         })
 
         orderBudgetCost.forEach(order => {
           totalBudget += parseInt(order.budget[6].budget || 0);
-          totalOwnIT += parseInt(order.budget[6].ownIT || 0);
-          totalThereofICT += parseInt(order.budget[6].thereofICT || 0);
-          totalExternalIT += parseInt(order.budget[6].externalIT || 0);
+          totalOwnIT += parseInt(order.budget[1].thereofIT || 0) + parseInt(order.budget[3].thereofIT || 0);
+          totalThereofICT += parseInt(order.budget[1].davon_GE_ICT || 0) + parseInt(order.budget[3].davon_GE_ICT || 0);
+          totalExternalIT += parseInt(order.budget[0].thereofIT || 0) + parseInt(order.budget[2].thereofIT || 0);
         })
 
         let fixedColumns = [{
@@ -171,16 +171,16 @@ module.exports = {
         if (projectBudgetCost.length > 0) {
           projectBudgetCost.forEach(project => {
             totalBudget += parseInt(project.budget[6].budget || 0);
-            totalOwnIT += parseInt(project.budget[6].ownIT || 0);
-            totalThereofICT += parseInt(project.budget[6].thereofICT || 0);
-            totalExternalIT += parseInt(project.budget[6].externalIT || 0);
+            totalOwnIT += parseInt(project.budget[1].thereofIT || 0) + parseInt(project.budget[3].thereofIT || 0);
+            totalThereofICT += parseInt(project.budget[1].davon_GE_ICT || 0) + parseInt(project.budget[3].davon_GE_ICT || 0);
+            totalExternalIT += parseInt(project.budget[0].thereofIT || 0) + parseInt(project.budget[2].thereofIT || 0);
           })
-
+  
           orderBudgetCost.forEach(order => {
             totalBudget += parseInt(order.budget[6].budget || 0);
-            totalOwnIT += parseInt(order.budget[6].ownIT || 0);
-            totalThereofICT += parseInt(order.budget[6].thereofICT || 0);
-            totalExternalIT += parseInt(order.budget[6].externalIT || 0);
+            totalOwnIT += parseInt(order.budget[1].thereofIT || 0) + parseInt(order.budget[3].thereofIT || 0);
+            totalThereofICT += parseInt(order.budget[1].davon_GE_ICT || 0) + parseInt(order.budget[3].davon_GE_ICT || 0);
+            totalExternalIT += parseInt(order.budget[0].thereofIT || 0) + parseInt(order.budget[2].thereofIT || 0);
           })
   
 

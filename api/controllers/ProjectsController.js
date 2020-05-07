@@ -11,52 +11,94 @@ var Email = require('machinepack-email');
 
 io.on('connection', socket => {
 
+  socket.on('getSelectiveProjects', data => {
+    let projectsIds = data.ids;
+    Projects.find({
+      id: projectsIds
+    }).then(projects => {
+      socket.emit('getSelectiveProjects', projects);
+    }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'getSelectiveProjects', '', socket.user.id);
+    })
+  });
+
   socket.on('getAllProjects', data => {
     Projects.find()
       .populateAll().then(projects => {
         socket.emit('getAllProjects', projects);
       }).catch(err => {
-        console.log(err);
+        ErrorsLogService.logError('Projects', err.toString(), 'getAllProjects', '', socket.user.id);
       })
   });
 
   socket.on('activeProjectsCount', async data => {
-    let count = await Projects.count({
-      isClosed: false
-    });
-    socket.emit('activeProjectsCount', count);
+    try {
+      let count = await Projects.count({
+        isClosed: false
+      });
+      socket.emit('activeProjectsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsCount', '', socket.user.id);
+    }
+  });
+
+  socket.on('getRecentActiveProjects', async data => {
+    let search = data.search;
+    try {
+      let projectsList = await Projects.find({
+        isClosed: false,
+        projectName: {
+          startsWith: search
+        }
+      }).limit(10).sort('projectName');
+      socket.emit('getRecentActiveProjects', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'getRecentActiveProjects', '', socket.user.id);
+    }
   });
 
   socket.on('activeProjectsIndex', async data => {
-    let projectsList = await Projects.find({
-        isClosed: false
-      })
-      .paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
-      .sort('createdAt', 'DESC').populateAll();
-    socket.emit('activeProjectsIndex', projectsList);
+    try {
+      let projectsList = await Projects.find({
+          isClosed: false
+        })
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .sort('createdAt', 'DESC').populateAll();
+      socket.emit('activeProjectsIndex', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsIndex', '', socket.user.id);
+    }
   });
 
   socket.on('closedProjectsCount', async data => {
-    let count = await Projects.count({
-      isClosed: true
-    });
-    socket.emit('closedProjectsCount', count);
+    try {
+      let count = await Projects.count({
+        isClosed: true
+      });
+      socket.emit('closedProjectsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsCount', '', socket.user.id);
+    }
   });
 
   socket.on('closedProjectsIndex', async data => {
-    let projectsList = await Projects.find({
-        isClosed: true
-      })
-      .paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
-      .sort('createdAt', 'DESC').populateAll();
+    try {
+      let projectsList = await Projects.find({
+          isClosed: true
+        })
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .sort('createdAt', 'DESC').populateAll();
 
-    socket.emit('closedProjectsIndex', projectsList);
+      socket.emit('closedProjectsIndex', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsIndex', '', socket.user.id);
+    }
   });
 
   socket.on('activeProjectsSearch', async data => {
@@ -96,32 +138,38 @@ io.on('connection', socket => {
         count,
         projects
       });
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearch', '', socket.user.id);
+    })
   });
 
   socket.on('activeProjectsSearchIndex', async data => {
-    let search = data.search;
-    let projectsList = await Projects.find({
-        or: [{
-            projectName: {
-              contains: search
+    try {
+      let search = data.search;
+      let projectsList = await Projects.find({
+          or: [{
+              projectName: {
+                contains: search
+              },
+              isClosed: false
             },
-            isClosed: false
-          },
-          {
-            docType: {
-              contains: search
-            },
-            isClosed: false
-          }
-        ]
-      })
-      .paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
-      .sort('createdAt', 'DESC').populateAll();
-    socket.emit('activeProjectsSearchIndex', projectsList);
+            {
+              docType: {
+                contains: search
+              },
+              isClosed: false
+            }
+          ]
+        })
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .sort('createdAt', 'DESC').populateAll();
+      socket.emit('activeProjectsSearchIndex', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearchIndex', '', socket.user.id);
+    }
   });
 
   socket.on('closedProjectsSearch', async data => {
@@ -181,43 +229,49 @@ io.on('connection', socket => {
         count,
         projects
       });
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsSearch', '', socket.user.id);
+    })
   });
 
   socket.on('closedProjectsSearchIndex', async data => {
-    let search = data.search;
-    let projectsList = await Projects.find({
-        or: [{
-            uid: parseInt(search),
-            isClosed: true
-          },
-          {
-            projectName: {
-              contains: search
+    try {
+      let search = data.search;
+      let projectsList = await Projects.find({
+          or: [{
+              uid: parseInt(search),
+              isClosed: true
             },
-            isClosed: true
-          },
-          {
-            status: {
-              contains: search
+            {
+              projectName: {
+                contains: search
+              },
+              isClosed: true
             },
-            isClosed: true
-          },
-          {
-            docType: {
-              contains: search
+            {
+              status: {
+                contains: search
+              },
+              isClosed: true
             },
-            isClosed: true
-          }
-        ]
-      })
-      .paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
-      .sort('createdAt', 'DESC').populateAll();
+            {
+              docType: {
+                contains: search
+              },
+              isClosed: true
+            }
+          ]
+        })
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .sort('createdAt', 'DESC').populateAll();
 
-    socket.emit('closedProjectsSearchIndex', projectsList);
+      socket.emit('closedProjectsSearchIndex', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsSearchIndex', '', socket.user.id);
+    }
   });
 
   socket.on('submittedProjectsIndex', data => {
@@ -225,10 +279,16 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: {
+              not: 'Rejected'
+            }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: {
+              not: 'Rejected'
+            }
           }
         ]
       }).paginate({
@@ -238,23 +298,33 @@ io.on('connection', socket => {
       .populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('submittedProjectsIndex', projects);
       }).catch(error => {
-        socket.emit('submittedProjectsIndex', error);
+        ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsIndex', '', socket.user.id);
       });
   });
 
   socket.on('submittedProjectsCount', async data => {
-    let count = await Projects.count({
-      or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
-      ]
-    });
-    socket.emit('submittedProjectsCount', count);
+    try {
+      let count = await Projects.count({
+        or: [{
+            outlineSubmitted: true,
+            outlineApproved: false,
+            status: {
+              not: 'Rejected'
+            }
+          },
+          {
+            orderSubmitted: true,
+            orderApproved: false,
+            status: {
+              not: 'Rejected'
+            }
+          }
+        ]
+      });
+      socket.emit('submittedProjectsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsCount', '', socket.user.id);
+    }
   });
 
   socket.on('submittedProjectsSearchIndex', data => {
@@ -264,10 +334,16 @@ io.on('connection', socket => {
         or: [{
             outlineSubmitted: true,
             outlineApproved: false,
+            status: {
+              not: 'Rejected'
+            }
           },
           {
             orderSubmitted: true,
-            orderApproved: false
+            orderApproved: false,
+            status: {
+              not: 'Rejected'
+            }
           }
         ],
         or: [{
@@ -296,7 +372,7 @@ io.on('connection', socket => {
       .populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('submittedProjectsSearchIndex', projects);
       }).catch(error => {
-        socket.emit('submittedProjectsSearchIndex', error);
+        ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsSearchIndex', '', socket.user.id);
       });
   });
 
@@ -306,10 +382,16 @@ io.on('connection', socket => {
       or: [{
           outlineSubmitted: true,
           outlineApproved: false,
+          status: {
+            not: 'Rejected'
+          }
         },
         {
           orderSubmitted: true,
-          orderApproved: false
+          orderApproved: false,
+          status: {
+            not: 'Rejected'
+          }
         }
       ],
       or: [{
@@ -337,10 +419,16 @@ io.on('connection', socket => {
       or: [{
           outlineSubmitted: true,
           outlineApproved: false,
+          status: {
+            not: 'Rejected'
+          }
         },
         {
           orderSubmitted: true,
-          orderApproved: false
+          orderApproved: false,
+          status: {
+            not: 'Rejected'
+          }
         }
       ],
       or: [{
@@ -368,7 +456,7 @@ io.on('connection', socket => {
         projects
       });
     }).catch(error => {
-      socket.emit('submittedProjectsSearch', error);
+      ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsSearch', '', socket.user.id);
     });
   });
 
@@ -380,18 +468,22 @@ io.on('connection', socket => {
         page: data.pageIndex,
         limit: data.pageSize
       })
-      .populateAll().sort('uid DESC').then(projects => {
+      .populateAll().then(projects => {
         socket.emit('projectsIndex', projects);
       }).catch(error => {
-        socket.emit('projectsIndex', error);
+        ErrorsLogService.logError('Projects', error.toString(), 'projectsIndex', '', socket.user.id);
       });
   });
 
   socket.on('projectsCount', async data => {
-    let count = await Projects.count({
-      user: data.userId
-    });
-    socket.emit('projectsCount', count);
+    try {
+      let count = await Projects.count({
+        user: data.userId
+      });
+      socket.emit('projectsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'projectsCount', '', socket.user.id);
+    }
   });
 
   //To search in data table of Projects
@@ -449,7 +541,7 @@ io.on('connection', socket => {
         });
       });
     } catch (error) {
-      console.log(error);
+      ErrorsLogService.logError('Projects', error.toString(), 'projectsSearch', '', socket.user.id);
     }
   });
 
@@ -482,15 +574,38 @@ io.on('connection', socket => {
       limit: data.pageSize
     }).populateAll().sort('uid DESC').then(projects => {
       socket.emit('projectsSearchIndex', projects);
+    }).catch(error => {
+      ErrorsLogService.logError('Projects', error.toString(), 'projectsSearch', '', socket.user.id);
+    })
+  });
+
+  // To send email
+  socket.on('sendEmail', data => {
+    EmailService.sendMail({
+      email: data.email,
+      message: data.message,
+      subject: data.subject
+    }, (err) => {
+      if (err) {
+        ErrorsLogService.logError('Projects', `email: ${email}, ` + error.toString(), 'sendEmail', socket.user.id);
+        console.log(err);
+      } else {
+        socket.emit('sendEmail', {
+          message: "Email sent."
+        });
+      }
     });
   });
 
   socket.on('fetchMultipleUsers', async data => {
-    let users = await User.find({ id: { $in: data.userIds }});
+    let users = await User.find({
+      id: {
+        $in: data.userIds
+      }
+    });
     socket.emit('fetchMultipleUsers', users);
   });
-})
-
+});
 
 module.exports = {
   userProjects: (req, res) => {
@@ -499,7 +614,7 @@ module.exports = {
     }).limit(req.param('limit') || 10).populateAll().sort('uid DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
-      res.badRequest(error);
+      ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'userProjects', req);
     });
   },
 
@@ -510,6 +625,7 @@ module.exports = {
     }).sort('createdAt DESC').limit(10).then(projects => {
       res.ok(projects);
     }).catch(error => {
+      ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'getOutlineApprovedProjects', req);
       res.badRequest(error);
     });
   },
@@ -529,6 +645,7 @@ module.exports = {
     }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
+      ErrorsLogService.logError('Projects', error.toString(), 'getSubmittedProjects', req);
       res.badRequest(error);
     });
   },
@@ -587,6 +704,7 @@ module.exports = {
         });
       });
     } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'getUserReport', req);
       res.badRequest(error);
     }
   },
@@ -600,6 +718,7 @@ module.exports = {
     }).then(projects => {
       res.ok(projects);
     }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
       res.badRequest(err);
     });
   },
@@ -609,10 +728,15 @@ module.exports = {
     Projects.create(body).then(projectResponse => {
       Projects.findOne({
         id: projectResponse.id
-      }).populate('projectOutline').then(project => {
+      }).populate('projectOutline').then(async project => {
+        let projectOutline = await ProjectOutline.findOne({
+          id: project.projectOutline[0].id
+        }).populateAll();
+
         let temp = {
-          projectOutline: project.projectOutline[0],
+          projectOutline: projectOutline,
           status: "Open",
+          overallStatus: "Submitted",
           projectStatus: 'Submitted',
           assignedTo: body.projectOutline.pmoOfficer.id,
           project: projectResponse.id,
@@ -627,12 +751,18 @@ module.exports = {
           res.ok({
             approvalId: response.id
           });
-        });
-      });
-    });
+        }).catch(error => {
+          ErrorsLogService.logError('Projects', `projectId: ${projectResponse.id}, ` + error.toString(), 'submitOutline', req);
+        })
+      }).catch(error => {
+        ErrorsLogService.logError('Projects', `projectId: ${projectResponse.id}, ` + error.toString(), 'submitOutline', req);
+      })
+    }).catch(error => {
+      ErrorsLogService.logError('Projects', error.toString(), 'submitOutline', req);
+    })
   },
 
-  submitOutlineUpdateCase: (req, res) => {
+  submitOutlineUpdateCase: async (req, res) => {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
@@ -646,14 +776,19 @@ module.exports = {
       }, outline).then(outlineObj => {
         ProjectOutline.findOne({
           id: outline.id
-        }).populate('projectId').then(populatedObj => {
+        }).populate('projectId').then(async populatedObj => {
           backup.projectId = populatedObj.projectId;
           backup.createdAt = populatedObj.createdAt;
 
+          let projectOutline = await ProjectOutline.findOne({
+            id: outline.id
+          }).populateAll();
+
           OutlineApproval.create({
-            projectOutline: backup,
+            projectOutline: projectOutline,
             status: "Open",
             projectStatus: 'Submitted',
+            overallStatus: "Submitted",
             assignedTo: outline.pmoOfficer.id,
             project: projectResponse[0].id,
             docType: "Outline",
@@ -666,24 +801,77 @@ module.exports = {
               approvalId: response.id
             });
           });
-        });
-      });
-    });
+        }).catch(error => {
+          ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'submitOutlineUpdateCase', req);
+        })
+      }).catch(error => {
+        ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'submitOutlineUpdateCase', req);
+      })
+    }).catch(error => {
+      ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'submitOutlineUpdateCase', req);
+    })
   },
 
   getRecentActiveProjects: async (req, res) => {
-    let projectsList = await Projects.find({
-      isClosed: false
-    }).sort('createdAt', 'DESC').populateAll();
+    try {
+      let limit = 0;
+      if (req.param('limit')) {
+        limit = req.param('limit');
+      }
+      let projectsList = await Projects.find({
+        isClosed: false
+      }).limit(limit).populateAll();
 
-    res.ok(projectsList);
+      res.ok(projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'getRecentActiveProjects', req);
+    }
   },
 
   getClosedProjects: async (req, res) => {
-    let projects = await Projects.find({
-      isClosed: true
-    }).sort('createdAt', 'DESC').populateAll();
+    try {
+      let limit = 0;
+      if (req.param('limit')) {
+        limit = req.param('limit');
+      }
+      let projects = await Projects.find({
+        isClosed: true
+      }).limit(limit).populateAll();
 
-    res.ok(projects);
+      res.ok(projects);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'getClosedProjects', req);
+    }
+  },
+  activeProjectsSearch: async (req, res) => {
+    let search = req.params.search;
+    try {
+      let projectsList = await Projects.find({
+        isClosed: false,
+        projectName: {
+          startsWith: search
+        }
+      }).limit(10).sort('projectName');
+      res.ok(projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearch', req);
+    }
+  },
+
+  search: (req, res) => {
+    let query = req.params.query;
+    Projects.find({
+      or: [{
+        projectName: {
+          'contains': query
+        }
+      }],
+      isClosed: false
+    }).then(projects => {
+      res.ok(projects)
+    }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'search', req);
+      res.badRequest(err);
+    });
   },
 };

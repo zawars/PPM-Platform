@@ -5,6 +5,26 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const io = SocketService.io;
+
+io.on('connection', socket => {
+
+  socket.on('helpGuideByFormName', async data => {
+    try {
+      let query = data.formName;
+      let helpGuideObj = await HelpGuide.findOne({
+        name: {
+          'contains': query
+        }
+      }).populate('fields');
+
+      socket.emit('helpGuideByFormName', helpGuideObj);
+    } catch (error) {
+      ErrorsLogService.logError('HelpGuide', `query : ${data.formName}, ` + error.toString(), 'helpGuideByFormName', socket.user.id);
+    }
+  });
+});
+
 module.exports = {
   getHelpGuideByFormName: async (req, res) => {
     try {
@@ -17,6 +37,7 @@ module.exports = {
 
       res.ok(helpGuideObj);
     } catch (error) {
+      ErrorsLogService.logError('HelpGuide', `query : ${req.params.query}, ` + error.toString(), 'getHelpGuideByFormName', req);
       res.ok({
         message: 'Not found.',
         error

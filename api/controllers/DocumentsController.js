@@ -11,6 +11,7 @@ module.exports = {
       dirname: '../../uploads/docs'
     }, (err, uploadedFiles) => {
       if (err) {
+        ErrorsLogService.logError('Document', err.toString(), 'uploadFile', req);
         return res.send(500, err);
       }
       return res.json({
@@ -26,6 +27,7 @@ module.exports = {
     }).populate('type').then(docsList => {
       res.ok(docsList);
     }).catch(err => {
+      ErrorsLogService.logError('Document', err.toString(), 'getDocumentsByReport', req);
       res.serverError(err)
     });
   }

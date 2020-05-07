@@ -12,6 +12,7 @@ module.exports = {
     }).then(resource => {
       res.ok(resource);
     }).catch(err => {
+      ErrorsLogService.logError('Resource', `id: ${req.params.id}, ` + err.toString(), 'resourceByReport', req);
       res.badRequest(err);
     });
   },

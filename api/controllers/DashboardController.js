@@ -43,8 +43,12 @@ io.on('connection', socket => {
   socketObj = socket;
 
   socket.on('dashboardProjectsIndex', data => {
-    let paginated = SocketService.paginateArray(projectsList, data.pageSize, data.pageIndex);
-    socket.emit('dashboardProjectsIndex', paginated)
+    try {
+      let paginated = SocketService.paginateArray(projectsList, data.pageSize, data.pageIndex);
+      socket.emit('dashboardProjectsIndex', paginated)
+    } catch (error) {
+      ErrorsLogService.logError('Dasboard', error.toString(), 'dashboardProjectsIndex', '', socket.user.id);
+    }
   });
 
   socket.on('dashboardProjectsFilter', async data => {
@@ -72,9 +76,10 @@ io.on('connection', socket => {
         totalBudget,
         totalActualCosts,
         totalForecast,
-        projectsList: SocketService.paginateArray(projectsList, 10, 1),
         projectsCount: projectsList.length
       });
+    }).catch(err => {
+      ErrorsLogService.logError('Dasboard', err.toString(), 'dashboardProjectsFilter', '', socket.user.id);
     });
   });
 });
@@ -82,32 +87,38 @@ io.on('connection', socket => {
 
 module.exports = {
   getDashboard: async (req, res) => {
-    await updateDropdownsValues();
-    Reports.find().populateAll().then(reports => {
-      Configurations.findOne({
-        uid: 1
-      }).then(response => {
-        configuration = response;
-        projectsList = reports;
-        calculateValues();
-        calculateProjectsStatusValue();
-        res.ok({
-          overallStatusChart,
-          numberOfProjectsPerBusinessUnitWithOverallStatus,
-          numberOfProjectsPerBusinessAreaWithOverallStatus,
-          opexVsCapexChart,
-          projectsWithStrategicContribution,
-          projectsPerProjectTypeChart,
-          activeProjects,
-          onHoldProjects,
-          totalBudget,
-          totalActualCosts,
-          totalForecast,
-          projectsCount: projectsList.length
+    try {
+      await updateDropdownsValues();
+      Reports.find().populateAll().then(reports => {
+        Configurations.findOne({ uid: 1 }).then(response => {
+          configuration = response;
+          projectsList = reports;
+          calculateValues();
+          calculateProjectsStatusValue();
+          res.ok({
+            overallStatusChart,
+            numberOfProjectsPerBusinessUnitWithOverallStatus,
+            numberOfProjectsPerBusinessAreaWithOverallStatus,
+            opexVsCapexChart,
+            projectsWithStrategicContribution,
+            projectsPerProjectTypeChart,
+            activeProjects,
+            onHoldProjects,
+            totalBudget,
+            totalActualCosts,
+            totalForecast,
+            projectsCount: projectsList.length
+          });
+          socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
+        }).catch(error => {
+          ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
         });
-        socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
+      }).catch(error => {
+        ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
       });
-    });
+    } catch (error) {
+      ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
+    }
   }
 }
 
@@ -215,74 +226,85 @@ function initializeValues() {
   onHoldProjects = 0;
   activeProjects = 0;
 
-  overallStatusChart = [{
-    status: 'Grün',
-    value: 0
-  }, {
-    status: 'Gelb',
-    value: 0
-  }, {
-    status: 'Rot',
-    value: 0
-  }];
+  overallStatusChart = [
+    {
+      status: 'Grün',
+      value: 0
+    }, {
+      status: 'Gelb',
+      value: 0
+    }, {
+      status: 'Rot',
+      value: 0
+    }];
 
-  costStatusChart = [{
-    status: 'Green',
-    value: 0
-  }, {
-    status: 'Yellow',
-    value: 0
-  }, {
-    status: 'Red',
-    value: 0
-  }];
+  costStatusChart = [
+    {
+      status: 'Green',
+      value: 0
+    }, {
+      status: 'Yellow',
+      value: 0
+    }, {
+      status: 'Red',
+      value: 0
+    }
+  ];
 
-  timeStatusChart = [{
-    status: 'Green',
-    value: 0
-  }, {
-    status: 'Yellow',
-    value: 0
-  }, {
-    status: 'Red',
-    value: 0
-  }];
+  timeStatusChart = [
+    {
+      status: 'Green',
+      value: 0
+    }, {
+      status: 'Yellow',
+      value: 0
+    }, {
+      status: 'Red',
+      value: 0
+    }
+  ];
 
-  riskStatusChart = [{
-    status: 'Green',
-    value: 0
-  }, {
-    status: 'Yellow',
-    value: 0
-  }, {
-    status: 'Red',
-    value: 0
-  }];
+  riskStatusChart = [
+    {
+      status: 'Green',
+      value: 0
+    }, {
+      status: 'Yellow',
+      value: 0
+    }, {
+      status: 'Red',
+      value: 0
+    }
+  ];
 
-  resourceStatusChart = [{
-    status: 'Green',
-    value: 0
-  }, {
-    status: 'Yellow',
-    value: 0
-  }, {
-    status: 'Red',
-    value: 0
-  }];
+  resourceStatusChart = [
+    {
+      status: 'Green',
+      value: 0
+    }, {
+      status: 'Yellow',
+      value: 0
+    }, {
+      status: 'Red',
+      value: 0
+    }
+  ];
 
-  projectsPerBusinessAreaChart = [{
-    name: 'Energy',
-    value: 0
-  }, {
-    name: 'Grids (Netze)',
-    value: 0
-  }, {
-    name: 'Services',
-    value: 0
-  }, {
-    name: 'Others',
-    value: 0
-  }, ];
+  projectsPerBusinessAreaChart = [
+    {
+      name: 'Energy',
+      value: 0
+    }, {
+      name: 'Grids (Netze)',
+      value: 0
+    }, {
+      name: 'Services',
+      value: 0
+    }, {
+      name: 'Others',
+      value: 0
+    },
+  ];
 
   applyFilterButtonOptions = {
     text: "Apply",
@@ -298,75 +320,81 @@ function initializeValues() {
     }
   };
 
-  numberOfProjectsPerBusinessAreaWithCostStatus = [{
-    area: "Energy",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }, {
-    area: "Grids (Netze)",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }, {
-    area: "Services",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }, {
-    area: "Others",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }];
+  numberOfProjectsPerBusinessAreaWithCostStatus = [
+    {
+      area: "Energy",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }, {
+      area: "Grids (Netze)",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }, {
+      area: "Services",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }, {
+      area: "Others",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }
+  ];
 
-  numberOfProjectsPerBusinessAreaWithTimeStatus = [{
-    area: "Energy",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }, {
-    area: "Grids (Netze)",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }, {
-    area: "Services",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }, {
-    area: "Others",
-    red: 0,
-    green: 0,
-    areaCount: 0,
-    yellow: 0
-  }];
+  numberOfProjectsPerBusinessAreaWithTimeStatus = [
+    {
+      area: "Energy",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }, {
+      area: "Grids (Netze)",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }, {
+      area: "Services",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }, {
+      area: "Others",
+      red: 0,
+      green: 0,
+      areaCount: 0,
+      yellow: 0
+    }
+  ];
 
-  numberOfProjectsPerBusinessAreaWithProjectType = [{
-    area: "Energy",
-    areaCount: 0,
-    projectTypeCount: 0
-  }, {
-    area: "Grids (Netze)",
-    areaCount: 0,
-    projectTypeCount: 0
-  }, {
-    area: "Services",
-    areaCount: 0,
-    projectTypeCount: 0
-  }, {
-    area: "Others",
-    areaCount: 0,
-    projectTypeCount: 0
-  }];
+  numberOfProjectsPerBusinessAreaWithProjectType = [
+    {
+      area: "Energy",
+      areaCount: 0,
+      projectTypeCount: 0
+    }, {
+      area: "Grids (Netze)",
+      areaCount: 0,
+      projectTypeCount: 0
+    }, {
+      area: "Services",
+      areaCount: 0,
+      projectTypeCount: 0
+    }, {
+      area: "Others",
+      areaCount: 0,
+      projectTypeCount: 0
+    }
+  ];
 }
 
 function updateDropdownsValues() {
@@ -459,7 +487,9 @@ function updateDropdownsValues() {
         value: 0
       });
     });
-  });
+  }).catch(error => {
+    ErrorsLogService.logError('Dasboard', error.toString(), 'dashboardProjectsFilter');
+  })
 }
 
 function calculateOverallStatusStacked(reports, idx) {
@@ -533,3 +563,4 @@ function calculateOverallStatusForBusinessUnitStacked(reports, idx) {
     }
   });
 }
+

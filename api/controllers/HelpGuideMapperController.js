@@ -32,11 +32,14 @@ module.exports = {
           });
         }
       } else {
+        ErrorsLogService.logError('HelpGuideMapper', `id: ${req.params.id}, Data Not Found`, 'show', req);
         res.badRequest({
           message: 'Data not Found'
         });
       }
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('HelpGuideMapper', `id: ${req.params.id}, ` + error.toString(), 'show', req);
+    })
   },
 
   update: async (req, res) => {
@@ -56,8 +59,8 @@ module.exports = {
       id: id
     }).then(async helpGuideObj => {
       if (helpGuideObj.type == 'text') {
-        delete(deFile[helpGuideObj.value]);
-        delete(frFile[helpGuideObj.value]);
+        delete (deFile[helpGuideObj.value]);
+        delete (frFile[helpGuideObj.value]);
       }
 
       if (obj.type == 'text') {
@@ -82,7 +85,9 @@ module.exports = {
           });
         }
       });
-    });
+    }).catch(error => {
+      ErrorsLogService.logError('HelpGuideMapper', `id: ${req.params.id}, ` + error.toString(), 'update', req);
+    })
   }
 
 };

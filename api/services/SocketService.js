@@ -12,6 +12,20 @@ server.listen(5000, () => {
   console.log('Socket server started on port 5000.')
 });
 const io = require('socket.io')(server);
+const jwt = require('jsonwebtoken');
+
+io.use(function (socket, next) {
+  if (socket.handshake.query && socket.handshake.query.token) {
+    jwt.verify(socket.handshake.query.token, sails.config.secret, function (err, authData) {
+      if (err) return next(new Error('Authentication error'));
+      socket.user = authData;
+      next();
+    });
+  } else {
+    next(new Error('Authentication error'));
+  }
+});
+
 
 module.exports.io = io;
 

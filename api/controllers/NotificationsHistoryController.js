@@ -10,8 +10,12 @@ const io = SocketService.io;
 io.on('connection', socket => {
 
   socket.on('getCount', async data => {
-    let notificationsCount = await NotificationsHistory.count();
-    socket.emit('getCount', notificationsCount);
+    try {
+      let notificationsCount = await NotificationsHistory.count();
+      socket.emit('getCount', notificationsCount);
+    } catch (error) {
+      ErrorsLogService.logError('NotificationsHistory', error.toString(), 'getCount', '', socket.user.id);
+    }
   });
 
   socket.on('createNotification', async data => {
@@ -30,8 +34,7 @@ io.on('connection', socket => {
         });
     }
     catch (err) {
-      console.log(err);
-      socket.emit('notification', err);
+      ErrorsLogService.logError('NotificationsHistory', err.toString(), 'createNotification', '', socket.user.id);
     }
   });
 
@@ -59,7 +62,7 @@ io.on('connection', socket => {
           socket.emit('notificationsIndex', { unseen: 0, allNotifications: '' });
         }
       }).catch(error => {
-        socket.emit('notificationsIndex', error);
+        ErrorsLogService.logError('NotificationsHistory', error.toString(), 'notificationsIndex', '', socket.user.id);
       })
   });
 });
@@ -91,6 +94,7 @@ module.exports = {
           res.ok({ unseen, allNotifications });
         }
       }).catch(error => {
+        ErrorsLogService.logError('NotificationsHistory', error.toString(), 'getAllNotifications', req);
         res.badRequest(error);
       })
   },

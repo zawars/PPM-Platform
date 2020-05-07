@@ -19,52 +19,59 @@ io.on('connection', socket => {
             id: element.id,
             eventDate: new Date(element.eventDate).toDateString(),
             description: element.description,
-            type: element.isPast ? 'Past' : 'Upcoming'
+            type: element.isPast ? 'Past' : 'Upcoming',
+            linkText: element.linkText,
+            link: element.link
           }
           newsArray.push(newsItem);
         });
         socket.emit('newsIndex', newsArray);
       }).catch(error => {
-        socket.emit('newsIndex', error);
+        ErrorsLogService.logError('News', error.toString(), 'newsIndex', '', socket.user.id);
       });
   });
 
   socket.on('newsCount', async data => {
-    let count = await News.count();
-    socket.emit('newsCount', count);
+    try {
+      let count = await News.count();
+      socket.emit('newsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('News', error.toString(), 'newsCount', '', socket.user.id);
+    }
   });
 
   //To search in data table of News
   socket.on('newsSearch', async data => {
     let search = data.search;
-    try {
-      let count = await News.count({
-        or: [
-          { eventDate: { contains: search } },
-          { description: { contains: search } }
-        ]
-      });
 
-      News.find({
-        or: [
-          { eventDate: { contains: search } },
-          { description: { contains: search } }]
-      }).limit(10).populateAll().sort('eventDate DESC').then(newsResp => {
-        let newsArray = [];
-        newsResp.forEach(element => {
-          let newsItem = {
-            id: element.id,
-            eventDate: new Date(element.eventDate).toDateString(),
-            description: element.description,
-            type: element.isPast ? 'Past' : 'Upcoming'
-          }
-          newsArray.push(newsItem);
-        });
-        socket.emit('newsSearch', { count: count, news: newsArray });
+    let count = await News.count({
+      or: [
+        { eventDate: { contains: search } },
+        { description: { contains: search } }
+      ]
+    });
+
+    News.find({
+      or: [
+        { eventDate: { contains: search } },
+        { description: { contains: search } }]
+    }).limit(10).populateAll().sort('eventDate DESC').then(newsResp => {
+      let newsArray = [];
+      newsResp.forEach(element => {
+        let newsItem = {
+          id: element.id,
+          eventDate: new Date(element.eventDate).toDateString(),
+          description: element.description,
+          type: element.isPast ? 'Past' : 'Upcoming',
+          linkText: element.linkText,
+          link: element.link
+        }
+        newsArray.push(newsItem);
       });
-    } catch (error) {
-      console.log(error);
-    }
+      socket.emit('newsSearch', { count: count, news: newsArray });
+    }).catch(error => {
+      ErrorsLogService.logError('News', error.toString(), 'newsSearch', '', socket.user.id);
+    });
   });
 
   //To paginate search results of News
@@ -82,11 +89,15 @@ io.on('connection', socket => {
           id: element.id,
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
-          type: element.isPast ? 'Past' : 'Upcoming'
+          type: element.isPast ? 'Past' : 'Upcoming',
+          linkText: element.linkText,
+          link: element.link
         }
         newsArray.push(newsItem);
       });
       socket.emit('newsSearchIndex', newsArray);
+    }).catch(error => {
+      ErrorsLogService.logError('News', error.toString(), 'newsSearchIndex', '', socket.user.id);
     });
   });
 
@@ -99,9 +110,13 @@ io.on('connection', socket => {
         let newsItem = {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
+          linkText: element.linkText,
+          link: element.link
         }
         pastNews.push(newsItem);
       });
+    }).catch(err => {
+      ErrorsLogService.logError('News', err.toString(), 'newsByType', '', socket.user.id);
     });
 
     News.find({ isPast: false }).sort('eventDate DESC').limit(10).then(newsResp => {
@@ -109,10 +124,14 @@ io.on('connection', socket => {
         let newsItem = {
           eventDate: new Date(element.eventDate).toDateString(),
           description: element.description,
+          linkText: element.linkText,
+          link: element.link
         }
         upcomingNews.push(newsItem);
       });
       socket.emit('newsByType', { upcomingNews, pastNews });
+    }).catch(err => {
+      ErrorsLogService.logError('News', JSON.stringify(err), 'newsByType', '', socket.user.id);
     });
   })
 })
@@ -133,13 +152,16 @@ module.exports = {
             id: element.id,
             eventDate: new Date(element.eventDate).toDateString(),
             description: element.description,
-            type: element.isPast ? 'Past' : 'Upcoming'
+            type: element.isPast ? 'Past' : 'Upcoming',
+            linkText: element.linkText,
+            link: element.link
           }
           newsArray.push(newsItem);
         });
         resp.ok(newsArray);
       })
       .catch(err => {
+        ErrorsLogService.logError('News', err.toString(), 'index', req);
         resp.badRequest(err);
       })
   },
@@ -148,6 +170,8 @@ module.exports = {
     let data = req.body;
     News.create(data).then(response => {
       res.ok(response);
+    }).catch(error => {
+      ErrorsLogService.logError('News', error.toString(), 'create', req);
     });
   },
 };

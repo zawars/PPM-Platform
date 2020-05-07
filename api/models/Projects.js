@@ -71,8 +71,8 @@ module.exports = {
       type: 'string',
       defaultsTo: 'project'
     },
-    digitalizationDegree: {
-      model: 'dropdownMapper',
+    itPlatform: {
+      type: 'json',
     },
     projectReport: {
       model: 'reports'
@@ -112,6 +112,12 @@ module.exports = {
     portfolio: {
       model: 'portfolio',
     },
+    subPortfolio: {
+      model: 'subPortfolio',
+    },
+    ganttChart: {
+      type: 'json'
+    }
   },
 
   beforeCreate: (values, cb) => {

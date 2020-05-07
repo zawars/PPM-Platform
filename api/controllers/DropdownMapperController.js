@@ -25,6 +25,7 @@ module.exports = {
           fr: fr
         });
       } else {
+        ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, Data not found`, 'show', req);
         res.badRequest({
           message: 'Data not Found'
         });
@@ -33,27 +34,31 @@ module.exports = {
   },
 
   delete: (req, res) => {
-    let id = req.params.id;
-    let deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
-    let frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
+    try {
+      let id = req.params.id;
+      let deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
+      let frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
 
-    DropdownMapper.findOne({
-      id: id
-    }).then(dropdownObj => {
-      delete (deFile[dropdownObj.name]);
-      delete (frFile[dropdownObj.name]);
-
-      fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2));
-      fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2));
-
-      DropdownMapper.destroy({
+      DropdownMapper.findOne({
         id: id
-      }).then(response => {
-        res.ok({
-          data: response,
+      }).then(dropdownObj => {
+        delete (deFile[dropdownObj.name]);
+        delete (frFile[dropdownObj.name]);
+
+        fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2));
+        fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2));
+
+        DropdownMapper.destroy({
+          id: id
+        }).then(response => {
+          res.ok({
+            data: response,
+          });
         });
       });
-    });
+    } catch (error) {
+      ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, ` + error.toString(), 'delete', req);
+    }
   },
 
   update: (req, res) => {
@@ -86,21 +91,29 @@ module.exports = {
           de: deFile,
           fr: frFile
         });
-      });
-    });
+      }).catch(error => {
+        ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, ` + error.toString(), 'update', req);
+      })
+    }).catch(error => {
+      ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, ` + error.toString(), 'update', req);
+    })
   },
 
   positionSort: async (req, res) => {
     let data = req.body;
-
-    data.forEach(async val => {
-      await DropdownMapper.update({
-        id: val.id
-      }).set({
-        position: val.position
+    try {
+      data.forEach(async val => {
+        await DropdownMapper.update({
+          id: val.id
+        }).set({
+          position: val.position
+        });
       });
-    });
 
-    res.ok(data);
+      res.ok(data);
+    }
+    catch (error) {
+      ErrorsLogService.logError('DropdownMapper', error.toString(), 'positionSort', req);
+    }
   }
 };

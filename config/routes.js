@@ -63,6 +63,7 @@ module.exports.routes = {
   'GET /getOutlinesByUser/:id': 'OutlineApprovalController.getOutlinesByUser',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
+  'POST /notifyAdmins': 'UserController.notifyAdminsbyEmail',
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
@@ -100,21 +101,23 @@ module.exports.routes = {
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
+  'GET /projects/activeProjects/:search': 'ProjectsController.activeProjectsSearch',
   'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
+  'GET /projects/search/:query': 'ProjectsController.search',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
+  'GET /reports/search/:query': 'ReportsController.searchProjectsReports',
   'POST /budgetImport': 'ReportsController.budgetImport',
   'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
-  'GET /reports/exceldump/upload/sharepoint': 'ReportsController.uploadExcelDumpToDrive',
   'GET /reports/portfolio/:id/:subPortfolio': 'ReportsController.getProjectsBySubPortfolio',
   'PUT /reports/:id': 'ReportsController.update',
 
   // Team Api
-  'GET /getTeamByProject/:id': 'TeamController.projectTeam',
-  'GET /getUserTeamProjects/:id': 'TeamController.userTeamProjects',
+  'GET /project/team/:id': 'TeamController.projectTeam',
+  'GET /user/team/project/:id': 'TeamController.userTeamProjects',
 
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
@@ -123,6 +126,8 @@ module.exports.routes = {
   'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
   'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',
   'GET /projectBudgetCost/year/:id': 'ProjectBudgetCostController.budgetsByYear',
+  'POST /createProjectBudgetCostbyYear': 'ProjectBudgetCostController.createBudgetByYear',
+  'POST /updateMultipleProjectsBudget': 'ProjectBudgetCostController.updateMultipleProjectsBudget',
 
   //News
   'GET /news': 'NewsController.index',
@@ -133,5 +138,58 @@ module.exports.routes = {
   'GET /seenNotifications': 'NotificationsHistoryController.seenNotifications',
 
   //Dashboard
-  'GET /getDashboardData': 'DashboardController.getDashboard'
+  'GET /getDashboardData': 'DashboardController.getDashboard',
+
+  //Subportfolio budget
+  'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
+  'POST /portfolioBudgetYear/fixYearlyBudget': 'PortfolioBudgetYearController.fixYearlyBudget',
+  'POST /portfolioBudgetYear/fixAllYearlyBudget': 'PortfolioBudgetYearController.fixAllYearlyBudget',
+
+  //Subportfolio status report
+  'GET /subportfolio/statusReports/:subportfolioId': 'SubportfolioStatusReportController.statusReportsbySubportfolio',
+
+  //Subportfolio
+  'POST /subPortfolio': 'SubPortfolioController.create',
+  //ProjectOutline
+  'PUT /project/outline': 'ProjectOutlineController.updateProjectOutline',
+
+  //ProjectOrder
+  'PUT /project/order': 'ProjectOrderController.updateProjectOrder',
+  'POST /project/order/approval': 'ProjectOrderController.submitOrder',
+  'PUT /project/order/approval': 'ProjectOrderController.submitOrderUpdateCase',
+
+  //ChangeRequest
+  'POST /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequest',
+  'PUT /project/changeRequest/approval': 'ChangeRequestController.submitChangeRequestUpdateCase',
+
+  //ClosingReport
+  'POST /project/closingReport/approval': 'ClosingReportController.submitClosingReport',
+  'PUT /project/closingReport/approval': 'ClosingReportController.submitClosingReportUpdateCase',
+
+  // Translation Api
+  'GET /translation': 'TranslationController.index',
+  'POST /translation': 'TranslationController.create',
+  'PUT /translation': 'TranslationController.update',
+  'DELETE /translation/:en': 'TranslationController.delete',
+
+  // SmallOrder Api
+  'GET /smallOrder': 'SmallOrderController.getSmallOrders',
+  'GET /smallOrder/user/:id': 'SmallOrderController.getSmallOrdersByUser',
+  'GET /smallOrder/sponsor/:id': 'SmallOrderController.getSmallOrdersBySponsor',
+
+  // SmallOrderStatusReport Api
+  'GET /smallOrder/statusReport/:id/:prev/:current': 'SmallOrderStatusReportController.getPreviousCurrentOrderReport',
+  'GET /smallOrder/statusReport/:id/:reportId': 'SmallOrderStatusReportController.getOrderReport',
+
+  //Program Budget
+  'POST /createProgramBudget': 'ProgramBudgetCostController.createProgramBudget',
+  'POST /createNewProgramBudgetYear': 'ProgramBudgetCostController.createNewBudgetYear',
+  'GET /getBudgetCostByProgram/:id': 'ProgramBudgetCostController.getBudgetCostByProgram',
+
+  //Small Order BudgetCost
+  'POST /createOrderBudget': 'OrderBudgetCostController.createOrderBudgetCost',
+  'GET /orderBudgetCost/year/:id': 'OrderBudgetCostController.budgetsByYear',
+  'POST /updateMultipleOrdersBudget': 'OrderBudgetCostController.updateMultipleOrdersBudget',
+  'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget'
+
 };

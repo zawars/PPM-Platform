@@ -10,8 +10,11 @@ const fs = require('fs');
 module.exports = {
   fetchLanguage: (req, res) => {
     let locale = req.params.id;
-
-    let file = fs.readFileSync('assets/langs/' + locale + '.json', 'utf8')
-    res.ok(file);
+    try {
+      let file = fs.readFileSync('assets/langs/' + locale + '.json', 'utf8')
+      res.ok(file);
+    } catch (error) {
+      ErrorsLogService.logError('Notifications', error.toString(), 'fetchLanguage', req);
+    }
   }
 };

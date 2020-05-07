@@ -1,5 +1,5 @@
 /**
- * SubPortfolio.js
+ * ProgramBudgetYear.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -13,42 +13,22 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    name: {
+    year: {
       type: 'string',
-    },
-    currentYear: {
-      type: 'string',
-    },
-    documentLink: {
-      type: 'string',
-    },
-    statusReportReminder: {
-      type: 'string'
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-    portfolio: {
-      model: 'portfolio',
-    },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    costYears: {
-      collection: 'PortfolioBudgetYear',
-      via: 'subPortfolio'
-    },
-    projects: {
-      collection: 'projects',
-      via: 'subPortfolio'
-    },
-    smallOrders: {
-      collection: 'SmallOrder',
-      via: 'subPortfolio'
-    },
 
+    programBudgetCost: {
+      collection: 'programBudgetCost',
+      via: 'programBudgetYear'
+    },
   },
 
 };

@@ -9,62 +9,86 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
-  socket.on('oneProgram', data => {
-    Program.findOne({ id: data.programId }).populateAll().then(program => {
-      socket.emit('oneProgram', program);
-    }).catch(err => {
-      console.log(err);
+  socket.on('fetchProgram', data => {
+    Program.findOne({
+      id: data.programId
+    }).populateAll().then(program => {
+      socket.emit('fetchProgram', program);
+    }).catch(error => {
+      ErrorsLogService.logError('Program', `id: ${data.programId}, ` + error.toString(), 'fetchProgram', '', socket.user.id);
     });
   });
 
   socket.on('activePrograms', data => {
-    Program.find({ status: 'Active' }).populateAll().then(programsList => {
+    Program.find({
+      status: 'Active'
+    }).sort({ programName: 'ASC' }).populateAll().then(programsList => {
       socket.emit('activePrograms', programsList);
-    }).catch(err => {
-      console.log(err);
+    }).catch(error => {
+      ErrorsLogService.logError('Program', error.toString(), 'activePrograms', '', socket.user.id);
+    });
+  });
+
+  socket.on('allPrograms', data => {
+    Program.find().sort({ programName: 'ASC' }).populateAll().then(programsList => {
+      socket.emit('allPrograms', programsList);
+    }).catch(error => {
+      ErrorsLogService.logError('Program', error.toString(), 'allPrograms', '', socket.user.id);
     });
   });
 
   socket.on('programsIndex', data => {
     if (data.userId) {
       Program.find({
-        or: [{
-          programManager: data.userId
-        },
-        {
-          programSponsor: data.userId
-        }]
-      }).paginate({ page: data.pageIndex, limit: data.pageSize })
-        .populateAll().sort('createdAt DESC').then(programs => {
+          or: [{
+              programManager: data.userId
+            },
+            {
+              programSponsor: data.userId
+            }
+          ]
+        }).paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .populateAll().then(programs => {
           socket.emit('programsIndex', programs);
         }).catch(error => {
-          socket.emit('programsIndex', error);
+          ErrorsLogService.logError('Program', error.toString(), 'programsIndex', '', socket.user.id);
         });
     } else {
       Program.find()
-        .paginate({ page: data.pageIndex, limit: data.pageSize })
-        .populateAll().sort('createdAt DESC').then(programs => {
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .populateAll().then(programs => {
           socket.emit('programsIndex', programs);
         }).catch(error => {
-          socket.emit('programsIndex', error);
+          ErrorsLogService.logError('Program', `id: ${data.userId}, ` + error.toString(), 'programsIndex', '', socket.user.id);
         });
     }
   });
 
   socket.on('programsCount', async data => {
-    if (data.userId) {
-      let count = await Program.count({
-        or: [{
-          programManager: data.userId
-        },
-        {
-          programSponsor: data.userId
-        }]
-      });
-      socket.emit('programsCount', count);
-    } else {
-      let count = await Program.count();
-      socket.emit('programsCount', count);
+    try {
+      if (data.userId) {
+        let count = await Program.count({
+          or: [{
+              programManager: data.userId
+            },
+            {
+              programSponsor: data.userId
+            }
+          ]
+        });
+        socket.emit('programsCount', count);
+      } else {
+        let count = await Program.count();
+        socket.emit('programsCount', count);
+      }
+    } catch (error) {
+      ErrorsLogService.logError('Program', `id: ${data.userId}, ` + error.toString(), 'programsCount', '', socket.user.id);
     }
   });
 
@@ -73,54 +97,125 @@ io.on('connection', socket => {
     let search = data.search;
 
     if (data.userId) {
-      try {
-        let count = await Program.count({
-          or: [
-            { uid: parseInt(search), programManager: data.userId },
-            { status: { contains: search }, programManager: data.userId },
-            { programName: { contains: search }, programManager: data.userId },
-            { uid: parseInt(search), programSponsor: data.userId },
-            { status: { contains: search }, programSponsor: data.userId },
-            { programName: { contains: search }, programSponsor: data.userId }
-          ],
-        });
 
-        Program.find({
-          or: [
-            { uid: parseInt(search), programManager: data.userId },
-            { status: { contains: search }, programManager: data.userId },
-            { programName: { contains: search }, programManager: data.userId },
-            { uid: parseInt(search), programSponsor: data.userId },
-            { status: { contains: search }, programSponsor: data.userId },
-            { programName: { contains: search }, programSponsor: data.userId }
-          ]
-        }).limit(10).populateAll().sort('createdAt DESC').then(programs => {
-          socket.emit('programsSearch', { count: count, programs });
+      let count = await Program.count({
+        or: [{
+            uid: parseInt(search),
+            programManager: data.userId
+          },
+          {
+            status: {
+              contains: search
+            },
+            programManager: data.userId
+          },
+          {
+            programName: {
+              contains: search
+            },
+            programManager: data.userId
+          },
+          {
+            uid: parseInt(search),
+            programSponsor: data.userId
+          },
+          {
+            status: {
+              contains: search
+            },
+            programSponsor: data.userId
+          },
+          {
+            programName: {
+              contains: search
+            },
+            programSponsor: data.userId
+          }
+        ],
+      });
+
+      Program.find({
+        or: [{
+            uid: parseInt(search),
+            programManager: data.userId
+          },
+          {
+            status: {
+              contains: search
+            },
+            programManager: data.userId
+          },
+          {
+            programName: {
+              contains: search
+            },
+            programManager: data.userId
+          },
+          {
+            uid: parseInt(search),
+            programSponsor: data.userId
+          },
+          {
+            status: {
+              contains: search
+            },
+            programSponsor: data.userId
+          },
+          {
+            programName: {
+              contains: search
+            },
+            programSponsor: data.userId
+          }
+        ]
+      }).limit(10).populateAll().sort('createdAt DESC').then(programs => {
+        socket.emit('programsSearch', {
+          count: count,
+          programs
         });
-      } catch (error) {
-        console.log(error);
-      }
+      }).catch(error => {
+        ErrorsLogService.logError('Program', error.toString(), 'programsSearch', '', socket.user.id);
+      });
     } else {
-      try {
-        let count = await Program.count({
-          or: [
-            { uid: parseInt(search) },
-            { status: { contains: search } },
-            { programName: { contains: search } }
-          ]
+      let count = await Program.count({
+        or: [{
+            uid: parseInt(search)
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            programName: {
+              contains: search
+            }
+          }
+        ]
+      });
+      Program.find({
+        or: [{
+            uid: parseInt(search)
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            programName: {
+              contains: search
+            }
+          }
+        ]
+      }).limit(10).populateAll().sort('createdAt DESC').then(programs => {
+        socket.emit('programsSearch', {
+          count: count,
+          programs
         });
-        Program.find({
-          or: [
-            { uid: parseInt(search) },
-            { status: { contains: search } },
-            { programName: { contains: search } }
-          ]
-        }).limit(10).populateAll().sort('createdAt DESC').then(programs => {
-          socket.emit('programsSearch', { count: count, programs });
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      }).catch(error => {
+        ErrorsLogService.logError('Program', error.toString(), 'programsSearch', '', socket.user.id);
+      });
     }
   });
 
@@ -128,36 +223,72 @@ io.on('connection', socket => {
   socket.on('programsSearchIndex', data => {
     let search = data.search;
     if (data.userId) {
-      try {
-        Program.find({
-          or: [
-            { uid: parseInt(search), programManager: data.userId },
-            { status: { contains: search }, programManager: data.userId },
-            { programName: { contains: search }, programManager: data.userId },
-            { uid: parseInt(search), programSponsor: data.userId },
-            { status: { contains: search }, programSponsor: data.userId },
-            { programName: { contains: search }, programSponsor: data.userId }
-          ]
-        }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('createdAt DESC').then(programs => {
-          socket.emit('programsSearchIndex', programs);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      Program.find({
+        or: [{
+            uid: parseInt(search),
+            programManager: data.userId
+          },
+          {
+            status: {
+              contains: search
+            },
+            programManager: data.userId
+          },
+          {
+            programName: {
+              contains: search
+            },
+            programManager: data.userId
+          },
+          {
+            uid: parseInt(search),
+            programSponsor: data.userId
+          },
+          {
+            status: {
+              contains: search
+            },
+            programSponsor: data.userId
+          },
+          {
+            programName: {
+              contains: search
+            },
+            programSponsor: data.userId
+          }
+        ]
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      }).populateAll().sort('createdAt DESC').then(programs => {
+        socket.emit('programsSearchIndex', programs);
+      }).catch(error => {
+        ErrorsLogService.logError('Program', `userId: ${data.userId},` + error.toString(), 'programsSearchIndex', '', socket.user.id);
+      });
     } else {
-      try {
-        Program.find({
-          or: [
-            { uid: parseInt(search) },
-            { status: { contains: search } },
-            { programName: { contains: search } }
-          ]
-        }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('createdAt DESC').then(programs => {
-          socket.emit('programsSearchIndex', programs);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      Program.find({
+        or: [{
+            uid: parseInt(search)
+          },
+          {
+            status: {
+              contains: search
+            }
+          },
+          {
+            programName: {
+              contains: search
+            }
+          }
+        ]
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      }).populateAll().sort('createdAt DESC').then(programs => {
+        socket.emit('programsSearchIndex', programs);
+      }).catch(error => {
+        ErrorsLogService.logError('Program', error.toString(), 'programsSearchIndex', '', socket.user.id);
+      });
     }
   });
 })
@@ -166,29 +297,35 @@ io.on('connection', socket => {
 
 module.exports = {
   getActivePrograms: (req, res) => {
-    Program.find({ status: 'Active' }).populateAll().then(programsList => {
+    Program.find({
+      status: 'Active'
+    }).populateAll().then(programsList => {
       res.ok(programsList);
-    }).catch(err => {
-      res.badRequest(err);
+    }).catch(error => {
+      ErrorsLogService.logError('Program', error.toString(), 'getActivePrograms', req);
+      res.badRequest(error);
     });
   },
 
-  /* Excel Point No 3 */
   getProgramsByUser: (req, res) => {
+    let limit = 0;
+    if (req.param('limit')) {
+      limit = req.param('limit');
+    }
     Program.find({
       or: [{
-        programManager: req.params.id
-      },
-      {
-        programSponsor: req.params.id
-      }]
-    }).populateAll().then(response => {
+          programManager: req.params.id
+        },
+        {
+          programSponsor: req.params.id
+        }
+      ]
+    }).limit(limit).populateAll().then(response => {
       res.ok(response);
-    }).catch(err => {
-      res.badRequest(err);
+    }).catch(error => {
+      let userId = req.params.id;
+      ErrorsLogService.logError('Program', `userId: ${userId},` + error.toString(), 'getProgramsByUser/:id', req);
+      res.badRequest(error);
     });
   },
-  /* Excel Point No 3 */
 };
-
- 

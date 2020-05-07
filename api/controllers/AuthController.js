@@ -37,7 +37,11 @@ module.exports = {
             EmailService.samlStrategy.logout(req, function (err, uri) {
               if (!err) {
                 //redirect to the IdP Logout URL
-                res.ok({ uri });
+                res.ok({
+                  uri
+                });
+              } else {
+                ErrorsLogService.logError('Auth', err.toString(), 'logout', req);
               }
             });
           });
@@ -74,6 +78,7 @@ module.exports = {
         req.forbidden('User not found');
       }
     } catch (error) {
+      ErrorsLogService.logError('Auth', error.toString(), 'externalLogin', req);
       res.badRequest(error)
     }
   },
@@ -109,6 +114,7 @@ module.exports = {
         });
       }
     } catch (error) {
+      ErrorsLogService.logError('Auth', error.toString(), 'verifyTokenExternal', req);
       res.badRequest(error)
     }
   },
@@ -139,16 +145,22 @@ module.exports = {
                   Location: config.callbackRedirectUrl + createdObj.id + params
                 });
                 res.end();
-              });
+              }).catch(error => {
+                ErrorsLogService.logError('Auth', error.toString(), 'samlConsumeToken', req);
+              })
             } else {
-              await User.update({ email: email }).set({ format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format });
+              await User.update({
+                email: email
+              }).set({
+                format: result['samlp:Response'].Assertion[0].Subject[0].NameID[0]['$'].Format
+              });
               res.writeHead(301, {
                 Location: config.callbackRedirectUrl + user[0].id + params
               });
               res.end();
             }
           }).catch(err => {
-            console.log(err);
+            ErrorsLogService.logError('Auth', err.toString(), 'samlConsumeToken', req);
           });
         });
       }
@@ -169,6 +181,8 @@ module.exports = {
     });
 
     if (userObj != undefined) {
+      delete(userObj.tablesState);
+
       req.session.user = userObj;
       jwt.sign({
         user: userObj

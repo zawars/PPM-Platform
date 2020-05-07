@@ -1,7 +1,7 @@
 /**
- * SubPortfolio.js
+ * ErrorsLog.js
  *
- * @description :: A model definition represents a database table/collection.
+ * @description :: Records log in database of each error produced by API Call in system.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
@@ -9,46 +9,37 @@ module.exports = {
 
   attributes: {
 
+
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    module: {
+      type: 'string',
+      required: true
+    },
+    errorDescription: {
+      type: 'string',
+      required: true
+    },
+    api: {
+      type: 'string',
+      required: true
+    },
 
-    name: {
-      type: 'string',
-    },
-    currentYear: {
-      type: 'string',
-    },
-    documentLink: {
-      type: 'string',
-    },
-    statusReportReminder: {
-      type: 'string'
-    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-    portfolio: {
-      model: 'portfolio',
-    },
+
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    costYears: {
-      collection: 'PortfolioBudgetYear',
-      via: 'subPortfolio'
-    },
-    projects: {
-      collection: 'projects',
-      via: 'subPortfolio'
-    },
-    smallOrders: {
-      collection: 'SmallOrder',
-      via: 'subPortfolio'
-    },
+    user: {
+      model: 'user'
+    }
 
   },
 
 };
+

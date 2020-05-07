@@ -116,13 +116,13 @@ module.exports.sockets = {
 
 
   /***************************************************************************
-  *                                                                          *
-  * `afterDisconnect`                                                        *
-  *                                                                          *
-  * This custom afterDisconnect function will be run each time a socket      *
-  * disconnects                                                              *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * `afterDisconnect`                                                        *
+   *                                                                          *
+   * This custom afterDisconnect function will be run each time a socket      *
+   * disconnects                                                              *
+   *                                                                          *
+   ***************************************************************************/
   // afterDisconnect: function(session, socket, cb) {
   //   // By default: do nothing.
   //   return cb();

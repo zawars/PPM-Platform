@@ -32,7 +32,7 @@ io.on('connection', socket => {
   //To paginate smallOrders table for user
   socket.on('smallOrdersByUserIndex', async data => {
     try {
-      let smallOrders = await SmallOrder.find({ user: data.userId }).paginate({ page: data.pageIndex, limit: data.pageSize })
+      let smallOrders = await SmallOrder.find({ orderManager: data.userId }).paginate({ page: data.pageIndex, limit: data.pageSize })
         .populateAll().sort('createdAt DESC');
       socket.emit('smallOrdersByUserIndex', smallOrders);
     } catch (error) {
@@ -43,7 +43,7 @@ io.on('connection', socket => {
   //To get count of total small Orders for user
   socket.on('smallOrdersByUserCount', async data => {
     try {
-      let count = await SmallOrder.count({ user: data.userId });
+      let count = await SmallOrder.count({ orderManager: data.userId });
       socket.emit('smallOrdersByUserCount', count);
     } catch (error) {
       ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersByUserCount', '', socket.user.id);
@@ -119,7 +119,7 @@ module.exports = {
 
   getSmallOrdersByUser: async (req, res) => {
     try {
-      let smallOrders = await SmallOrder.find({ user: req.params.id }).limit(req.query.limit || 10)
+      let smallOrders = await SmallOrder.find({ orderManager: req.params.id }).limit(req.query.limit || 10)
         .populateAll().sort('createdAt DESC');
       res.ok(smallOrders);
     } catch (error) {

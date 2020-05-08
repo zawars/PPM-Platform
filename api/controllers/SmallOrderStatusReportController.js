@@ -30,5 +30,16 @@ module.exports = {
     }
   },
 
+  getStatusReportsByOrder: (req, res) => {
+    SmallOrderStatusReport.find({
+      smallOrder: req.params.id
+    }).then(reports => {
+      res.ok(reports);
+    }).catch(err => {
+      ErrorsLogService.logError('Small Order Status Reports', `id: ${req.params.id}, ` + err.toString(), 'getStatusReportsByOrder', req);
+      res.badRequest(err);
+    });
+  },
+
 };
 

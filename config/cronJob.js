@@ -375,17 +375,18 @@ async function uploadExcelDumpToDrive(req, res) {
 
       let dependencies = [];
       if (reportObj.impactedByDependenciesTable) {
-        reportObj.impactedByDependenciesTable.forEach(async val => {
-          let dependeeProject = await Projects.find({
-            id: val.project
-          });
+        reportObj.impactedByDependenciesTable.forEach(val => {
+          // let dependeeProject = await Projects.find({
+          //   id: val.project
+          // });
 
           dependencies.push({
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
             description: val.description,
             impact: val.impact != undefined ? val.impact.name : '',
-            project: dependeeProject ? dependeeProject.projectName : ''
+            // project: dependeeProject ? dependeeProject.projectName : ''
+            project: val.project
           });
         });
         dependenciesList.push(...dependencies);
@@ -461,7 +462,7 @@ async function uploadExcelDumpToDrive(req, res) {
       }
     });
 
-    pipelineProjects.forEach(pipelineProject => {
+    pipelineProjects.forEach(async pipelineProject => {
       let totalBudget;
       let budget;
       let businessUnit;
@@ -486,6 +487,17 @@ async function uploadExcelDumpToDrive(req, res) {
         fico = pipelineProject.projectOrder[0].projectFico.name;
       }
 
+      let portfolio = {
+        id: '',
+        name: ''
+      };
+
+      if (pipelineProject.subPortfolio) {
+        portfolio = await Portfolio.findOne({
+          id: pipelineProject.subPortfolio.portfolio
+        });
+      }
+
       pipelineProjectsList.push({
         projectId: pipelineProject.uid,
         projectName: pipelineProject.projectName,
@@ -496,8 +508,10 @@ async function uploadExcelDumpToDrive(req, res) {
         businessArea,
         totalBudget,
         budget,
-        portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
-        subPortfolio: reportObj.subPortfolio,
+        portfolio: portfolio.id,
+        portfolioName: portfolio.name,
+        subPortfolio: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.id : '',
+        subPortfolio: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.name : '',
       });
     });
 

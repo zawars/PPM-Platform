@@ -324,20 +324,24 @@ async function uploadExcelDumpToDrive(req, res) {
       let outlineQues = [];
       reportObj.question.forEach((val, idx) => {
         outlineQues.push({
+          department: outlineQuestions[idx].department,
           question: outlineQuestions[idx].question,
           answer: val,
           projectId: reportObj.uid,
-          projectName: reportObj.projectName
+          projectName: reportObj.projectName,
+          document: 'Outline'
         });
       });
       let orderQues = [];
       if (reportObj.orderQuestion) {
         reportObj.orderQuestion.forEach((val, idx) => {
           orderQues.push({
+            department: orderQuestions[idx].department,
             question: orderQuestions[idx].question,
             answer: val,
             projectId: reportObj.uid,
-            projectName: reportObj.projectName
+            projectName: reportObj.projectName,
+            document: 'Order'
           });
         });
       }
@@ -345,10 +349,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (reportObj.changeRequestQuestion) {
         reportObj.changeRequestQuestion.forEach((val, idx) => {
           changeQues.push({
+            department: changeReqQuestions[idx].department,
             question: changeReqQuestions[idx].question,
             answer: val,
             projectId: reportObj.uid,
-            projectName: reportObj.projectName
+            projectName: reportObj.projectName,
+            document: 'Change Request'
           });
         });
       }
@@ -356,10 +362,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (reportObj.closingQuestion) {
         reportObj.closingQuestion.forEach((val, idx) => {
           closingQuestions.push({
+            department: closingRepQuestions[idx].department,
             question: closingRepQuestions[idx].question,
             answer: val,
             projectId: reportObj.uid,
-            projectName: reportObj.projectName
+            projectName: reportObj.projectName,
+            document: 'Closing Report'
           });
         });
       }
@@ -368,10 +376,10 @@ async function uploadExcelDumpToDrive(req, res) {
       let dependencies = [];
       if (reportObj.impactedByDependenciesTable) {
         reportObj.impactedByDependenciesTable.forEach(async val => {
-          // let dependeeProject = dropdowns.projectList.find(obj => obj.id == val.project);
           let dependeeProject = await Projects.find({
             id: val.project
           });
+
           dependencies.push({
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
@@ -380,7 +388,7 @@ async function uploadExcelDumpToDrive(req, res) {
             project: dependeeProject ? dependeeProject.projectName : ''
           });
         });
-        dependenciesList.push(...dependencies)
+        dependenciesList.push(...dependencies);
       }
     });
 
@@ -487,7 +495,9 @@ async function uploadExcelDumpToDrive(req, res) {
         businessUnit,
         businessArea,
         totalBudget,
-        budget
+        budget,
+        portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
+        subPortfolio: reportObj.subPortfolio,
       });
     });
 
@@ -713,25 +723,25 @@ async function uploadExcelDumpToDrive(req, res) {
     const filename = `Excel-Dump.xlsx`;
     XLSX.writeFile(workbook, filename);
 
-    let promise = XlsxPopulate.fromFileAsync(process.cwd() + "/Excel-Dump.xlsx").then(workbookObj => {
-      return workbookObj.toFileAsync("./Excel-Dump.xlsx", {
-        password: "kitcHlew2020$"
-      });
+    // let promise = XlsxPopulate.fromFileAsync(process.cwd() + "/Excel-Dump.xlsx").then(workbookObj => {
+    //   return workbookObj.toFileAsync("./Excel-Dump.xlsx", {
+    //     password: "kitcHlew2020$"
+    //   });
+    // });
+
+    // promise.then(success => {
+    let newPath = process.cwd().split('\\');
+    newPath.pop();
+    newPath = newPath.join('\\');
+
+    fs.rename(`${process.cwd()}/Excel-Dump.xlsx`, newPath + '\\uploads\\Excel-Dump.xlsx', err => {
+      if (err) {
+        throw err;
+      }
+
+      console.log('Excel Dump exported.');
     });
-
-    promise.then(success => {
-      let newPath = process.cwd().split('\\');
-      newPath.pop();
-      newPath = newPath.join('\\');
-
-      fs.rename(`${process.cwd()}/Excel-Dump.xlsx`, newPath + '\\uploads\\Excel-Dump.xlsx', err => {
-        if (err) {
-          throw err;
-        }
-
-        console.log('Excel Dump exported.');
-      });
-    });
+    // });
   } catch (error) {
     console.log(error)
     ErrorsLogService.logError('Reports', error.toString(), 'uploadExcelDumpToDrive', req);

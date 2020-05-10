@@ -43,13 +43,15 @@ async function uploadExcelDumpToDrive(req, res) {
   try {
     const XLSX = require('xlsx');
     const moment = require('moment');
+    var {
+      DateTime
+    } = require('luxon');
     const fs = require('fs');
     const XlsxPopulate = require('xlsx-populate');
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
     let generalList = [{
-      date: moment().format('DD.MMM.YYYY'),
-      time: moment().format('HH:mm:ss a')
+      dateTime: DateTime.local().setZone("Europe/Berlin").toLocaleString(DateTime.DATETIME_MED)
     }];
 
     let dropdownsList = await Dropdown.find().populateAll();
@@ -113,8 +115,8 @@ async function uploadExcelDumpToDrive(req, res) {
         milestones.forEach((val, idx) => {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
-          val.dueDate = moment(val.dueDate).format('DD.MMM.YYYY')
-        });
+          val.dueDate = moment(val.dueDate)
+        })
         milestonesList.push(...milestones);
       }
 
@@ -221,7 +223,7 @@ async function uploadExcelDumpToDrive(req, res) {
         projectManager: reportObj.projectManager.name,
         projectSponsor: reportObj.projectSponsor.name,
         portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
-        subPortfolio: reportObj.subPortfolio,
+        subPortfolio: reportObj.subPortfolio.name,
         projectPhase: reportObj.projectPhase ? reportObj.projectPhase.name : '',
         businessSegment: reportObj.businessSegment ? reportObj.businessSegment.name : '',
         reportingLevel: reportObj.reportingLevel ? reportObj.reportingLevel.name : '',

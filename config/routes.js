@@ -180,6 +180,7 @@ module.exports.routes = {
   // SmallOrderStatusReport Api
   'GET /smallOrder/statusReport/:id/:prev/:current': 'SmallOrderStatusReportController.getPreviousCurrentOrderReport',
   'GET /smallOrder/statusReport/:id/:reportId': 'SmallOrderStatusReportController.getOrderReport',
+  'GET /getStatusReportsByOrder/:id': 'SmallOrderStatusReportController.getStatusReportsByOrder',
 
   //Program Budget
   'POST /createProgramBudget': 'ProgramBudgetCostController.createProgramBudget',

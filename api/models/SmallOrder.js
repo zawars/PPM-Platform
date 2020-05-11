@@ -34,7 +34,7 @@ module.exports = {
     goals: {
       type: 'json'
     },
-    deliverables:{
+    deliverables: {
       type: 'json'
     },
     currency: {
@@ -43,10 +43,10 @@ module.exports = {
     qualitativeBenefits: {
       type: 'json'
     },
-    quantitativeBenefits : {
+    quantitativeBenefits: {
       type: 'json'
     },
-    budget : {
+    budget: {
       type: 'json'
     },
     itPlatform: {
@@ -58,28 +58,28 @@ module.exports = {
     status: {
       type: 'string'
     },
-    risks : {
+    risks: {
       type: 'json'
     },
     reportRelevantRisksCount: {
       type: 'integer',
       defaultsTo: 0
     },
-    mileStonesValues : {
+    mileStonesValues: {
       type: 'json'
     },
     reportRelevantMilestoneCount: {
       type: 'integer',
       defaultsTo: 0
     },
-    measures : {
+    measures: {
       type: 'json'
     },
     reportRelevantMeasuresCount: {
       type: 'integer',
       defaultsTo: 0
     },
-    decisions : {
+    decisions: {
       type: 'json'
     },
     reportRelevantDecisionCount: {
@@ -131,9 +131,6 @@ module.exports = {
     classification: {
       model: 'dropdownMapper'
     },
-    // projectType: {
-    //   model: 'dropdownMapper'
-    // },
     program: {
       model: 'program'
     },
@@ -149,9 +146,6 @@ module.exports = {
     itRelevant: {
       model: 'dropdownMapper'
     },
-    // projectMethodology: {
-    //   model: 'dropdownMapper'
-    // },
     user: {
       model: 'user',
     },
@@ -180,4 +174,3 @@ module.exports = {
   }
 
 };
-

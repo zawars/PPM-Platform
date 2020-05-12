@@ -843,6 +843,7 @@ module.exports = {
       ErrorsLogService.logError('Projects', error.toString(), 'getClosedProjects', req);
     }
   },
+
   activeProjectsSearch: async (req, res) => {
     let search = req.params.search;
     try {
@@ -873,5 +874,15 @@ module.exports = {
       ErrorsLogService.logError('Projects', err.toString(), 'search', req);
       res.badRequest(err);
     });
+  },
+
+  show: async (req, res) => {
+    if (req.query.populate) {
+      let projects = await Projects.findOne(req.params.id).populateAll();
+      res.ok(projects);
+    } else {
+      let projects = await Projects.findOne(req.params.id);
+      res.ok(projects);
+    }
   },
 };

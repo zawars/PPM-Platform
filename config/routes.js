@@ -150,6 +150,8 @@ module.exports.routes = {
 
   //Subportfolio
   'POST /subPortfolio': 'SubPortfolioController.create',
+  'GET /subPortfolio/:id/projects': 'SubPortfolioController.getSubportfolioProjects',
+
   //ProjectOutline
   'PUT /project/outline': 'ProjectOutlineController.updateProjectOutline',
 

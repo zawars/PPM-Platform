@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+    uid: {
+      type: 'integer',
+      unique: true
+    },
     reports: {
       collection: 'Reports',
       via: 'program'
@@ -21,14 +25,8 @@ module.exports = {
     programManager: {
       model: 'user'
     },
-    /* Excel Point No 3 */
     programSponsor: {
       model: 'user'
-    },
-    /* Excel Point No 3 */
-    uid: {
-      type: 'integer',
-      unique: true
     },
     programBudgetOriginal: {
       type: 'integer'

@@ -43,13 +43,18 @@ async function uploadExcelDumpToDrive(req, res) {
   try {
     const XLSX = require('xlsx');
     const moment = require('moment');
+    var {
+      DateTime
+    } = require('luxon');
     const fs = require('fs');
     const XlsxPopulate = require('xlsx-populate');
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
+    let dateTime = DateTime.local().setZone("Europe/Berlin").toLocaleString(DateTime.DATETIME_MED);
+    dateTime = dateTime.split(',');
     let generalList = [{
-      date: moment().format('DD.MMM.YYYY'),
-      time: moment().format('HH:mm:ss a')
+      date: dateTime[0] + ', ' + dateTime[1],
+      time: dateTime[2]
     }];
 
     let dropdownsList = await Dropdown.find().populateAll();
@@ -87,6 +92,7 @@ async function uploadExcelDumpToDrive(req, res) {
     let programAggregatedCost = [];
     let pipelineProjectsList = [];
     let documentsList = [];
+    let smallOrdersList = [];
 
     let reports = await Reports.find().populateAll();
     let portfolios = await Portfolio.find().populateAll();
@@ -105,6 +111,7 @@ async function uploadExcelDumpToDrive(req, res) {
     let approvals = await OutlineApproval.find().populateAll();
     approvals = approvals.filter(val => val.sentTo == 'PMO');
     let subportfolioBudgetCollection = await PortfolioBudgetYear.find().populateAll();
+    let smallOrders = await SmallOrder.find().populateAll();
 
     // Reports
     reports.forEach(async reportObj => {
@@ -113,7 +120,7 @@ async function uploadExcelDumpToDrive(req, res) {
         milestones.forEach((val, idx) => {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
-          val.dueDate = moment(val.dueDate).format('DD.MMM.YYYY')
+          val.dueDate = val.dueDate != '' ? moment(val.dueDate).format('DD.MMM.YYYY') : ''
         });
         milestonesList.push(...milestones);
       }
@@ -221,7 +228,7 @@ async function uploadExcelDumpToDrive(req, res) {
         projectManager: reportObj.projectManager.name,
         projectSponsor: reportObj.projectSponsor.name,
         portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
-        subPortfolio: reportObj.subPortfolio,
+        subPortfolio: reportObj.subPortfolio.name,
         projectPhase: reportObj.projectPhase ? reportObj.projectPhase.name : '',
         businessSegment: reportObj.businessSegment ? reportObj.businessSegment.name : '',
         reportingLevel: reportObj.reportingLevel ? reportObj.reportingLevel.name : '',
@@ -245,6 +252,7 @@ async function uploadExcelDumpToDrive(req, res) {
         psp: reportObj.psp ? reportObj.psp[0].psp : '',
         currency: reportObj.currency,
         status: reportObj.status,
+        projectClassification: reportObj.classification.name,
         bkwShare: reportObj.bkwShare,
         IRR: reportObj.kpisTable[4].value,
         GwH: reportObj.GwH,
@@ -275,7 +283,7 @@ async function uploadExcelDumpToDrive(req, res) {
         originalBudget: reportObj.costTypeTable[6].originalBudget,
         actualCost: reportObj.costTypeTable[6].actualCost,
         programName: reportObj.program ? reportObj.program.programName : '',
-        reportingDate: reportObj.statusReports.length > 0 ? moment(reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '',
+        reportingDate: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate != '' ? moment(reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '' : '',
       });
 
       if (reportObj.statusReports != undefined) {
@@ -284,7 +292,7 @@ async function uploadExcelDumpToDrive(req, res) {
             projectStatusReports.push({
               projectId: reportObj.uid,
               projectName: reportObj.projectName,
-              reportingDate: moment(statusReportObj.reportingDate).format('DD.MMM.YYYY'),
+              reportingDate: statusReportObj.reportingDate != '' ? moment(statusReportObj.reportingDate).format('DD.MMM.YYYY') : '',
               submittedDate: statusReportObj.submittedDate != undefined ? moment(statusReportObj.submittedDate).format('DD.MMM.YYYY') : '',
               actualCost: statusReportObj.costTypeTable[6].actualCost,
               forecast: statusReportObj.costTypeTable[6].forecast,
@@ -300,7 +308,7 @@ async function uploadExcelDumpToDrive(req, res) {
           obj.reportingDate = moment(obj.reportingDate).format('DD.MMM.YYYY');
           if (Object.keys(obj).length > 1) {
             for (let i = 1; i < Object.keys(obj).length; i++) {
-              obj[`milestone${i}`] = moment(obj[`milestone${i}`]).format('DD.MMM.YYYY');
+              obj[`milestone${i}`] = obj[`milestone${i}`] != '' ? moment(obj[`milestone${i}`]).format('DD.MMM.YYYY') : '';
             }
           }
 
@@ -324,20 +332,24 @@ async function uploadExcelDumpToDrive(req, res) {
       let outlineQues = [];
       reportObj.question.forEach((val, idx) => {
         outlineQues.push({
+          department: outlineQuestions[idx].department,
           question: outlineQuestions[idx].question,
           answer: val,
           projectId: reportObj.uid,
-          projectName: reportObj.projectName
+          projectName: reportObj.projectName,
+          document: 'Outline'
         });
       });
       let orderQues = [];
       if (reportObj.orderQuestion) {
         reportObj.orderQuestion.forEach((val, idx) => {
           orderQues.push({
+            department: orderQuestions[idx].department,
             question: orderQuestions[idx].question,
             answer: val,
             projectId: reportObj.uid,
-            projectName: reportObj.projectName
+            projectName: reportObj.projectName,
+            document: 'Order'
           });
         });
       }
@@ -345,10 +357,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (reportObj.changeRequestQuestion) {
         reportObj.changeRequestQuestion.forEach((val, idx) => {
           changeQues.push({
+            department: changeReqQuestions[idx].department,
             question: changeReqQuestions[idx].question,
             answer: val,
             projectId: reportObj.uid,
-            projectName: reportObj.projectName
+            projectName: reportObj.projectName,
+            document: 'Change Request'
           });
         });
       }
@@ -356,10 +370,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (reportObj.closingQuestion) {
         reportObj.closingQuestion.forEach((val, idx) => {
           closingQuestions.push({
+            department: closingRepQuestions[idx].department,
             question: closingRepQuestions[idx].question,
             answer: val,
             projectId: reportObj.uid,
-            projectName: reportObj.projectName
+            projectName: reportObj.projectName,
+            document: 'Closing Report'
           });
         });
       }
@@ -367,20 +383,21 @@ async function uploadExcelDumpToDrive(req, res) {
 
       let dependencies = [];
       if (reportObj.impactedByDependenciesTable) {
-        reportObj.impactedByDependenciesTable.forEach(async val => {
-          // let dependeeProject = dropdowns.projectList.find(obj => obj.id == val.project);
-          let dependeeProject = await Projects.find({
-            id: val.project
-          });
+        reportObj.impactedByDependenciesTable.forEach(val => {
+          // let dependeeProject = await Projects.find({
+          //   id: val.project
+          // });
+
           dependencies.push({
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
             description: val.description,
             impact: val.impact != undefined ? val.impact.name : '',
-            project: dependeeProject ? dependeeProject.projectName : ''
+            // project: dependeeProject ? dependeeProject.projectName : ''
+            project: val.project
           });
         });
-        dependenciesList.push(...dependencies)
+        dependenciesList.push(...dependencies);
       }
     });
 
@@ -453,11 +470,12 @@ async function uploadExcelDumpToDrive(req, res) {
       }
     });
 
-    pipelineProjects.forEach(pipelineProject => {
+    pipelineProjects.forEach(async pipelineProject => {
       let totalBudget;
       let budget;
       let businessUnit;
       let businessArea;
+      let fico;
       if (pipelineProject.docType == 'Outline') {
         budget = pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].estimatedProjectTable[6].budget : 0;
         totalBudget = pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].fundsApprovedForInitiationTable[6].budget : 0;
@@ -478,16 +496,32 @@ async function uploadExcelDumpToDrive(req, res) {
         fico = pipelineProject.projectOrder[0].projectFico.name;
       }
 
+      let portfolio = {
+        id: '',
+        name: ''
+      };
+
+      if (pipelineProject.subPortfolio) {
+        portfolio = await Portfolio.findOne({
+          id: pipelineProject.subPortfolio.portfolio
+        });
+      }
+
       pipelineProjectsList.push({
         projectId: pipelineProject.uid,
         projectName: pipelineProject.projectName,
         purpose: pipelineProject.projectReport ? pipelineProject.projectReport.purpose : '',
         projectManager: pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].projectManager.name : '',
         projectSponsor: pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].projectSponsor.name : '',
+        projectFico: fico,
         businessUnit,
         businessArea,
         totalBudget,
-        budget
+        budget,
+        portfolio: portfolio.id,
+        portfolioName: portfolio.name,
+        subPortfolio: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.id : '',
+        subPortfolio: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.name : '',
       });
     });
 
@@ -590,6 +624,68 @@ async function uploadExcelDumpToDrive(req, res) {
         }
       }
     }
+
+
+    // Small Orders
+    smallOrders.forEach(smallOrder => {
+      let itPlatforms = '';
+      if (reportObj.itPlatform) {
+        if (reportObj.itPlatform.length > 0) {
+          reportObj.itPlatform.forEach((itPlatform, idx) => {
+            let itPlatformObj = this.utilityService.itPlatformOptions.values.find(val => val.id == itPlatform);
+
+            if (itPlatformObj) {
+              if (idx == 0) {
+                itPlatforms = itPlatformObj.name;
+              } else {
+                itPlatforms = itPlatforms + ', ' + itPlatformObj.name;
+              }
+            }
+          });
+        }
+      }
+
+      smallOrdersList.push({
+        id: smallOrder.uid,
+        name: smallOrder.name,
+        orderManager: smallOrder.orderManager.name,
+        orderSponsor: smallOrder.orderSponsor.name,
+        portfolio: smallOrder.portfolio.name,
+        subPortfolio: smallOrder.subPortfolio.name,
+        businessSegment: smallOrder.businessSegment.name,
+        reportingLevel: smallOrder.reportingLevel.name,
+        businessUnit: smallOrder.businessUnit.name,
+        businessArea: smallOrder.businessArea.name,
+        portfolioId: smallOrder.portfolio.id,
+        strategicContribution: smallOrder.strategicContribution.name,
+        profitability: smallOrder.profitability.name,
+        itRelevant: smallOrder.itRelevant.name,
+        itPlatform: itPlatforms,
+        confidential: smallOrder.confidential,
+        reportStatus: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].status : '',
+        overallStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].overallStatus) : '',
+        scopeStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].scopeStatus) : '',
+        costStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].costStatus) : '',
+        timeStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].timeStatus) : '',
+        riskStatus: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].riskStatus : '',
+        purpose: smallOrder.purpose,
+        percentageComplete: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].percentageComplete : '',
+        managementSummary: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].managementSummary : '',
+        scopeStatusComments: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].scopeStatusComments : '',
+        costStatusComments: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].costStatusComments : '',
+        timeStatusComments: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].timeStatusComments : '',
+        forecastEndDate: moment(smallOrder.forecastEndDate).format('DD.MMM.YYYY'),
+        plannedEndDate: moment(smallOrder.plannedEndDate).format('DD.MMM.YYYY'),
+        startDate: moment(smallOrder.startDate).format('DD.MMM.YYYY'),
+        endDate: moment(smallOrder.endDate).format('DD.MMM.YYYY'),
+        forecast: smallOrder.costTypeTable[6].forecast,
+        currentBudget: smallOrder.costTypeTable[6].currentBudget,
+        originalBudget: smallOrder.costTypeTable[6].originalBudget,
+        actualCost: smallOrder.costTypeTable[6].actualCost,
+        program: smallOrder.program ? smallOrder.program.programName : '',
+        reportingDate: smallOrder.statusReports.length > 0 ? smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate != '' ? moment(smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '' : '',
+      });
+    });
 
     const workbook = XLSX.utils.book_new();
 
@@ -710,28 +806,33 @@ async function uploadExcelDumpToDrive(req, res) {
     });
     XLSX.utils.book_append_sheet(workbook, documentsSheet, 'Documents');
 
+    const smallOrderSheet = XLSX.utils.json_to_sheet(smallOrdersList, {
+      cellDates: true
+    });
+    XLSX.utils.book_append_sheet(workbook, smallOrderSheet, 'Small Orders');
+
     const filename = `Excel-Dump.xlsx`;
     XLSX.writeFile(workbook, filename);
 
-    let promise = XlsxPopulate.fromFileAsync(process.cwd() + "/Excel-Dump.xlsx").then(workbookObj => {
-      return workbookObj.toFileAsync("./Excel-Dump.xlsx", {
-        password: "kitcHlew2020$"
-      });
+    // let promise = XlsxPopulate.fromFileAsync(process.cwd() + "/Excel-Dump.xlsx").then(workbookObj => {
+    //   return workbookObj.toFileAsync("./Excel-Dump.xlsx", {
+    //     password: "kitcHlew2020$"
+    //   });
+    // });
+
+    // promise.then(success => {
+    let newPath = process.cwd().split('\\');
+    newPath.pop();
+    newPath = newPath.join('\\');
+
+    fs.rename(`${process.cwd()}/Excel-Dump.xlsx`, newPath + '\\uploads\\Excel-Dump.xlsx', err => {
+      if (err) {
+        throw err;
+      }
+
+      console.log('Excel Dump exported.');
     });
-
-    promise.then(success => {
-      let newPath = process.cwd().split('\\');
-      newPath.pop();
-      newPath = newPath.join('\\');
-
-      fs.rename(`${process.cwd()}/Excel-Dump.xlsx`, newPath + '\\uploads\\Excel-Dump.xlsx', err => {
-        if (err) {
-          throw err;
-        }
-
-        console.log('Excel Dump exported.');
-      });
-    });
+    // });
   } catch (error) {
     console.log(error)
     ErrorsLogService.logError('Reports', error.toString(), 'uploadExcelDumpToDrive', req);

@@ -11,17 +11,28 @@ io.on('connection', socket => {
 
   socket.on('fetchChangeRequest', async data => {
     try {
-      let project = await Projects.findOne({ id: data.projectId }).populateAll();
+      let project = await Projects.findOne({
+        id: data.projectId
+      }).populateAll();
+      delete(project.approvals);
       let detail;
       let changeRequest;
 
       if (data.changeRequestId == undefined || data.changeRequestId == 0) {
-        detail = await Reports.findOne({ id: project.projectReport.id }).populateAll();
+        detail = await Reports.findOne({
+          id: project.projectReport.id
+        }).populateAll();
       } else {
-        changeRequest = await ChangeRequest.findOne({ id: data.changeRequestId }).populateAll();
+        changeRequest = await ChangeRequest.findOne({
+          id: data.changeRequestId
+        }).populateAll();
       }
 
-      socket.emit('fetchChangeRequest', { project, detail, changeRequest });
+      socket.emit('fetchChangeRequest', {
+        project,
+        detail,
+        changeRequest
+      });
     } catch (error) {
       ErrorsLogService.logError('Change Request', error.toString(), 'fetchChangeRequest', socket.user.id);
     }
@@ -39,8 +50,12 @@ module.exports = {
         id: body.projectId
       }).set(body.projectObj);
 
-      let project = await Projects.findOne({ id: body.projectId }).populateAll();
-      let changeRequest = await ChangeRequest.findOne({ id: changeRequestObj.id }).populateAll();
+      let project = await Projects.findOne({
+        id: body.projectId
+      }).populateAll();
+      let changeRequest = await ChangeRequest.findOne({
+        id: changeRequestObj.id
+      }).populateAll();
 
       let temp = {
         changeRequest: changeRequest,
@@ -73,7 +88,9 @@ module.exports = {
         id: body.changeRequestId
       }).set(body.obj);
 
-      let changeRequest = await ChangeRequest.findOne({ id: body.changeRequestId }).populateAll();
+      let changeRequest = await ChangeRequest.findOne({
+        id: body.changeRequestId
+      }).populateAll();
       let projectObj = {
         changeRequestMade: true,
         docType: 'Change Request',
@@ -88,7 +105,9 @@ module.exports = {
         id: body.projectId
       }).set(projectObj);
 
-      let project = await Projects.findOne({ id: body.projectId }).populateAll();
+      let project = await Projects.findOne({
+        id: body.projectId
+      }).populateAll();
 
       let temp = {
         changeRequest: changeRequest,
@@ -113,4 +132,3 @@ module.exports = {
     }
   },
 };
-

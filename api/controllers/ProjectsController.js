@@ -877,7 +877,7 @@ module.exports = {
   },
 
   show: async (req, res) => {
-    if (req.query.populate) {
+    if (!req.query.populate) {
       let projects = await Projects.findOne(req.params.id).populateAll();
       res.ok(projects);
     } else {

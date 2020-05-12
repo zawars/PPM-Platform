@@ -12,7 +12,7 @@ module.exports = {
         name: req.body.name,
         portfolio: req.body.portfolio,
         subPortfolioManager: req.body.subPortfolioManager,
-        statusReportReminder: req.body.statusReportReminder   // statusReportReminder value is used to how many days after send email reminder those project managers whose do not create a status report according to current date  
+        statusReportReminder: req.body.statusReportReminder // statusReportReminder value is used to how many days after send email reminder those project managers whose do not create a status report according to current date  
       })
       let createdPortfolioBudgetYear = await PortfolioBudgetYear.create({
         year: new Date().getFullYear(),
@@ -33,6 +33,37 @@ module.exports = {
       res.ok(response[0]);
     } catch (error) {
       ErrorsLogService.logError('Subportfolio', error.toString(), 'createSubportfolio', req);
+    }
+  },
+
+  getSubportfolioProjects: async (req, res) => {
+    try {
+      let reports = await Reports.find({
+        'subPortfolio.id': req.params.id
+      }, {
+        fields: {
+          project: 1
+        }
+      });
+
+      let projectIds = [];
+
+      if (reports.length > 0) {
+        for (let i = 0; i < reports.length; i++) {
+          projectIds.push(reports[i].project);
+        }
+
+        let projects = await Projects.find({
+          id: projectIds
+        }).populateAll();
+
+        res.ok(projects);
+
+      } else {
+        res.ok([]);
+      }
+    } catch (error) {
+      ErrorsLogService.logError('Subportfolio', error.toString(), 'getSubportfolioProjects', req);
     }
   }
 };

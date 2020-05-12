@@ -50,8 +50,11 @@ async function uploadExcelDumpToDrive(req, res) {
     const XlsxPopulate = require('xlsx-populate');
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
+    let dateTime = DateTime.local().setZone("Europe/Berlin").toLocaleString(DateTime.DATETIME_MED);
+    dateTime = dateTime.split(',');
     let generalList = [{
-      dateTime: DateTime.local().setZone("Europe/Berlin").toLocaleString(DateTime.DATETIME_MED)
+      date: dateTime[0] + ', ' + dateTime[1],
+      time: dateTime[2]
     }];
 
     let dropdownsList = await Dropdown.find().populateAll();
@@ -117,8 +120,8 @@ async function uploadExcelDumpToDrive(req, res) {
         milestones.forEach((val, idx) => {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
-          val.dueDate = moment(val.dueDate)
-        })
+          val.dueDate = val.dueDate != '' ? moment(val.dueDate).format('DD.MMM.YYYY') : ''
+        });
         milestonesList.push(...milestones);
       }
 
@@ -305,7 +308,7 @@ async function uploadExcelDumpToDrive(req, res) {
           obj.reportingDate = moment(obj.reportingDate).format('DD.MMM.YYYY');
           if (Object.keys(obj).length > 1) {
             for (let i = 1; i < Object.keys(obj).length; i++) {
-              obj[`milestone${i}`] = moment(obj[`milestone${i}`]).format('DD.MMM.YYYY');
+              obj[`milestone${i}`] = obj[`milestone${i}`] != '' ? moment(obj[`milestone${i}`]).format('DD.MMM.YYYY') : '';
             }
           }
 

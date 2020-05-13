@@ -843,6 +843,7 @@ module.exports = {
       ErrorsLogService.logError('Projects', error.toString(), 'getClosedProjects', req);
     }
   },
+
   activeProjectsSearch: async (req, res) => {
     let search = req.params.search;
     try {
@@ -874,4 +875,5 @@ module.exports = {
       res.badRequest(err);
     });
   },
+
 };

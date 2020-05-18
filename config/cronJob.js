@@ -5,17 +5,17 @@ function cronJob(cb) {
   //Synchronize Users
   userController.syncUsers();
 
-  // Email Reminder For Project Order Creation
-  userController.emailReminderOrderCreation();
+  // // Email Reminder For Project Order Creation
+  // userController.emailReminderOrderCreation();
 
-  // sent email reminder for project closing report creation
-  userController.emailReminderClosingReport();
+  // // sent email reminder for project closing report creation
+  // userController.emailReminderClosingReport();
 
-  //send email reminder for those approval which are pending
-  userController.emailReminderPendingApprovals();
+  // //send email reminder for those approval which are pending
+  // userController.emailReminderPendingApprovals();
 
-  //Email Reminder for Status Report Creation
-  userController.emailReminderStatusReport();
+  // //Email Reminder for Status Report Creation
+  // userController.emailReminderStatusReport();
 
   //Synchronize Users Cycle after every 24 Hours
   let intervalTimer = 1000 * 60 * 60 * 24;
@@ -629,10 +629,10 @@ async function uploadExcelDumpToDrive(req, res) {
     // Small Orders
     smallOrders.forEach(smallOrder => {
       let itPlatforms = '';
-      if (reportObj.itPlatform) {
-        if (reportObj.itPlatform.length > 0) {
-          reportObj.itPlatform.forEach((itPlatform, idx) => {
-            let itPlatformObj = this.utilityService.itPlatformOptions.values.find(val => val.id == itPlatform);
+      if (smallOrder.itPlatform) {
+        if (smallOrder.itPlatform.length > 0) {
+          smallOrder.itPlatform.forEach((itPlatform, idx) => {
+            let itPlatformObj = dropdowns.itPlatformValues.values.find(val => val.id == itPlatform);
 
             if (itPlatformObj) {
               if (idx == 0) {
@@ -648,8 +648,8 @@ async function uploadExcelDumpToDrive(req, res) {
       smallOrdersList.push({
         id: smallOrder.uid,
         name: smallOrder.name,
-        orderManager: smallOrder.orderManager.name,
-        orderSponsor: smallOrder.orderSponsor.name,
+        orderManager: smallOrder.orderManager ? smallOrder.orderManager.name : '',
+        orderSponsor: smallOrder.orderSponsor ? smallOrder.orderSponsor.name : '',
         portfolio: smallOrder.portfolio.name,
         subPortfolio: smallOrder.subPortfolio.name,
         businessSegment: smallOrder.businessSegment.name,
@@ -659,7 +659,7 @@ async function uploadExcelDumpToDrive(req, res) {
         portfolioId: smallOrder.portfolio.id,
         strategicContribution: smallOrder.strategicContribution.name,
         profitability: smallOrder.profitability.name,
-        itRelevant: smallOrder.itRelevant.name,
+        itRelevant: smallOrder.itRelevant ? smallOrder.itRelevant.name : '',
         itPlatform: itPlatforms,
         confidential: smallOrder.confidential,
         reportStatus: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].status : '',
@@ -678,12 +678,12 @@ async function uploadExcelDumpToDrive(req, res) {
         plannedEndDate: moment(smallOrder.plannedEndDate).format('DD.MMM.YYYY'),
         startDate: moment(smallOrder.startDate).format('DD.MMM.YYYY'),
         endDate: moment(smallOrder.endDate).format('DD.MMM.YYYY'),
-        forecast: smallOrder.costTypeTable[6].forecast,
-        currentBudget: smallOrder.costTypeTable[6].currentBudget,
-        originalBudget: smallOrder.costTypeTable[6].originalBudget,
-        actualCost: smallOrder.costTypeTable[6].actualCost,
+        forecast: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].forecast : 0,
+        currentBudget: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].currentBudget : 0,
+        originalBudget: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].originalBudget : 0,
+        actualCost: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].actualCost : 0,
         program: smallOrder.program ? smallOrder.program.programName : '',
-        reportingDate: smallOrder.statusReports.length > 0 ? smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate != '' ? moment(smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '' : '',
+        reportingDate: smallOrder.statusReports ? smallOrder.statusReports.length > 0 ? smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate != '' ? moment(smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '' : '' : '',
       });
     });
 

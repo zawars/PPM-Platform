@@ -101,10 +101,10 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
-    approvals: {
-      collection: 'outlineApproval',
-      via: 'project'
-    },
+    // approvals: {
+    //   collection: 'outlineApproval',
+    //   via: 'project'
+    // },
     team: {
       collection: 'team',
       via: 'project'

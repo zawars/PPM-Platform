@@ -5,6 +5,38 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const io = SocketService.io;
+
+io.on('connection', socket => {
+
+  socket.on('subportfolioReports', async data => {
+    try {
+      let reports = await Reports.find({
+        'subPortfolio.id': data.id
+      }).populateAll();
+
+      socket.emit('subportfolioReports', reports);
+
+    } catch (error) {
+      ErrorsLogService.logError('Subportfolio', error.toString(), 'subportfolioReports', '', socket.user.id);
+    }
+  });
+
+  socket.on('subportfolioOrders', async data => {
+    try {
+      let orders = await SmallOrder.find({
+        subPortfolio: data.id
+      }).populateAll();
+
+      socket.emit('subportfolioOrders', orders);
+
+    } catch (error) {
+      ErrorsLogService.logError('Subportfolio', error.toString(), 'subportfolioOrders', '', socket.user.id);
+    }
+  });
+
+})
+
 module.exports = {
   create: async (req, res) => {
     try {

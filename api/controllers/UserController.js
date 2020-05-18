@@ -316,7 +316,7 @@ module.exports = {
 
         details.forEach(async (detail, index) => {
           if (projects[index].subPortfolio) {
-            if (projects[index].subPortfolio.statusReportReminder && detail.status != 'Closed') {
+            if (projects[index].subPortfolio.statusReportReminder && detail.status == 'Active') {
               let dateDiffDays;
 
               if (detail.statusReports.length > 0) {

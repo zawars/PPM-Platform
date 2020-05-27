@@ -131,7 +131,7 @@ async function uploadExcelDumpToDrive(req, res) {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
           val.status = translate(val.status);
-          val.dueDate = val.dueDate != '' ? moment(val.dueDate).format('DD.MMM.YYYY') : ''
+          val.dueDate = val.dueDate != '' && val.dueDate != undefined ? moment(val.dueDate).format('DD.MMM.YYYY') : ''
         });
         milestonesList.push(...milestones);
       }
@@ -326,7 +326,7 @@ async function uploadExcelDumpToDrive(req, res) {
           obj.reportingDate = obj.reportingDate ? moment(obj.reportingDate).format('DD.MMM.YYYY') : '';
           if (Object.keys(obj).length > 1) {
             for (let i = 1; i < Object.keys(obj).length; i++) {
-              obj[`milestone${i}`] = obj[`milestone${i}`] != '' ? moment(obj[`milestone${i}`]).format('DD.MMM.YYYY') : '';
+              obj[`milestone${i}`] = obj[`milestone${i}`] != '' && obj[`milestone${i}`] != undefined ? moment(obj[`milestone${i}`]).format('DD.MMM.YYYY') : '';
             }
           }
 

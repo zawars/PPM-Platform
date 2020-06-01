@@ -49,6 +49,7 @@ async function uploadExcelDumpToDrive(req, res) {
     const fs = require('fs');
     const XlsxPopulate = require('xlsx-populate');
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+    const deJson = JSON.parse(fs.readFileSync('assets/langs/de.json', 'utf8'));
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
     let dateTime = DateTime.local().setZone("Europe/Berlin").toLocaleString(DateTime.DATETIME_MED);
     dateTime = dateTime.split(',');
@@ -56,6 +57,13 @@ async function uploadExcelDumpToDrive(req, res) {
       date: dateTime[0] + ', ' + dateTime[1],
       time: dateTime[2]
     }];
+    let translate = value => {
+      if (deJson[value] != undefined) {
+        return deJson[value];
+      } else {
+        return value;
+      }
+    };
 
     let dropdownsList = await Dropdown.find().populateAll();
     let questions = await Questions.find().populateAll();
@@ -86,8 +94,9 @@ async function uploadExcelDumpToDrive(req, res) {
     let portfolioBudgetCurrentYearList = [];
     let portfolioBudgetNextYearList = [];
     let subportfolioBudgetList = [];
-    let programBudgetCurrentYearList = [];
-    let programBudgetNextYearList = [];
+    let programBudgetList = [];
+    // let programBudgetCurrentYearList = [];
+    // let programBudgetNextYearList = [];
     let programDetails = [];
     let programAggregatedCost = [];
     let pipelineProjectsList = [];
@@ -111,6 +120,7 @@ async function uploadExcelDumpToDrive(req, res) {
     let approvals = await OutlineApproval.find().populateAll();
     approvals = approvals.filter(val => val.sentTo == 'PMO');
     let subportfolioBudgetCollection = await PortfolioBudgetYear.find().populateAll();
+    let programBudgetCollection = await ProgramBudgetYear.find().populateAll();
     let smallOrders = await SmallOrder.find().populateAll();
 
     // Reports
@@ -120,7 +130,8 @@ async function uploadExcelDumpToDrive(req, res) {
         milestones.forEach((val, idx) => {
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
-          val.dueDate = val.dueDate != '' ? moment(val.dueDate).format('DD.MMM.YYYY') : ''
+          val.status = translate(val.status);
+          val.dueDate = val.dueDate != '' && val.dueDate != undefined ? moment(val.dueDate).format('DD.MMM.YYYY') : ''
         });
         milestonesList.push(...milestones);
       }
@@ -137,8 +148,11 @@ async function uploadExcelDumpToDrive(req, res) {
       let decisions = reportObj.decisions;
       if (decisions != undefined) {
         decisions.forEach((val, idx) => {
+          val.decisionType = translate(val.decisionType.name);
+          val.decisionBy = translate(val.decisionBy.name);
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
+          val.status = translate(val.status);
           val.date = moment(val.date).format('DD.MMM.YYYY');
         });
         decisionsList.push(...decisions);
@@ -147,6 +161,8 @@ async function uploadExcelDumpToDrive(req, res) {
       let measures = reportObj.measures;
       if (measures != undefined) {
         measures.forEach((val, idx) => {
+          val.impact = translate(val.impact);
+          val.impactOnStatus = translate(val.impactOnStatus);
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
         });
@@ -156,6 +172,7 @@ async function uploadExcelDumpToDrive(req, res) {
       let eva = reportObj.EVA;
       if (eva != undefined) {
         eva.forEach((val, idx) => {
+          val.costType = translate(val.costType);
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
         });
@@ -166,6 +183,7 @@ async function uploadExcelDumpToDrive(req, res) {
       if (projectActualBudget != undefined) {
         projectActualBudget.forEach((val, idx) => {
           delete(val.actualBudget);
+          val.costType = translate(val.costType);
           val.reportId = reportObj.id;
           val.projectId = reportObj.uid;
           val.projectName = reportObj.projectName;
@@ -178,11 +196,11 @@ async function uploadExcelDumpToDrive(req, res) {
         lessonsLearnedArr.forEach((val, idx) => {
           lessonsLearned.push({
             description: val.description,
-            type: val.lessonType,
-            category: val.lessonCategory.name,
+            type: translate(val.lessonType),
+            category: translate(val.lessonCategory.name),
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
-            projectType: reportObj.projectType ? reportObj.projectType.name : ''
+            projectType: reportObj.projectType ? translate(reportObj.projectType.name) : ''
           });
         });
       }
@@ -212,9 +230,9 @@ async function uploadExcelDumpToDrive(req, res) {
             if (itPlatforms.length > 0) {
               itPlatforms.forEach((itPlatform, idx) => {
                 if (idx == 0) {
-                  itPlatformsName = itPlatform.name;
+                  itPlatformsName = translate(itPlatform.name);
                 } else {
-                  itPlatformsName = itPlatformsName + ', ' + itPlatform.name;
+                  itPlatformsName = itPlatformsName + ', ' + translate(itPlatform.name);
                 }
               });
             }
@@ -229,37 +247,38 @@ async function uploadExcelDumpToDrive(req, res) {
         projectSponsor: reportObj.projectSponsor.name,
         portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
         subPortfolio: reportObj.subPortfolio.name,
-        projectPhase: reportObj.projectPhase ? reportObj.projectPhase.name : '',
-        businessSegment: reportObj.businessSegment ? reportObj.businessSegment.name : '',
-        reportingLevel: reportObj.reportingLevel ? reportObj.reportingLevel.name : '',
-        businessUnit: reportObj.businessUnit ? reportObj.businessUnit.name : '',
-        businessArea: reportObj.businessArea ? reportObj.businessArea.name : '',
+        projectPhase: reportObj.projectPhase ? translate(reportObj.projectPhase.name) : '',
+        businessSegment: reportObj.businessSegment ? translate(reportObj.businessSegment.name) : '',
+        reportingLevel: reportObj.reportingLevel ? translate(reportObj.reportingLevel.name) : '',
+        businessUnit: reportObj.businessUnit ? translate(reportObj.businessUnit.name) : '',
+        businessArea: reportObj.businessArea ? translate(reportObj.businessArea.name) : '',
         portfolioId: reportObj.portfolio ? reportObj.portfolio.id : '',
         portfolioName: reportObj.portfolio ? reportObj.portfolio.name : '',
-        strategicContribution: reportObj.strategicContribution ? reportObj.strategicContribution.name : '',
-        profitability: reportObj.profitability ? reportObj.profitability.name : '',
-        itRelevant: reportObj.itRelevant ? reportObj.itRelevant.name : '',
+        strategicContribution: reportObj.strategicContribution ? translate(reportObj.strategicContribution.name) : '',
+        profitability: reportObj.profitability ? translate(reportObj.profitability.name) : '',
+        feasibility: reportObj.feasibility ? translate(reportObj.feasibility.name) : '',
+        itRelevant: reportObj.itRelevant ? translate(reportObj.itRelevant.name) : '',
         itPlatform: itPlatformsName,
         /*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
-        projectMethodology: reportObj.projectMethodology ? reportObj.projectMethodology.name : '',
-        confidential: reportObj.confidential,
-        reportStatus: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].status : '',
+        projectMethodology: reportObj.projectMethodology ? translate(reportObj.projectMethodology.name) : '',
+        confidential: translate(reportObj.confidential),
+        reportStatus: reportObj.statusReports.length > 0 ? translate(reportObj.statusReports[reportObj.statusReports.length - 1].status) : '',
         overallStatus: reportObj.statusReports.length > 0 ? statusConverter(reportObj.statusReports[reportObj.statusReports.length - 1].overallStatus) : '',
         scopeStatus: reportObj.statusReports.length > 0 ? statusConverter(reportObj.statusReports[reportObj.statusReports.length - 1].scopeStatus) : '',
         costStatus: reportObj.statusReports.length > 0 ? statusConverter(reportObj.statusReports[reportObj.statusReports.length - 1].costStatus) : '',
         timeStatus: reportObj.statusReports.length > 0 ? statusConverter(reportObj.statusReports[reportObj.statusReports.length - 1].timeStatus) : '',
-        riskStatus: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].riskStatus : '',
+        riskStatus: reportObj.statusReports.length > 0 ? translate(reportObj.statusReports[reportObj.statusReports.length - 1].riskStatus) : '',
         psp: reportObj.psp ? reportObj.psp[0].psp : '',
         currency: reportObj.currency,
-        status: reportObj.status,
+        status: translate(reportObj.status),
         projectClassification: reportObj.classification.name,
         bkwShare: reportObj.bkwShare,
         IRR: reportObj.kpisTable[4].value,
         GwH: reportObj.GwH,
-        digitalizationFocus: reportObj.digitalizationFocus != undefined ? reportObj.digitalizationFocus.name : '',
-        digitalizationTopic: reportObj.digitalizationTopic != undefined ? reportObj.digitalizationTopic.name : '',
+        digitalizationFocus: reportObj.digitalizationFocus != undefined ? translate(reportObj.digitalizationFocus.name) : '',
+        digitalizationTopic: reportObj.digitalizationTopic != undefined ? translate(reportObj.digitalizationTopic.name) : '',
         technology: technology.join(', '),
-        purpose: reportObj.purpose,
+        purpose: translate(reportObj.purpose),
         SPI: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].SPI : '' : '',
         riskExposureVsCurrentBudget: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].riskExposureVsCurrentBudget : '',
         totalExposure: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].totalExposure : '',
@@ -305,10 +324,10 @@ async function uploadExcelDumpToDrive(req, res) {
 
       if (reportObj.milestoneTable) {
         reportObj.milestoneTable.map(obj => {
-          obj.reportingDate = moment(obj.reportingDate).format('DD.MMM.YYYY');
+          obj.reportingDate = obj.reportingDate ? moment(obj.reportingDate).format('DD.MMM.YYYY') : '';
           if (Object.keys(obj).length > 1) {
             for (let i = 1; i < Object.keys(obj).length; i++) {
-              obj[`milestone${i}`] = obj[`milestone${i}`] != '' ? moment(obj[`milestone${i}`]).format('DD.MMM.YYYY') : '';
+              obj[`milestone${i}`] = obj[`milestone${i}`] != '' && obj[`milestone${i}`] != undefined ? moment(obj[`milestone${i}`]).format('DD.MMM.YYYY') : '';
             }
           }
 
@@ -332,24 +351,24 @@ async function uploadExcelDumpToDrive(req, res) {
       let outlineQues = [];
       reportObj.question.forEach((val, idx) => {
         outlineQues.push({
-          department: outlineQuestions[idx].department,
-          question: outlineQuestions[idx].question,
-          answer: val,
+          department: translate(outlineQuestions[idx].department),
+          question: translate(outlineQuestions[idx].question),
+          answer: translate(val),
           projectId: reportObj.uid,
           projectName: reportObj.projectName,
-          document: 'Outline'
+          document: translate('Outline')
         });
       });
       let orderQues = [];
       if (reportObj.orderQuestion) {
         reportObj.orderQuestion.forEach((val, idx) => {
           orderQues.push({
-            department: orderQuestions[idx].department,
-            question: orderQuestions[idx].question,
-            answer: val,
+            department: translate(orderQuestions[idx].department),
+            question: translate(orderQuestions[idx].question),
+            answer: translate(val),
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
-            document: 'Order'
+            document: translate('Order')
           });
         });
       }
@@ -357,12 +376,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (reportObj.changeRequestQuestion) {
         reportObj.changeRequestQuestion.forEach((val, idx) => {
           changeQues.push({
-            department: changeReqQuestions[idx].department,
-            question: changeReqQuestions[idx].question,
-            answer: val,
+            department: (changeReqQuestions[idx].department),
+            question: (changeReqQuestions[idx].question),
+            answer: translate(val),
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
-            document: 'Change Request'
+            document: translate('Change Request')
           });
         });
       }
@@ -370,12 +389,12 @@ async function uploadExcelDumpToDrive(req, res) {
       if (reportObj.closingQuestion) {
         reportObj.closingQuestion.forEach((val, idx) => {
           closingQuestions.push({
-            department: closingRepQuestions[idx].department,
-            question: closingRepQuestions[idx].question,
-            answer: val,
+            department: translate(closingRepQuestions[idx].department),
+            question: translate(closingRepQuestions[idx].question),
+            answer: translate(val),
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
-            document: 'Closing Report'
+            document: translate('Closing Report')
           });
         });
       }
@@ -392,7 +411,7 @@ async function uploadExcelDumpToDrive(req, res) {
             projectId: reportObj.uid,
             projectName: reportObj.projectName,
             description: val.description,
-            impact: val.impact != undefined ? val.impact.name : '',
+            impact: val.impact != undefined ? translate(val.impact.name) : '',
             // project: dependeeProject ? dependeeProject.projectName : ''
             project: val.project
           });
@@ -406,6 +425,7 @@ async function uploadExcelDumpToDrive(req, res) {
       let portfolioBudgetCurrentYear = portfolio.portfolioBudgetingList != undefined ? portfolio.portfolioBudgetingList.portfolioBudgetCurrentYear : [];
       if (portfolioBudgetCurrentYear != undefined) {
         portfolioBudgetCurrentYear.forEach((val, idx) => {
+          val.costType = translate(val.costType);
           val.portfolioId = portfolio.id;
           val.portfolioName = portfolio.name;
         });
@@ -417,6 +437,7 @@ async function uploadExcelDumpToDrive(req, res) {
         portfolioBudgetNextYear.forEach((val, idx) => {
           delete(val.actualCost);
           delete(val.forecast);
+          val.costType = translate(val.costType);
           val.portfolioId = portfolio.id;
           val.portfolioName = portfolio.name;
         });
@@ -424,31 +445,46 @@ async function uploadExcelDumpToDrive(req, res) {
       }
     });
 
-    // Programs
+    // Programs Yearly Budget
+    let programBudgetGroupedByYears = _.groupBy(programBudgetCollection, 'year');
+    let programYearsKeys = Object.keys(programBudgetGroupedByYears);
+    let programCurrentYear = moment().year();
+    let programYearIndex = programYearsKeys.indexOf(programCurrentYear.toString());
+
+    if (programYearIndex > 0) {
+      let indexes = [programYearIndex - 1, programYearIndex, programYearIndex + 1];
+      let temp = [];
+      indexes.map(val => {
+        if (val > -1) {
+          if (programYearsKeys[val] != undefined) {
+            temp.push(programYearsKeys[val])
+          }
+        }
+      });
+      programYearsKeys = temp;
+    }
+
+    for (let year of programYearsKeys) {
+      programBudgetList[`${year}`] = [];
+
+      for (let yearlyBudgetObj of programBudgetGroupedByYears[year]) {
+        for (let budgetObj of yearlyBudgetObj.programBudgetCost) {
+
+          budgetObj.budget.forEach(obj => {
+            delete(obj.id);
+            obj.programId = budgetObj.program;
+            obj.costType = translate(obj.costType);
+          });
+
+          programBudgetList[year].push(...budgetObj.budget);
+        }
+      }
+    }
+
     programs.forEach(program => {
-      let programBudgetCurrentYear = program.programBudgetCurrentYear;
-      if (programBudgetCurrentYear != undefined) {
-        programBudgetCurrentYear.forEach((val, idx) => {
-          val.programId = program.uid;
-          val.programName = program.programName;
-        });
-        programBudgetCurrentYearList.push(...programBudgetCurrentYear);
-      }
-
-      let programBudgetNextYear = program.programBudgetNextYear;
-      if (programBudgetNextYear != undefined) {
-        programBudgetNextYear.forEach((val, idx) => {
-          delete(val.actualCost);
-          delete(val.forecast);
-          val.programId = program.uid;
-          val.programName = program.programName;
-        });
-        programBudgetNextYearList.push(...programBudgetNextYear);
-      }
-
       programDetails.push({
         programName: program.programName,
-        purpose: program.purpose,
+        purpose: translate(program.purpose),
         startDate: moment(program.startDate).format('DD.MMM.YYYY'),
         endDate: moment(program.startDate).format('DD.MMM.YYYY'),
         overallStatus: program.statusReports ? program.statusReports.length > 0 ? statusConverter(program.statusReports[program.statusReports.length - 1].overallStatus) : '' : '',
@@ -464,6 +500,7 @@ async function uploadExcelDumpToDrive(req, res) {
       let aggregatedProgramTable1 = program.aggregatedProgramTable1;
       if (program.aggregatedProgramTable1) {
         aggregatedProgramTable1.forEach(obj => {
+          obj.costType = translate(obj.costType);
           obj.programName = program.programName;
         });
         programAggregatedCost.push(...aggregatedProgramTable1)
@@ -510,18 +547,18 @@ async function uploadExcelDumpToDrive(req, res) {
       pipelineProjectsList.push({
         projectId: pipelineProject.uid,
         projectName: pipelineProject.projectName,
-        purpose: pipelineProject.projectReport ? pipelineProject.projectReport.purpose : '',
+        purpose: pipelineProject.projectReport ? translate(pipelineProject.projectReport.purpose) : '',
         projectManager: pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].projectManager.name : '',
         projectSponsor: pipelineProject.projectOutline[0] ? pipelineProject.projectOutline[0].projectSponsor.name : '',
         projectFico: fico,
-        businessUnit,
-        businessArea,
+        businessUnit: translate(businessUnit),
+        businessArea: translate(businessArea),
         totalBudget,
         budget,
         portfolio: portfolio.id,
         portfolioName: portfolio.name,
         subPortfolio: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.id : '',
-        subPortfolio: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.name : '',
+        subPortfolioName: pipelineProject.subPortfolio ? pipelineProject.subPortfolio.name : '',
       });
     });
 
@@ -569,11 +606,11 @@ async function uploadExcelDumpToDrive(req, res) {
       documentsList.push({
         uid: val.uid,
         projectName: val.project ? val.project.projectName : '',
-        docType: val.docType,
-        status: val.overallStatus,
+        docType: translate(val.docType),
+        status: translate(val.overallStatus),
         version: val.version,
-        businessArea: businessArea ? businessArea.name : '',
-        businessUnit: businessUnit ? businessUnit.name : '',
+        businessArea: businessArea ? translate(businessArea.name) : '',
+        businessUnit: businessUnit ? translate(businessUnit.name) : '',
         projectManager,
         link
       });
@@ -618,6 +655,7 @@ async function uploadExcelDumpToDrive(req, res) {
             obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
             obj.projectName = project ? project.projectName : '';
             obj.projectCategory = project ? project.mode : '';
+            obj.costType = translate(obj.costType);
           });
 
           subportfolioBudgetList[year].push(...budgetObj.budget);
@@ -636,9 +674,9 @@ async function uploadExcelDumpToDrive(req, res) {
 
             if (itPlatformObj) {
               if (idx == 0) {
-                itPlatforms = itPlatformObj.name;
+                itPlatforms = translate(itPlatformObj.name);
               } else {
-                itPlatforms = itPlatforms + ', ' + itPlatformObj.name;
+                itPlatforms = itPlatforms + ', ' + translate(itPlatformObj.name);
               }
             }
           });
@@ -652,23 +690,23 @@ async function uploadExcelDumpToDrive(req, res) {
         orderSponsor: smallOrder.orderSponsor ? smallOrder.orderSponsor.name : '',
         portfolio: smallOrder.portfolio.name,
         subPortfolio: smallOrder.subPortfolio.name,
-        businessSegment: smallOrder.businessSegment.name,
-        reportingLevel: smallOrder.reportingLevel.name,
-        businessUnit: smallOrder.businessUnit.name,
-        businessArea: smallOrder.businessArea.name,
+        businessSegment: translate(smallOrder.businessSegment.name),
+        reportingLevel: translate(smallOrder.reportingLevel.name),
+        businessUnit: translate(smallOrder.businessUnit.name),
+        businessArea: translate(smallOrder.businessArea.name),
         portfolioId: smallOrder.portfolio.id,
-        strategicContribution: smallOrder.strategicContribution.name,
-        profitability: smallOrder.profitability.name,
-        itRelevant: smallOrder.itRelevant ? smallOrder.itRelevant.name : '',
+        strategicContribution: translate(smallOrder.strategicContribution.name),
+        profitability: translate(smallOrder.profitability.name),
+        itRelevant: smallOrder.itRelevant ? translate(smallOrder.itRelevant.name) : '',
         itPlatform: itPlatforms,
-        confidential: smallOrder.confidential,
-        reportStatus: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].status : '',
+        confidential: translate(smallOrder.confidential),
+        reportStatus: smallOrder.smallOrderStatusReports.length > 0 ? translate(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].status) : '',
         overallStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].overallStatus) : '',
         scopeStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].scopeStatus) : '',
         costStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].costStatus) : '',
         timeStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].timeStatus) : '',
-        riskStatus: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].riskStatus : '',
-        purpose: smallOrder.purpose,
+        riskStatus: smallOrder.smallOrderStatusReports.length > 0 ? translate(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].riskStatus) : '',
+        purpose: translate(smallOrder.purpose),
         percentageComplete: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].percentageComplete : '',
         managementSummary: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].managementSummary : '',
         scopeStatusComments: smallOrder.smallOrderStatusReports.length > 0 ? smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].scopeStatusComments : '',
@@ -746,15 +784,22 @@ async function uploadExcelDumpToDrive(req, res) {
       XLSX.utils.book_append_sheet(workbook, subPortfolioBudgetSheet, `Sub-Port Budget ${year}`);
     });
 
-    const programBudgetCurrentYearSheet = XLSX.utils.json_to_sheet(programBudgetCurrentYearList, {
-      cellDates: true
+    programYearsKeys.forEach(year => {
+      let programBudgetSheet = XLSX.utils.json_to_sheet(programBudgetList[year], {
+        cellDates: true
+      });
+      XLSX.utils.book_append_sheet(workbook, programBudgetSheet, `Program Budget ${year}`);
     });
-    XLSX.utils.book_append_sheet(workbook, programBudgetCurrentYearSheet, 'Program Budget Current Year');
 
-    const programBudgetNextYearSheet = XLSX.utils.json_to_sheet(programBudgetNextYearList, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, programBudgetNextYearSheet, 'Program Budget Next Year');
+    // const programBudgetCurrentYearSheet = XLSX.utils.json_to_sheet(programBudgetCurrentYearList, {
+    //   cellDates: true
+    // });
+    // XLSX.utils.book_append_sheet(workbook, programBudgetCurrentYearSheet, 'Program Budget Current Year');
+
+    // const programBudgetNextYearSheet = XLSX.utils.json_to_sheet(programBudgetNextYearList, {
+    //   cellDates: true
+    // });
+    // XLSX.utils.book_append_sheet(workbook, programBudgetNextYearSheet, 'Program Budget Next Year');
 
     const multiProjectReportSheet = XLSX.utils.json_to_sheet(multiProjectReport, {
       cellDates: true
@@ -838,6 +883,20 @@ async function uploadExcelDumpToDrive(req, res) {
     ErrorsLogService.logError('Reports', error.toString(), 'uploadExcelDumpToDrive', req);
   }
 };
+
+toCamelCase = (str) => {
+  return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+}
+
+statusConverter = (status) => {
+  if (status == 'Green') {
+    return 1;
+  } else if (status == 'Red') {
+    return 3;
+  } else if (status == "Yellow") {
+    return 2;
+  }
+}
 
 module.exports = {
   cronJob,

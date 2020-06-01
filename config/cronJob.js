@@ -256,6 +256,7 @@ async function uploadExcelDumpToDrive(req, res) {
         portfolioName: reportObj.portfolio ? reportObj.portfolio.name : '',
         strategicContribution: reportObj.strategicContribution ? translate(reportObj.strategicContribution.name) : '',
         profitability: reportObj.profitability ? translate(reportObj.profitability.name) : '',
+        feasibility: reportObj.feasibility ? translate(reportObj.feasibility.name) : '',
         itRelevant: reportObj.itRelevant ? translate(reportObj.itRelevant.name) : '',
         itPlatform: itPlatformsName,
         /*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/

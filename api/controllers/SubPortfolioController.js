@@ -12,7 +12,7 @@ io.on('connection', socket => {
   socket.on('subportfolioReports', async data => {
     try {
       let reports = await Reports.find({
-        'subPortfolio.id': data.id
+        subPortfolio: data.id
       }).populateAll();
 
       socket.emit('subportfolioReports', reports);
@@ -71,7 +71,7 @@ module.exports = {
   getSubportfolioProjects: async (req, res) => {
     try {
       let reports = await Reports.find({
-        'subPortfolio.id': req.params.id
+        subPortfolio: req.params.id
       }, {
         fields: {
           project: 1

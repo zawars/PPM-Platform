@@ -371,7 +371,7 @@ module.exports = {
       let subportfolioProjects = await Reports.find({
         or: [{
             status: 'Active',
-            'subPortfolio.id': subPortfolio
+            subPortfolio: subPortfolio
           },
           {
             status: 'Closed',
@@ -379,7 +379,7 @@ module.exports = {
             ficoApprovedClosingReportDate: {
               contains: year
             },
-            'subPortfolio.id': subPortfolio
+            subPortfolio: subPortfolio
           }
         ]
       });

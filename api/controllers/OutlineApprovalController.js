@@ -38,6 +38,21 @@ io.on('connection', socket => {
     }
   });
 
+  //To get count of user's open outlines
+  socket.on('userOpenOutlinesCount', async data => {
+    try {
+      let openOutlinesCount = await OutlineApproval.count({
+        assignedTo: data.id,
+        isFreezed: false
+      });
+
+      socket.emit('userOpenOutlinesCount', openOutlinesCount);
+
+    } catch (error) {
+      ErrorsLogService.logError('Outline Approval', `id: ${req.params.id}, ` + error.toString(), 'userOpenOutlinesCount', '', socket.user.id);
+    }
+  })
+
   //To search in data table of Approvals
   socket.on('approvalsSearch', async data => {
     let search = data.search;

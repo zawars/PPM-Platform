@@ -61,6 +61,7 @@ module.exports.routes = {
   'GET /projects/userProjects/:id': 'ProjectsController.userProjects',
   'GET /getUsersFromRoles/:role': 'UserController.getUsersFromRoles',
   'GET /getOutlinesByUser/:id': 'OutlineApprovalController.getOutlinesByUser',
+  'GET /getOutlinesByProject/:id': 'OutlineApprovalController.getOutlinesByProject',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
   'POST /notifyAdmins': 'UserController.notifyAdminsbyEmail',

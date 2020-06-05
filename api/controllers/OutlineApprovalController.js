@@ -303,6 +303,16 @@ module.exports = {
     })
   },
 
+  getOutlinesByProject: (req, res) => {
+    OutlineApproval.find({
+      project: req.params.id
+    }).limit(req.query.limit || 10).populateAll().sort('createdAt DESC').then(projects => {
+      res.ok(projects);
+    }).catch(error => {
+      ErrorsLogService.logError('Outline Approval', `id: ${req.params.id}, ` + error.toString(), 'getOutlinesByProject', req);
+    })
+  },
+
   updateApprovalOwner: (req, res) => {
     OutlineApproval.update({
       assignedTo: req.body.prev,

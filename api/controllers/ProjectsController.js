@@ -468,7 +468,7 @@ io.on('connection', socket => {
         page: data.pageIndex,
         limit: data.pageSize
       })
-      .populateAll().then(projects => {
+      .populateAll().sort('uid DESC').then(projects => {
         socket.emit('projectsIndex', projects);
       }).catch(error => {
         ErrorsLogService.logError('Projects', error.toString(), 'projectsIndex', '', socket.user.id);

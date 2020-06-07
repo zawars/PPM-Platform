@@ -468,7 +468,7 @@ io.on('connection', socket => {
         page: data.pageIndex,
         limit: data.pageSize
       })
-      .populateAll().then(projects => {
+      .populateAll().sort('uid DESC').then(projects => {
         socket.emit('projectsIndex', projects);
       }).catch(error => {
         ErrorsLogService.logError('Projects', error.toString(), 'projectsIndex', '', socket.user.id);
@@ -859,21 +859,34 @@ module.exports = {
     }
   },
 
-  search: (req, res) => {
+  search: async (req, res) => {
     let query = req.params.query;
-    Projects.find({
-      or: [{
-        projectName: {
-          'contains': query
+
+    try {
+      let projects = await Projects.find({
+        or: [{
+            projectName: {
+              'contains': query
+            }
+          },
+          {
+            uid: parseInt(query)
+          }
+        ],
+        isClosed: false
+      }, {
+        fields: {
+          uid: 1,
+          projectName: 1
         }
-      }],
-      isClosed: false
-    }).then(projects => {
-      res.ok(projects)
-    }).catch(err => {
-      ErrorsLogService.logError('Projects', err.toString(), 'search', req);
-      res.badRequest(err);
-    });
-  },
+      }).limit(10).sort('uid DESC');
+
+      res.send(projects);
+
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'search', req);
+      res.badRequest(error);
+    }
+  }
 
 };

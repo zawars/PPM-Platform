@@ -872,8 +872,7 @@ module.exports = {
           {
             uid: parseInt(query)
           }
-        ],
-        isClosed: false
+        ]
       }, {
         fields: {
           uid: 1,

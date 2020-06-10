@@ -216,6 +216,36 @@ module.exports = {
     });
   },
 
+  createProjectBudgetCost: async (req, res) => {
+    try {
+      let portfolioBudgetYear = await PortfolioBudgetYear.findOne({
+        id: req.body.portfolioBudgetYear
+      });
+
+      let budget = req.body.budget;
+      if (portfolioBudgetYear.additionalColumns && portfolioBudgetYear.additionalColumns.length > 0) {
+        let additionalColumns = portfolioBudgetYear.additionalColumns;
+
+        for (let i = 0; i < additionalColumns.length; i++) {
+          for (let j = 0; j < budget.length; j++) {
+            budget[j][additionalColumns[i].dataField] = '';
+          }
+        }
+      }
+
+      let createdCost = await ProjectBudgetCost.create({
+        portfolioBudgetYear: req.body.portfolioBudgetYear,
+        project: req.body.project,
+        budget: budget
+      });
+
+      res.ok(createdCost);
+
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createProjectBudgetCost', req);
+    }
+  },
+
   updateMultipleProjectsBudget: async (req, res) => {
     try {
       let projectsBudget = req.body.projectsBudget;

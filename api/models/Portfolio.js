@@ -11,9 +11,6 @@ module.exports = {
     name: {
       type: 'string',
     },
-    subPortfolio: {
-      type: 'json'
-    },
     department: {
       type: 'string',
     },
@@ -26,10 +23,10 @@ module.exports = {
     status: {
       type: 'string',
     },
-    reports: {
-      collection: 'Reports',
-      via: 'portfolio'
-    },
+    // reports: {
+    //   collection: 'Reports',
+    //   via: 'portfolio'
+    // },
     subPortfolio: {
       collection: 'subPortfolio',
       via: 'portfolio'

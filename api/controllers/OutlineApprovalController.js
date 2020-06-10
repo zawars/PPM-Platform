@@ -332,7 +332,8 @@ module.exports = {
   updatePreviousApproval: (req, resp) => {
     let query = req.body.query;
     let projectItem = req.body.projectItem;
-    OutlineApproval.update(query).set(projectItem).then(() => {
+    
+    OutlineApproval.update(query).set(projectItem).then((data) => {
       resp.ok({
         message: "Previous Approval has been updated."
       });

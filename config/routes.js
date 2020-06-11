@@ -115,6 +115,7 @@ module.exports.routes = {
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
   'GET /reports/portfolio/:id/:subPortfolio': 'ReportsController.getProjectsBySubPortfolio',
   'PUT /reports/:id': 'ReportsController.update',
+  'GET /reports/index': 'ReportsController.getAllReports',
 
   // Team Api
   'GET /project/team/:id': 'TeamController.projectTeam',

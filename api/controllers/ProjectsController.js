@@ -605,6 +605,30 @@ io.on('connection', socket => {
     });
     socket.emit('fetchMultipleUsers', users);
   });
+
+  socket.on('searchOpenDetailsProjects', async data => {
+    let query = data.search;
+
+    let projects = await Projects.find({
+      or: [{
+        projectName: {
+          'contains': query
+        }
+      },
+      {
+        uid: parseInt(query)
+      }
+      ],
+      outlineApproved: true
+    }, {
+      fields: {
+        uid: 1,
+        projectName: 1
+      }
+    }).limit(10).sort('uid DESC');
+
+    socket.emit('searchOpenDetailsProjects', projects);
+  });
 });
 
 module.exports = {

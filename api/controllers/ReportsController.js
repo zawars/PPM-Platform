@@ -344,6 +344,15 @@ io.on('connection', socket => {
 
 
 module.exports = {
+  getAllReports: async (req, res) => {
+    try {
+      let reports = await Reports.find().limit(req.query.limit || 10).populateAll().sort('uid DESC');
+      res.ok(reports);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', err.toString(), 'getReports', req);
+    }
+  },
+
   getReportsByUser: (req, res) => {
     Reports.find({
       user: req.params.id

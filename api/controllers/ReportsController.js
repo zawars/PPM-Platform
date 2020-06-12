@@ -697,11 +697,6 @@ module.exports = {
             }
           }
         ]
-      }, {
-        fields: {
-          uid: 1,
-          projectName: 1
-        }
       }).limit(10).sort('uid DESC');
 
       res.send(projects);

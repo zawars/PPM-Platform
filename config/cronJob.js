@@ -238,12 +238,32 @@ async function uploadExcelDumpToDrive(req, res) {
         }
       }
 
+      let evaValues = {
+        EAC: '',
+        CPI: '',
+        SPI: ''
+      };
+      if (reportObj.EVA) {
+        for (let i = reportObj.EVA.length - 1; i >= 0; i--) {
+          if (reportObj.EVA[i].EAC != null && evaValues.EAC == '') {
+            evaValues.EAC = reportObj.EVA[i].EAC;
+          }
+
+          if (reportObj.EVA[i].CPI != null && evaValues.CPI == '') {
+            evaValues.CPI = reportObj.EVA[i].CPI;
+          }
+
+          if (reportObj.EVA[i].SPI != null && evaValues.SPI == '') {
+            evaValues.SPI = reportObj.EVA[i].SPI;
+          }
+        }
+      }
+
       multiProjectReport.push({
         id: reportObj.uid,
         projectName: reportObj.projectName,
         projectManager: reportObj.projectManager.name,
         projectSponsor: reportObj.projectSponsor.name,
-        portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
         subPortfolioId: reportObj.subPortfolio ? reportObj.subPortfolio.id : '',
         subPortfolio: reportObj.subPortfolio ? reportObj.subPortfolio.name : '',
         projectPhase: reportObj.projectPhase ? translate(reportObj.projectPhase.name) : '',
@@ -258,7 +278,6 @@ async function uploadExcelDumpToDrive(req, res) {
         feasibility: reportObj.feasibility ? translate(reportObj.feasibility.name) : '',
         itRelevant: reportObj.itRelevant ? translate(reportObj.itRelevant.name) : '',
         itPlatform: itPlatformsName,
-        /*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
         projectMethodology: reportObj.projectMethodology ? translate(reportObj.projectMethodology.name) : '',
         confidential: translate(reportObj.confidential),
         reportStatus: reportObj.statusReports.length > 0 ? translate(reportObj.statusReports[reportObj.statusReports.length - 1].status) : '',
@@ -278,15 +297,15 @@ async function uploadExcelDumpToDrive(req, res) {
         digitalizationTopic: reportObj.digitalizationTopic != undefined ? translate(reportObj.digitalizationTopic.name) : '',
         technology: technology.join(', '),
         purpose: translate(reportObj.purpose),
-        SPI: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].SPI : '' : '',
         riskExposureVsCurrentBudget: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].riskExposureVsCurrentBudget : '',
         totalExposure: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].totalExposure : '',
         plannedEndDateVsForecastEndDate: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].plannedDateVSForecastDate : '',
         currentBudgetVSForecast: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].currentBudgetVSForecast : '',
         currentBudgetVSOriginalBudget: reportObj.currentBudgetVSOriginalBudget,
         endDateVSPlannedEndDate: reportObj.endDateVSPlannedEndDate,
-        EAC: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].EAC : '' : '',
-        CPI: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].CPI : '' : '',
+        EAC: evaValues.EAC,
+        CPI: evaValues.CPI,
+        SPI: evaValues.SPI,
         percentageComplete: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].percentageComplete : '',
         managementSummary: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].managementSummary : '',
         scopeStatusComments: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].scopeStatusComments : '',
@@ -601,6 +620,9 @@ async function uploadExcelDumpToDrive(req, res) {
     let itPlatformOptions = await Dropdown.findOne({
       field: 'IT Platform'
     }).populateAll();
+    let technologyOptions = await Dropdown.findOne({
+      field: 'Technology'
+    }).populateAll();
 
     if (yearIndex > 0) {
       let indexes = [yearIndex - 1, yearIndex, yearIndex + 1];
@@ -640,6 +662,22 @@ async function uploadExcelDumpToDrive(req, res) {
           });
           itPlatforms = values.join(',');
 
+          let purpose = '';
+          purpose = project.mode == 'bucket' ? (project.purpose != undefined ? project.purpose : '') : project.projectReport != undefined ? project.projectReport.purpose : '';
+
+          let technology = project.projectReport ? project.projectReport.technology : [];
+          let temp1 = {};
+          let values1 = [];
+          if (technology != undefined) {
+            technology.forEach(val => {
+              temp1 = technologyOptions.values.find(obj => obj.id == val);
+              if (temp1) {
+                values1.push(temp1.name);
+              }
+            });
+          }
+          technology = values1.join(',');
+
           budgetObj.budget.forEach(obj => {
             delete(obj.id);
             obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
@@ -648,7 +686,9 @@ async function uploadExcelDumpToDrive(req, res) {
             obj.projectName = project ? project.projectName : '';
             obj.projectCategory = project.mode ? project.mode : 'project';
             obj.costType = translate(obj.costType);
-            obj.itPlatform = itPlatforms
+            obj.purpose = purpose;
+            obj.technology = technology;
+            obj.itPlatform = itPlatforms;
           });
 
           subportfolioBudgetList[year].push(...budgetObj.budget);
@@ -664,7 +704,7 @@ async function uploadExcelDumpToDrive(req, res) {
             });
           }
 
-          let itPlatforms = order.itPlatform;
+          let itPlatforms = order ? order.itPlatform : [];
           let temp = {};
           let values = [];
           itPlatforms.forEach(val => {
@@ -680,7 +720,7 @@ async function uploadExcelDumpToDrive(req, res) {
             obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
             obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
             obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
-            obj.orderId = order ? order.id : '';
+            obj.orderId = order ? order.uid : '';
             obj.orderName = order ? order.name : '';
             obj.projectCategory = 'order';
             obj.costType = translate(obj.costType);

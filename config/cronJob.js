@@ -91,8 +91,6 @@ async function uploadExcelDumpToDrive(req, res) {
     let currentReservesTrendAnalysis = [];
     let projectQuestions = [];
     let dependenciesList = [];
-    let portfolioBudgetCurrentYearList = [];
-    let portfolioBudgetNextYearList = [];
     let subportfolioBudgetList = [];
     let programBudgetList = [];
     // let programBudgetCurrentYearList = [];
@@ -246,7 +244,8 @@ async function uploadExcelDumpToDrive(req, res) {
         projectManager: reportObj.projectManager.name,
         projectSponsor: reportObj.projectSponsor.name,
         portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
-        subPortfolio: reportObj.subPortfolio.name,
+        subPortfolioId: reportObj.subPortfolio ? reportObj.subPortfolio.id : '',
+        subPortfolio: reportObj.subPortfolio ? reportObj.subPortfolio.name : '',
         projectPhase: reportObj.projectPhase ? translate(reportObj.projectPhase.name) : '',
         businessSegment: reportObj.businessSegment ? translate(reportObj.businessSegment.name) : '',
         reportingLevel: reportObj.reportingLevel ? translate(reportObj.reportingLevel.name) : '',
@@ -301,6 +300,7 @@ async function uploadExcelDumpToDrive(req, res) {
         currentBudget: reportObj.costTypeTable[6].currentBudget,
         originalBudget: reportObj.costTypeTable[6].originalBudget,
         actualCost: reportObj.costTypeTable[6].actualCost,
+        programId: reportObj.program ? reportObj.program.uid : '',
         programName: reportObj.program ? reportObj.program.programName : '',
         reportingDate: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate != '' ? moment(reportObj.statusReports[reportObj.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '' : '',
       });
@@ -420,31 +420,6 @@ async function uploadExcelDumpToDrive(req, res) {
       }
     });
 
-    // Portfolio
-    portfolios.forEach(portfolio => {
-      let portfolioBudgetCurrentYear = portfolio.portfolioBudgetingList != undefined ? portfolio.portfolioBudgetingList.portfolioBudgetCurrentYear : [];
-      if (portfolioBudgetCurrentYear != undefined) {
-        portfolioBudgetCurrentYear.forEach((val, idx) => {
-          val.costType = translate(val.costType);
-          val.portfolioId = portfolio.id;
-          val.portfolioName = portfolio.name;
-        });
-        portfolioBudgetCurrentYearList.push(...portfolioBudgetCurrentYear);
-      }
-
-      let portfolioBudgetNextYear = portfolio.portfolioBudgetingList != undefined ? portfolio.portfolioBudgetingList.portfolioBudgetNextYear : [];
-      if (portfolioBudgetNextYear != undefined) {
-        portfolioBudgetNextYear.forEach((val, idx) => {
-          delete(val.actualCost);
-          delete(val.forecast);
-          val.costType = translate(val.costType);
-          val.portfolioId = portfolio.id;
-          val.portfolioName = portfolio.name;
-        });
-        portfolioBudgetNextYearList.push(...portfolioBudgetNextYear);
-      }
-    });
-
     // Programs Yearly Budget
     let programBudgetGroupedByYears = _.groupBy(programBudgetCollection, 'year');
     let programYearsKeys = Object.keys(programBudgetGroupedByYears);
@@ -483,6 +458,7 @@ async function uploadExcelDumpToDrive(req, res) {
 
     programs.forEach(program => {
       programDetails.push({
+        programId: program.uid,
         programName: program.programName,
         purpose: translate(program.purpose),
         startDate: moment(program.startDate).format('DD.MMM.YYYY'),
@@ -501,6 +477,7 @@ async function uploadExcelDumpToDrive(req, res) {
       if (program.aggregatedProgramTable1) {
         aggregatedProgramTable1.forEach(obj => {
           obj.costType = translate(obj.costType);
+          obj.programId = program.uid;
           obj.programName = program.programName;
         });
         programAggregatedCost.push(...aggregatedProgramTable1)
@@ -577,7 +554,7 @@ async function uploadExcelDumpToDrive(req, res) {
           businessUnit = val.projectOutline.businessUnit;
         }
         projectManager = val.projectOutline.projectManager.name;
-        link = `${FrontEndPATH}/view/outline/${val.id}`;
+        link = `${FrontEndPATH}#/view/outline/${val.id}`;
       } else if (val.docType == 'Order') {
         if (val.projectOrder.businessArea.name == undefined) {
           businessArea = dropdowns.businessAreaValues.values.find(value => value.id == val.projectOrder.businessArea);
@@ -587,7 +564,7 @@ async function uploadExcelDumpToDrive(req, res) {
           businessUnit = val.projectOrder.businessUnit;
         }
         projectManager = val.projectOrder.projectManager.name;
-        link = `${FrontEndPATH}/view/order/${val.id}`;
+        link = `${FrontEndPATH}#/view/order/${val.id}`;
       } else if (val.docType == 'Change Request') {
         if (val.changeRequest.businessArea == undefined) {
           businessArea = dropdowns.businessAreaValues.values.find(value => value.id == val.changeRequest.businessArea)
@@ -597,10 +574,10 @@ async function uploadExcelDumpToDrive(req, res) {
           businessUnit = val.changeRequest.businessUnit;
         }
         projectManager = val.changeRequest.projectManager ? val.changeRequest.projectManager.name : '';
-        link = `${FrontEndPATH}/view/changeRequest/${val.id}`;
+        link = `${FrontEndPATH}#/view/changeRequest/${val.id}`;
       } else if (val.docType == 'Closing Report') {
         projectManager = val.closingReport.projectManager ? val.closingReport.projectManager.name : '';
-        link = `${FrontEndPATH}/view/closingReport/${val.id}`;
+        link = `${FrontEndPATH}#/view/closingReport/${val.id}`;
       }
 
       documentsList.push({
@@ -621,6 +598,9 @@ async function uploadExcelDumpToDrive(req, res) {
     let yearsKeys = Object.keys(projectBudgetGroupedByYears);
     let currentYear = moment().year();
     let yearIndex = yearsKeys.indexOf(currentYear.toString());
+    let itPlatformOptions = await Dropdown.findOne({
+      field: 'IT Platform'
+    }).populateAll();
 
     if (yearIndex > 0) {
       let indexes = [yearIndex - 1, yearIndex, yearIndex + 1];
@@ -645,8 +625,20 @@ async function uploadExcelDumpToDrive(req, res) {
           if (project) {
             project = await Projects.findOne({
               id: project
-            });
+            }).populate('projectReport');
           }
+
+          let itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
+          let temp = {};
+          let values = [];
+
+          itPlatforms.forEach(val => {
+            temp = itPlatformOptions.values.find(obj => obj.id == val);
+            if (temp) {
+              values.push(temp.name);
+            }
+          });
+          itPlatforms = values.join(',');
 
           budgetObj.budget.forEach(obj => {
             delete(obj.id);
@@ -654,8 +646,45 @@ async function uploadExcelDumpToDrive(req, res) {
             obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
             obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
             obj.projectName = project ? project.projectName : '';
-            obj.projectCategory = project ? project.mode : '';
+            obj.projectCategory = project.mode ? project.mode : 'project';
             obj.costType = translate(obj.costType);
+            obj.itPlatform = itPlatforms
+          });
+
+          subportfolioBudgetList[year].push(...budgetObj.budget);
+        }
+
+        // Small Orders Budget
+        for (let budgetObj of yearlyBudgetObj.orderBudgetCost) {
+          order = budgetObj.order;
+
+          if (order) {
+            order = await SmallOrder.findOne({
+              id: order
+            });
+          }
+
+          let itPlatforms = order.itPlatform;
+          let temp = {};
+          let values = [];
+          itPlatforms.forEach(val => {
+            temp = itPlatformOptions.values.find(obj => obj.id == val);
+            if (temp) {
+              values.push(temp.name);
+            }
+          });
+          itPlatforms = values.join(',');
+
+          budgetObj.budget.forEach(obj => {
+            delete(obj.id);
+            obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
+            obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
+            obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
+            obj.orderId = order ? order.id : '';
+            obj.orderName = order ? order.name : '';
+            obj.projectCategory = 'order';
+            obj.costType = translate(obj.costType);
+            obj.itPlatform = itPlatforms
           });
 
           subportfolioBudgetList[year].push(...budgetObj.budget);
@@ -688,17 +717,23 @@ async function uploadExcelDumpToDrive(req, res) {
         name: smallOrder.name,
         orderManager: smallOrder.orderManager ? smallOrder.orderManager.name : '',
         orderSponsor: smallOrder.orderSponsor ? smallOrder.orderSponsor.name : '',
-        portfolio: smallOrder.portfolio.name,
-        subPortfolio: smallOrder.subPortfolio.name,
+        status: smallOrder.status,
+        portfolioId: smallOrder.portfolio ? smallOrder.portfolio.id : '',
+        portfolio: smallOrder.portfolio ? smallOrder.portfolio.name : '',
+        subPortfolioId: smallOrder.subPortfolio ? smallOrder.subPortfolio.id : '',
+        subPortfolio: smallOrder.subPortfolio ? smallOrder.subPortfolio.name : '',
         businessSegment: translate(smallOrder.businessSegment.name),
         reportingLevel: translate(smallOrder.reportingLevel.name),
         businessUnit: translate(smallOrder.businessUnit.name),
         businessArea: translate(smallOrder.businessArea.name),
         portfolioId: smallOrder.portfolio.id,
         strategicContribution: translate(smallOrder.strategicContribution.name),
+        feasibility: translate(smallOrder.feasibility.name),
         profitability: translate(smallOrder.profitability.name),
         itRelevant: smallOrder.itRelevant ? translate(smallOrder.itRelevant.name) : '',
         itPlatform: itPlatforms,
+        purpose: smallOrder.purpose,
+        currency: smallOrder.currency,
         confidential: translate(smallOrder.confidential),
         reportStatus: smallOrder.smallOrderStatusReports.length > 0 ? translate(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].status) : '',
         overallStatus: smallOrder.smallOrderStatusReports.length > 0 ? statusConverter(smallOrder.smallOrderStatusReports[smallOrder.smallOrderStatusReports.length - 1].overallStatus) : '',
@@ -720,7 +755,8 @@ async function uploadExcelDumpToDrive(req, res) {
         currentBudget: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].currentBudget : 0,
         originalBudget: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].originalBudget : 0,
         actualCost: smallOrder.costTypeTable ? smallOrder.costTypeTable[6].actualCost : 0,
-        program: smallOrder.program ? smallOrder.program.programName : '',
+        programId: smallOrder.program ? smallOrder.program.uid : '',
+        programName: smallOrder.program ? smallOrder.program.programName : '',
         reportingDate: smallOrder.statusReports ? smallOrder.statusReports.length > 0 ? smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate != '' ? moment(smallOrder.statusReports[smallOrder.statusReports.length - 1].reportingDate).format('DD.MMM.YYYY') : '' : '' : '',
       });
     });
@@ -731,6 +767,11 @@ async function uploadExcelDumpToDrive(req, res) {
       cellDates: true
     });
     XLSX.utils.book_append_sheet(workbook, generalsheet, 'General');
+
+    const multiProjectReportSheet = XLSX.utils.json_to_sheet(multiProjectReport, {
+      cellDates: true
+    });
+    XLSX.utils.book_append_sheet(workbook, multiProjectReportSheet, 'Multi Project Report');
 
     const milestonesheet = XLSX.utils.json_to_sheet(milestonesList, {
       cellDates: true
@@ -767,16 +808,6 @@ async function uploadExcelDumpToDrive(req, res) {
     });
     XLSX.utils.book_append_sheet(workbook, lessonsLearnedSheet, 'Lessons Learned');
 
-    const portfolioBudgetCurrentYearSheet = XLSX.utils.json_to_sheet(portfolioBudgetCurrentYearList, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, portfolioBudgetCurrentYearSheet, 'Portfolio Budget Current Year');
-
-    const portfolioBudgetNextYearSheet = XLSX.utils.json_to_sheet(portfolioBudgetNextYearList, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, portfolioBudgetNextYearSheet, 'Portfolio Budget Next Year');
-
     yearsKeys.forEach(year => {
       let subPortfolioBudgetSheet = XLSX.utils.json_to_sheet(subportfolioBudgetList[year], {
         cellDates: true
@@ -800,11 +831,6 @@ async function uploadExcelDumpToDrive(req, res) {
     //   cellDates: true
     // });
     // XLSX.utils.book_append_sheet(workbook, programBudgetNextYearSheet, 'Program Budget Next Year');
-
-    const multiProjectReportSheet = XLSX.utils.json_to_sheet(multiProjectReport, {
-      cellDates: true
-    });
-    XLSX.utils.book_append_sheet(workbook, multiProjectReportSheet, 'Multi Project Report');
 
     const programDetailsSheet = XLSX.utils.json_to_sheet(programDetails, {
       cellDates: true

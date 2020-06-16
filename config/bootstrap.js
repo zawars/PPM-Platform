@@ -129,6 +129,34 @@ module.exports.bootstrap = async function (cb) {
     }
   });
 
+  // script to change costTypes to costTypeTable of small orders
+  let smallOrders = await SmallOrder.find();
+  smallOrders.forEach(async order => {
+    if (order.costTypes) {
+      if (!order.costTypeTable) {
+        await SmallOrder.update({
+          id: order.id
+        }).set({
+          costTypeTable: order.costTypes
+        });
+      }
+    }
+  });
+
+  // script to change costTypes to costTypeTable of small orders status report
+  let smallOrderStatusReports = await SmallOrderStatusReport.find();
+  smallOrderStatusReports.forEach(async statusReport => {
+    if (statusReport.costTypes) {
+      if (!statusReport.costTypeTable) {
+        await SmallOrderStatusReport.update({
+          id: statusReport.id
+        }).set({
+          costTypeTable: statusReport.costTypes
+        });
+      }
+    }
+  });
+
   cronJob();
 
   //Run Server on HTTPS

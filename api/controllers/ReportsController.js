@@ -296,14 +296,8 @@ io.on('connection', socket => {
         filtersObj[key] = filter[key];
       })
 
-      Reports.find({
-        user: data.userId
-      }).where(filtersObj).populateAll().then(projects => {
-        let paginatedProjects = SocketService.paginateArray(projects, 20, 1);
-        socket.emit('portfolioProjectsFilter', {
-          count: projects.length,
-          projects: paginatedProjects
-        });
+      Reports.find({}).where(filtersObj).populateAll().then(projects => {
+        socket.emit('portfolioProjectsFilter', projects);
       })
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);

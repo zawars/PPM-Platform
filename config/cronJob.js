@@ -78,6 +78,7 @@ async function uploadExcelDumpToDrive(req, res) {
       dropdowns[`${toCamelCase(element.field)}Values`] = element;
     });
 
+
     let milestonesList = [];
     let risksList = [];
     let decisionsList = [];
@@ -203,19 +204,6 @@ async function uploadExcelDumpToDrive(req, res) {
         });
       }
 
-      let technology = [];
-      if (reportObj.technology) {
-        if (dropdowns.technologyOptions) {
-          dropdowns.technologyOptions.values.map(techObj => {
-            let obj = reportObj.technology.find(val => {
-              if (val == techObj.id) {
-                technology.push(techObj.name);
-              }
-            });
-          });
-        }
-      }
-
       let itPlatformsName = '';
       if (reportObj.itPlatform) {
         if (reportObj.itPlatform.length > 0) {
@@ -259,6 +247,19 @@ async function uploadExcelDumpToDrive(req, res) {
         }
       }
 
+      let technology = reportObj.technology ? reportObj.technology : [];
+      let temp2 = {};
+      let values2 = [];
+      if (technology != undefined) {
+        technology.forEach(val => {
+          temp2 = dropdowns.technologyValues.values.find(obj => obj.id == val);
+          if (temp2) {
+            values2.push(temp2.name);
+          }
+        });
+      }
+      technology = values2.join(',');
+
       multiProjectReport.push({
         id: reportObj.uid,
         projectName: reportObj.projectName,
@@ -295,7 +296,7 @@ async function uploadExcelDumpToDrive(req, res) {
         GwH: reportObj.GwH,
         digitalizationFocus: reportObj.digitalizationFocus != undefined ? translate(reportObj.digitalizationFocus.name) : '',
         digitalizationTopic: reportObj.digitalizationTopic != undefined ? translate(reportObj.digitalizationTopic.name) : '',
-        technology: technology.join(', '),
+        technology: technology,
         purpose: translate(reportObj.purpose),
         riskExposureVsCurrentBudget: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].riskExposureVsCurrentBudget : '',
         totalExposure: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].totalExposure : '',
@@ -620,9 +621,6 @@ async function uploadExcelDumpToDrive(req, res) {
     let itPlatformOptions = await Dropdown.findOne({
       field: 'IT Platform'
     }).populateAll();
-    let technologyOptions = await Dropdown.findOne({
-      field: 'Technology'
-    }).populateAll();
 
     if (yearIndex > 0) {
       let indexes = [yearIndex - 1, yearIndex, yearIndex + 1];
@@ -669,7 +667,7 @@ async function uploadExcelDumpToDrive(req, res) {
           let values1 = [];
           if (technology != undefined) {
             technology.forEach(val => {
-              temp1 = technologyOptions.values.find(obj => obj.id == val);
+              temp1 = dropdowns.technologyValues.values.find(obj => obj.id == val);
               if (temp1) {
                 values1.push(temp1.name);
               }

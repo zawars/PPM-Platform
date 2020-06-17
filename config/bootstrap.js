@@ -54,7 +54,9 @@ module.exports.bootstrap = async function (cb) {
   let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report', 'Small Order Started', 'Small Order Closed'];
 
   emailConfigEvents.forEach(async event => {
-    let emailConfig = await EmailConfig.findOne({ event: event });
+    let emailConfig = await EmailConfig.findOne({
+      event: event
+    });
     if (!emailConfig) {
       await EmailConfig.create({
         event: event,
@@ -62,7 +64,7 @@ module.exports.bootstrap = async function (cb) {
       });
     }
   });
-  
+
   // script to change itPlatform to array of ids of Project Outline
   let outlines = await ProjectOutline.find().populateAll();
   outlines.forEach(async outline => {
@@ -80,7 +82,7 @@ module.exports.bootstrap = async function (cb) {
   // script to change itPlatform to array of ids of Project Order
   let orders = await ProjectOrder.find().populateAll();
   orders.forEach(async order => {
-    if (order.itPlatform) { 
+    if (order.itPlatform) {
       if (order.itPlatform.id) {
         await ProjectOrder.update({
           id: order.id
@@ -110,7 +112,7 @@ module.exports.bootstrap = async function (cb) {
   details.forEach(async detail => {
     if (detail.itPlatform) {
       if (!detail.itPlatform.length) {
-        if(detail.itPlatform.id) {
+        if (detail.itPlatform.id) {
           await Reports.update({
             id: detail.id
           }).set({
@@ -123,6 +125,34 @@ module.exports.bootstrap = async function (cb) {
             itPlatform: [detail.itPlatform]
           });
         }
+      }
+    }
+  });
+
+  // script to change costTypes to costTypeTable of small orders
+  let smallOrders = await SmallOrder.find();
+  smallOrders.forEach(async order => {
+    if (order.costTypes) {
+      if (!order.costTypeTable) {
+        await SmallOrder.update({
+          id: order.id
+        }).set({
+          costTypeTable: order.costTypes
+        });
+      }
+    }
+  });
+
+  // script to change costTypes to costTypeTable of small orders status report
+  let smallOrderStatusReports = await SmallOrderStatusReport.find();
+  smallOrderStatusReports.forEach(async statusReport => {
+    if (statusReport.costTypes) {
+      if (!statusReport.costTypeTable) {
+        await SmallOrderStatusReport.update({
+          id: statusReport.id
+        }).set({
+          costTypeTable: statusReport.costTypes
+        });
       }
     }
   });

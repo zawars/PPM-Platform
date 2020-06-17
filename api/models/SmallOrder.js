@@ -86,7 +86,7 @@ module.exports = {
       type: 'integer',
       defaultsTo: 0
     },
-    costTypes: {
+    costTypeTable: {
       type: 'json'
     },
     forecastEndDate: {

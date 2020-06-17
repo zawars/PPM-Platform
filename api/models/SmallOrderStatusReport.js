@@ -67,7 +67,7 @@ module.exports = {
     decisions : {
       type: 'json'
     },
-    costTypes: {
+    costTypeTable: {
       type: 'json'
     },
     currentBudgetVSForecast: {

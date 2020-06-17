@@ -191,6 +191,62 @@ io.on('connection', socket => {
       });
   });
 
+  //To search in data table of Reports
+  socket.on('reportsSearch', async data => {
+    let search = data.search;
+
+    let count = await Reports.count({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    });
+
+    Reports.find({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    }).limit(10).populateAll().sort('uid DESC').then(reportsResp => {
+      socket.emit('reportsSearch', { count: count, reports: reportsResp });
+    }).catch(error => {
+      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearch', '', socket.user.id);
+    });
+  });
+
+  //To paginate search results of Reports
+  socket.on('reportsSearchIndex', data => {
+    let search = data.search;
+    Reports.find({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(reportsResp => {
+      socket.emit('reportsSearchIndex', reportsResp);
+    }).catch(error => {
+      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearchIndex', '', socket.user.id);
+    });
+  });
+
   //To get count
   socket.on('portfolioProjectsCount', async data => {
     try {

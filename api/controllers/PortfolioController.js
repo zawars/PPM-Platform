@@ -157,7 +157,7 @@ module.exports = {
     try {
       let portfolios = await Portfolio.find().sort({
         name: 'ASC'
-      });
+      }).populateAll();
 
       let programs = await Program.find().sort({
         programName: 'ASC'

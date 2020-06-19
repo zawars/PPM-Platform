@@ -10,7 +10,8 @@ module.exports = {
     try {
       let budgetYears = await PortfolioBudgetYear.find({
         subPortfolio: req.params.id
-      });
+      }).sort('year ASC');
+
       res.ok(budgetYears);
     } catch (error) {
       ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'getBudgetYears', req);

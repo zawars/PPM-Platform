@@ -9,6 +9,17 @@ const io = SocketService.io;
 
 io.on('connection', socket => {
 
+  socket.on('getSelectiveOrders', data => {
+    let ordersIds = data.ids;
+    SmallOrder.find({
+      id: ordersIds
+    }).then(orders => {
+      socket.emit('getSelectiveOrders', orders);
+    }).catch(err => {
+      ErrorsLogService.logError('Orders', err.toString(), 'getSelectiveOrders', '', socket.user.id);
+    })
+  });
+
   //To paginate smallOrders table
   socket.on('smallOrdersIndex', async data => {
     try {

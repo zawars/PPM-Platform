@@ -20,6 +20,24 @@ io.on('connection', socket => {
     })
   });
 
+  socket.on('smallOrdersFilter', data => {
+    try {
+      let filters = data.filtersArray;
+      let filtersObj = {};
+
+      filters.forEach(filter => {
+        let key = Object.keys(filter)[0];
+        filtersObj[key] = filter[key];
+      })
+
+      SmallOrder.find({}).where(filtersObj).populateAll().then(orders => {
+        socket.emit('smallOrdersFilter', orders);
+      })
+    } catch (error) {
+      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersFilter', '', socket.user.id);
+    }
+  });
+
   //To paginate smallOrders table
   socket.on('smallOrdersIndex', async data => {
     try {

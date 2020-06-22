@@ -64,7 +64,7 @@ module.exports.routes = {
   'GET /getOutlinesByProject/:id': 'OutlineApprovalController.getOutlinesByProject',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
-  'POST /notifyAdmins': 'UserController.notifyAdminsbyEmail',
+  'POST /notifyAdmins': 'UserController.notifyAdminsbyEmailAttachment',
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',

@@ -73,43 +73,30 @@ module.exports = {
     })
   },
 
-  notifyAdminsbyEmail: async (req, res) => {
-    let user = req.body.user;
-    let message = req.body.message;
+  notifyAdminsbyEmailAttachment: async (req, res) => {
+    req.file('attachment').upload({
+      dirname: '../../../uploads/'
+    }, async (err, uploadedFiles) => {
+      if (err) {
+        console.log(err);
+        return res.send(500, err);
+      }
 
-    let admins = await User.find({
-      role: 'admin'
-    });
-
-    let recepientsEmails = [];
-
-    if (admins.length > 0) {
-      admins.forEach((admin, index) => {
-        recepientsEmails.push(admin.email);
-      })
-
-      EmailService.sendMail({
-        email: recepientsEmails,
-        message: message,
-        subject: user.name + ` (${user.email}) Reported an Issue`
-      }, (err) => {
-        if (err) {
-          ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'notifyAdminsbyEmail', req);
-          console.log(err);
-          res.forbidden({
-            message: "Error sending email."
-          });
-        } else {
-          res.send({
-            message: "Email sent."
-          });
+      if (uploadedFiles.length > 0) {
+        if (uploadedFiles[0].fd.includes("..")) {
+          while (uploadedFiles[0].fd.includes("..")) {
+            uploadedFiles[0].fd = uploadedFiles[0].fd.replace(`..\\`, ``);
+          }
         }
-      })
-    } else {
-      res.send({
-        message: "No Admins found."
-      });
-    }
+      }
+
+      let attachmentObj = {
+        fileName: uploadedFiles[0].filename,
+        path: uploadedFiles[0].fd
+      };
+
+      res.ok(attachmentObj);
+    });
   },
 
   login: (req, res) => {

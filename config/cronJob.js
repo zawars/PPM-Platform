@@ -648,15 +648,37 @@ async function uploadExcelDumpToDrive(req, res) {
             }).populate('projectReport');
           }
 
-          let itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
+          let itPlatforms;
           let temp = {};
           let values = [];
+<<<<<<< Updated upstream
           itPlatforms.forEach(val => {
             temp = itPlatformOptions.values.find(obj => obj.id == val);
             if (temp) {
               values.push(temp.name);
             }
           });
+=======
+          if (project.mode != 'bucket') {
+            itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
+
+            itPlatforms.forEach(val => {
+              temp = itPlatformOptions.values.find(obj => obj.id == val);
+              if (temp) {
+                values.push(temp.name);
+              }
+            });
+          } else {
+            itPlatforms = project.itPlatform;
+
+            itPlatforms.forEach(val => {
+              temp = itPlatformOptions.values.find(obj => obj.id == val);
+              if (temp) {
+                values.push(temp.name);
+              }
+            });
+          }
+>>>>>>> Stashed changes
           itPlatforms = values.join(',');
 
           let purpose = '';
@@ -680,6 +702,7 @@ async function uploadExcelDumpToDrive(req, res) {
             obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
             obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
             obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
+            obj.projectId = project ? project.uid : '';
             obj.projectName = project ? project.projectName : '';
             obj.projectCategory = project.mode ? project.mode : 'project';
             obj.costType = translate(obj.costType);

@@ -629,6 +629,44 @@ io.on('connection', socket => {
 
     socket.emit('searchOpenDetailsProjects', projects);
   });
+
+  // notify Admins by Email for report an issue
+  socket.on('notifyAdminsbyEmail', async data => {
+    let user = data.user;
+    let message = data.message;
+    let attachments = data.attachments;
+
+    let admins = await User.find({
+      role: 'admin'
+    });
+
+    let recepientsEmails = [];
+
+    if (admins.length > 0) {
+      admins.forEach((admin, index) => {
+        recepientsEmails.push(admin.email);
+      })
+
+      EmailService.sendMail({
+        email: recepientsEmails,
+        message: message,
+        subject: user.name + ` (${user.email}) Reported an Issue`,
+        attachments: attachments
+      }, (err) => {
+        if (err) {
+          ErrorsLogService.logError('Projects', `email: ${email}, ` + err.toString(), 'notifyAdminsbyEmail', socket.user.id);
+          console.log(err);
+          res.forbidden({
+            message: "Error sending email."
+          });
+        } else {
+          socket.emit('notifyAdminsbyEmail', { message: "Email sent." });
+        }
+      })
+    } else {
+      socket.emit('notifyAdminsbyEmail', { message: "No Admins found." });
+    }
+  });
 });
 
 module.exports = {

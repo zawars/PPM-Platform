@@ -651,14 +651,6 @@ async function uploadExcelDumpToDrive(req, res) {
           let itPlatforms;
           let temp = {};
           let values = [];
-<<<<<<< Updated upstream
-          itPlatforms.forEach(val => {
-            temp = itPlatformOptions.values.find(obj => obj.id == val);
-            if (temp) {
-              values.push(temp.name);
-            }
-          });
-=======
           if (project.mode != 'bucket') {
             itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
 
@@ -678,7 +670,6 @@ async function uploadExcelDumpToDrive(req, res) {
               }
             });
           }
->>>>>>> Stashed changes
           itPlatforms = values.join(',');
 
           let purpose = '';

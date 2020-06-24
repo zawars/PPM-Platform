@@ -34,6 +34,9 @@ module.exports = {
     // subPortfolioManager: {
     //   model: 'user',
     // },
+    additionalSubPortfolioManager: {
+      type: 'json',
+    },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗

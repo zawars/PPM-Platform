@@ -636,6 +636,10 @@ io.on('connection', socket => {
     let message = data.message;
     let attachments = data.attachments;
 
+    if(attachments && attachments.length > 0) {
+      attachments[0].path = process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + attachments[0].path;
+    }
+
     let admins = await User.find({
       role: 'admin'
     });

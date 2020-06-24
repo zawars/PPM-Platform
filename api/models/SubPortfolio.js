@@ -22,7 +22,7 @@ module.exports = {
       type: 'string',
     },
     statusReportReminder: {
-      type: 'string'
+      type: 'json'
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

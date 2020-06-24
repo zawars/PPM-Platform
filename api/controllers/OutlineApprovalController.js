@@ -17,7 +17,12 @@ io.on('connection', socket => {
 
       filters.forEach(filter => {
         let key = Object.keys(filter)[0];
-        filtersObj[key] = filter[key];
+        if (filtersObj[key]) {
+          let presentFil = filtersObj[key];
+          filtersObj[key] = presentFil.concat(filter[key])
+        } else {
+          filtersObj[key] = filter[key];
+        }
       })
 
       let approvalsResult = await OutlineApproval.find({

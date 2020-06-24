@@ -10,6 +10,31 @@ const io = SocketService.io;
 io.on('connection', socket => {
 
 
+  socket.on('ApprovalsFilterCount', async data => {
+    try {
+      let filters = data.filtersArray;
+      let filtersObj = {};
+
+      filters.forEach(filter => {
+        let key = Object.keys(filter)[0];
+        if (filtersObj[key]) {
+          let presentFil = filtersObj[key];
+          filtersObj[key] = presentFil.concat(filter[key])
+        } else {
+          filtersObj[key] = filter[key];
+        }
+      })
+
+      let approvalsResultCount = await OutlineApproval.count({
+        assignedTo: data.userId
+      }).where(filtersObj);
+
+      socket.emit('ApprovalsFilterCount', approvalsResultCount);
+    } catch (error) {
+      ErrorsLogService.logError('OutlineApproval', error.toString(), 'ApprovalsFilterCount', '', socket.user.id);
+    }
+  });
+
   socket.on('ApprovalsFilter', async data => {
     try {
       let filters = data.filtersArray;
@@ -27,7 +52,10 @@ io.on('connection', socket => {
 
       let approvalsResult = await OutlineApproval.find({
         assignedTo: data.userId
-      }).where(filtersObj).populateAll();
+      }).where(filtersObj).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      }).populateAll();
 
       socket.emit('ApprovalsFilter', approvalsResult);
     } catch (error) {

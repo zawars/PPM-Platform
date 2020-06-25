@@ -30,7 +30,7 @@ io.on('connection', socket => {
         filtersObj[key] = filter[key];
       })
 
-      SmallOrder.find({}).where(filtersObj).populateAll().then(orders => {
+      SmallOrder.find({}).where(filtersObj).limit(100).populateAll().then(orders => {
         socket.emit('smallOrdersFilter', orders);
       })
     } catch (error) {

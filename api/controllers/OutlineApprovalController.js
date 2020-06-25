@@ -52,7 +52,7 @@ io.on('connection', socket => {
 
       let approvalsResult = await OutlineApproval.find({
         assignedTo: data.userId
-      }).where(filtersObj).paginate({
+      }).where(filtersObj).sort('createdAt DESC').paginate({
         page: data.pageIndex,
         limit: data.pageSize
       }).populateAll();

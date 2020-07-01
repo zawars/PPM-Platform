@@ -31,7 +31,7 @@ module.exports = {
       model: 'portfolio'
     },
     subPortfolio: {
-      type: 'json'
+      model: 'subPortfolio'
     },
     program: {
       model: 'program'

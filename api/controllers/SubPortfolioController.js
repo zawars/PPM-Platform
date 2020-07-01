@@ -145,7 +145,11 @@ module.exports = {
       }
 
       let subportfolios = await SubPortfolio.find({
-        'subPortfolioManager.id': req.params.id
+        or: [{
+          'subPortfolioManager.id': req.params.id
+        }, {
+          'additionalSubPortfolioManager.id': req.params.id
+        }]
       }).limit(limit).populateAll();
 
       res.ok(subportfolios);

@@ -133,6 +133,7 @@ module.exports.routes = {
   'POST /createProjectBudgetCostbyYear': 'ProjectBudgetCostController.createBudgetByYear',
   'POST /updateMultipleProjectsBudget': 'ProjectBudgetCostController.updateMultipleProjectsBudget',
   'POST /createProjectBudgetCost': 'ProjectBudgetCostController.createProjectBudgetCost',
+  'POST /projectBudgetCost/yearlyBudget/switch': 'ProjectBudgetCostController.switchYearlyBudget',
 
   //News
   'GET /news': 'NewsController.index',

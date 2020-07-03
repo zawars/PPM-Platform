@@ -663,12 +663,14 @@ async function uploadExcelDumpToDrive(req, res) {
           } else {
             itPlatforms = project.itPlatform;
 
-            itPlatforms.forEach(val => {
-              temp = itPlatformOptions.values.find(obj => obj.id == val);
-              if (temp) {
-                values.push(temp.name);
-              }
-            });
+            if (typeof itPlatforms == 'array') {
+              itPlatforms.forEach(val => {
+                temp = itPlatformOptions.values.find(obj => obj.id == val);
+                if (temp) {
+                  values.push(temp.name);
+                }
+              });
+            }
           }
           itPlatforms = values.join(',');
 

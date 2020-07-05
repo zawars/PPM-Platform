@@ -159,10 +159,10 @@ module.exports = {
           portfolioBudgetYear: budgetYears[i].id
         });
 
-        
-      let orderBudgetCost = await OrderBudgetCost.find({
-        portfolioBudgetYear: budgetYears[i].id
-      });
+
+        let orderBudgetCost = await OrderBudgetCost.find({
+          portfolioBudgetYear: budgetYears[i].id
+        });
 
         let totalBudget = 0;
         let totalOwnIT = 0;
@@ -176,14 +176,14 @@ module.exports = {
             totalThereofICT += parseInt(project.budget[1].davon_GE_ICT || 0) + parseInt(project.budget[3].davon_GE_ICT || 0);
             totalExternalIT += parseInt(project.budget[0].thereofIT || 0) + parseInt(project.budget[2].thereofIT || 0);
           })
-  
+
           orderBudgetCost.forEach(order => {
             totalBudget += parseInt(order.budget[6].budget || 0);
             totalOwnIT += parseInt(order.budget[1].thereofIT || 0) + parseInt(order.budget[3].thereofIT || 0);
             totalThereofICT += parseInt(order.budget[1].davon_GE_ICT || 0) + parseInt(order.budget[3].davon_GE_ICT || 0);
             totalExternalIT += parseInt(order.budget[0].thereofIT || 0) + parseInt(order.budget[2].thereofIT || 0);
           })
-  
+
 
           let PortfolioBudgetYearUpdated = await PortfolioBudgetYear.update({
             id: budgetYears[i].id
@@ -230,18 +230,18 @@ module.exports = {
               delete temp.Yearly_Budget_Fixed;
               delete temp.thereof_IT_Fixed;
               delete temp.davon_GE_ICT_Fixed;
-  
+
               let davonGEFixedObj = isdavonGEFixed ? {
                 davon_GE_ICT_Fixed: order.budget[i].davon_GE_ICT
               } : {};
-  
+
               order.budget[i] = Object.assign({}, temp, {
                 Yearly_Budget_Fixed: order.budget[i].budget
               }, {
                 thereof_IT_Fixed: order.budget[i].thereofIT
               }, davonGEFixedObj);
             }
-  
+
             let result = await OrderBudgetCost.update({
               id: order.id
             }).set({
@@ -285,5 +285,44 @@ module.exports = {
       ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'fixYearlyBudget', req);
       res.badRequest(error);
     }
+  },
+
+  multiYearlyBudget: async (req, res) => {
+    let subPortfolioBudgetYearList = await PortfolioBudgetYear.find({
+      subPortfolio: req.params.id
+    }).populateAll();
+
+    let data = {};
+
+    subPortfolioBudgetYearList.map(subportfolioBudgetYear => {
+      subportfolioBudgetYear.projectBudgetCost.map(val => {
+        if (data[val.project] == undefined) {
+          data[val.project] = {};
+          data[val.project].total = 0;
+          data[val.project].years = [];
+        }
+
+        data[val.project][subportfolioBudgetYear.year] = val.budget[6].budget;
+        data[val.project].total += data[val.project][subportfolioBudgetYear.year];
+        data[val.project].years.push(subportfolioBudgetYear.year);
+      });
+    });
+
+    let keys = Object.keys(data);
+    let projects = await Projects.find({
+      id: keys
+    }).populate('projectReport');
+
+    let result = [];
+    projects.map(val => {
+      result.push({
+        id: val.uid,
+        projectName: val.projectName,
+        ...data[val.id],
+        status: val.projectReport.status
+      });
+    });
+
+    res.ok(result)
   }
 };

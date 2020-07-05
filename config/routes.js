@@ -150,6 +150,7 @@ module.exports.routes = {
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
   'POST /portfolioBudgetYear/fixYearlyBudget': 'PortfolioBudgetYearController.fixYearlyBudget',
   'POST /portfolioBudgetYear/fixAllYearlyBudget': 'PortfolioBudgetYearController.fixAllYearlyBudget',
+  'GET /portfolioBudgetYear/subportfolio/:id/yearlyBudget': 'PortfolioBudgetYearController.multiYearlyBudget',
 
   //Subportfolio status report
   'GET /subportfolio/statusReports/:subportfolioId': 'SubportfolioStatusReportController.statusReportsbySubportfolio',

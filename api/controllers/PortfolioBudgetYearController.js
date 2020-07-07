@@ -192,7 +192,7 @@ module.exports = {
             totalThereofICT += parseInt(project.budget[6].davon_GE_ICT || 0);
             totalExternalIT += parseInt(project.budget[0].thereofIT || 0) + parseInt(project.budget[2].thereofIT || 0);
             totalopexCapexExternal += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[2].budget || 0);
-            totalCapex += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[1].budget || 0);  
+            totalCapex += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[1].budget || 0);
           })
 
           orderBudgetCost.forEach(order => {
@@ -202,7 +202,7 @@ module.exports = {
             totalThereofICT += parseInt(order.budget[6].davon_GE_ICT || 0);
             totalExternalIT += parseInt(order.budget[0].thereofIT || 0) + parseInt(order.budget[2].thereofIT || 0);
             totalopexCapexExternal += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[2].budget || 0);
-            totalCapex += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[1].budget || 0);  
+            totalCapex += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[1].budget || 0);
           })
 
 
@@ -215,7 +215,7 @@ module.exports = {
             totalFixedThereofICT: totalThereofICT,
             totalFixedExternalIT: totalExternalIT,
             totalFixedopexCapexExternal: totalopexCapexExternal,
-            totalFixedCapex: totalCapex  
+            totalFixedCapex: totalCapex
           });
 
           let fixedColumns = [{
@@ -334,7 +334,8 @@ module.exports = {
 
     let keys = Object.keys(data);
     let projects = await Projects.find({
-      id: keys
+      id: keys,
+      mode: 'project'
     }).populate('projectReport');
 
     let result = [];

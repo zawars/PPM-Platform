@@ -690,21 +690,37 @@ async function uploadExcelDumpToDrive(req, res) {
           }
           technology = values1.join(',');
 
+          let budget = [];
           budgetObj.budget.forEach(obj => {
-            delete(obj.id);
-            obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
-            obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
-            obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
-            obj.projectId = project ? project.uid : '';
-            obj.projectName = project ? project.projectName : '';
-            obj.projectCategory = project.mode ? project.mode : 'project';
-            obj.costType = translate(obj.costType);
-            obj.purpose = purpose;
-            obj.technology = technology;
-            obj.itPlatform = itPlatforms;
+            // delete(obj.id);
+            budget.push({
+              costType: translate(obj.costType),
+              remainingProjectBudget: obj.remainingProjectBudget,
+              yealryBudgetDemand: obj.yearlyForecast,
+              thereofITDemand: obj.thereofITForecast,
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
+              thereofITFixed: obj.thereof_IT_Fixed,
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed,
+              yearlyBudgetApproved: obj.budget,
+              thereofITApproved: obj.thereofIT,
+              davonGEICT: obj.davon_GE_ICT,
+              GBMS: obj.GB_MS,
+              corpRisk: obj[`Corp.Risk`],
+              GBP: obj.GB_P,
+              FDHandel: obj.FD_Handel,
+              portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
+              subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
+              subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
+              projectId: project ? project.uid : '',
+              projectName: project ? project.projectName : '',
+              projectCategory: project.mode ? project.mode : 'project',
+              purpose: purpose,
+              technology: technology,
+              itPlatform: itPlatforms,
+            });
           });
 
-          subportfolioBudgetList[year].push(...budgetObj.budget);
+          subportfolioBudgetList[year].push(...budget);
         }
 
         // Small Orders Budget
@@ -728,19 +744,35 @@ async function uploadExcelDumpToDrive(req, res) {
           });
           itPlatforms = values.join(',');
 
+          let budget = [];
           budgetObj.budget.forEach(obj => {
-            delete(obj.id);
-            obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
-            obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
-            obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
-            obj.orderId = order ? order.uid : '';
-            obj.orderName = order ? order.name : '';
-            obj.projectCategory = 'order';
-            obj.costType = translate(obj.costType);
-            obj.itPlatform = itPlatforms
+            budget.push({
+              costType: translate(obj.costType),
+              remainingProjectBudget: obj.remainingProjectBudget,
+              yealryBudgetDemand: obj.yearlyForecast,
+              thereofITDemand: obj.thereofITForecast,
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
+              thereofITFixed: obj.thereof_IT_Fixed,
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed,
+              yearlyBudgetApproved: obj.budget,
+              thereofITApproved: obj.thereofIT,
+              davonGEICT: obj.davon_GE_ICT,
+              GBMS: obj.GB_MS,
+              corpRisk: obj[`Corp.Risk`],
+              GBP: obj.GB_P,
+              FDHandel: obj.FD_Handel,
+              portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
+              subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
+              subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
+              orderId: order ? order.uid : '',
+              orderName: order ? order.name : '',
+              projectCategory: 'order',
+              costType: translate(obj.costType),
+              itPlatform: itPlatforms,
+            });
           });
 
-          subportfolioBudgetList[year].push(...budgetObj.budget);
+          subportfolioBudgetList[year].push(...budget);
         }
       }
     }
@@ -781,7 +813,7 @@ async function uploadExcelDumpToDrive(req, res) {
         businessArea: smallOrder.businessArea ? translate(smallOrder.businessArea.name) : '',
         portfolioId: smallOrder.portfolio ? smallOrder.portfolio.id : '',
         strategicContribution: smallOrder.strategicContribution ? translate(smallOrder.strategicContribution.name) : '',
-        feasibility: translate(smallOrder.feasibility.name),
+        feasibility: smallOrder.feasibility ? translate(smallOrder.feasibility.name) : '',
         profitability: smallOrder.profitability ? translate(smallOrder.profitability.name) : '',
         itRelevant: smallOrder.itRelevant ? translate(smallOrder.itRelevant.name) : '',
         itPlatform: itPlatforms,

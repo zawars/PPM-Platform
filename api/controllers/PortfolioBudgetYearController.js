@@ -32,23 +32,32 @@ module.exports = {
       });
 
       let totalBudget = 0;
+      let totalThereofIT = 0;
       let totalOwnIT = 0;
       let totalThereofICT = 0;
       let totalExternalIT = 0;
+      let totalopexCapexExternal = 0;
+      let totalCapex = 0;
 
       if (projectBudgetCost.length > 0 || orderBudgetCost.length > 0) {
         projectBudgetCost.forEach(project => {
           totalBudget += parseInt(project.budget[6].budget || 0);
+          totalThereofIT += parseInt(project.budget[6].thereofIT || 0);
           totalOwnIT += parseInt(project.budget[1].thereofIT || 0) + parseInt(project.budget[3].thereofIT || 0);
           totalThereofICT += parseInt(project.budget[1].davon_GE_ICT || 0) + parseInt(project.budget[3].davon_GE_ICT || 0);
           totalExternalIT += parseInt(project.budget[0].thereofIT || 0) + parseInt(project.budget[2].thereofIT || 0);
+          totalopexCapexExternal += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[2].budget || 0);
+          totalCapex += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[1].budget || 0);
         })
 
         orderBudgetCost.forEach(order => {
           totalBudget += parseInt(order.budget[6].budget || 0);
+          totalThereofIT += parseInt(order.budget[6].thereofIT || 0);
           totalOwnIT += parseInt(order.budget[1].thereofIT || 0) + parseInt(order.budget[3].thereofIT || 0);
           totalThereofICT += parseInt(order.budget[1].davon_GE_ICT || 0) + parseInt(order.budget[3].davon_GE_ICT || 0);
           totalExternalIT += parseInt(order.budget[0].thereofIT || 0) + parseInt(order.budget[2].thereofIT || 0);
+          totalopexCapexExternal += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[2].budget || 0);
+          totalCapex += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[1].budget || 0);
         })
 
         let fixedColumns = [{
@@ -63,9 +72,12 @@ module.exports = {
           id: budgetYear
         }).set({
           totalFixedBudget: totalBudget,
+          totalFixedthereofIT: totalThereofIT,
           totalFixedOwnIT: totalOwnIT,
           totalFixedThereofICT: totalThereofICT,
-          totalFixedExternalIT: totalExternalIT
+          totalFixedExternalIT: totalExternalIT,
+          totalFixedopexCapexExternal: totalopexCapexExternal,
+          totalFixedCapex: totalCapex
         });
 
         let isdavonGEFixed = false;
@@ -165,23 +177,32 @@ module.exports = {
         });
 
         let totalBudget = 0;
+        let totalThereofIT = 0;
         let totalOwnIT = 0;
         let totalThereofICT = 0;
         let totalExternalIT = 0;
+        let totalopexCapexExternal = 0;
+        let totalCapex = 0;
 
         if (projectBudgetCost.length > 0) {
           projectBudgetCost.forEach(project => {
             totalBudget += parseInt(project.budget[6].budget || 0);
+            totalThereofIT += parseInt(project.budget[6].thereofIT || 0);
             totalOwnIT += parseInt(project.budget[1].thereofIT || 0) + parseInt(project.budget[3].thereofIT || 0);
             totalThereofICT += parseInt(project.budget[1].davon_GE_ICT || 0) + parseInt(project.budget[3].davon_GE_ICT || 0);
             totalExternalIT += parseInt(project.budget[0].thereofIT || 0) + parseInt(project.budget[2].thereofIT || 0);
+            totalopexCapexExternal += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[2].budget || 0);
+            totalCapex += parseInt(project.budget[0].budget || 0) + parseInt(project.budget[1].budget || 0);  
           })
 
           orderBudgetCost.forEach(order => {
             totalBudget += parseInt(order.budget[6].budget || 0);
+            totalThereofIT += parseInt(order.budget[6].thereofIT || 0);
             totalOwnIT += parseInt(order.budget[1].thereofIT || 0) + parseInt(order.budget[3].thereofIT || 0);
             totalThereofICT += parseInt(order.budget[1].davon_GE_ICT || 0) + parseInt(order.budget[3].davon_GE_ICT || 0);
             totalExternalIT += parseInt(order.budget[0].thereofIT || 0) + parseInt(order.budget[2].thereofIT || 0);
+            totalopexCapexExternal += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[2].budget || 0);
+            totalCapex += parseInt(order.budget[0].budget || 0) + parseInt(order.budget[1].budget || 0);  
           })
 
 
@@ -189,9 +210,12 @@ module.exports = {
             id: budgetYears[i].id
           }).set({
             totalFixedBudget: totalBudget,
+            totalFixedthereofIT: totalThereofIT,
             totalFixedOwnIT: totalOwnIT,
             totalFixedThereofICT: totalThereofICT,
-            totalFixedExternalIT: totalExternalIT
+            totalFixedExternalIT: totalExternalIT,
+            totalFixedopexCapexExternal: totalopexCapexExternal,
+            totalFixedCapex: totalCapex  
           });
 
           let fixedColumns = [{

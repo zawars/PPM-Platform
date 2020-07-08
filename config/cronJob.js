@@ -695,6 +695,7 @@ async function uploadExcelDumpToDrive(req, res) {
             // delete(obj.id);
             budget.push({
               costType: translate(obj.costType),
+              group: translate(obj.group),
               remainingProjectBudget: obj.remainingProjectBudget,
               yealryBudgetDemand: obj.yearlyForecast,
               thereofITDemand: obj.thereofITForecast,

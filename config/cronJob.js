@@ -713,7 +713,7 @@ async function uploadExcelDumpToDrive(req, res) {
               subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
               projectId: project ? project.uid : '',
               projectName: project ? project.projectName : '',
-              projectCategory: project.mode ? project.mode : 'project',
+              projectCategory: project.mode ? translate(project.mode) : translate('project'),
               purpose: purpose,
               technology: technology,
               itPlatform: itPlatforms,

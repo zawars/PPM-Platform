@@ -22,7 +22,7 @@ module.exports = {
       type: 'string',
     },
     statusReportReminder: {
-      type: 'string'
+      type: 'json'
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
@@ -34,6 +34,9 @@ module.exports = {
     // subPortfolioManager: {
     //   model: 'user',
     // },
+    additionalSubPortfolioManager: {
+      type: 'json',
+    },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗

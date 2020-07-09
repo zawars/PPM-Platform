@@ -12,7 +12,7 @@ io.on('connection', socket => {
   socket.on('subportfolioReports', async data => {
     try {
       let reports = await Reports.find({
-        'subPortfolio.id': data.id
+        subPortfolio: data.id
       }).populateAll();
 
       socket.emit('subportfolioReports', reports);
@@ -38,7 +38,11 @@ io.on('connection', socket => {
   socket.on('subportfoliosByUserCount', async data => {
     try {
       let subportfoliosCount = await SubPortfolio.count({
-        'subPortfolioManager.id': data.id
+        or: [{
+          'subPortfolioManager.id': data.id
+        }, {
+          'additionalSubPortfolioManager.id': data.id
+        }]
       });
 
       socket.emit('subportfoliosByUserCount', subportfoliosCount);
@@ -51,7 +55,11 @@ io.on('connection', socket => {
   socket.on('subportfoliosByUser', async data => {
     try {
       let subportfolios = await SubPortfolio.find({
-        'subPortfolioManager.id': data.id
+        or: [{
+          'subPortfolioManager.id': data.id
+        }, {
+          'additionalSubPortfolioManager.id': data.id
+        }]
       }).paginate({
         page: data.pageIndex,
         limit: data.pageSize
@@ -73,6 +81,7 @@ module.exports = {
         name: req.body.name,
         portfolio: req.body.portfolio,
         subPortfolioManager: req.body.subPortfolioManager,
+        additionalSubPortfolioManager: req.body.additionalSubPortfolioManager,
         statusReportReminder: req.body.statusReportReminder // statusReportReminder value is used to how many days after send email reminder those project managers whose do not create a status report according to current date  
       })
       let createdPortfolioBudgetYear = await PortfolioBudgetYear.create({
@@ -100,7 +109,7 @@ module.exports = {
   getSubportfolioProjects: async (req, res) => {
     try {
       let reports = await Reports.find({
-        'subPortfolio.id': req.params.id
+        subPortfolio: req.params.id
       }, {
         fields: {
           project: 1
@@ -136,7 +145,11 @@ module.exports = {
       }
 
       let subportfolios = await SubPortfolio.find({
-        'subPortfolioManager.id': req.params.id
+        or: [{
+          'subPortfolioManager.id': req.params.id
+        }, {
+          'additionalSubPortfolioManager.id': req.params.id
+        }]
       }).limit(limit).populateAll();
 
       res.ok(subportfolios);

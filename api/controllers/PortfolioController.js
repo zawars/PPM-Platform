@@ -152,4 +152,23 @@ module.exports = {
       ErrorsLogService.logError('Project Outline', error.toString(), 'getActivePortfolios', req);
     });
   },
+
+  getAllPortfoliosPrograms: async (req, res) => {
+    try {
+      let portfolios = await Portfolio.find().sort({
+        name: 'ASC'
+      }).populateAll();
+
+      let programs = await Program.find().sort({
+        programName: 'ASC'
+      });
+
+      res.send({
+        programs,
+        portfolios
+      });
+    } catch (error) {
+      ErrorsLogService.logError('Portfolio', error.toString(), 'getAllPortfoliosPrograms', req);
+    }
+  }
 };

@@ -750,7 +750,7 @@ async function uploadExcelDumpToDrive(req, res) {
             budget.push({
               costType: translate(obj.costType),
               remainingProjectBudget: obj.remainingProjectBudget,
-              yealryBudgetDemand: obj.yearlyForecast,
+              yearlyBudgetDemand: obj.yearlyForecast,
               thereofITDemand: obj.thereofITForecast,
               yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
               thereofITFixed: obj.thereof_IT_Fixed,
@@ -770,6 +770,7 @@ async function uploadExcelDumpToDrive(req, res) {
               projectCategory: 'order',
               costType: translate(obj.costType),
               itPlatform: itPlatforms,
+              purpose: order.purpose
             });
           });
 

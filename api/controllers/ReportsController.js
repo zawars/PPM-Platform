@@ -183,12 +183,68 @@ io.on('connection', socket => {
         page: data.pageIndex,
         limit: data.pageSize
       })
-      .populateAll().then(projects => {
+      .populateAll().sort('uid DESC').then(projects => {
         socket.emit('allReportsIndex', projects);
       })
       .catch(error => {
         ErrorsLogService.logError('Reports', error.toString(), 'allReportsIndex', '', socket.user.id);
       });
+  });
+
+  //To search in data table of Reports
+  socket.on('reportsSearch', async data => {
+    let search = data.search;
+
+    let count = await Reports.count({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    });
+
+    Reports.find({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    }).limit(10).populateAll().sort('uid DESC').then(reportsResp => {
+      socket.emit('reportsSearch', { count: count, reports: reportsResp });
+    }).catch(error => {
+      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearch', '', socket.user.id);
+    });
+  });
+
+  //To paginate search results of Reports
+  socket.on('reportsSearchIndex', data => {
+    let search = data.search;
+    Reports.find({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(reportsResp => {
+      socket.emit('reportsSearchIndex', reportsResp);
+    }).catch(error => {
+      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearchIndex', '', socket.user.id);
+    });
   });
 
   //To get count
@@ -296,14 +352,8 @@ io.on('connection', socket => {
         filtersObj[key] = filter[key];
       })
 
-      Reports.find({
-        user: data.userId
-      }).where(filtersObj).populateAll().then(projects => {
-        let paginatedProjects = SocketService.paginateArray(projects, 20, 1);
-        socket.emit('portfolioProjectsFilter', {
-          count: projects.length,
-          projects: paginatedProjects
-        });
+      Reports.find({}).where(filtersObj).populateAll().then(projects => {
+        socket.emit('portfolioProjectsFilter', projects);
       })
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);
@@ -344,6 +394,15 @@ io.on('connection', socket => {
 
 
 module.exports = {
+  getAllReports: async (req, res) => {
+    try {
+      let reports = await Reports.find().limit(req.query.limit || 10).populateAll().sort('uid DESC');
+      res.ok(reports);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', err.toString(), 'getReports', req);
+    }
+  },
+
   getReportsByUser: (req, res) => {
     Reports.find({
       user: req.params.id
@@ -688,11 +747,6 @@ module.exports = {
             }
           }
         ]
-      }, {
-        fields: {
-          uid: 1,
-          projectName: 1
-        }
       }).limit(10).sort('uid DESC');
 
       res.send(projects);

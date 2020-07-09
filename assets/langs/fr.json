@@ -204,5 +204,6 @@
   "SAP CCE": "SAP CCE",
   "Bucket": "Topf",
   "Created At": "Erstellt am",
-  "Add New Bucket": "Sammeltopf einfügen"
+  "Add New Bucket": "Sammeltopf einfügen",
+  "bucket": "Topf"
 }

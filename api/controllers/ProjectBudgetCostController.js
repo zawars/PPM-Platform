@@ -401,7 +401,7 @@ module.exports = {
       let subportfolioProjects = await Reports.find({
         or: [{
             status: 'Active',
-            'subPortfolio.id': subPortfolio
+            'subPortfolio': subPortfolio
           },
           {
             status: 'Closed',
@@ -409,7 +409,7 @@ module.exports = {
             ficoApprovedClosingReportDate: {
               contains: year
             },
-            'subPortfolio.id': subPortfolio
+            'subPortfolio': subPortfolio
           }
         ]
       });
@@ -438,6 +438,46 @@ module.exports = {
       }
     } catch (error) {
       ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
+    }
+  },
+
+  switchYearlyBudget: async (req, res) => {
+    try {
+      let body = req.body;
+
+      await ProjectBudgetCost.destroy({
+        project: body.project
+      });
+
+      let subPortfolio = await SubPortfolio.findOne({
+        id: body.subPortfolio
+      }).populateAll();
+
+      let costYearIds = [];
+      subPortfolio.costYears.map(val => costYearIds.push(val.id));
+
+      let obj = [];
+      costYearIds.map(val => obj.push({
+        budget: body.budget,
+        portfolioBudgetYear: val,
+        project: body.project
+      }));
+
+      let projectBudgetCost = await ProjectBudgetCost.createEach(obj);
+      await Projects.update({
+        id: body.project
+      }).set({
+        subPortfolio: subPortfolio.id
+      });
+
+      res.ok({
+        message: 'Project Yearly Budget created.'
+      });
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Switch', `id: ${body.project}, ` + error.toString(), 'switchYearlyBudget', req);
+      res.badRequest({
+        message: error.message
+      });
     }
   }
 

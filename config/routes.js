@@ -64,7 +64,7 @@ module.exports.routes = {
   'GET /getOutlinesByProject/:id': 'OutlineApprovalController.getOutlinesByProject',
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
-  'POST /notifyAdmins': 'UserController.notifyAdminsbyEmail',
+  'POST /notifyAdmins': 'UserController.notifyAdminsbyEmailAttachment',
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
@@ -115,6 +115,9 @@ module.exports.routes = {
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
   'GET /reports/portfolio/:id/:subPortfolio': 'ReportsController.getProjectsBySubPortfolio',
   'PUT /reports/:id': 'ReportsController.update',
+  'GET /reports/index': 'ReportsController.getAllReports',
+
+  'GET /portfoliosPrograms': 'PortfolioController.getAllPortfoliosPrograms',
 
   // Team Api
   'GET /project/team/:id': 'TeamController.projectTeam',
@@ -130,6 +133,7 @@ module.exports.routes = {
   'POST /createProjectBudgetCostbyYear': 'ProjectBudgetCostController.createBudgetByYear',
   'POST /updateMultipleProjectsBudget': 'ProjectBudgetCostController.updateMultipleProjectsBudget',
   'POST /createProjectBudgetCost': 'ProjectBudgetCostController.createProjectBudgetCost',
+  'POST /projectBudgetCost/yearlyBudget/switch': 'ProjectBudgetCostController.switchYearlyBudget',
 
   //News
   'GET /news': 'NewsController.index',
@@ -146,6 +150,7 @@ module.exports.routes = {
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',
   'POST /portfolioBudgetYear/fixYearlyBudget': 'PortfolioBudgetYearController.fixYearlyBudget',
   'POST /portfolioBudgetYear/fixAllYearlyBudget': 'PortfolioBudgetYearController.fixAllYearlyBudget',
+  'GET /portfolioBudgetYear/subportfolio/:id/yearlyBudget': 'PortfolioBudgetYearController.multiYearlyBudget',
 
   //Subportfolio status report
   'GET /subportfolio/statusReports/:subportfolioId': 'SubportfolioStatusReportController.statusReportsbySubportfolio',
@@ -181,6 +186,7 @@ module.exports.routes = {
   'GET /smallOrder': 'SmallOrderController.getSmallOrders',
   'GET /smallOrder/user/:id': 'SmallOrderController.getSmallOrdersByUser',
   'GET /smallOrder/sponsor/:id': 'SmallOrderController.getSmallOrdersBySponsor',
+  'GET /smallOrder/search/:query': 'SmallOrderController.searchOrders',
 
   // SmallOrderStatusReport Api
   'GET /smallOrder/statusReport/:id/:prev/:current': 'SmallOrderStatusReportController.getPreviousCurrentOrderReport',

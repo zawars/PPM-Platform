@@ -78,6 +78,7 @@ async function uploadExcelDumpToDrive(req, res) {
       dropdowns[`${toCamelCase(element.field)}Values`] = element;
     });
 
+
     let milestonesList = [];
     let risksList = [];
     let decisionsList = [];
@@ -203,19 +204,6 @@ async function uploadExcelDumpToDrive(req, res) {
         });
       }
 
-      let technology = [];
-      if (reportObj.technology) {
-        if (dropdowns.technologyOptions) {
-          dropdowns.technologyOptions.values.map(techObj => {
-            let obj = reportObj.technology.find(val => {
-              if (val == techObj.id) {
-                technology.push(techObj.name);
-              }
-            });
-          });
-        }
-      }
-
       let itPlatformsName = '';
       if (reportObj.itPlatform) {
         if (reportObj.itPlatform.length > 0) {
@@ -238,12 +226,45 @@ async function uploadExcelDumpToDrive(req, res) {
         }
       }
 
+      let evaValues = {
+        EAC: '',
+        CPI: '',
+        SPI: ''
+      };
+      if (reportObj.EVA) {
+        for (let i = reportObj.EVA.length - 1; i >= 0; i--) {
+          if (reportObj.EVA[i].EAC != null && evaValues.EAC == '') {
+            evaValues.EAC = reportObj.EVA[i].EAC;
+          }
+
+          if (reportObj.EVA[i].CPI != null && evaValues.CPI == '') {
+            evaValues.CPI = reportObj.EVA[i].CPI;
+          }
+
+          if (reportObj.EVA[i].SPI != null && evaValues.SPI == '') {
+            evaValues.SPI = reportObj.EVA[i].SPI;
+          }
+        }
+      }
+
+      let technology = reportObj.technology ? reportObj.technology : [];
+      let temp2 = {};
+      let values2 = [];
+      if (technology != undefined) {
+        technology.forEach(val => {
+          temp2 = dropdowns.technologyValues.values.find(obj => obj.id == val);
+          if (temp2) {
+            values2.push(temp2.name);
+          }
+        });
+      }
+      technology = values2.join(',');
+
       multiProjectReport.push({
         id: reportObj.uid,
         projectName: reportObj.projectName,
         projectManager: reportObj.projectManager.name,
         projectSponsor: reportObj.projectSponsor.name,
-        portfolio: reportObj.portfolio ? reportObj.portfolio.name : '',
         subPortfolioId: reportObj.subPortfolio ? reportObj.subPortfolio.id : '',
         subPortfolio: reportObj.subPortfolio ? reportObj.subPortfolio.name : '',
         projectPhase: reportObj.projectPhase ? translate(reportObj.projectPhase.name) : '',
@@ -258,7 +279,6 @@ async function uploadExcelDumpToDrive(req, res) {
         feasibility: reportObj.feasibility ? translate(reportObj.feasibility.name) : '',
         itRelevant: reportObj.itRelevant ? translate(reportObj.itRelevant.name) : '',
         itPlatform: itPlatformsName,
-        /*reportObj.itPlatform != undefined ? reportObj.itPlatform.name : '',*/
         projectMethodology: reportObj.projectMethodology ? translate(reportObj.projectMethodology.name) : '',
         confidential: translate(reportObj.confidential),
         reportStatus: reportObj.statusReports.length > 0 ? translate(reportObj.statusReports[reportObj.statusReports.length - 1].status) : '',
@@ -276,17 +296,17 @@ async function uploadExcelDumpToDrive(req, res) {
         GwH: reportObj.GwH,
         digitalizationFocus: reportObj.digitalizationFocus != undefined ? translate(reportObj.digitalizationFocus.name) : '',
         digitalizationTopic: reportObj.digitalizationTopic != undefined ? translate(reportObj.digitalizationTopic.name) : '',
-        technology: technology.join(', '),
+        technology: technology,
         purpose: translate(reportObj.purpose),
-        SPI: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].SPI : '' : '',
         riskExposureVsCurrentBudget: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].riskExposureVsCurrentBudget : '',
         totalExposure: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].totalExposure : '',
         plannedEndDateVsForecastEndDate: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].plannedDateVSForecastDate : '',
         currentBudgetVSForecast: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].currentBudgetVSForecast : '',
         currentBudgetVSOriginalBudget: reportObj.currentBudgetVSOriginalBudget,
         endDateVSPlannedEndDate: reportObj.endDateVSPlannedEndDate,
-        EAC: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].EAC : '' : '',
-        CPI: reportObj.EVA ? reportObj.EVA.length > 0 ? reportObj.EVA[reportObj.EVA.length - 1].CPI : '' : '',
+        EAC: evaValues.EAC,
+        CPI: evaValues.CPI,
+        SPI: evaValues.SPI,
         percentageComplete: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].percentageComplete : '',
         managementSummary: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].managementSummary : '',
         scopeStatusComments: reportObj.statusReports.length > 0 ? reportObj.statusReports[reportObj.statusReports.length - 1].scopeStatusComments : '',
@@ -631,26 +651,77 @@ async function uploadExcelDumpToDrive(req, res) {
           let itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
           let temp = {};
           let values = [];
-          itPlatforms.forEach(val => {
-            temp = itPlatformOptions.values.find(obj => obj.id == val);
-            if (temp) {
-              values.push(temp.name);
+          if (project.mode != 'bucket') {
+            itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
+
+            itPlatforms.forEach(val => {
+              temp = itPlatformOptions.values.find(obj => obj.id == val);
+              if (temp) {
+                values.push(temp.name);
+              }
+            });
+          } else {
+            itPlatforms = project.itPlatform;
+
+            if (typeof itPlatforms == 'array') {
+              itPlatforms.forEach(val => {
+                temp = itPlatformOptions.values.find(obj => obj.id == val);
+                if (temp) {
+                  values.push(temp.name);
+                }
+              });
             }
-          });
+          }
           itPlatforms = values.join(',');
 
+          let purpose = '';
+          purpose = project.mode == 'bucket' ? (project.purpose != undefined ? project.purpose : '') : project.projectReport != undefined ? project.projectReport.purpose : '';
+
+          let technology = project.projectReport ? project.projectReport.technology : [];
+          let temp1 = {};
+          let values1 = [];
+          if (technology != undefined) {
+            technology.forEach(val => {
+              temp1 = dropdowns.technologyValues.values.find(obj => obj.id == val);
+              if (temp1) {
+                values1.push(temp1.name);
+              }
+            });
+          }
+          technology = values1.join(',');
+
+          let budget = [];
           budgetObj.budget.forEach(obj => {
-            delete(obj.id);
-            obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
-            obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
-            obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
-            obj.projectName = project ? project.projectName : '';
-            obj.projectCategory = project.mode ? project.mode : 'project';
-            obj.costType = translate(obj.costType);
-            obj.itPlatform = itPlatforms
+            // delete(obj.id);
+            budget.push({
+              costType: translate(obj.costType),
+              group: translate(obj.group),
+              remainingProjectBudget: obj.remainingProjectBudget,
+              yealryBudgetDemand: obj.yearlyForecast,
+              thereofITDemand: obj.thereofITForecast,
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
+              thereofITFixed: obj.thereof_IT_Fixed,
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed,
+              yearlyBudgetApproved: obj.budget,
+              thereofITApproved: obj.thereofIT,
+              davonGEICT: obj.davon_GE_ICT,
+              GBMS: obj.GB_MS,
+              corpRisk: obj[`Corp.Risk`],
+              GBP: obj.GB_P,
+              FDHandel: obj.FD_Handel,
+              portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
+              subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
+              subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
+              projectId: project ? project.uid : '',
+              projectName: project ? project.projectName : '',
+              projectCategory: project.mode ? translate(project.mode) : translate('project'),
+              purpose: purpose,
+              technology: technology,
+              itPlatform: itPlatforms,
+            });
           });
 
-          subportfolioBudgetList[year].push(...budgetObj.budget);
+          subportfolioBudgetList[year].push(...budget);
         }
 
         // Small Orders Budget
@@ -663,7 +734,7 @@ async function uploadExcelDumpToDrive(req, res) {
             });
           }
 
-          let itPlatforms = order.itPlatform;
+          let itPlatforms = order ? order.itPlatform : [];
           let temp = {};
           let values = [];
           itPlatforms.forEach(val => {
@@ -674,19 +745,36 @@ async function uploadExcelDumpToDrive(req, res) {
           });
           itPlatforms = values.join(',');
 
+          let budget = [];
           budgetObj.budget.forEach(obj => {
-            delete(obj.id);
-            obj.portfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '';
-            obj.subPortfolioId = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '';
-            obj.subPortfolioName = yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '';
-            obj.orderId = order ? order.id : '';
-            obj.orderName = order ? order.name : '';
-            obj.projectCategory = 'order';
-            obj.costType = translate(obj.costType);
-            obj.itPlatform = itPlatforms
+            budget.push({
+              costType: translate(obj.costType),
+              remainingProjectBudget: obj.remainingProjectBudget,
+              yearlyBudgetDemand: obj.yearlyForecast,
+              thereofITDemand: obj.thereofITForecast,
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
+              thereofITFixed: obj.thereof_IT_Fixed,
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed,
+              yearlyBudgetApproved: obj.budget,
+              thereofITApproved: obj.thereofIT,
+              davonGEICT: obj.davon_GE_ICT,
+              GBMS: obj.GB_MS,
+              corpRisk: obj[`Corp.Risk`],
+              GBP: obj.GB_P,
+              FDHandel: obj.FD_Handel,
+              portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
+              subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
+              subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
+              orderId: order ? order.uid : '',
+              orderName: order ? order.name : '',
+              projectCategory: 'order',
+              costType: translate(obj.costType),
+              itPlatform: itPlatforms,
+              purpose: order.purpose
+            });
           });
 
-          subportfolioBudgetList[year].push(...budgetObj.budget);
+          subportfolioBudgetList[year].push(...budget);
         }
       }
     }
@@ -717,18 +805,18 @@ async function uploadExcelDumpToDrive(req, res) {
         orderManager: smallOrder.orderManager ? smallOrder.orderManager.name : '',
         orderSponsor: smallOrder.orderSponsor ? smallOrder.orderSponsor.name : '',
         status: smallOrder.status,
-        portfolioId: smallOrder.portfolio.id,
-        portfolio: smallOrder.portfolio.name,
-        subPortfolioId: smallOrder.subPortfolio.id,
-        subPortfolio: smallOrder.subPortfolio.name,
-        businessSegment: translate(smallOrder.businessSegment.name),
-        reportingLevel: translate(smallOrder.reportingLevel.name),
-        businessUnit: translate(smallOrder.businessUnit.name),
-        businessArea: translate(smallOrder.businessArea.name),
-        portfolioId: smallOrder.portfolio.id,
-        strategicContribution: translate(smallOrder.strategicContribution.name),
-        feasibility: translate(smallOrder.feasibility.name),
-        profitability: translate(smallOrder.profitability.name),
+        portfolioId: smallOrder.portfolio ? smallOrder.portfolio.id : '',
+        portfolio: smallOrder.portfolio ? smallOrder.portfolio.name : '',
+        subPortfolioId: smallOrder.subPortfolio ? smallOrder.subPortfolio.id : '',
+        subPortfolio: smallOrder.subPortfolio ? smallOrder.subPortfolio.name : '',
+        businessSegment: smallOrder.businessSegment ? translate(smallOrder.businessSegment.name) : '',
+        reportingLevel: smallOrder.reportingLevel ? translate(smallOrder.reportingLevel.name) : '',
+        businessUnit: smallOrder.businessUnit ? translate(smallOrder.businessUnit.name) : '',
+        businessArea: smallOrder.businessArea ? translate(smallOrder.businessArea.name) : '',
+        portfolioId: smallOrder.portfolio ? smallOrder.portfolio.id : '',
+        strategicContribution: smallOrder.strategicContribution ? translate(smallOrder.strategicContribution.name) : '',
+        feasibility: smallOrder.feasibility ? translate(smallOrder.feasibility.name) : '',
+        profitability: smallOrder.profitability ? translate(smallOrder.profitability.name) : '',
         itRelevant: smallOrder.itRelevant ? translate(smallOrder.itRelevant.name) : '',
         itPlatform: itPlatforms,
         purpose: smallOrder.purpose,

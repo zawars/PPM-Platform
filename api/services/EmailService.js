@@ -78,7 +78,8 @@ module.exports = {
       
       Dies ist eine vom System generierte Mail. Bitte Antworten Sie nicht darauf. Bei Fragen oder Anliegen wenden Sie sich an den Applikationsverantwortlichen oder an den Service Desk der BKW.									
       This is an automatically generated message. Please do not reply to this message. For Questions please contact application responsible or BKW service desk.
-      </div>`
+      </div>`,
+      attachments: options.attachments
     }, (err, info) => {
       if (err) {
         return done(err);

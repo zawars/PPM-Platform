@@ -216,6 +216,36 @@ module.exports = {
     });
   },
 
+  createProjectBudgetCost: async (req, res) => {
+    try {
+      let portfolioBudgetYear = await PortfolioBudgetYear.findOne({
+        id: req.body.portfolioBudgetYear
+      });
+
+      let budget = req.body.budget;
+      if (portfolioBudgetYear.additionalColumns && portfolioBudgetYear.additionalColumns.length > 0) {
+        let additionalColumns = portfolioBudgetYear.additionalColumns;
+
+        for (let i = 0; i < additionalColumns.length; i++) {
+          for (let j = 0; j < budget.length; j++) {
+            budget[j][additionalColumns[i].dataField] = '';
+          }
+        }
+      }
+
+      let createdCost = await ProjectBudgetCost.create({
+        portfolioBudgetYear: req.body.portfolioBudgetYear,
+        project: req.body.project,
+        budget: budget
+      });
+
+      res.ok(createdCost);
+
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createProjectBudgetCost', req);
+    }
+  },
+
   updateMultipleProjectsBudget: async (req, res) => {
     try {
       let projectsBudget = req.body.projectsBudget;
@@ -408,6 +438,46 @@ module.exports = {
       }
     } catch (error) {
       ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
+    }
+  },
+
+  switchYearlyBudget: async (req, res) => {
+    try {
+      let body = req.body;
+
+      await ProjectBudgetCost.destroy({
+        project: body.project
+      });
+
+      let subPortfolio = await SubPortfolio.findOne({
+        id: body.subPortfolio
+      }).populateAll();
+
+      let costYearIds = [];
+      subPortfolio.costYears.map(val => costYearIds.push(val.id));
+
+      let obj = [];
+      costYearIds.map(val => obj.push({
+        budget: body.budget,
+        portfolioBudgetYear: val,
+        project: body.project
+      }));
+
+      let projectBudgetCost = await ProjectBudgetCost.createEach(obj);
+      await Projects.update({
+        id: body.project
+      }).set({
+        subPortfolio: subPortfolio.id
+      });
+
+      res.ok({
+        message: 'Project Yearly Budget created.'
+      });
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Switch', `id: ${body.project}, ` + error.toString(), 'switchYearlyBudget', req);
+      res.badRequest({
+        message: error.message
+      });
     }
   }
 

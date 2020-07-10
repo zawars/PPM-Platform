@@ -468,7 +468,7 @@ io.on('connection', socket => {
         page: data.pageIndex,
         limit: data.pageSize
       })
-      .populateAll().then(projects => {
+      .populateAll().sort('uid DESC').then(projects => {
         socket.emit('projectsIndex', projects);
       }).catch(error => {
         ErrorsLogService.logError('Projects', error.toString(), 'projectsIndex', '', socket.user.id);
@@ -604,6 +604,72 @@ io.on('connection', socket => {
       }
     });
     socket.emit('fetchMultipleUsers', users);
+  });
+
+  socket.on('searchOpenDetailsProjects', async data => {
+    let query = data.search;
+
+    let projects = await Projects.find({
+      or: [{
+        projectName: {
+          'contains': query
+        }
+      },
+      {
+        uid: parseInt(query)
+      }
+      ],
+      outlineApproved: true
+    }, {
+      fields: {
+        uid: 1,
+        projectName: 1
+      }
+    }).limit(10).sort('uid DESC');
+
+    socket.emit('searchOpenDetailsProjects', projects);
+  });
+
+  // notify Admins by Email for report an issue
+  socket.on('notifyAdminsbyEmail', async data => {
+    let user = data.user;
+    let message = data.message;
+    let attachments = data.attachments;
+
+    if(attachments && attachments.length > 0) {
+      attachments[0].path = process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + attachments[0].path;
+    }
+
+    let admins = await User.find({
+      role: 'admin'
+    });
+
+    let recepientsEmails = [];
+
+    if (admins.length > 0) {
+      admins.forEach((admin, index) => {
+        recepientsEmails.push(admin.email);
+      })
+
+      EmailService.sendMail({
+        email: recepientsEmails,
+        message: message,
+        subject: user.name + ` (${user.email}) Reported an Issue`,
+        attachments: attachments
+      }, (err) => {
+        if (err) {
+          ErrorsLogService.logError('Projects', `email: ${email}, ` + err.toString(), 'notifyAdminsbyEmail', socket.user.id);
+          console.log(err);
+          res.forbidden({
+            message: "Error sending email."
+          });
+        } else {
+          socket.emit('notifyAdminsbyEmail', { message: "Email sent." });
+        }
+      })
+    } else {
+      socket.emit('notifyAdminsbyEmail', { message: "No Admins found." });
+    }
   });
 });
 
@@ -859,21 +925,33 @@ module.exports = {
     }
   },
 
-  search: (req, res) => {
+  search: async (req, res) => {
     let query = req.params.query;
-    Projects.find({
-      or: [{
-        projectName: {
-          'contains': query
+
+    try {
+      let projects = await Projects.find({
+        or: [{
+            projectName: {
+              'contains': query
+            }
+          },
+          {
+            uid: parseInt(query)
+          }
+        ]
+      }, {
+        fields: {
+          uid: 1,
+          projectName: 1
         }
-      }],
-      isClosed: false
-    }).then(projects => {
-      res.ok(projects)
-    }).catch(err => {
-      ErrorsLogService.logError('Projects', err.toString(), 'search', req);
-      res.badRequest(err);
-    });
-  },
+      }).limit(10).sort('uid DESC');
+
+      res.send(projects);
+
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'search', req);
+      res.badRequest(error);
+    }
+  }
 
 };

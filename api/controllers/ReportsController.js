@@ -25,11 +25,11 @@ io.on('connection', socket => {
   socket.on('selectiveReportsIndex', data => {
     let selectionIds = data.ids;
     Reports.find({
-      id: selectionIds
-    }).paginate({
-      page: data.pageIndex,
-      limit: data.pageSize
-    })
+        id: selectionIds
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
       .populateAll().then(projects => {
         socket.emit('selectiveReportsIndex', projects);
       })
@@ -45,67 +45,67 @@ io.on('connection', socket => {
 
       let count = await Reports.count({
         or: [{
-          uid: parseInt(search),
-          id: selectionIds
-        },
-        {
-          projectName: {
-            contains: search
+            uid: parseInt(search),
+            id: selectionIds
           },
-          id: selectionIds
-        },
-        {
-          'projectSponsor.name': {
-            contains: search
+          {
+            projectName: {
+              contains: search
+            },
+            id: selectionIds
           },
-          id: selectionIds
-        },
-        {
-          'projectManager.name': {
-            contains: search
+          {
+            'projectSponsor.name': {
+              contains: search
+            },
+            id: selectionIds
           },
-          id: selectionIds
-        },
-        {
-          status: {
-            contains: search
+          {
+            'projectManager.name': {
+              contains: search
+            },
+            id: selectionIds
           },
-          id: selectionIds
-        }
+          {
+            status: {
+              contains: search
+            },
+            id: selectionIds
+          }
         ]
       });
 
       Reports.find({
-        or: [{
-          uid: parseInt(search),
-          id: selectionIds
-        },
-        {
-          projectName: {
-            contains: search
-          },
-          id: selectionIds
-        },
-        {
-          'projectSponsor.name': {
-            contains: search
-          },
-          id: selectionIds
-        },
-        {
-          'projectManager.name': {
-            contains: search
-          },
-          id: selectionIds
-        },
-        {
-          status: {
-            contains: search
-          },
-          id: selectionIds
-        }
-        ]
-      }).limit(10)
+          or: [{
+              uid: parseInt(search),
+              id: selectionIds
+            },
+            {
+              projectName: {
+                contains: search
+              },
+              id: selectionIds
+            },
+            {
+              'projectSponsor.name': {
+                contains: search
+              },
+              id: selectionIds
+            },
+            {
+              'projectManager.name': {
+                contains: search
+              },
+              id: selectionIds
+            },
+            {
+              status: {
+                contains: search
+              },
+              id: selectionIds
+            }
+          ]
+        }).limit(10)
         .populateAll().then(projects => {
           socket.emit('selectiveReportsSearch', {
             count,
@@ -125,39 +125,39 @@ io.on('connection', socket => {
     let selectionIds = data.ids;
 
     Reports.find({
-      or: [{
-        uid: parseInt(search),
-        id: selectionIds
-      },
-      {
-        projectName: {
-          contains: search
-        },
-        id: selectionIds
-      },
-      {
-        'projectSponsor.name': {
-          contains: search
-        },
-        id: selectionIds
-      },
-      {
-        'projectManager.name': {
-          contains: search
-        },
-        id: selectionIds
-      },
-      {
-        status: {
-          contains: search
-        },
-        id: selectionIds
-      }
-      ]
-    }).paginate({
-      page: data.pageIndex,
-      limit: data.pageSize
-    })
+        or: [{
+            uid: parseInt(search),
+            id: selectionIds
+          },
+          {
+            projectName: {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            'projectSponsor.name': {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            'projectManager.name': {
+              contains: search
+            },
+            id: selectionIds
+          },
+          {
+            status: {
+              contains: search
+            },
+            id: selectionIds
+          }
+        ]
+      }).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      })
       .populateAll().then(projects => {
         socket.emit('selectiveReportsSearchIndex', projects);
       })
@@ -183,12 +183,68 @@ io.on('connection', socket => {
         page: data.pageIndex,
         limit: data.pageSize
       })
-      .populateAll().then(projects => {
+      .populateAll().sort('uid DESC').then(projects => {
         socket.emit('allReportsIndex', projects);
       })
       .catch(error => {
         ErrorsLogService.logError('Reports', error.toString(), 'allReportsIndex', '', socket.user.id);
       });
+  });
+
+  //To search in data table of Reports
+  socket.on('reportsSearch', async data => {
+    let search = data.search;
+
+    let count = await Reports.count({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    });
+
+    Reports.find({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    }).limit(10).populateAll().sort('uid DESC').then(reportsResp => {
+      socket.emit('reportsSearch', { count: count, reports: reportsResp });
+    }).catch(error => {
+      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearch', '', socket.user.id);
+    });
+  });
+
+  //To paginate search results of Reports
+  socket.on('reportsSearchIndex', data => {
+    let search = data.search;
+    Reports.find({
+      or: [
+        {
+          projectName: {
+            'contains': search
+          }
+        },
+        {
+          uid: parseInt(search)
+        }
+      ]
+    }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(reportsResp => {
+      socket.emit('reportsSearchIndex', reportsResp);
+    }).catch(error => {
+      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearchIndex', '', socket.user.id);
+    });
   });
 
   //To get count
@@ -286,7 +342,7 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on('portfolioProjectsFilter', data => {
+  socket.on('portfolioProjectsFilterCount', async data => {
     try {
       let filters = data.filtersArray;
       let filtersObj = {};
@@ -296,15 +352,26 @@ io.on('connection', socket => {
         filtersObj[key] = filter[key];
       })
 
-      Reports.find({
-        user: data.userId
-      }).where(filtersObj).populateAll().then(projects => {
-        let paginatedProjects = SocketService.paginateArray(projects, 20, 1);
-        socket.emit('portfolioProjectsFilter', {
-          count: projects.length,
-          projects: paginatedProjects
-        });
+      let count = await Reports.count({}).where(filtersObj);
+      socket.emit('portfolioProjectsFilterCount', count);
+
+    } catch (error) {
+      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilterCount', '', socket.user.id);
+    }
+  });
+
+  socket.on('portfolioProjectsFilter', async data => {
+    try {
+      let filters = data.filtersArray;
+      let filtersObj = {};
+
+      filters.forEach(filter => {
+        let key = Object.keys(filter)[0];
+        filtersObj[key] = filter[key];
       })
+
+      let reports = await Reports.find({}).where(filtersObj).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll();
+      socket.emit('portfolioProjectsFilter', reports);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);
     }
@@ -332,7 +399,9 @@ io.on('connection', socket => {
 
   socket.on('fetchReport', async data => {
     try {
-      let report = await Reports.findOne({ id: data.id }).populateAll();
+      let report = await Reports.findOne({
+        id: data.id
+      }).populateAll();
       socket.emit('fetchReport', report);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'fetchReport', '', socket.user.id);
@@ -342,6 +411,15 @@ io.on('connection', socket => {
 
 
 module.exports = {
+  getAllReports: async (req, res) => {
+    try {
+      let reports = await Reports.find().limit(req.query.limit || 10).populateAll().sort('uid DESC');
+      res.ok(reports);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', err.toString(), 'getReports', req);
+    }
+  },
+
   getReportsByUser: (req, res) => {
     Reports.find({
       user: req.params.id
@@ -678,19 +756,14 @@ module.exports = {
     try {
       let projects = await Reports.find({
         or: [{
-          uid: parseInt(search)
-        },
-        {
-          projectName: {
-            contains: search
+            uid: parseInt(search)
+          },
+          {
+            projectName: {
+              contains: search
+            }
           }
-        }
         ]
-      }, {
-        fields: {
-          uid: 1,
-          projectName: 1
-        }
       }).limit(10).sort('uid DESC');
 
       res.send(projects);
@@ -702,333 +775,11 @@ module.exports = {
   update: async (req, res) => {
     try {
       let data = req.body;
-      let subportfolioBudget = data.portfolio
 
       // Update Subportfolio Budget
       if (data.subPortfolio != undefined && data.subPortfolio != "") {
-        if (data.isSubportfolioChanged != undefined) {
-          if (data.isSubportfolioChanged == true) {
-
-            // ################################################################################################################
-            // Updating budget in old subportfolio
-            let subportfolioProjects = await Reports.find({
-              subPortfolio: data.oldSubportfolio
-            }).populateAll();
-
-            let subPortfolioBudgetCurrentYear = [{
-              costType: "External Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 0,
-              group: "CAPEX",
-            }, {
-              costType: "Internal Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 1,
-              group: "CAPEX",
-            }, {
-              costType: "External Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 2,
-              group: "OPEX"
-            }, {
-              costType: "Internal Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 3,
-              group: "OPEX"
-            }, {
-              costType: "Revenues",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 4,
-              group: "Sonstiges",
-            }, {
-              costType: "Reserves",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              group: "Sonstiges",
-              id: 5,
-            }, {
-              costType: "Total",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 6,
-              group: "Sonstiges",
-            },];
-            let subPortfolioBudgetNextYear = JSON.parse(JSON.stringify(subPortfolioBudgetCurrentYear));
-
-            for (let i = 0; i <= 6; i++) {
-              subPortfolioBudgetCurrentYear[i].assigned = 0;
-              subPortfolioBudgetCurrentYear[i].actualCost = 0;
-              subPortfolioBudgetCurrentYear[i].forecast = 0;
-
-              subPortfolioBudgetNextYear[i].assigned = 0;
-              subPortfolioBudgetNextYear[i].actualCost = 0;
-              subPortfolioBudgetNextYear[i].forecast = 0;
-            }
-
-            subportfolioProjects.map(project => {
-              if (data.id != project.id) {
-                for (let i = 0; i <= 6; i++) {
-                  // Current Year
-                  if (project.budgetPlanningTable1 != undefined) {
-                    subPortfolioBudgetCurrentYear[i].assigned = (subPortfolioBudgetCurrentYear[i].assigned * 1) +
-                      (project.budgetPlanningTable1[i].budget * 1);
-
-                    subPortfolioBudgetCurrentYear[i].actualCost = (subPortfolioBudgetCurrentYear[i].actualCost * 1) +
-                      (project.budgetPlanningTable1[i].actualCost * 1);
-
-                    subPortfolioBudgetCurrentYear[i].forecast = (subPortfolioBudgetCurrentYear[i].forecast * 1) +
-                      (project.budgetPlanningTable1[i].forecast * 1);
-                  }
-
-                  // Next Year
-                  if (project.budgetPlanningTable2 != undefined) {
-                    subPortfolioBudgetNextYear[i].assigned = (subPortfolioBudgetNextYear[i].assigned * 1) +
-                      (project.budgetPlanningTable2[i].budget * 1);
-                  }
-                }
-              }
-            });
-
-            let portfolioObj = await Portfolio.findOne({
-              id: data.oldPortfolioId
-            }).populateAll();
-
-            if (portfolioObj != undefined) {
-              let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-              if (idx > 0) {
-                if (portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear != undefined) {
-                  portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
-                }
-                if (portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear != undefined) {
-                  portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
-                }
-
-                await Portfolio.update({
-                  id: data.oldPortfolioId
-                }).set({
-                  subPortfolioBudgetingList: portfolioObj.subPortfolioBudgetingList
-                });
-              }
-            }
-
-            delete (data.oldSubportfolio);
-            delete (data.oldPortfolioId);
-
-            // ################################################################################################################
-
-            // Update budget in new Subportfolio
-            idx = data.portfolio.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.subPortfolio);
-            subPortfolioBudgetCurrentYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear;
-            subPortfolioBudgetNextYear = data.portfolio.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear;
-
-            subportfolioProjects = await Reports.find({
-              portfolio: data.portfolio.id,
-              subPortfolio: data.subPortfolio
-            }).populateAll();
-
-            subportfolioProjects.map(project => {
-              if (data.id != project.id) {
-                for (let i = 0; i <= 6; i++) {
-                  // Current Year
-                  if (project.budgetPlanningTable1 != undefined) {
-                    subPortfolioBudgetCurrentYear[i].assigned = (subPortfolioBudgetCurrentYear[i].assigned * 1) +
-                      (project.budgetPlanningTable1[i].budget * 1);
-
-                    subPortfolioBudgetCurrentYear[i].actualCost = (subPortfolioBudgetCurrentYear[i].actualCost * 1) +
-                      (project.budgetPlanningTable1[i].actualCost * 1);
-
-                    subPortfolioBudgetCurrentYear[i].forecast = (subPortfolioBudgetCurrentYear[i].forecast * 1) +
-                      (project.budgetPlanningTable1[i].forecast * 1);
-                  }
-
-                  // Next Year
-                  if (project.budgetPlanningTable2 != undefined) {
-                    subPortfolioBudgetNextYear[i].assigned = (subPortfolioBudgetNextYear[i].assigned * 1) +
-                      (project.budgetPlanningTable2[i].budget * 1);
-                  }
-                }
-              }
-            });
-            // It will be updated automatically with the Report Model using association
-          }
-        } else {
-          // Case: Subportfolio has not been updated
-          // Nothing to do for now
-        }
-      } else {
-        // Case: No new subportfolio is selected
-        if (data.isSubportfolioChanged != undefined) {
-          if (data.isSubportfolioChanged == true) {
-            // Updating budget in old subportfolio
-            let subportfolioProjects = await Reports.find({
-              subPortfolio: data.oldSubportfolio
-            }).populateAll();
-
-            let subPortfolioBudgetCurrentYear = [{
-              costType: "External Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 0,
-              group: "CAPEX",
-            }, {
-              costType: "Internal Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 1,
-              group: "CAPEX",
-            }, {
-              costType: "External Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 2,
-              group: "OPEX"
-            }, {
-              costType: "Internal Costs",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 3,
-              group: "OPEX"
-            }, {
-              costType: "Revenues",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 4,
-              group: "Sonstiges",
-            }, {
-              costType: "Reserves",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              group: "Sonstiges",
-              id: 5,
-            }, {
-              costType: "Total",
-              budget: "",
-              assigned: "",
-              remaining: "",
-              remainingPercent: "",
-              actualCost: "",
-              forecast: "",
-              id: 6,
-              group: "Sonstiges",
-            },];
-            let subPortfolioBudgetNextYear = JSON.parse(JSON.stringify(subPortfolioBudgetCurrentYear));
-
-            for (let i = 0; i <= 6; i++) {
-              subPortfolioBudgetCurrentYear[i].assigned = 0;
-              subPortfolioBudgetCurrentYear[i].actualCost = 0;
-              subPortfolioBudgetCurrentYear[i].forecast = 0;
-
-              subPortfolioBudgetNextYear[i].assigned = 0;
-              subPortfolioBudgetNextYear[i].actualCost = 0;
-              subPortfolioBudgetNextYear[i].forecast = 0;
-            }
-
-            subportfolioProjects.map(project => {
-              if (data.id != project.id) {
-                for (let i = 0; i <= 6; i++) {
-                  // Current Year
-                  if (project.budgetPlanningTable1 != undefined) {
-                    subPortfolioBudgetCurrentYear[i].assigned = (subPortfolioBudgetCurrentYear[i].assigned * 1) +
-                      (project.budgetPlanningTable1[i].budget * 1);
-
-                    subPortfolioBudgetCurrentYear[i].actualCost = (subPortfolioBudgetCurrentYear[i].actualCost * 1) +
-                      (project.budgetPlanningTable1[i].actualCost * 1);
-
-                    subPortfolioBudgetCurrentYear[i].forecast = (subPortfolioBudgetCurrentYear[i].forecast * 1) +
-                      (project.budgetPlanningTable1[i].forecast * 1);
-                  }
-
-                  // Next Year
-                  if (project.budgetPlanningTable2 != undefined) {
-                    subPortfolioBudgetNextYear[i].assigned = (subPortfolioBudgetNextYear[i].assigned * 1) +
-                      (project.budgetPlanningTable2[i].budget * 1);
-                  }
-                }
-              }
-            });
-
-            let portfolioObj = await Portfolio.findOne({
-              id: data.oldPortfolioId
-            }).populateAll();
-
-            if (portfolioObj != undefined) {
-              let idx = portfolioObj.subPortfolioBudgetingList.findIndex(val => val.subPortfolio == data.oldSubportfolio);
-              if (idx > 0) {
-                if (portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear != undefined) {
-                  portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetCurrentYear = subPortfolioBudgetCurrentYear;
-                }
-                if (portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear != undefined) {
-                  portfolioObj.subPortfolioBudgetingList[idx].subPortfolioBudgetNextYear = subPortfolioBudgetNextYear;
-                }
-              }
-              await Portfolio.update({
-                id: data.oldPortfolioId
-              }).set(portfolioObj);
-            }
-
-            delete (data.oldSubportfolio);
-            delete (data.oldPortfolioId);
-          }
-        }
+        // Move budget to new subportfolio from old one.
       }
-      delete (data.isSubportfolioChanged);
 
       await Reports.update({
         id: req.params.id

@@ -12,7 +12,6 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
     name: {
       type: 'string',
     },
@@ -23,7 +22,7 @@ module.exports = {
       type: 'string',
     },
     statusReportReminder: {
-      type: 'string'
+      type: 'json'
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
@@ -31,6 +30,12 @@ module.exports = {
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
     portfolio: {
       model: 'portfolio',
+    },
+    // subPortfolioManager: {
+    //   model: 'user',
+    // },
+    additionalSubPortfolioManager: {
+      type: 'json',
     },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

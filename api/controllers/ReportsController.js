@@ -342,7 +342,7 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on('portfolioProjectsFilter', data => {
+  socket.on('portfolioProjectsFilterCount', async data => {
     try {
       let filters = data.filtersArray;
       let filtersObj = {};
@@ -352,9 +352,26 @@ io.on('connection', socket => {
         filtersObj[key] = filter[key];
       })
 
-      Reports.find({}).where(filtersObj).populateAll().then(projects => {
-        socket.emit('portfolioProjectsFilter', projects);
+      let count = await Reports.count({}).where(filtersObj);
+      socket.emit('portfolioProjectsFilterCount', count);
+
+    } catch (error) {
+      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilterCount', '', socket.user.id);
+    }
+  });
+
+  socket.on('portfolioProjectsFilter', async data => {
+    try {
+      let filters = data.filtersArray;
+      let filtersObj = {};
+
+      filters.forEach(filter => {
+        let key = Object.keys(filter)[0];
+        filtersObj[key] = filter[key];
       })
+
+      let reports = await Reports.find({}).where(filtersObj).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll();
+      socket.emit('portfolioProjectsFilter', reports);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);
     }

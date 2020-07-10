@@ -648,7 +648,7 @@ async function uploadExcelDumpToDrive(req, res) {
             }).populate('projectReport');
           }
 
-          let itPlatforms;
+          let itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
           let temp = {};
           let values = [];
           if (project.mode != 'bucket') {

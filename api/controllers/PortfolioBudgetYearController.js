@@ -349,5 +349,54 @@ module.exports = {
     });
 
     res.ok(result)
-  }
+  },
+
+  getProjectYearlyBudgets: async (req, res) => {
+    try {
+      let budgetYears = await PortfolioBudgetYear.find({
+        subPortfolio: req.params.id
+      }).sort('year ASC').populateAll();
+
+      let projectsIds = [];
+      if (budgetYears && budgetYears.length > 0) {
+        budgetYears.map(budgetYear => {
+          budgetYear.projectBudgetCost.map(budget => {
+            if(projectsIds.findIndex(val => val == budget.project) < 0) {
+              projectsIds.push(budget.project);
+            }
+          });
+        });
+      }
+
+      let projects = await Projects.find({
+        id: {
+          $in: projectsIds
+        }
+      }).populateAll();
+
+      let projectYearlyBudgets = [];
+      if(projects.length > 0) {
+        budgetYears.map(budgetYear => {
+          budgetYear.projectBudgetCost.map(projectBudget => {
+            let project = projects.find(val => val.id == projectBudget.project);
+            if(project && project.mode != 'bucket' && projectBudget.budget && projectBudget.budget.length > 0) {
+              projectYearlyBudgets.push({
+                // id: project.uid,
+                name: project.uid + ' - ' + project.projectName,
+                status: project.projectReport ? project.projectReport.status : '',
+                budget: projectBudget.budget[6].budget,
+                year: budgetYear.year //new Date(`${budgetYear.year}-12-01`)  
+              });
+            }
+          });
+        });
+      }
+
+      res.ok(projectYearlyBudgets);
+    } catch (error) {
+      ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'getProjectYearlyBudgets', req);
+      res.badRequest(error);
+    }
+  },
+
 };

@@ -133,15 +133,20 @@ module.exports = {
     try {
       const moment = require('moment');
 
-      let projects = await Projects.find({ outlineApproved: true, orderSubmitted: false }).populateAll();
-      
+      let projects = await Projects.find({
+        outlineApproved: true,
+        orderSubmitted: false
+      }).populateAll();
+
       if (projects.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Project Order' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Project Order'
+        });
 
         projects.forEach(async (project, index) => {
           let dateDiffDays = moment(project.projectOutline[0].initiationApprovalDate).diff(moment(new Date()), 'days');
           ++dateDiffDays;
-          
+
           if (dateDiffDays == 14 || dateDiffDays == 1) {
             if (project.user) {
               EmailService.sendMail({
@@ -177,7 +182,9 @@ module.exports = {
     try {
       const moment = require('moment');
 
-      let orderApprovedProjects = await Projects.find({ orderApproved: true }).populateAll();
+      let orderApprovedProjects = await Projects.find({
+        orderApproved: true
+      }).populateAll();
       let detailIds = [];
       let projects = [];
 
@@ -195,7 +202,9 @@ module.exports = {
       }).populateAll();
 
       if (details.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Closing Report' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Closing Report'
+        });
 
         details.forEach(async (detail, index) => {
           if (detail.statusReports.length > 0 && detail.status != 'Closed') {
@@ -239,15 +248,19 @@ module.exports = {
 
   emailReminderPendingApprovals: async (req, res) => {
     try {
-      let approvals = await OutlineApproval.find({ status: "Open" }).populateAll();
-  
+      let approvals = await OutlineApproval.find({
+        status: "Open"
+      }).populateAll();
+
       if (approvals.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Pending Approval' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Pending Approval'
+        });
         let date = new Date().getDate();
 
         approvals.forEach(async (approval, index) => {
           if (date == 10 || date == 20 || date == 28) {
-            if(approval.assignedTo) {
+            if (approval.assignedTo) {
               EmailService.sendMail({
                 email: approval.assignedTo.email,
                 message: emailConfig.text,
@@ -281,12 +294,14 @@ module.exports = {
     try {
       const moment = require('moment');
 
-      let orderApprovedProjects = await Projects.find({ orderApproved: true }).populateAll();
+      let orderApprovedProjects = await Projects.find({
+        orderApproved: true
+      }).populateAll();
       let detailIds = [];
       let projects = [];
-     
+
       orderApprovedProjects.forEach(project => {
-        if(project.projectReport) {
+        if (project.projectReport) {
           detailIds.push(project.projectReport.id);
           projects.push(project);
         }
@@ -299,12 +314,14 @@ module.exports = {
       }).populateAll();
 
       if (details.length > 0) {
-        let emailConfig = await EmailConfig.findOne({ event: 'Email Reminder Status Report' });
+        let emailConfig = await EmailConfig.findOne({
+          event: 'Email Reminder Status Report'
+        });
 
         details.forEach(async (detail, index) => {
           if (projects[index].subPortfolio) {
-            if (projects[index].subPortfolio.statusReportReminder && Array.isArray(projects[index].subPortfolio.statusReportReminder) 
-              && detail.status == 'Active') {
+            if (projects[index].subPortfolio.statusReportReminder && Array.isArray(projects[index].subPortfolio.statusReportReminder) &&
+              detail.status == 'Active') {
               let dateDiffDays;
               let isCurrentDate;
 
@@ -348,7 +365,7 @@ module.exports = {
                       }
                     })
                   }
-                } 
+                }
               }
             }
           }

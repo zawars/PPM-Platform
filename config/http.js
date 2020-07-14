@@ -28,7 +28,7 @@ module.exports.http = {
   middleware: {
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
-    bootstrapAssets: express.static(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '/uploads'),
+    // bootstrapAssets: express.static(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '/uploads'),
     expressSession: session({
       resave: true,
       saveUninitialized: true,
@@ -57,7 +57,7 @@ module.exports.http = {
       'cookieParser',
       'session',
       'expressSession',
-      'bootstrapAssets',
+      // 'bootstrapAssets',
       'apiLimiter',
       'helmetGuard',
       'passportInit',

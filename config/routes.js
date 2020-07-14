@@ -44,6 +44,7 @@ module.exports.routes = {
   'POST /saml/consume': 'AuthController.samlConsumeToken',
   'POST /saml/logout': 'AuthController.samlLogout',
   'GET /syncUsers': 'UserController.syncUsers',
+  'GET /auth/:id/accessToken/refresh': 'UserController.refreshAccessToken',
 
   'GET /user/login/external/:email': 'AuthController.externalLogin',
   'POST /user/verify/external': 'AuthController.verifyTokenExternal',
@@ -65,8 +66,6 @@ module.exports.routes = {
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
   'POST /notifyAdmins': 'UserController.notifyAdminsbyEmailAttachment',
-  'POST /upload': 'AttachmentController.uploadFile',
-  'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
   'GET /getReportsByUser/:id': 'ReportsController.getReportsByUser',
   'GET /getStatusReportsByProjectReport/:id': 'StatusReportsController.getStatusReportsByProjectReport',
@@ -202,6 +201,11 @@ module.exports.routes = {
   'POST /createOrderBudget': 'OrderBudgetCostController.createOrderBudgetCost',
   'GET /orderBudgetCost/year/:id': 'OrderBudgetCostController.budgetsByYear',
   'POST /updateMultipleOrdersBudget': 'OrderBudgetCostController.updateMultipleOrdersBudget',
-  'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget'
+  'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget',
 
+
+  // Attachments
+  'POST /upload': 'AttachmentController.uploadFile',
+  'POST /deleteFile': 'AttachmentController.deleteFile',
+  'GET /attachment/protected/:file': 'AttachmentController.download',
 };

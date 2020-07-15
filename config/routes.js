@@ -44,7 +44,7 @@ module.exports.routes = {
   'POST /saml/consume': 'AuthController.samlConsumeToken',
   'POST /saml/logout': 'AuthController.samlLogout',
   'GET /syncUsers': 'UserController.syncUsers',
-  'GET /auth/:id/accessToken/refresh': 'UserController.refreshAccessToken',
+  'GET /auth/:id/accessToken/refresh': 'AuthController.refreshAccessToken',
 
   'GET /user/login/external/:email': 'AuthController.externalLogin',
   'POST /user/verify/external': 'AuthController.verifyTokenExternal',

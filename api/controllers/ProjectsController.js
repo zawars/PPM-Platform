@@ -587,7 +587,7 @@ io.on('connection', socket => {
       subject: data.subject
     }, (err) => {
       if (err) {
-        ErrorsLogService.logError('Projects', `email: ${email}, ` + error.toString(), 'sendEmail', socket.user.id);
+        ErrorsLogService.logError('Projects', `email: ${data.email}, ` + error.toString(), 'sendEmail', socket.user.id);
         console.log(err);
       } else {
         socket.emit('sendEmail', {

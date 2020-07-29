@@ -648,7 +648,7 @@ async function uploadExcelDumpToDrive(req, res) {
             }).populate('projectReport');
           }
 
-          let itPlatforms = project.projectReport ? project.projectReport.itPlatform : [];
+          let itPlatforms;
           let temp = {};
           let values = [];
           if (project.mode != 'bucket') {
@@ -694,30 +694,32 @@ async function uploadExcelDumpToDrive(req, res) {
           budgetObj.budget.forEach(obj => {
             // delete(obj.id);
             budget.push({
-              costType: translate(obj.costType),
-              group: translate(obj.group),
-              remainingProjectBudget: obj.remainingProjectBudget,
-              yealryBudgetDemand: obj.yearlyForecast,
-              thereofITDemand: obj.thereofITForecast,
-              yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
-              thereofITFixed: obj.thereof_IT_Fixed,
-              davonGEICTFixed: obj.davon_GE_ICT_Fixed,
-              yearlyBudgetApproved: obj.budget,
-              thereofITApproved: obj.thereofIT,
-              davonGEICT: obj.davon_GE_ICT,
-              GBMS: obj.GB_MS,
-              corpRisk: obj[`Corp.Risk`],
-              GBP: obj.GB_P,
-              FDHandel: obj.FD_Handel,
-              portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
-              subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
-              subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
               projectId: project ? project.uid : '',
               projectName: project ? project.projectName : '',
-              projectCategory: project.mode ? translate(project.mode) : translate('project'),
+              group: translate(obj.group),
+              costType: translate(obj.costType),
+              remainingProjectBudget: obj.remainingProjectBudget ? parseInt(obj.remainingProjectBudget) : '',
+              yearlyBudgetDemand: obj.yearlyForecast ? parseInt(obj.yearlyForecast) : '',
+              thereofITDemand: obj.thereofITForecast ? parseInt(obj.thereofITForecast) : '',
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed ? parseInt(obj.Yearly_Budget_Fixed) : '',
+              thereofITFixed: obj.thereof_IT_Fixed ? parseInt(obj.thereof_IT_Fixed) : '',
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed ? parseInt(obj.davon_GE_ICT_Fixed) : '',
+              yearlyBudgetApproved: obj.budget ? parseInt(obj.budget) : '',
+              thereofITApproved: obj.thereofIT ? parseInt(obj.thereofIT) : '',
+              davonGEICT: obj.davon_GE_ICT ? parseInt(obj.davon_GE_ICT) : '',
+              GBMS: obj.GB_MS ? parseInt(obj.GB_MS) : '',
+              corpRisk: obj[`Corp.Risk`] ? parseInt(obj[`Corp.Risk`]) : '',
+              GBP: obj.GB_P ? parseInt(obj.GB_P) : '',
+              FDHandel: obj.FD_Handel ? parseInt(obj.FD_Handel) : '',
               purpose: purpose,
-              technology: technology,
+              subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
               itPlatform: itPlatforms,
+              projectCategory: project.mode ? translate(project.mode) : translate('project'),
+              technology: technology,
+              portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
+              subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
+              orderId: '',
+              orderName: ''
             });
           });
 
@@ -749,26 +751,25 @@ async function uploadExcelDumpToDrive(req, res) {
           budgetObj.budget.forEach(obj => {
             budget.push({
               costType: translate(obj.costType),
-              remainingProjectBudget: obj.remainingProjectBudget,
-              yearlyBudgetDemand: obj.yearlyForecast,
-              thereofITDemand: obj.thereofITForecast,
-              yearlyBudgetFixed: obj.Yearly_Budget_Fixed,
-              thereofITFixed: obj.thereof_IT_Fixed,
-              davonGEICTFixed: obj.davon_GE_ICT_Fixed,
-              yearlyBudgetApproved: obj.budget,
-              thereofITApproved: obj.thereofIT,
-              davonGEICT: obj.davon_GE_ICT,
-              GBMS: obj.GB_MS,
-              corpRisk: obj[`Corp.Risk`],
-              GBP: obj.GB_P,
-              FDHandel: obj.FD_Handel,
+              remainingProjectBudget: obj.remainingProjectBudget ? parseInt(obj.remainingProjectBudget) : '',
+              yearlyBudgetDemand: obj.yearlyForecast ? parseInt(obj.yearlyForecast) : '',
+              thereofITDemand: obj.thereofITForecast ? parseInt(obj.thereofITForecast) : '',
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed ? parseInt(obj.Yearly_Budget_Fixed) : '',
+              thereofITFixed: obj.thereof_IT_Fixed ? parseInt(obj.thereof_IT_Fixed) : '',
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed ? parseInt(obj.davon_GE_ICT_Fixed) : '',
+              yearlyBudgetApproved: obj.budget ? parseInt(obj.budget) : '',
+              thereofITApproved: obj.thereofIT ? parseInt(obj.thereofIT) : '',
+              davonGEICT: obj.davon_GE_ICT ? parseInt(obj.davon_GE_ICT) : '',
+              GBMS: obj.GB_MS ? parseInt(obj.GB_MS) : '',
+              corpRisk: obj[`Corp.Risk`] ? parseInt(obj[`Corp.Risk`]) : '',
+              GBP: obj.GB_P ? parseInt(obj.GB_P) : '',
+              FDHandel: obj.FD_Handel ? parseInt(obj.FD_Handel) : '',
               portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
               subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
               subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
               orderId: order ? order.uid : '',
               orderName: order ? order.name : '',
               projectCategory: 'order',
-              costType: translate(obj.costType),
               itPlatform: itPlatforms,
               purpose: order.purpose
             });

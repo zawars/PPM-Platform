@@ -692,7 +692,7 @@ async function uploadExcelDumpToDrive(req, res) {
 
           let additionalColumns = yearlyBudgetObj.additionalColumns;
           let budget = [];
-          let n = 0;
+          // let n = 0;
 
           budgetObj.budget.forEach(obj => {
             budget.push({
@@ -700,15 +700,15 @@ async function uploadExcelDumpToDrive(req, res) {
               projectName: project ? project.projectName : '',
               group: translate(obj.group),
               costType: translate(obj.costType),
-              remainingProjectBudget: obj.remainingProjectBudget ? parseInt(obj.remainingProjectBudget) : '',
-              yearlyBudgetDemand: obj.yearlyForecast ? parseInt(obj.yearlyForecast) : '',
-              thereofITDemand: obj.thereofITForecast ? parseInt(obj.thereofITForecast) : '',
-              yearlyBudgetFixed: obj.Yearly_Budget_Fixed ? parseInt(obj.Yearly_Budget_Fixed) : '',
-              thereofITFixed: obj.thereof_IT_Fixed ? parseInt(obj.thereof_IT_Fixed) : '',
-              davonGEICTFixed: obj.davon_GE_ICT_Fixed ? parseInt(obj.davon_GE_ICT_Fixed) : '',
-              yearlyBudgetApproved: obj.budget ? parseInt(obj.budget) : '',
-              thereofITApproved: obj.thereofIT ? parseInt(obj.thereofIT) : '',
-              davonGEICT: obj.davon_GE_ICT ? parseInt(obj.davon_GE_ICT) : '',
+              remainingProjectBudget: obj.remainingProjectBudget ? parseInt(obj.remainingProjectBudget) : 0,
+              yearlyBudgetDemand: obj.yearlyForecast ? parseInt(obj.yearlyForecast) : 0,
+              thereofITDemand: obj.thereofITForecast ? parseInt(obj.thereofITForecast) : 0,
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed ? parseInt(obj.Yearly_Budget_Fixed) : 0,
+              thereofITFixed: obj.thereof_IT_Fixed ? parseInt(obj.thereof_IT_Fixed) : 0,
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed ? parseInt(obj.davon_GE_ICT_Fixed) : 0,
+              yearlyBudgetApproved: obj.budget ? parseInt(obj.budget) : 0,
+              thereofITApproved: obj.thereofIT ? parseInt(obj.thereofIT) : 0,
+              davonGEICT: obj.davon_GE_ICT ? parseInt(obj.davon_GE_ICT) : 0,
               purpose: purpose,
               subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
               itPlatform: itPlatforms,
@@ -721,31 +721,31 @@ async function uploadExcelDumpToDrive(req, res) {
               status: project.mode != 'bucket' ? project.projectReport ? project.projectReport.status : '' : project.status,
             });
 
-            if (n < budgetObj.budget.length - 1) {
-              if (additionalColumns) {
-                additionalColumns.forEach(column => {
-                  budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : '';
-                });
-              }
-            } else {
-              if (additionalColumns) {
-                additionalColumns.forEach(column => {
-                  budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : 0;
-                });
-              }
+            // if (n < budgetObj.budget.length - 1) {
+            //   if (additionalColumns) {
+            //     additionalColumns.forEach(column => {
+            //       budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : '';
+            //     });
+            //   }
+            // } else {
+            if (additionalColumns) {
+              additionalColumns.forEach(column => {
+                budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : 0;
+              });
             }
+            // }
 
-            n++;
+            // n++;
           });
 
-          budget[budget.length - 1].remainingProjectBudget = budget[budget.length - 1].remainingProjectBudget != '' ? budget[budget.length - 1].remainingProjectBudget : 0;
-          budget[budget.length - 1].yearlyBudgetDemand = budget[budget.length - 1].yearlyBudgetDemand != '' ? budget[budget.length - 1].yearlyBudgetDemand : 0;
-          budget[budget.length - 1].thereofITDemand = budget[budget.length - 1].thereofITDemand != '' ? budget[budget.length - 1].thereofITDemand : 0;
-          budget[budget.length - 1].yearlyBudgetFixed = budget[budget.length - 1].yearlyBudgetFixed != '' ? budget[budget.length - 1].yearlyBudgetFixed : 0;
-          budget[budget.length - 1].thereofITFixed = budget[budget.length - 1].thereofITFixed != '' ? budget[budget.length - 1].thereofITFixed : 0;
-          budget[budget.length - 1].yearlyBudgetApproved = budget[budget.length - 1].yearlyBudgetApproved != '' ? budget[budget.length - 1].yearlyBudgetApproved : 0;
-          budget[budget.length - 1].thereofITApproved = budget[budget.length - 1].thereofITApproved != '' ? budget[budget.length - 1].thereofITApproved : 0;
-          budget[budget.length - 1].davonGEICT = budget[budget.length - 1].davonGEICT != '' ? budget[budget.length - 1].davonGEICT : 0;
+          // budget[budget.length - 1].remainingProjectBudget = budget[budget.length - 1].remainingProjectBudget != '' ? budget[budget.length - 1].remainingProjectBudget : 0;
+          // budget[budget.length - 1].yearlyBudgetDemand = budget[budget.length - 1].yearlyBudgetDemand != '' ? budget[budget.length - 1].yearlyBudgetDemand : 0;
+          // budget[budget.length - 1].thereofITDemand = budget[budget.length - 1].thereofITDemand != '' ? budget[budget.length - 1].thereofITDemand : 0;
+          // budget[budget.length - 1].yearlyBudgetFixed = budget[budget.length - 1].yearlyBudgetFixed != '' ? budget[budget.length - 1].yearlyBudgetFixed : 0;
+          // budget[budget.length - 1].thereofITFixed = budget[budget.length - 1].thereofITFixed != '' ? budget[budget.length - 1].thereofITFixed : 0;
+          // budget[budget.length - 1].yearlyBudgetApproved = budget[budget.length - 1].yearlyBudgetApproved != '' ? budget[budget.length - 1].yearlyBudgetApproved : 0;
+          // budget[budget.length - 1].thereofITApproved = budget[budget.length - 1].thereofITApproved != '' ? budget[budget.length - 1].thereofITApproved : 0;
+          // budget[budget.length - 1].davonGEICT = budget[budget.length - 1].davonGEICT != '' ? budget[budget.length - 1].davonGEICT : 0;
 
           subportfolioBudgetList[year].push(...budget);
         }
@@ -773,21 +773,21 @@ async function uploadExcelDumpToDrive(req, res) {
 
           let budget = [];
           let additionalColumns = yearlyBudgetObj.additionalColumns;
-          let n = 0;
+          // let n = 0;
 
           budgetObj.budget.forEach(obj => {
             budget.push({
               group: translate(obj.group),
               costType: translate(obj.costType),
-              remainingProjectBudget: obj.remainingProjectBudget ? parseInt(obj.remainingProjectBudget) : '',
-              yearlyBudgetDemand: obj.yearlyForecast ? parseInt(obj.yearlyForecast) : '',
-              thereofITDemand: obj.thereofITForecast ? parseInt(obj.thereofITForecast) : '',
-              yearlyBudgetFixed: obj.Yearly_Budget_Fixed ? parseInt(obj.Yearly_Budget_Fixed) : '',
-              thereofITFixed: obj.thereof_IT_Fixed ? parseInt(obj.thereof_IT_Fixed) : '',
-              davonGEICTFixed: obj.davon_GE_ICT_Fixed ? parseInt(obj.davon_GE_ICT_Fixed) : '',
-              yearlyBudgetApproved: obj.budget ? parseInt(obj.budget) : '',
-              thereofITApproved: obj.thereofIT ? parseInt(obj.thereofIT) : '',
-              davonGEICT: obj.davon_GE_ICT ? parseInt(obj.davon_GE_ICT) : '',
+              remainingProjectBudget: obj.remainingProjectBudget ? parseInt(obj.remainingProjectBudget) : 0,
+              yearlyBudgetDemand: obj.yearlyForecast ? parseInt(obj.yearlyForecast) : 0,
+              thereofITDemand: obj.thereofITForecast ? parseInt(obj.thereofITForecast) : 0,
+              yearlyBudgetFixed: obj.Yearly_Budget_Fixed ? parseInt(obj.Yearly_Budget_Fixed) : 0,
+              thereofITFixed: obj.thereof_IT_Fixed ? parseInt(obj.thereof_IT_Fixed) : 0,
+              davonGEICTFixed: obj.davon_GE_ICT_Fixed ? parseInt(obj.davon_GE_ICT_Fixed) : 0,
+              yearlyBudgetApproved: obj.budget ? parseInt(obj.budget) : 0,
+              thereofITApproved: obj.thereofIT ? parseInt(obj.thereofIT) : 0,
+              davonGEICT: obj.davon_GE_ICT ? parseInt(obj.davon_GE_ICT) : 0,
               portfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.portfolio : '',
               subPortfolioId: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.id : '',
               subPortfolioName: yearlyBudgetObj.subPortfolio ? yearlyBudgetObj.subPortfolio.name : '',
@@ -799,31 +799,31 @@ async function uploadExcelDumpToDrive(req, res) {
               status: order ? order.status : '',
             });
 
-            if (n < budgetObj.budget.length - 1) {
-              if (additionalColumns) {
-                additionalColumns.forEach(column => {
-                  budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : '';
-                });
-              }
-            } else {
-              if (additionalColumns) {
-                additionalColumns.forEach(column => {
-                  budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : 0;
-                });
-              }
+            // if (n < budgetObj.budget.length - 1) {
+            //   if (additionalColumns) {
+            //     additionalColumns.forEach(column => {
+            //       budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : '';
+            //     });
+            //   }
+            // } else {
+            if (additionalColumns) {
+              additionalColumns.forEach(column => {
+                budget[budget.length - 1][column.dataField] = obj[column.dataField] ? parseInt(obj[column.dataField]) : 0;
+              });
             }
+            // }
 
-            n++;
+            // n++;
           });
 
-          budget[budget.length - 1].remainingProjectBudget = budget[budget.length - 1].remainingProjectBudget != '' ? budget[budget.length - 1].remainingProjectBudget : 0;
-          budget[budget.length - 1].yearlyBudgetDemand = budget[budget.length - 1].yearlyBudgetDemand != '' ? budget[budget.length - 1].yearlyBudgetDemand : 0;
-          budget[budget.length - 1].thereofITDemand = budget[budget.length - 1].thereofITDemand != '' ? budget[budget.length - 1].thereofITDemand : 0;
-          budget[budget.length - 1].yearlyBudgetFixed = budget[budget.length - 1].yearlyBudgetFixed != '' ? budget[budget.length - 1].yearlyBudgetFixed : 0;
-          budget[budget.length - 1].thereofITFixed = budget[budget.length - 1].thereofITFixed != '' ? budget[budget.length - 1].thereofITFixed : 0;
-          budget[budget.length - 1].yearlyBudgetApproved = budget[budget.length - 1].yearlyBudgetApproved != '' ? budget[budget.length - 1].yearlyBudgetApproved : 0;
-          budget[budget.length - 1].thereofITApproved = budget[budget.length - 1].thereofITApproved != '' ? budget[budget.length - 1].thereofITApproved : 0;
-          budget[budget.length - 1].davonGEICT = budget[budget.length - 1].davonGEICT != '' ? budget[budget.length - 1].davonGEICT : 0;
+          // budget[budget.length - 1].remainingProjectBudget = budget[budget.length - 1].remainingProjectBudget != '' ? budget[budget.length - 1].remainingProjectBudget : 0;
+          // budget[budget.length - 1].yearlyBudgetDemand = budget[budget.length - 1].yearlyBudgetDemand != '' ? budget[budget.length - 1].yearlyBudgetDemand : 0;
+          // budget[budget.length - 1].thereofITDemand = budget[budget.length - 1].thereofITDemand != '' ? budget[budget.length - 1].thereofITDemand : 0;
+          // budget[budget.length - 1].yearlyBudgetFixed = budget[budget.length - 1].yearlyBudgetFixed != '' ? budget[budget.length - 1].yearlyBudgetFixed : 0;
+          // budget[budget.length - 1].thereofITFixed = budget[budget.length - 1].thereofITFixed != '' ? budget[budget.length - 1].thereofITFixed : 0;
+          // budget[budget.length - 1].yearlyBudgetApproved = budget[budget.length - 1].yearlyBudgetApproved != '' ? budget[budget.length - 1].yearlyBudgetApproved : 0;
+          // budget[budget.length - 1].thereofITApproved = budget[budget.length - 1].thereofITApproved != '' ? budget[budget.length - 1].thereofITApproved : 0;
+          // budget[budget.length - 1].davonGEICT = budget[budget.length - 1].davonGEICT != '' ? budget[budget.length - 1].davonGEICT : 0;
 
           subportfolioBudgetList[year].push(...budget);
         }

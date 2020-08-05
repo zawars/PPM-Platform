@@ -370,7 +370,103 @@ io.on('connection', socket => {
         filtersObj[key] = filter[key];
       })
 
-      let reports = await Reports.find({}).where(filtersObj).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll();
+      let reports = await Reports.find({}, {
+        fields: {
+          hasDraftReport: 0,
+          budgetPlanningTable2: 0,
+          budgetPlanningTable1: 0,
+          actualCostTable: 0,
+          reportRelevantRisksCount: 0,
+          mileStonesValues: 0,
+          risks: 0,
+          user: 0,
+          subProjects: 0,
+          risksTable: 0,
+          question: 0,
+          quantitativeBenefit: 0,
+          outOfScope: 0,
+          mileStonesValues: 0,
+          mandatoryProject: 0,
+          involvedPartnersTable: 0,
+          goals: 0,
+          feasibility: 0,
+          estimatedProjectTable: 0,
+          estimatedProjectCostTableOutline: 0,
+          documents: 0,
+          deliverables: 0,
+          currentReserveHistory: 0,
+          threeYearsBudgetBreakdown: 0,
+          trippleConstraint: 0,
+          radarChartData: 0,
+          projectOrganizationChart: 0,
+          profitability: 0,
+          prioritizationOld: 0,
+          orderQuestion: 0,
+          milestoneTable: 0,
+          measures: 0,
+          lessonsLearned: 0,
+          impactedByDependenciesTable: 0,
+          decisions: 0,
+          communicationTable: 0,
+          closingQuestion: 0,
+          changeRequestQuestion: 0,
+          classification: 0,
+          businessUnit: 0,
+          'pmoOfficer.tablesState': 0,
+          'projectManager.tablesState': 0,
+          'projectManager.projects': 0,
+          'projectManager.teams': 0,
+          'projectManager.configuration': 0,
+          'projectSponsor.tablesState': 0,
+          'projectFico.tablesState': 0
+        }
+      }).where(filtersObj).paginate({ page: data.pageIndex, limit: data.pageSize }).populate('businessArea', {
+        select: ['name']
+      }).populate('businessSegment', {
+        select: ['name']
+      }).populate('itRelevant', {
+        select: ['name']
+      }).populate('portfolio', {
+        select: ['name']
+      }).populate('program', {
+        select: ['programName']
+      }).populate('project', {
+        select: ['projectName']
+      }).populate('projectMethodology', {
+        select: ['name']
+      }).populate('projectPhase', {
+        select: ['name']
+      }).populate('projectType', {
+        select: ['name']
+      }).populate('reportingLevel', {
+        select: ['name']
+      }).populate('strategicContribution', {
+        select: ['name']
+      }).populate('subPortfolio', {
+        select: ['name']
+      }).populate('statusReports',
+        {
+          select: [
+            "overallStatus",
+            "scopeStatus",
+            "costStatus",
+            "timeStatus",
+            "riskStatus",
+            "forecastEndDate",
+            "startDate",
+            "endDate",
+            "plannedEndDate",
+            "reportingDate",
+            "EVA",
+            "totalExposure",
+            "riskExposureVsCurrentBudget",
+            "plannedDateVSForecastDate",
+            "currentBudgetVSForecast",
+            "managementSummary",
+            "percentageComplete"
+          ]
+        });
+
       socket.emit('portfolioProjectsFilter', reports);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);

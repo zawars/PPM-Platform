@@ -205,6 +205,8 @@ module.exports.routes = {
   'POST /updateMultipleOrdersBudget': 'OrderBudgetCostController.updateMultipleOrdersBudget',
   'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget',
 
+  //ProjectBudgetBucket Assignment
+  'POST /findAssignedProjectBucketBudget' : 'ProjectBucketBudgetController.findProjectBucketAssignedBudget',
 
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',

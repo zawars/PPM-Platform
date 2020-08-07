@@ -5,8 +5,6 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-const Reports = require('../models/Reports');
-
 const io = SocketService.io;
 
 io.on('connection', socket => {

@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+const Reports = require('../models/Reports');
+
 const io = SocketService.io;
 
 io.on('connection', socket => {
@@ -196,8 +198,7 @@ io.on('connection', socket => {
     let search = data.search;
 
     let count = await Reports.count({
-      or: [
-        {
+      or: [{
           projectName: {
             'contains': search
           }
@@ -209,8 +210,7 @@ io.on('connection', socket => {
     });
 
     Reports.find({
-      or: [
-        {
+      or: [{
           projectName: {
             'contains': search
           }
@@ -220,7 +220,10 @@ io.on('connection', socket => {
         }
       ]
     }).limit(10).populateAll().sort('uid DESC').then(reportsResp => {
-      socket.emit('reportsSearch', { count: count, reports: reportsResp });
+      socket.emit('reportsSearch', {
+        count: count,
+        reports: reportsResp
+      });
     }).catch(error => {
       ErrorsLogService.logError('Reports', error.toString(), 'reportsSearch', '', socket.user.id);
     });
@@ -230,8 +233,7 @@ io.on('connection', socket => {
   socket.on('reportsSearchIndex', data => {
     let search = data.search;
     Reports.find({
-      or: [
-        {
+      or: [{
           projectName: {
             'contains': search
           }
@@ -240,7 +242,10 @@ io.on('connection', socket => {
           uid: parseInt(search)
         }
       ]
-    }).paginate({ page: data.pageIndex, limit: data.pageSize }).populateAll().sort('uid DESC').then(reportsResp => {
+    }).paginate({
+      page: data.pageIndex,
+      limit: data.pageSize
+    }).populateAll().sort('uid DESC').then(reportsResp => {
       socket.emit('reportsSearchIndex', reportsResp);
     }).catch(error => {
       ErrorsLogService.logError('Reports', error.toString(), 'reportsSearchIndex', '', socket.user.id);
@@ -420,7 +425,10 @@ io.on('connection', socket => {
           'projectSponsor.tablesState': 0,
           'projectFico.tablesState': 0
         }
-      }).where(filtersObj).paginate({ page: data.pageIndex, limit: data.pageSize }).populate('businessArea', {
+      }).where(filtersObj).paginate({
+        page: data.pageIndex,
+        limit: data.pageSize
+      }).populate('businessArea', {
         select: ['name']
       }).populate('businessSegment', {
         select: ['name']
@@ -444,28 +452,27 @@ io.on('connection', socket => {
         select: ['name']
       }).populate('subPortfolio', {
         select: ['name']
-      }).populate('statusReports',
-        {
-          select: [
-            "overallStatus",
-            "scopeStatus",
-            "costStatus",
-            "timeStatus",
-            "riskStatus",
-            "forecastEndDate",
-            "startDate",
-            "endDate",
-            "plannedEndDate",
-            "reportingDate",
-            "EVA",
-            "totalExposure",
-            "riskExposureVsCurrentBudget",
-            "plannedDateVSForecastDate",
-            "currentBudgetVSForecast",
-            "managementSummary",
-            "percentageComplete"
-          ]
-        });
+      }).populate('statusReports', {
+        select: [
+          "overallStatus",
+          "scopeStatus",
+          "costStatus",
+          "timeStatus",
+          "riskStatus",
+          "forecastEndDate",
+          "startDate",
+          "endDate",
+          "plannedEndDate",
+          "reportingDate",
+          "EVA",
+          "totalExposure",
+          "riskExposureVsCurrentBudget",
+          "plannedDateVSForecastDate",
+          "currentBudgetVSForecast",
+          "managementSummary",
+          "percentageComplete"
+        ]
+      });
 
       socket.emit('portfolioProjectsFilter', reports);
     } catch (error) {
@@ -888,6 +895,25 @@ module.exports = {
       res.ok(report);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'update', req);
+    }
+  },
+
+  getReportsDocumentsAnswers: async (req, res) => {
+    try {
+      let documentAnswers = await Reports.find({
+        id: req.params.id
+      }, {
+        fields: {
+          question: 1,
+          orderQuestion: 1,
+          changeRequestQuestion: 1,
+          closingQuestion: 1
+        }
+      });
+
+      res.send(documentAnswers);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', error.toString(), 'getReportsDocumentsAnswers', req);
     }
   }
 };

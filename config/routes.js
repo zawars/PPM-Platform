@@ -115,6 +115,7 @@ module.exports.routes = {
   'GET /reports/portfolio/:id/:subPortfolio': 'ReportsController.getProjectsBySubPortfolio',
   'PUT /reports/:id': 'ReportsController.update',
   'GET /reports/index': 'ReportsController.getAllReports',
+  'GET /reports/getDocumentAnswers/:id': 'ReportsController.getReportsDocumentsAnswers',
 
   'GET /portfoliosPrograms': 'PortfolioController.getAllPortfoliosPrograms',
 

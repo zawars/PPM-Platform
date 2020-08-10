@@ -487,19 +487,18 @@ module.exports = {
       let currentYear = moment().format('YYYY');
 
       let subportfolioBudgetYears = await PortfolioBudgetYear.find({
-        subPortfolio: req.body.subPortfolio,
-        year: {
-          '>=': currentYear
-        }
+        subPortfolio: req.body.subPortfolio
       });
 
       let objects = [];
       for (let i = 0; i < subportfolioBudgetYears.length; i++) {
-        objects.push({
-          project: req.body.project,
-          budget: req.body.budget,
-          portfolioBudgetYear: subportfolioBudgetYears[i].id
-        })
+        if (parseInt(subportfolioBudgetYears[i].year) >= parseInt(currentYear)) {
+          objects.push({
+            project: req.body.project,
+            budget: req.body.budget,
+            portfolioBudgetYear: subportfolioBudgetYears[i].id
+          })
+        }
       }
 
       let projectBudgetCosts = await ProjectBudgetCost.createEach(objects);

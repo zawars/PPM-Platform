@@ -5,6 +5,7 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 const moment = require('moment');
+const ObjectId = require('mongodb').ObjectID;
 const io = SocketService.io;
 
 io.on('connection', socket => {
@@ -152,9 +153,24 @@ module.exports = {
 
   //It retrieves all projects' budget cost for a selected Budget Year
   budgetsByYear: async (req, res) => {
+    let budgetYears = await PortfolioBudgetYear.find({
+      id: req.params.id
+    }, {
+      fields: {
+        year: 1
+      }
+    });
+
+    let year = budgetYears[0].year;
+
     ProjectBudgetCost.native(async function (err, collection) {
       if (err) return res.serverError(err);
       collection.aggregate([{
+          $match: {
+            portfolioBudgetYear: ObjectId(req.params.id)
+          }
+        },
+        {
           $lookup: {
             from: "projects",
             localField: 'project',
@@ -183,7 +199,9 @@ module.exports = {
                   status: 1,
                   itPlatform: 1,
                   plannedEndDate: 1,
-                  costTypeTable: 1
+                  costTypeTable: 1,
+                  isFicoApprovedClosingReport: 1,
+                  ficoApprovedClosingReportDate: 1
                 }
               }
             ],
@@ -195,15 +213,30 @@ module.exports = {
             path: '$report',
             preserveNullAndEmptyArrays: true
           }
+        },
+        {
+          $match: {
+            $or: [{
+                'report.status': 'Active'
+              },
+              {
+                'report.status': 'Closed',
+                'report.isFicoApprovedClosingReport': true,
+                'report.ficoApprovedClosingReportDate': {
+                  $lte: year
+                }
+              }
+            ]
+          }
         }
       ]).toArray(function (err, results = []) {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
 
-        let finalResult = results.filter(result => {
-          return result.portfolioBudgetYear == req.params.id;
-        })
+        // let finalResult = results.filter(result => {
+        //   return result.portfolioBudgetYear == req.params.id;
+        // })
 
-        finalResult.forEach(result => {
+        results.forEach(result => {
           if (result.report && result.report.costTypeTable) {
             for (let i = 0; i < 7; i++) {
               result.budget[i].remainingProjectBudget = parseInt(result.report.costTypeTable[i].currentBudget || 0) - parseInt(result.report.costTypeTable[i].actualCost || 0);
@@ -212,7 +245,7 @@ module.exports = {
           }
         });
 
-        res.ok(finalResult);
+        res.ok(results);
       })
     });
   },

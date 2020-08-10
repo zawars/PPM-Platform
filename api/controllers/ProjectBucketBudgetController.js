@@ -21,10 +21,6 @@ module.exports = {
     try {
       let assignedBudgetItems = await ProjectBucketBudget.find({
         bucketId: req.params.bucketId
-      }, {
-        fields: {
-          budget: 0
-        }
       }).populate('orderId', {
         select: ['name']
       }).populate('projectId', {

@@ -488,9 +488,9 @@ module.exports = {
 
       let subportfolioBudgetYears = await PortfolioBudgetYear.find({
         subPortfolio: req.body.subPortfolio,
-        // year: {
-        //   '>=': currentYear
-        // }
+        year: {
+          '>=': currentYear
+        }
       });
 
       let objects = [];

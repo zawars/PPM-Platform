@@ -4,6 +4,7 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
+const moment = require('moment');
 const io = SocketService.io;
 
 io.on('connection', socket => {
@@ -475,6 +476,37 @@ module.exports = {
       });
     } catch (error) {
       ErrorsLogService.logError('Project Budget Switch', `id: ${body.project}, ` + error.toString(), 'switchYearlyBudget', req);
+      res.badRequest({
+        message: error.message
+      });
+    }
+  },
+
+  createProjectBudgetForSubportfolio: async (req, res) => {
+    try {
+      let currentYear = moment().format('YYYY');
+
+      let subportfolioBudgetYears = await PortfolioBudgetYear.find({
+        subPortfolio: req.body.subPortfolio,
+        // year: {
+        //   '>=': currentYear
+        // }
+      });
+
+      let objects = [];
+      for (let i = 0; i < subportfolioBudgetYears.length; i++) {
+        objects.push({
+          project: req.body.project,
+          budget: req.body.budget,
+          portfolioBudgetYear: subportfolioBudgetYears[i].id
+        })
+      }
+
+      let projectBudgetCosts = await ProjectBudgetCost.createEach(objects);
+
+      res.send(projectBudgetCosts);
+    } catch (error) {
+      ErrorsLogService.logError('Project Budget Switch', `id: ${body.project}, ` + error.toString(), 'createProjectBudgetForSubportfolio', req);
       res.badRequest({
         message: error.message
       });

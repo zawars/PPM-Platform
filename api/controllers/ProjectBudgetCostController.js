@@ -161,7 +161,7 @@ module.exports = {
       }
     });
 
-    let year = budgetYears[0].year;
+    let year = parseInt(budgetYears[0].year);
 
     ProjectBudgetCost.native(async function (err, collection) {
       if (err) return res.serverError(err);
@@ -232,7 +232,7 @@ module.exports = {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
 
         let finalResult = results.filter(result => {
-          return result.report.status == 'Active' || (result.report.status == 'Closed' && result.projectitem.isFicoApprovedClosingReport == true && parseInt(result.projectitem.ficoApprovedClosingReportDate) >= year);
+          return (result.report && result.report.status == 'Active' ) || (result.report && result.report.status == 'Closed' &&  result.projectitem && result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
         })
 
         finalResult.forEach(result => {

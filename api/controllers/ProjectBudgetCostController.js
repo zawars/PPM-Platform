@@ -199,9 +199,7 @@ module.exports = {
                   status: 1,
                   itPlatform: 1,
                   plannedEndDate: 1,
-                  costTypeTable: 1,
-                  isFicoApprovedClosingReport: 1,
-                  ficoApprovedClosingReportDate: 1
+                  costTypeTable: 1
                 }
               }
             ],
@@ -213,30 +211,31 @@ module.exports = {
             path: '$report',
             preserveNullAndEmptyArrays: true
           }
-        },
-        {
-          $match: {
-            $or: [{
-                'report.status': 'Active'
-              },
-              {
-                'report.status': 'Closed',
-                'report.isFicoApprovedClosingReport': true,
-                'report.ficoApprovedClosingReportDate': {
-                  $lte: year
-                }
-              }
-            ]
-          }
         }
+        // ,
+        // {
+        //   $match: {
+        //     $or: [{
+        //         'report.status': 'Active'
+        //       },
+        //       {
+        //         'report.status': 'Closed',
+        //         'projectitem.isFicoApprovedClosingReport': true,
+        //         'projectitem.ficoApprovedClosingReportDate': {
+        //           $lte: year
+        //         }
+        //       }
+        //     ]
+        //   }
+        // }
       ]).toArray(function (err, results = []) {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
 
-        // let finalResult = results.filter(result => {
-        //   return result.portfolioBudgetYear == req.params.id;
-        // })
+        let finalResult = results.filter(result => {
+          return result.report.status == 'Active' || (result.report.status == 'Closed' && result.projectitem.isFicoApprovedClosingReport == true && parseInt(result.projectitem.ficoApprovedClosingReportDate) >= year);
+        })
 
-        results.forEach(result => {
+        finalResult.forEach(result => {
           if (result.report && result.report.costTypeTable) {
             for (let i = 0; i < 7; i++) {
               result.budget[i].remainingProjectBudget = parseInt(result.report.costTypeTable[i].currentBudget || 0) - parseInt(result.report.costTypeTable[i].actualCost || 0);
@@ -245,7 +244,7 @@ module.exports = {
           }
         });
 
-        res.ok(results);
+        res.ok(finalResult);
       })
     });
   },

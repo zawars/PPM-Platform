@@ -232,7 +232,7 @@ module.exports = {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
 
         let finalResult = results.filter(result => {
-          return (result.report && result.report.status == 'Active' ) || (result.report && result.report.status == 'Closed' && result.projectitem &&  result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
+          return (result.projectitem && result.projectitem.mode == 'bucket') || (result.report && result.report.status == 'Active' ) || (result.report && result.report.status == 'Closed' && result.projectitem &&  result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
         })
 
         finalResult.forEach(result => {

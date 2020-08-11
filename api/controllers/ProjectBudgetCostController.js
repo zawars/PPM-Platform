@@ -156,62 +156,62 @@ module.exports = {
     let budgetYears = await PortfolioBudgetYear.find({
       id: req.params.id
     }, {
-      fields: {
-        year: 1
-      }
-    });
+        fields: {
+          year: 1
+        }
+      });
 
     let year = parseInt(budgetYears[0].year);
 
     ProjectBudgetCost.native(async function (err, collection) {
       if (err) return res.serverError(err);
       collection.aggregate([{
-          $match: {
-            portfolioBudgetYear: ObjectId(req.params.id)
-          }
-        },
-        {
-          $lookup: {
-            from: "projects",
-            localField: 'project',
-            foreignField: '_id',
-            as: "projectitem"
-          }
-        },
-        {
-          $unwind: '$projectitem'
-        },
-        {
-          $lookup: {
-            from: "reports",
-            let: {
-              project: '$project'
-            },
-            pipeline: [{
-                $match: {
-                  $expr: {
-                    $eq: ["$project", "$$project"]
-                  },
-                }
-              },
-              {
-                $project: {
-                  status: 1,
-                  itPlatform: 1,
-                  plannedEndDate: 1,
-                  costTypeTable: 1
-                }
-              }
-            ],
-            as: "report"
-          }
-        },
-        {
-          $unwind: {
-            path: '$report',
-            preserveNullAndEmptyArrays: true
-          }
+        $match: {
+          portfolioBudgetYear: ObjectId(req.params.id)
         }
+      },
+      {
+        $lookup: {
+          from: "projects",
+          localField: 'project',
+          foreignField: '_id',
+          as: "projectitem"
+        }
+      },
+      {
+        $unwind: '$projectitem'
+      },
+      {
+        $lookup: {
+          from: "reports",
+          let: {
+            project: '$project'
+          },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $eq: ["$project", "$$project"]
+              },
+            }
+          },
+          {
+            $project: {
+              status: 1,
+              itPlatform: 1,
+              plannedEndDate: 1,
+              costTypeTable: 1
+            }
+          }
+          ],
+          as: "report"
+        }
+      },
+      {
+        $unwind: {
+          path: '$report',
+          preserveNullAndEmptyArrays: true
+        }
+      }
         // ,
         // {
         //   $match: {
@@ -232,7 +232,7 @@ module.exports = {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
 
         let finalResult = results.filter(result => {
-          return (result.report && result.report.status == 'Active' ) || (result.report && result.report.status == 'Closed' &&  result.projectitem && result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
+          return (result.report && result.report.status == 'Active' ) || (result.report && result.report.status == 'Closed' && result.projectitem &&  result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
         })
 
         finalResult.forEach(result => {
@@ -289,8 +289,8 @@ module.exports = {
       if (ordersBudget.length > 0) {
         for (let i = 0; i < ordersBudget.length; i++) {
           await OrderBudgetCost.update({
-              id: ordersBudget[i].id
-            })
+            id: ordersBudget[i].id
+          })
             .set({
               budget: ordersBudget[i].budget
             })
@@ -299,8 +299,8 @@ module.exports = {
 
       projectsBudget.forEach(async (project, index) => {
         let result = await ProjectBudgetCost.update({
-            id: project.id
-          })
+          id: project.id
+        })
           .set({
             budget: project.budget
           })
@@ -396,21 +396,21 @@ module.exports = {
       remainingProjectBudget: '',
       id: 6,
       group: "Sonstiges",
-    }, ];
+    },];
 
     try {
       let smallOrders = await SmallOrder.find({
         or: [{
-            status: 'Start',
-            subPortfolio: subPortfolio
-          },
-          {
-            status: 'Closed',
-            subPortfolio: subPortfolio,
-            endDate: {
-              contains: year
-            }
+          status: 'Start',
+          subPortfolio: subPortfolio
+        },
+        {
+          status: 'Closed',
+          subPortfolio: subPortfolio,
+          endDate: {
+            contains: year
           }
+        }
         ]
       });
 
@@ -431,21 +431,17 @@ module.exports = {
         });
       }
 
-      let subportfolioProjects = await Reports.find({
-        or: [{
-            status: 'Active',
-            subPortfolio: subPortfolio
-          },
-          {
-            status: 'Closed',
-            isFicoApprovedClosingReport: true,
-            ficoApprovedClosingReportDate: {
-              contains: year
-            },
-            subPortfolio: subPortfolio
-          }
-        ]
+      let subportfolioProjectss = await Reports.find({ subPortfolio: subPortfolio }, {
+        fields: {
+          status: 1,
+          project: 1,
+          projectId: 1,
+        }
       });
+
+      let subportfolioProjects = subportfolioProjectss.filter(report => {
+        return report.status == 'Active' || (report.status == 'Closed' && report.project.isFicoApprovedClosingReport == true && report.project.ficoApprovedClosingReportDate.contains(year))
+      })
 
       if (subportfolioProjects.length > 0) {
         subportfolioProjects.forEach((project, index) => {

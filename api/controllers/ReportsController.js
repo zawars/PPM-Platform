@@ -367,12 +367,10 @@ io.on('connection', socket => {
     try {
       let filters = data.filtersArray;
       let filtersObj = {};
-
       filters.forEach(filter => {
         let key = Object.keys(filter)[0];
         filtersObj[key] = filter[key];
       })
-
       let reports = await Reports.find({}, {
         fields: {
           hasDraftReport: 0,
@@ -471,7 +469,6 @@ io.on('connection', socket => {
           "percentageComplete"
         ]
       });
-
       socket.emit('portfolioProjectsFilter', reports);
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);

@@ -361,7 +361,7 @@ module.exports = {
       if (budgetYears && budgetYears.length > 0) {
         budgetYears.map(budgetYear => {
           budgetYear.projectBudgetCost.map(budget => {
-            if(projectsIds.findIndex(val => val == budget.project) < 0) {
+            if (projectsIds.findIndex(val => val == budget.project) < 0) {
               projectsIds.push(budget.project);
             }
           });
@@ -375,11 +375,11 @@ module.exports = {
       }).populateAll();
 
       let projectYearlyBudgets = [];
-      if(projects.length > 0) {
+      if (projects.length > 0) {
         budgetYears.map(budgetYear => {
           budgetYear.projectBudgetCost.map(projectBudget => {
             let project = projects.find(val => val.id == projectBudget.project);
-            if(project && project.mode != 'bucket' && projectBudget.budget && projectBudget.budget.length > 0) {
+            if (project && project.mode != 'bucket' && projectBudget.budget && projectBudget.budget.length > 0) {
               projectYearlyBudgets.push({
                 // id: project.uid,
                 name: project.uid + ' - ' + project.projectName,
@@ -398,5 +398,4 @@ module.exports = {
       res.badRequest(error);
     }
   },
-
 };

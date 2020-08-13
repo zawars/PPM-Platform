@@ -611,13 +611,13 @@ io.on('connection', socket => {
 
     let projects = await Projects.find({
       or: [{
-        projectName: {
-          'contains': query
+          projectName: {
+            'contains': query
+          }
+        },
+        {
+          uid: parseInt(query)
         }
-      },
-      {
-        uid: parseInt(query)
-      }
       ],
       outlineApproved: true
     }, {
@@ -636,7 +636,7 @@ io.on('connection', socket => {
     let message = data.message;
     let attachments = data.attachments;
 
-    if(attachments && attachments.length > 0) {
+    if (attachments && attachments.length > 0) {
       attachments[0].path = process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + attachments[0].path;
     }
 
@@ -664,11 +664,15 @@ io.on('connection', socket => {
             message: "Error sending email."
           });
         } else {
-          socket.emit('notifyAdminsbyEmail', { message: "Email sent." });
+          socket.emit('notifyAdminsbyEmail', {
+            message: "Email sent."
+          });
         }
       })
     } else {
-      socket.emit('notifyAdminsbyEmail', { message: "No Admins found." });
+      socket.emit('notifyAdminsbyEmail', {
+        message: "No Admins found."
+      });
     }
   });
 });
@@ -933,10 +937,16 @@ module.exports = {
         or: [{
             projectName: {
               'contains': query
+            },
+            mode: {
+              '!=': 'bucket'
             }
           },
           {
-            uid: parseInt(query)
+            uid: parseInt(query),
+            mode: {
+              '!=': 'bucket'
+            }
           }
         ]
       }, {

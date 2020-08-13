@@ -937,16 +937,10 @@ module.exports = {
         or: [{
             projectName: {
               'contains': query
-            },
-            mode: {
-              '!=': 'bucket'
             }
           },
           {
-            uid: parseInt(query),
-            mode: {
-              '!=': 'bucket'
-            }
+            uid: parseInt(query)
           }
         ]
       }, {

@@ -38,6 +38,9 @@ module.exports = {
       model: 'smallOrder'
     },
 
+    portfolioBudgetYear: {
+      model: 'portfolioBudgetYear'
+    }
   },
 
 };

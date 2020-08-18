@@ -182,6 +182,37 @@ module.exports = {
         $unwind: '$projectitem'
       },
       {
+        $lookup:
+        {
+          from: "projectbucketbudget",
+          let: {
+            portfolioBudgetYear: '$portfolioBudgetYear',
+            projectId: "$project"
+          },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $and:
+                  [
+                    { $eq: ["$portfolioBudgetYear", "$$portfolioBudgetYear"] },
+                    { $eq: ["$projectId", "$$projectId"] }
+                  ]
+              }
+            },
+          },
+          { $group: { _id: null, count: { $sum: 1 } } },
+          { $project: { _id: 0 } }
+          ],
+          as: "assignmentsCount"
+        },
+      },
+      {
+        $unwind: {
+          path: '$assignmentsCount',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
         $lookup: {
           from: "reports",
           let: {
@@ -232,7 +263,7 @@ module.exports = {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
 
         let finalResult = results.filter(result => {
-          return (result.projectitem && result.projectitem.mode == 'bucket') || (result.report && result.report.status == 'Active' ) || (result.report && result.report.status == 'Closed' && result.projectitem &&  result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
+          return (result.projectitem && result.projectitem.mode == 'bucket') || (result.report && result.report.status == 'Active') || (result.report && result.report.status == 'Closed' && result.projectitem && result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
         })
 
         finalResult.forEach(result => {

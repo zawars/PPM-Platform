@@ -37,7 +37,7 @@ module.exports = {
   getItemsCountbyQuery: async (req, res) => {
     try {
       let count = await ProjectBucketBudget.count(req.body);
-      res.send(count);
+      res.send({count});
     } catch (error) {
       ErrorsLogService.logError('ProjectBucketBudget', error.toString(), 'getItemsCountbyQuery', req);
     }

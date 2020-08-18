@@ -210,6 +210,7 @@ module.exports.routes = {
   //ProjectBudgetBucket Assignment
   'POST /findAssignedProjectBucketBudget': 'ProjectBucketBudgetController.findProjectBucketAssignedBudget',
   'GET /projectBudget/:bucketId/names': 'ProjectBucketBudgetController.getItemsNamesByBucket',
+  'POST /getProjectBucketItemsCount': 'ProjectBucketBudgetController.getItemsCountbyQuery',
 
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',

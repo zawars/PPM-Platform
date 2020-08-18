@@ -32,6 +32,15 @@ module.exports = {
     } catch (error) {
       ErrorsLogService.logError('ProjectBucketBudget', error.toString(), 'getItemsNamesByBucket', req);
     }
+  },
+
+  getItemsCountbyQuery: async (req, res) => {
+    try {
+      let count = await ProjectBucketBudget.count(req.body);
+      res.send(count);
+    } catch (error) {
+      ErrorsLogService.logError('ProjectBucketBudget', error.toString(), 'getItemsCountbyQuery', req);
+    }
   }
 
 };

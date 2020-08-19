@@ -96,19 +96,79 @@ module.exports = {
   },
 
   budgetsByYear: async (req, res) => {
-    let orderBudgetCosts = await OrderBudgetCost.find({
-      portfolioBudgetYear: req.params.id
-    }).populateAll();
-
-    orderBudgetCosts.forEach(result => {
-      if (result.order.costTypeTable) {
-        for (let i = 0; i < 7; i++) {
-          result.budget[i].remainingProjectBudget = parseInt(result.order.costTypeTable[i].currentBudget || 0) - parseInt(result.order.costTypeTable[i].actualCost || 0);
+    OrderBudgetCost.native(async function (err, collection) {
+      if (err) return res.serverError(err);
+      collection.aggregate([{
+          $match: {
+            portfolioBudgetYear: ObjectId(req.params.id)
+          }
+        },
+        {
+          $lookup: {
+            from: "smallOrder",
+            localField: 'order',
+            foreignField: '_id',
+            as: "order"
+          }
+        },
+        {
+          $unwind: '$order'
+        },
+        {
+          $lookup: {
+            from: "projectbucketbudget",
+            let: {
+              portfolioBudgetYear: '$portfolioBudgetYear',
+              orderId: "$order"
+            },
+            pipeline: [{
+                $match: {
+                  $expr: {
+                    $and: [{
+                        $eq: ["$portfolioBudgetYear", "$$portfolioBudgetYear"]
+                      },
+                      {
+                        $eq: ["$orderId", "$$orderId"]
+                      }
+                    ]
+                  }
+                },
+              },
+              {
+                $group: {
+                  _id: null,
+                  count: {
+                    $sum: 1
+                  }
+                }
+              },
+              {
+                $project: {
+                  _id: 0
+                }
+              }
+            ],
+            as: "assignmentsCount"
+          },
+        },
+        {
+          $unwind: {
+            path: '$assignmentsCount',
+            preserveNullAndEmptyArrays: true
+          }
         }
-      }
+      ]).toArray(function (err, orderBudgetCosts = []) {
+        if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
+        orderBudgetCosts.forEach(result => {
+          if (result.order.costTypeTable) {
+            for (let i = 0; i < 7; i++) {
+              result.budget[i].remainingProjectBudget = parseInt(result.order.costTypeTable[i].currentBudget || 0) - parseInt(result.order.costTypeTable[i].actualCost || 0);
+            }
+          }
+        });
+        res.ok(orderBudgetCosts);
+      });
     });
-
-    res.ok(orderBudgetCosts);
   },
 
   updateMultipleOrdersBudget: (req, res) => {

@@ -106,17 +106,6 @@ module.exports = {
         },
         {
           $lookup: {
-            from: "smallorder",
-            localField: 'order',
-            foreignField: '_id',
-            as: "order"
-          }
-        },
-        {
-          $unwind: '$order'
-        },
-        {
-          $lookup: {
             from: "projectbucketbudget",
             let: {
               portfolioBudgetYear: '$portfolioBudgetYear',
@@ -157,6 +146,17 @@ module.exports = {
             path: '$assignmentsCount',
             preserveNullAndEmptyArrays: true
           }
+        },
+        {
+          $lookup: {
+            from: "smallorder",
+            localField: 'order',
+            foreignField: '_id',
+            as: "order"
+          }
+        },
+        {
+          $unwind: '$order'
         }
       ]).toArray(function (err, orderBudgetCosts = []) {
         if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);

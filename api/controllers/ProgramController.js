@@ -22,7 +22,9 @@ io.on('connection', socket => {
   socket.on('activePrograms', data => {
     Program.find({
       status: 'Active'
-    }).sort({ programName: 'ASC' }).populateAll().then(programsList => {
+    }).sort({
+      programName: 'ASC'
+    }).populateAll().then(programsList => {
       socket.emit('activePrograms', programsList);
     }).catch(error => {
       ErrorsLogService.logError('Program', error.toString(), 'activePrograms', '', socket.user.id);
@@ -30,7 +32,9 @@ io.on('connection', socket => {
   });
 
   socket.on('allPrograms', data => {
-    Program.find().sort({ programName: 'ASC' }).populateAll().then(programsList => {
+    Program.find().sort({
+      programName: 'ASC'
+    }).populateAll().then(programsList => {
       socket.emit('allPrograms', programsList);
     }).catch(error => {
       ErrorsLogService.logError('Program', error.toString(), 'allPrograms', '', socket.user.id);
@@ -45,6 +49,9 @@ io.on('connection', socket => {
             },
             {
               programSponsor: data.userId
+            },
+            {
+              additionalProgramManager: req.params.id
             }
           ]
         }).paginate({
@@ -79,6 +86,9 @@ io.on('connection', socket => {
             },
             {
               programSponsor: data.userId
+            },
+            {
+              additionalProgramManager: req.params.id
             }
           ]
         });
@@ -318,6 +328,9 @@ module.exports = {
         },
         {
           programSponsor: req.params.id
+        },
+        {
+          additionalProgramManager: req.params.id
         }
       ]
     }).limit(limit).populateAll().then(response => {

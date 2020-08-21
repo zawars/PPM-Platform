@@ -51,7 +51,7 @@ io.on('connection', socket => {
               programSponsor: data.userId
             },
             {
-              additionalProgramManager: req.params.id
+              additionalProgramManager: data.userId
             }
           ]
         }).paginate({
@@ -88,7 +88,7 @@ io.on('connection', socket => {
               programSponsor: data.userId
             },
             {
-              additionalProgramManager: req.params.id
+              additionalProgramManager: data.userId
             }
           ]
         });

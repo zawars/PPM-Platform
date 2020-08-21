@@ -25,6 +25,9 @@ module.exports = {
     programManager: {
       model: 'user'
     },
+    additionalProgramManager: {
+      model: 'user'
+    },
     programSponsor: {
       model: 'user'
     },

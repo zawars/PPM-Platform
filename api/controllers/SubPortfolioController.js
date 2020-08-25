@@ -121,11 +121,13 @@ module.exports = {
         id: subportfolioId
       }).set(req.body)
 
-      await User.update({
-        id: req.body.subPortfolioManager.id
-      }).set({
-        isSubportfolioManager: true
-      });
+      if (req.body.subPortfolioManager != undefined) {
+        await User.update({
+          id: req.body.subPortfolioManager.id
+        }).set({
+          isSubportfolioManager: true
+        });
+      }
 
       if (req.body.additionalSubPortfolioManager != undefined && req.body.subPortfolioManager.id != req.body.additionalSubPortfolioManager.id) {
         await User.update({

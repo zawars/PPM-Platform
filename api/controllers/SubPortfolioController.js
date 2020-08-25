@@ -114,7 +114,7 @@ module.exports = {
     }
   },
 
-  update: async (req, res) => {
+  updateSubportfolio: async (req, res) => {
     try {
       let subportfolioId = req.params.id;
       let updatedSubportfolio = await SubPortfolio.update({

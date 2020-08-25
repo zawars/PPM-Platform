@@ -129,7 +129,7 @@ module.exports = {
         });
       }
 
-      if (req.body.additionalSubPortfolioManager != undefined && req.body.subPortfolioManager.id != req.body.additionalSubPortfolioManager.id) {
+      if (req.body.additionalSubPortfolioManager != undefined) {
         await User.update({
           id: req.body.additionalSubPortfolioManager.id
         }).set({

@@ -77,7 +77,6 @@
   "Project Name": "Projektname",
   "Project Sponsor": "Projektauftraggeber/in",
   "Estimated Project Duration": "Geschätzte Gesamtprojektdauer",
-  "Start": "Anfang",
   "End Date": "Endtermin",
   "End": "Ende",
   "Years": "Jahre",
@@ -970,6 +969,17 @@
   "Third Party": "API Konfiguration",
   "*Detailed definition of projects can be found here according to": "*Detaillierte Definition der Projekte ist hier gemäss",
   "minimum standards.": "Minimalstandards zu finden.",
+  "*The sponsor decides in his/her area of responsibility whether it is project or an order. The table above serves as a help reference.": "*Der Aufraggeber/in entscheidet in seiner Geschäftsverantwortung, ob ein Vorhaben ein Projekt oder ein Autrag ist. Die obige Tabelle dient nur als Hilfestellung.​",
   "t": "the",
-  "*The sponsor decides in his/her area of responsibility whether it is project or an order. The table above serves as a help reference.": "*Der Aufraggeber/in entscheidet in seiner Geschäftsverantwortung, ob ein Vorhaben ein Projekt oder ein Autrag ist. Die obige Tabelle dient nur als Hilfestellung.​"
+  "The sponsor decides in his/her area of responsibility whether it is project or an order. The table above serves as a help reference.": "Der Aufraggeber/in entscheidet in seiner Geschäftsverantwortung, ob ein Vorhaben ein Projekt oder ein Autrag ist. Die obige Tabelle dient nur als Hilfestellung.​",
+  "minimum standards": "Minimalstandards zu finden",
+  "Detailed definition of projects can be found here according to": "Detaillierte Definition der Projekte ist hier gemäss",
+  "Yearly Current Budget": "Jahresbudget Aktuell",
+  "Aggregated Subportfolio Financials": "Aggregierte Sub-Portfolio Kosten",
+  "Get Aggregated Values": "Aggregierte Kosten Abrufen",
+  "Yearly Original Budget": "Jahresbudget Original",
+  "Yearly Actual Cost": "Jahreskosten Aktuell",
+  "Erfordert die erfolgreiche Projektumsetzung einen Mindset-Shift bei den Beteiligten?\n": "Erfordert die erfolgreiche Projektumsetzung einen Mindset-Shift bei den Beteiligten?",
+  "SAP": "SAP",
+  "Start": "Anfangen"
 }

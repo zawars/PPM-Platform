@@ -60,8 +60,8 @@ io.on('connection', socket => {
   socket.on('activeProjectsIndex', async data => {
     try {
       let projectsList = await Projects.find({
-          isClosed: false
-        })
+        isClosed: false
+      })
         .paginate({
           page: data.pageIndex,
           limit: data.pageSize
@@ -87,8 +87,8 @@ io.on('connection', socket => {
   socket.on('closedProjectsIndex', async data => {
     try {
       let projectsList = await Projects.find({
-          isClosed: true
-        })
+        isClosed: true
+      })
         .paginate({
           page: data.pageIndex,
           limit: data.pageSize
@@ -105,33 +105,33 @@ io.on('connection', socket => {
     let search = data.search;
     let count = await Projects.count({
       or: [{
-          projectName: {
-            contains: search
-          },
-          isClosed: false
+        projectName: {
+          contains: search
         },
-        {
-          docType: {
-            contains: search
-          },
-          isClosed: false
-        }
+        isClosed: false
+      },
+      {
+        docType: {
+          contains: search
+        },
+        isClosed: false
+      }
       ]
     });
 
     Projects.find({
       or: [{
-          projectName: {
-            contains: search
-          },
-          isClosed: false
+        projectName: {
+          contains: search
         },
-        {
-          docType: {
-            contains: search
-          },
-          isClosed: false
-        }
+        isClosed: false
+      },
+      {
+        docType: {
+          contains: search
+        },
+        isClosed: false
+      }
       ]
     }).limit(10).sort('createdAt', 'DESC').populateAll().then(projects => {
       socket.emit('activeProjectsSearch', {
@@ -147,20 +147,20 @@ io.on('connection', socket => {
     try {
       let search = data.search;
       let projectsList = await Projects.find({
-          or: [{
-              projectName: {
-                contains: search
-              },
-              isClosed: false
-            },
-            {
-              docType: {
-                contains: search
-              },
-              isClosed: false
-            }
-          ]
-        })
+        or: [{
+          projectName: {
+            contains: search
+          },
+          isClosed: false
+        },
+        {
+          docType: {
+            contains: search
+          },
+          isClosed: false
+        }
+        ]
+      })
         .paginate({
           page: data.pageIndex,
           limit: data.pageSize
@@ -176,53 +176,53 @@ io.on('connection', socket => {
     let search = data.search;
     let count = await Projects.count({
       or: [{
-          uid: parseInt(search),
-          isClosed: true
+        uid: parseInt(search),
+        isClosed: true
+      },
+      {
+        projectName: {
+          contains: search
         },
-        {
-          projectName: {
-            contains: search
-          },
-          isClosed: true
+        isClosed: true
+      },
+      {
+        status: {
+          contains: search
         },
-        {
-          status: {
-            contains: search
-          },
-          isClosed: true
+        isClosed: true
+      },
+      {
+        docType: {
+          contains: search
         },
-        {
-          docType: {
-            contains: search
-          },
-          isClosed: true
-        }
+        isClosed: true
+      }
       ]
     });
 
     Projects.find({
       or: [{
-          uid: parseInt(search),
-          isClosed: true
+        uid: parseInt(search),
+        isClosed: true
+      },
+      {
+        projectName: {
+          contains: search
         },
-        {
-          projectName: {
-            contains: search
-          },
-          isClosed: true
+        isClosed: true
+      },
+      {
+        status: {
+          contains: search
         },
-        {
-          status: {
-            contains: search
-          },
-          isClosed: true
+        isClosed: true
+      },
+      {
+        docType: {
+          contains: search
         },
-        {
-          docType: {
-            contains: search
-          },
-          isClosed: true
-        }
+        isClosed: true
+      }
       ]
     }).limit(10).sort('createdAt', 'DESC').populateAll().then(projects => {
       socket.emit('closedProjectsSearch', {
@@ -238,30 +238,30 @@ io.on('connection', socket => {
     try {
       let search = data.search;
       let projectsList = await Projects.find({
-          or: [{
-              uid: parseInt(search),
-              isClosed: true
-            },
-            {
-              projectName: {
-                contains: search
-              },
-              isClosed: true
-            },
-            {
-              status: {
-                contains: search
-              },
-              isClosed: true
-            },
-            {
-              docType: {
-                contains: search
-              },
-              isClosed: true
-            }
-          ]
-        })
+        or: [{
+          uid: parseInt(search),
+          isClosed: true
+        },
+        {
+          projectName: {
+            contains: search
+          },
+          isClosed: true
+        },
+        {
+          status: {
+            contains: search
+          },
+          isClosed: true
+        },
+        {
+          docType: {
+            contains: search
+          },
+          isClosed: true
+        }
+        ]
+      })
         .paginate({
           page: data.pageIndex,
           limit: data.pageSize
@@ -276,25 +276,25 @@ io.on('connection', socket => {
 
   socket.on('submittedProjectsIndex', data => {
     Projects.find({
-        or: [{
-            outlineSubmitted: true,
-            outlineApproved: false,
-            status: {
-              not: 'Rejected'
-            }
-          },
-          {
-            orderSubmitted: true,
-            orderApproved: false,
-            status: {
-              not: 'Rejected'
-            }
-          }
-        ]
-      }).paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+        status: {
+          not: 'Rejected'
+        }
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false,
+        status: {
+          not: 'Rejected'
+        }
+      }
+      ]
+    }).paginate({
+      page: data.pageIndex,
+      limit: data.pageSize
+    })
       .populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('submittedProjectsIndex', projects);
       }).catch(error => {
@@ -306,19 +306,19 @@ io.on('connection', socket => {
     try {
       let count = await Projects.count({
         or: [{
-            outlineSubmitted: true,
-            outlineApproved: false,
-            status: {
-              not: 'Rejected'
-            }
-          },
-          {
-            orderSubmitted: true,
-            orderApproved: false,
-            status: {
-              not: 'Rejected'
-            }
+          outlineSubmitted: true,
+          outlineApproved: false,
+          status: {
+            not: 'Rejected'
           }
+        },
+        {
+          orderSubmitted: true,
+          orderApproved: false,
+          status: {
+            not: 'Rejected'
+          }
+        }
         ]
       });
       socket.emit('submittedProjectsCount', count);
@@ -331,44 +331,44 @@ io.on('connection', socket => {
     let search = data.search;
 
     Projects.find({
-        or: [{
-            outlineSubmitted: true,
-            outlineApproved: false,
-            status: {
-              not: 'Rejected'
-            }
-          },
-          {
-            orderSubmitted: true,
-            orderApproved: false,
-            status: {
-              not: 'Rejected'
-            }
-          }
-        ],
-        or: [{
-            uid: parseInt(search)
-          },
-          {
-            docType: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            projectName: {
-              contains: search
-            }
-          }
-        ]
-      }).paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
+      or: [{
+        outlineSubmitted: true,
+        outlineApproved: false,
+        status: {
+          not: 'Rejected'
+        }
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false,
+        status: {
+          not: 'Rejected'
+        }
+      }
+      ],
+      or: [{
+        uid: parseInt(search)
+      },
+      {
+        docType: {
+          contains: search
+        }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        projectName: {
+          contains: search
+        }
+      }
+      ]
+    }).paginate({
+      page: data.pageIndex,
+      limit: data.pageSize
+    })
       .populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('submittedProjectsSearchIndex', projects);
       }).catch(error => {
@@ -380,75 +380,75 @@ io.on('connection', socket => {
     let search = data.search;
     let count = await Projects.count({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-          status: {
-            not: 'Rejected'
-          }
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false,
-          status: {
-            not: 'Rejected'
-          }
+        outlineSubmitted: true,
+        outlineApproved: false,
+        status: {
+          not: 'Rejected'
         }
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false,
+        status: {
+          not: 'Rejected'
+        }
+      }
       ],
       or: [{
-          uid: parseInt(search)
-        },
-        {
-          docType: {
-            contains: search
-          }
-        },
-        {
-          status: {
-            contains: search
-          }
-        },
-        {
-          projectName: {
-            contains: search
-          }
+        uid: parseInt(search)
+      },
+      {
+        docType: {
+          contains: search
         }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        projectName: {
+          contains: search
+        }
+      }
       ]
     });
 
     Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-          status: {
-            not: 'Rejected'
-          }
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false,
-          status: {
-            not: 'Rejected'
-          }
+        outlineSubmitted: true,
+        outlineApproved: false,
+        status: {
+          not: 'Rejected'
         }
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false,
+        status: {
+          not: 'Rejected'
+        }
+      }
       ],
       or: [{
-          uid: parseInt(search)
-        },
-        {
-          docType: {
-            contains: search
-          }
-        },
-        {
-          status: {
-            contains: search
-          }
-        },
-        {
-          projectName: {
-            contains: search
-          }
+        uid: parseInt(search)
+      },
+      {
+        docType: {
+          contains: search
         }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        projectName: {
+          contains: search
+        }
+      }
       ]
     }).populateAll().sort('createdAt DESC').then(projects => {
       socket.emit('submittedProjectsSearch', {
@@ -462,8 +462,8 @@ io.on('connection', socket => {
 
   socket.on('projectsIndex', data => {
     Projects.find({
-        user: data.userId
-      })
+      user: data.userId
+    })
       .paginate({
         page: data.pageIndex,
         limit: data.pageSize
@@ -493,46 +493,46 @@ io.on('connection', socket => {
       let count = await Projects.count({
         user: data.userId,
         or: [{
-            uid: parseInt(search)
-          },
-          {
-            docType: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            projectName: {
-              contains: search
-            }
+          uid: parseInt(search)
+        },
+        {
+          docType: {
+            contains: search
           }
+        },
+        {
+          status: {
+            contains: search
+          }
+        },
+        {
+          projectName: {
+            contains: search
+          }
+        }
         ]
       });
 
       Projects.find({
         user: data.userId,
         or: [{
-            uid: parseInt(search)
-          },
-          {
-            docType: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            projectName: {
-              contains: search
-            }
+          uid: parseInt(search)
+        },
+        {
+          docType: {
+            contains: search
           }
+        },
+        {
+          status: {
+            contains: search
+          }
+        },
+        {
+          projectName: {
+            contains: search
+          }
+        }
         ]
       }).limit(10).populateAll().sort('uid DESC').then(projects => {
         socket.emit('projectsSearch', {
@@ -551,23 +551,23 @@ io.on('connection', socket => {
     Projects.find({
       user: data.userId,
       or: [{
-          uid: parseInt(search)
-        },
-        {
-          docType: {
-            contains: search
-          }
-        },
-        {
-          status: {
-            contains: search
-          }
-        },
-        {
-          projectName: {
-            contains: search
-          }
+        uid: parseInt(search)
+      },
+      {
+        docType: {
+          contains: search
         }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        projectName: {
+          contains: search
+        }
+      }
       ]
     }).paginate({
       page: data.pageIndex,
@@ -587,7 +587,7 @@ io.on('connection', socket => {
       subject: data.subject
     }, (err) => {
       if (err) {
-        ErrorsLogService.logError('Projects', `email: ${email}, ` + error.toString(), 'sendEmail', socket.user.id);
+        ErrorsLogService.logError('Projects', `email: ${data.email}, ` + error.toString(), 'sendEmail', socket.user.id);
         console.log(err);
       } else {
         socket.emit('sendEmail', {
@@ -621,11 +621,11 @@ io.on('connection', socket => {
       ],
       outlineApproved: true
     }, {
-      fields: {
-        uid: 1,
-        projectName: 1
-      }
-    }).limit(10).sort('uid DESC');
+        fields: {
+          uid: 1,
+          projectName: 1
+        }
+      }).limit(10).sort('uid DESC');
 
     socket.emit('searchOpenDetailsProjects', projects);
   });
@@ -636,7 +636,7 @@ io.on('connection', socket => {
     let message = data.message;
     let attachments = data.attachments;
 
-    if(attachments && attachments.length > 0) {
+    if (attachments && attachments.length > 0) {
       attachments[0].path = process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + '\\' + attachments[0].path;
     }
 
@@ -664,11 +664,15 @@ io.on('connection', socket => {
             message: "Error sending email."
           });
         } else {
-          socket.emit('notifyAdminsbyEmail', { message: "Email sent." });
+          socket.emit('notifyAdminsbyEmail', {
+            message: "Email sent."
+          });
         }
       })
     } else {
-      socket.emit('notifyAdminsbyEmail', { message: "No Admins found." });
+      socket.emit('notifyAdminsbyEmail', {
+        message: "No Admins found."
+      });
     }
   });
 });
@@ -699,13 +703,13 @@ module.exports = {
   getSubmittedProjects: (req, res) => {
     Projects.find({
       or: [{
-          outlineSubmitted: true,
-          outlineApproved: false,
-        },
-        {
-          orderSubmitted: true,
-          orderApproved: false
-        }
+        outlineSubmitted: true,
+        outlineApproved: false,
+      },
+      {
+        orderSubmitted: true,
+        orderApproved: false
+      }
       ],
       status: 'Submitted'
     }).populateAll().sort('createdAt DESC').then(projects => {
@@ -780,13 +784,13 @@ module.exports = {
       isClosed: true,
       isCashedOut: false
     }, {
-      isCashedOut: true
-    }).then(projects => {
-      res.ok(projects);
-    }).catch(err => {
-      ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
-      res.badRequest(err);
-    });
+        isCashedOut: true
+      }).then(projects => {
+        res.ok(projects);
+      }).catch(err => {
+        ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
+        res.badRequest(err);
+      });
   },
 
   submitOutline: (req, res) => {
@@ -832,7 +836,7 @@ module.exports = {
     let body = req.body;
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
-    delete(body.projectOutline);
+    delete (body.projectOutline);
 
     Projects.update({
       id: req.params.id
@@ -931,20 +935,20 @@ module.exports = {
     try {
       let projects = await Projects.find({
         or: [{
-            projectName: {
-              'contains': query
-            }
-          },
-          {
-            uid: parseInt(query)
+          projectName: {
+            'contains': query
           }
+        },
+        {
+          uid: parseInt(query)
+        }
         ]
       }, {
-        fields: {
-          uid: 1,
-          projectName: 1
-        }
-      }).limit(10).sort('uid DESC');
+          fields: {
+            uid: 1,
+            projectName: 1
+          }
+        }).where({ mode: { '!': 'bucket' } }).limit(10).sort('uid DESC');
 
       res.send(projects);
 

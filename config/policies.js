@@ -62,4 +62,8 @@ module.exports.policies = {
     verifyTokenExternal: true,
   },
 
+  AttachmentController: {
+    download: ['isStorageAuthenticated']
+  }
+
 };

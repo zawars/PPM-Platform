@@ -100,9 +100,46 @@ module.exports = {
         isSubportfolioManager: true
       });
 
+      if (req.body.additionalSubPortfolioManager != undefined && req.body.subPortfolioManager.id != req.body.additionalSubPortfolioManager.id) {
+        await User.update({
+          id: req.body.additionalSubPortfolioManager.id
+        }).set({
+          isSubportfolioManager: true
+        });
+      }
+
       res.ok(response[0]);
     } catch (error) {
       ErrorsLogService.logError('Subportfolio', error.toString(), 'createSubportfolio', req);
+    }
+  },
+
+  updateSubportfolio: async (req, res) => {
+    try {
+      let subportfolioId = req.params.id;
+      let updatedSubportfolio = await SubPortfolio.update({
+        id: subportfolioId
+      }).set(req.body)
+
+      if (req.body.subPortfolioManager != undefined) {
+        await User.update({
+          id: req.body.subPortfolioManager.id
+        }).set({
+          isSubportfolioManager: true
+        });
+      }
+
+      if (req.body.additionalSubPortfolioManager != undefined) {
+        await User.update({
+          id: req.body.additionalSubPortfolioManager.id
+        }).set({
+          isSubportfolioManager: true
+        });
+      }
+
+      res.send(updatedSubportfolio[0]);
+    } catch (error) {
+      ErrorsLogService.logError('Subportfolio', error.toString(), 'update', req);
     }
   },
 

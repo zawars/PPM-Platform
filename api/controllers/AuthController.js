@@ -67,7 +67,7 @@ module.exports = {
         EmailService.sendMail({
           email: userObj.email,
           subject: 'Verification',
-          message: `You verification token is: '${secret}'. \n`
+          message: `Your verification token is: '${secret}'. \n`
         }, () => {
           res.ok({
             user: userObj,
@@ -182,21 +182,44 @@ module.exports = {
 
     if (userObj != undefined) {
       delete(userObj.tablesState);
-
       req.session.user = userObj;
+      const moment = require('moment');
+
       jwt.sign({
-        user: userObj
-      }, sails.config.secret, (err, token) => {
-        RedisService.set(token, userObj, () => {
-          console.log(`${userObj.email} logged in.`);
-          res.ok({
-            userObj,
-            token
+        id: userObj.id,
+        exp: moment().add('day', 1).unix()
+      }, sails.config.secret, (err, accessToken) => {
+        jwt.sign({
+          user: userObj
+        }, sails.config.secret, (err, token) => {
+          RedisService.set(token, userObj, () => {
+            console.log(`${userObj.email} logged in.`);
+            res.ok({
+              userObj,
+              token,
+              accessToken
+            });
           });
         });
       });
+
     } else {
       res.forbidden('You are not permitted to perform this action. Unauthorized, user not found.');
+    }
+  },
+
+  refreshAccessToken: async (req, res) => {
+    try {
+      jwt.sign({
+        id: req.params.id,
+        exp: moment().add('day', 1).unix()
+      }, sails.config.secret, (err, accessToken) => {
+        res.ok({
+          accessToken
+        });
+      });
+    } catch (error) {
+      console.log(error);
     }
   }
 };

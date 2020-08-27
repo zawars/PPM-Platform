@@ -44,6 +44,7 @@ module.exports.routes = {
   'POST /saml/consume': 'AuthController.samlConsumeToken',
   'POST /saml/logout': 'AuthController.samlLogout',
   'GET /syncUsers': 'UserController.syncUsers',
+  'GET /auth/:id/accessToken/refresh': 'AuthController.refreshAccessToken',
 
   'GET /user/login/external/:email': 'AuthController.externalLogin',
   'POST /user/verify/external': 'AuthController.verifyTokenExternal',
@@ -65,8 +66,6 @@ module.exports.routes = {
   'GET /getUserByEmail/:email': 'UserController.getUserByEmail',
   'POST /sendEmail': 'UserController.sendEmail',
   'POST /notifyAdmins': 'UserController.notifyAdminsbyEmailAttachment',
-  'POST /upload': 'AttachmentController.uploadFile',
-  'POST /deleteFile': 'AttachmentController.deleteFile',
   'POST /uploadDoc': 'DocumentsController.uploadFile',
   'GET /getReportsByUser/:id': 'ReportsController.getReportsByUser',
   'GET /getStatusReportsByProjectReport/:id': 'StatusReportsController.getStatusReportsByProjectReport',
@@ -116,6 +115,7 @@ module.exports.routes = {
   'GET /reports/portfolio/:id/:subPortfolio': 'ReportsController.getProjectsBySubPortfolio',
   'PUT /reports/:id': 'ReportsController.update',
   'GET /reports/index': 'ReportsController.getAllReports',
+  'GET /reports/getDocumentAnswers/:id': 'ReportsController.getReportsDocumentsAnswers',
 
   'GET /portfoliosPrograms': 'PortfolioController.getAllPortfoliosPrograms',
 
@@ -134,6 +134,7 @@ module.exports.routes = {
   'POST /updateMultipleProjectsBudget': 'ProjectBudgetCostController.updateMultipleProjectsBudget',
   'POST /createProjectBudgetCost': 'ProjectBudgetCostController.createProjectBudgetCost',
   'POST /projectBudgetCost/yearlyBudget/switch': 'ProjectBudgetCostController.switchYearlyBudget',
+  'POST /projectBudgetCost/createForSubportfolio': 'ProjectBudgetCostController.createProjectBudgetForSubportfolio',
 
   //News
   'GET /news': 'NewsController.index',
@@ -158,6 +159,7 @@ module.exports.routes = {
 
   //Subportfolio
   'POST /subPortfolio': 'SubPortfolioController.create',
+  'PUT /subPortfolio/edit/:id': 'SubPortfolioController.updateSubportfolio',
   'GET /subPortfolio/:id/projects': 'SubPortfolioController.getSubportfolioProjects',
   'GET /subPortfolio/user/:id': 'SubPortfolioController.getUserSubportfolios',
 
@@ -203,6 +205,15 @@ module.exports.routes = {
   'POST /createOrderBudget': 'OrderBudgetCostController.createOrderBudgetCost',
   'GET /orderBudgetCost/year/:id': 'OrderBudgetCostController.budgetsByYear',
   'POST /updateMultipleOrdersBudget': 'OrderBudgetCostController.updateMultipleOrdersBudget',
-  'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget'
+  'GET /orderBudgetCost/order/:id': 'OrderBudgetCostController.getOrderBudget',
 
+  //ProjectBudgetBucket Assignment
+  'POST /findAssignedProjectBucketBudget': 'ProjectBucketBudgetController.findProjectBucketAssignedBudget',
+  'GET /projectBudget/:bucketId/names': 'ProjectBucketBudgetController.getItemsNamesByBucket',
+  'POST /getProjectBucketItemsCount': 'ProjectBucketBudgetController.getItemsCountbyQuery',
+
+  // Attachments
+  'POST /upload': 'AttachmentController.uploadFile',
+  'POST /deleteFile': 'AttachmentController.deleteFile',
+  'GET /attachment/protected/:file': 'AttachmentController.download',
 };

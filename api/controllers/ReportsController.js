@@ -891,6 +891,25 @@ module.exports = {
     } catch (error) {
       ErrorsLogService.logError('Reports', error.toString(), 'update', req);
     }
+  },
+
+  getReportsDocumentsAnswers: async (req, res) => {
+    try {
+      let documentAnswers = await Reports.find({
+        id: req.params.id
+      }, {
+        fields: {
+          question: 1,
+          orderQuestion: 1,
+          changeRequestQuestion: 1,
+          closingQuestion: 1
+        }
+      });
+
+      res.send(documentAnswers);
+    } catch (error) {
+      ErrorsLogService.logError('Reports', error.toString(), 'getReportsDocumentsAnswers', req);
+    }
   }
 };
 

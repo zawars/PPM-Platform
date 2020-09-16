@@ -152,6 +152,13 @@ module.exports = {
           })
         });
 
+        //Marking Subportfolio as Fixed so that it can't be deleted
+        await SubPortfolio.update({
+          id: portfolioBudgetYearUpdatedAgain.subPortfolio
+        }).set({
+          isFixed: true
+        });
+
         res.ok(PortfolioBudgetYearUpdated);
       } else {
         res.ok("Projects Not Found");
@@ -175,6 +182,14 @@ module.exports = {
         let orderBudgetCost = await OrderBudgetCost.find({
           portfolioBudgetYear: budgetYears[i].id
         });
+
+        //Marking Subportfolio as Fixed so that it can't be deleted
+        await SubPortfolio.update({
+          id: budgetYears[i].subPortfolio
+        }).set({
+          isFixed: true
+        });
+
 
         let totalBudget = 0;
         let totalThereofIT = 0;

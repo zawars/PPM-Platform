@@ -154,7 +154,7 @@ module.exports = {
 
         //Marking Subportfolio as Fixed so that it can't be deleted
         await SubPortfolio.update({
-          id: portfolioBudgetYearUpdatedAgain.subPortfolio
+          id: portfolioBudgetYearUpdatedAgain[0].subPortfolio
         }).set({
           isFixed: true
         });

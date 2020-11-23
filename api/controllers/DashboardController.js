@@ -119,6 +119,22 @@ module.exports = {
     } catch (error) {
       ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
     }
+  },
+
+  importExcelFinancials: async (req, res) => {
+    let financialsArray = req.body;
+
+    for (let i = 0; i < financialsArray.length; i++) {
+      let projectItem = financialsArray[i];
+
+      await Reports.update({ projectIdentifier: projectItem.projectId }).set({ importedExcelFinancials: projectItem })
+
+      if (i == financialsArray.length - 1) {
+        res.ok({
+          message: 'Data Imported successfully.'
+        });
+      }
+    }
   }
 }
 

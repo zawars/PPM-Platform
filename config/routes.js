@@ -147,6 +147,7 @@ module.exports.routes = {
   //Dashboard
   'GET /getDashboardData': 'DashboardController.getDashboard',
   'POST /dashboard/importExcelFinancials': 'DashboardController.importExcelFinancials',
+  'GET /dashboard/getActiveProjectsIdentifiers': 'DashboardController.getActiveProjectsIdentifiers',
 
   //Subportfolio budget
   'GET /portfolioBudgetYear/:id': 'PortfolioBudgetYearController.getBudgetYears',

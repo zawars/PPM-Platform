@@ -135,6 +135,16 @@ module.exports = {
         });
       }
     }
+  },
+
+  getActiveProjectsIdentifiers: async (req, res) => {
+   let projectsIdentifiers = await Reports.find({ "projectIdentifier": { $exists : true }, status: 'Active' }, {
+      fields: {
+        projectIdentifier: 1
+      }
+    });
+
+    res.ok(projectsIdentifiers);
   }
 }
 

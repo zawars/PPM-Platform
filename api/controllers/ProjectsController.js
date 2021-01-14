@@ -321,6 +321,9 @@ io.on('connection', socket => {
           status: {
             not: 'Rejected'
           }
+        },
+        {
+          status: 'Draft'
         }
         ]
       });

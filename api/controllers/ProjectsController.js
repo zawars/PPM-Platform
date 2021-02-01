@@ -31,14 +31,19 @@ io.on('connection', socket => {
       })
   });
 
-  socket.on('activeProjectsCount', async data => {
+  socket.on('resetProjectsCount', async data => {
     try {
       let count = await Projects.count({
-        isClosed: false
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+        ]
       });
-      socket.emit('activeProjectsCount', count);
+      socket.emit('resetProjectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsCount', '', socket.user.id);
+      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsCount', '', socket.user.id);
     }
   });
 
@@ -57,19 +62,24 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on('activeProjectsIndex', async data => {
+  socket.on('resetProjectsIndex', async data => {
     try {
       let projectsList = await Projects.find({
-        isClosed: false
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+        ]
       })
         .paginate({
           page: data.pageIndex,
           limit: data.pageSize
         })
         .sort('createdAt', 'DESC').populateAll();
-      socket.emit('activeProjectsIndex', projectsList);
+      socket.emit('resetProjectsIndex', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsIndex', '', socket.user.id);
+      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsIndex', '', socket.user.id);
     }
   });
 
@@ -627,11 +637,11 @@ io.on('connection', socket => {
       ],
       outlineApproved: true
     }, {
-        fields: {
-          uid: 1,
-          projectName: 1
-        }
-      }).limit(10).sort('uid DESC');
+      fields: {
+        uid: 1,
+        projectName: 1
+      }
+    }).limit(10).sort('uid DESC');
 
     socket.emit('searchOpenDetailsProjects', projects);
   });
@@ -790,13 +800,13 @@ module.exports = {
       isClosed: true,
       isCashedOut: false
     }, {
-        isCashedOut: true
-      }).then(projects => {
-        res.ok(projects);
-      }).catch(err => {
-        ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
-        res.badRequest(err);
-      });
+      isCashedOut: true
+    }).then(projects => {
+      res.ok(projects);
+    }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
+      res.badRequest(err);
+    });
   },
 
   submitOutline: (req, res) => {
@@ -950,11 +960,11 @@ module.exports = {
         }
         ]
       }, {
-          fields: {
-            uid: 1,
-            projectName: 1
-          }
-        }).where({ mode: { '!': 'bucket' } }).limit(10).sort('uid DESC');
+        fields: {
+          uid: 1,
+          projectName: 1
+        }
+      }).where({ mode: { '!': 'bucket' } }).limit(10).sort('uid DESC');
 
       res.send(projects);
 

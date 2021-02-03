@@ -81,7 +81,7 @@ io.on('connection', socket => {
           { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
           { docType: 'Order', orderSubmitted: true, orderApproved: false },
           { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
-          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
         ]
       });
       socket.emit('resetProjectsCount', count);
@@ -97,7 +97,7 @@ io.on('connection', socket => {
           { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
           { docType: 'Order', orderSubmitted: true, orderApproved: false },
           { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
-          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
         ]
       })
         .paginate({
@@ -953,7 +953,7 @@ module.exports = {
           { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
           { docType: 'Order', orderSubmitted: true, orderApproved: false },
           { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
-          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
         ]
       }).limit(limit).populateAll();
 

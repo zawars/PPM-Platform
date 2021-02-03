@@ -73,6 +73,44 @@ io.on('connection', socket => {
     }
   });
 
+
+  socket.on('resetProjectsCount', async data => {
+    try {
+      let count = await Projects.count({
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+        ]
+      });
+      socket.emit('resetProjectsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsCount', '', socket.user.id);
+    }
+  });
+
+  socket.on('resetProjectsIndex', async data => {
+    try {
+      let projectsList = await Projects.find({
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+        ]
+      })
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .sort('createdAt', 'DESC').populateAll();
+      socket.emit('resetProjectsIndex', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsIndex', '', socket.user.id);
+    }
+  });
+
   socket.on('closedProjectsCount', async data => {
     try {
       let count = await Projects.count({
@@ -627,11 +665,11 @@ io.on('connection', socket => {
       ],
       outlineApproved: true
     }, {
-        fields: {
-          uid: 1,
-          projectName: 1
-        }
-      }).limit(10).sort('uid DESC');
+      fields: {
+        uid: 1,
+        projectName: 1
+      }
+    }).limit(10).sort('uid DESC');
 
     socket.emit('searchOpenDetailsProjects', projects);
   });
@@ -790,13 +828,13 @@ module.exports = {
       isClosed: true,
       isCashedOut: false
     }, {
-        isCashedOut: true
-      }).then(projects => {
-        res.ok(projects);
-      }).catch(err => {
-        ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
-        res.badRequest(err);
-      });
+      isCashedOut: true
+    }).then(projects => {
+      res.ok(projects);
+    }).catch(err => {
+      ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
+      res.badRequest(err);
+    });
   },
 
   submitOutline: (req, res) => {
@@ -904,6 +942,27 @@ module.exports = {
     }
   },
 
+  getResetProjects: async (req, res) => {
+    try {
+      let limit = 0;
+      if (req.param('limit')) {
+        limit = req.param('limit');
+      }
+      let projectsList = await Projects.find({
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false }
+        ]
+      }).limit(limit).populateAll();
+
+      res.ok(projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'getResetProjects', req);
+    }
+  },
+
   getClosedProjects: async (req, res) => {
     try {
       let limit = 0;
@@ -950,11 +1009,11 @@ module.exports = {
         }
         ]
       }, {
-          fields: {
-            uid: 1,
-            projectName: 1
-          }
-        }).where({ mode: { '!': 'bucket' } }).limit(10).sort('uid DESC');
+        fields: {
+          uid: 1,
+          projectName: 1
+        }
+      }).where({ mode: { '!': 'bucket' } }).limit(10).sort('uid DESC');
 
       res.send(projects);
 

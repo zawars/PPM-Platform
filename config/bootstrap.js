@@ -8,7 +8,7 @@
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
-var http = require('http');
+// var http = require('http');
 const cronJob = require('./cronJob').cronJob;
 
 module.exports.bootstrap = async function (cb) {
@@ -156,7 +156,8 @@ module.exports.bootstrap = async function (cb) {
   //     }
   //   }
   // });
-
+  
+  cb();
   cronJob();
 
   //Run Server on HTTPS
@@ -164,5 +165,4 @@ module.exports.bootstrap = async function (cb) {
   //   http.createServer(sails.hooks.http.app).listen(81);
   // }
 
-  cb();
 };

@@ -10,6 +10,7 @@ const parseString = require('xml2js').parseString;
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const speakEasy = require('speakeasy');
+const moment = require('moment');
 
 module.exports = {
   login: function (req, res) {
@@ -124,7 +125,7 @@ module.exports = {
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
     if (req.body.RelayState != '' && req.body.RelayState != undefined) {
-      params = `;redirectTo=${req.body.RelayState}`;
+      params = `?redirectTo=${req.body.RelayState}`;
     }
 
     //save user;
@@ -183,7 +184,6 @@ module.exports = {
     if (userObj != undefined) {
       delete(userObj.tablesState);
       req.session.user = userObj;
-      const moment = require('moment');
 
       jwt.sign({
         id: userObj.id,

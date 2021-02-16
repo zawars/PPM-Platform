@@ -119,6 +119,32 @@ module.exports = {
     } catch (error) {
       ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
     }
+  },
+
+  importExcelFinancials: async (req, res) => {
+    let financialsArray = req.body;
+
+    for (let i = 0; i < financialsArray.length; i++) {
+      let projectItem = financialsArray[i];
+
+      await Reports.update({ projectIdentifier: projectItem.projectId }).set({ importedExcelFinancials: projectItem })
+
+      if (i == financialsArray.length - 1) {
+        res.ok({
+          message: 'Data Imported successfully.'
+        });
+      }
+    }
+  },
+
+  getActiveProjectsIdentifiers: async (req, res) => {
+   let projectsIdentifiers = await Reports.find({ "projectIdentifier": { $exists : true }, status: 'Active' }, {
+      fields: {
+        projectIdentifier: 1
+      }
+    });
+
+    res.ok(projectsIdentifiers);
   }
 }
 

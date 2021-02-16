@@ -51,7 +51,7 @@ module.exports.bootstrap = async function (cb) {
     EmailService.smallOrderCounter = uid;
   }
 
-  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report', 'Small Order Started', 'Small Order Closed'];
+  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report', 'Small Order Started', 'Small Order Closed', 'Project Submission Notification'];
 
   emailConfigEvents.forEach(async event => {
     let emailConfig = await EmailConfig.findOne({
@@ -66,96 +66,96 @@ module.exports.bootstrap = async function (cb) {
   });
 
   // script to change itPlatform to array of ids of Project Outline
-  let outlines = await ProjectOutline.find().populateAll();
-  outlines.forEach(async outline => {
-    if (outline.itPlatform) {
-      if (outline.itPlatform.id) {
-        await ProjectOutline.update({
-          id: outline.id
-        }).set({
-          itPlatform: [outline.itPlatform.id]
-        });
-      }
-    }
-  });
+  // let outlines = await ProjectOutline.find().populateAll();
+  // outlines.forEach(async outline => {
+  //   if (outline.itPlatform) {
+  //     if (outline.itPlatform.id) {
+  //       await ProjectOutline.update({
+  //         id: outline.id
+  //       }).set({
+  //         itPlatform: [outline.itPlatform.id]
+  //       });
+  //     }
+  //   }
+  // });
 
-  // script to change itPlatform to array of ids of Project Order
-  let orders = await ProjectOrder.find().populateAll();
-  orders.forEach(async order => {
-    if (order.itPlatform) {
-      if (order.itPlatform.id) {
-        await ProjectOrder.update({
-          id: order.id
-        }).set({
-          itPlatform: [order.itPlatform.id]
-        });
-      }
-    }
-  });
+  // // script to change itPlatform to array of ids of Project Order
+  // let orders = await ProjectOrder.find().populateAll();
+  // orders.forEach(async order => {
+  //   if (order.itPlatform) {
+  //     if (order.itPlatform.id) {
+  //       await ProjectOrder.update({
+  //         id: order.id
+  //       }).set({
+  //         itPlatform: [order.itPlatform.id]
+  //       });
+  //     }
+  //   }
+  // });
 
-  // script to change itPlatform to array of ids of Project Closing Report
-  let changeRequests = await ChangeRequest.find().populateAll();
-  changeRequests.forEach(async changeRequest => {
-    if (changeRequest.itPlatform) {
-      if (changeRequest.itPlatform.id) {
-        await ChangeRequest.update({
-          id: changeRequest.id
-        }).set({
-          itPlatform: [changeRequest.itPlatform.id]
-        });
-      }
-    }
-  });
+  // // script to change itPlatform to array of ids of Project Closing Report
+  // let changeRequests = await ChangeRequest.find().populateAll();
+  // changeRequests.forEach(async changeRequest => {
+  //   if (changeRequest.itPlatform) {
+  //     if (changeRequest.itPlatform.id) {
+  //       await ChangeRequest.update({
+  //         id: changeRequest.id
+  //       }).set({
+  //         itPlatform: [changeRequest.itPlatform.id]
+  //       });
+  //     }
+  //   }
+  // });
 
-  // script to change itPlatform to array of ids of Project Details
-  let details = await Reports.find().populateAll();
-  details.forEach(async detail => {
-    if (detail.itPlatform) {
-      if (!detail.itPlatform.length) {
-        if (detail.itPlatform.id) {
-          await Reports.update({
-            id: detail.id
-          }).set({
-            itPlatform: [detail.itPlatform.id]
-          });
-        } else {
-          await Reports.update({
-            id: detail.id
-          }).set({
-            itPlatform: [detail.itPlatform]
-          });
-        }
-      }
-    }
-  });
+  // // script to change itPlatform to array of ids of Project Details
+  // let details = await Reports.find().populateAll();
+  // details.forEach(async detail => {
+  //   if (detail.itPlatform) {
+  //     if (!detail.itPlatform.length) {
+  //       if (detail.itPlatform.id) {
+  //         await Reports.update({
+  //           id: detail.id
+  //         }).set({
+  //           itPlatform: [detail.itPlatform.id]
+  //         });
+  //       } else {
+  //         await Reports.update({
+  //           id: detail.id
+  //         }).set({
+  //           itPlatform: [detail.itPlatform]
+  //         });
+  //       }
+  //     }
+  //   }
+  // });
 
-  // script to change costTypes to costTypeTable of small orders
-  let smallOrders = await SmallOrder.find();
-  smallOrders.forEach(async order => {
-    if (order.costTypes) {
-      if (!order.costTypeTable) {
-        await SmallOrder.update({
-          id: order.id
-        }).set({
-          costTypeTable: order.costTypes
-        });
-      }
-    }
-  });
+  // // script to change costTypes to costTypeTable of small orders
+  // let smallOrders = await SmallOrder.find();
+  // smallOrders.forEach(async order => {
+  //   if (order.costTypes) {
+  //     if (!order.costTypeTable) {
+  //       await SmallOrder.update({
+  //         id: order.id
+  //       }).set({
+  //         costTypeTable: order.costTypes
+  //       });
+  //     }
+  //   }
+  // });
 
-  // script to change costTypes to costTypeTable of small orders status report
-  let smallOrderStatusReports = await SmallOrderStatusReport.find();
-  smallOrderStatusReports.forEach(async statusReport => {
-    if (statusReport.costTypes) {
-      if (!statusReport.costTypeTable) {
-        await SmallOrderStatusReport.update({
-          id: statusReport.id
-        }).set({
-          costTypeTable: statusReport.costTypes
-        });
-      }
-    }
-  });
+  // // script to change costTypes to costTypeTable of small orders status report
+  // let smallOrderStatusReports = await SmallOrderStatusReport.find();
+  // smallOrderStatusReports.forEach(async statusReport => {
+  //   if (statusReport.costTypes) {
+  //     if (!statusReport.costTypeTable) {
+  //       await SmallOrderStatusReport.update({
+  //         id: statusReport.id
+  //       }).set({
+  //         costTypeTable: statusReport.costTypes
+  //       });
+  //     }
+  //   }
+  // });
 
   cronJob();
 

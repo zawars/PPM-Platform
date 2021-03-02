@@ -13,7 +13,7 @@ const {
 let usersList = [];
 
 module.exports = {
-  pong:(req, res)=>{
+  ping:(req, res)=>{
     res.ok('pong');
   },
 

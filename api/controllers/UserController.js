@@ -13,6 +13,10 @@ const {
 let usersList = [];
 
 module.exports = {
+  pong:(req, res)=>{
+    res.ok('pong');
+  },
+
   getUsersFromRoles: (req, res) => {
     if (req.params.role == "PMO") {
       User.find({

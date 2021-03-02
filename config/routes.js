@@ -38,6 +38,7 @@ module.exports.routes = {
   '/failure': {
     view: '404'
   },
+  'GET /ping': 'UserController.ping',
   'GET /login': 'AuthController.login',
   'GET /authenticate/:id': 'AuthController.getTokenOnLogin',
   'GET /logout': 'AuthController.logout',

@@ -64,6 +64,9 @@ module.exports.policies = {
 
   AttachmentController: {
     download: ['isStorageAuthenticated']
-  }
-
+  },
+  
+  UserController : {
+    ping: true
+  },
 };

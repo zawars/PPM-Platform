@@ -78,9 +78,9 @@ io.on('connection', socket => {
     try {
       let count = await Projects.count({
         or: [
-          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
-          { docType: 'Order', orderSubmitted: true, orderApproved: false },
-          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false, status: 'Submitted' },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false, status: 'Submitted' },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false, status: 'Submitted' },
           { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
         ]
       });
@@ -94,9 +94,9 @@ io.on('connection', socket => {
     try {
       let projectsList = await Projects.find({
         or: [
-          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
-          { docType: 'Order', orderSubmitted: true, orderApproved: false },
-          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false, status: 'Submitted' },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false, status: 'Submitted' },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false, status: 'Submitted' },
           { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
         ]
       })
@@ -950,9 +950,9 @@ module.exports = {
       }
       let projectsList = await Projects.find({
         or: [
-          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
-          { docType: 'Order', orderSubmitted: true, orderApproved: false },
-          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false, status: 'Submitted' },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false, status: 'Submitted' },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false, status: 'Submitted' },
           { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
         ]
       }).limit(limit).populateAll();

@@ -128,7 +128,8 @@ module.exports = {
       let projectItem = financialsArray[i];
 
       await Reports.update({ projectIdentifier: projectItem.projectId }).set({ importedExcelFinancials: projectItem })
-
+      await SmallOrder.update({ projectIdentifier: projectItem.projectId }).set({ importedExcelFinancials: projectItem })
+      
       if (i == financialsArray.length - 1) {
         res.ok({
           message: 'Data Imported successfully.'

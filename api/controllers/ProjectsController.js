@@ -18,7 +18,6 @@ io.on('connection', socket => {
     }).then(projects => {
       socket.emit('getSelectiveProjects', projects);
     }).catch(err => {
-      ErrorsLogService.logError('Projects', err.toString(), 'getSelectiveProjects', '', socket.user.id);
     })
   });
 
@@ -27,7 +26,6 @@ io.on('connection', socket => {
       .populateAll().then(projects => {
         socket.emit('getAllProjects', projects);
       }).catch(err => {
-        ErrorsLogService.logError('Projects', err.toString(), 'getAllProjects', '', socket.user.id);
       })
   });
 
@@ -38,7 +36,6 @@ io.on('connection', socket => {
       });
       socket.emit('activeProjectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsCount', '', socket.user.id);
     }
   });
 
@@ -53,7 +50,6 @@ io.on('connection', socket => {
       }).limit(10).sort('projectName');
       socket.emit('getRecentActiveProjects', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'getRecentActiveProjects', '', socket.user.id);
     }
   });
 
@@ -69,7 +65,6 @@ io.on('connection', socket => {
         .sort('createdAt', 'DESC').populateAll();
       socket.emit('activeProjectsIndex', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsIndex', '', socket.user.id);
     }
   });
 
@@ -86,7 +81,6 @@ io.on('connection', socket => {
       });
       socket.emit('resetProjectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsCount', '', socket.user.id);
     }
   });
 
@@ -107,7 +101,6 @@ io.on('connection', socket => {
         .sort('createdAt', 'DESC').populateAll();
       socket.emit('resetProjectsIndex', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsIndex', '', socket.user.id);
     }
   });
 
@@ -118,7 +111,6 @@ io.on('connection', socket => {
       });
       socket.emit('closedProjectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsCount', '', socket.user.id);
     }
   });
 
@@ -135,7 +127,6 @@ io.on('connection', socket => {
 
       socket.emit('closedProjectsIndex', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsIndex', '', socket.user.id);
     }
   });
 
@@ -177,7 +168,6 @@ io.on('connection', socket => {
         projects
       });
     }).catch(error => {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearch', '', socket.user.id);
     })
   });
 
@@ -206,7 +196,6 @@ io.on('connection', socket => {
         .sort('createdAt', 'DESC').populateAll();
       socket.emit('activeProjectsSearchIndex', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearchIndex', '', socket.user.id);
     }
   });
 
@@ -268,7 +257,6 @@ io.on('connection', socket => {
         projects
       });
     }).catch(error => {
-      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsSearch', '', socket.user.id);
     })
   });
 
@@ -308,7 +296,6 @@ io.on('connection', socket => {
 
       socket.emit('closedProjectsSearchIndex', projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'closedProjectsSearchIndex', '', socket.user.id);
     }
   });
 
@@ -339,7 +326,6 @@ io.on('connection', socket => {
       .populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('submittedProjectsIndex', projects);
       }).catch(error => {
-        ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsIndex', '', socket.user.id);
       });
   });
 
@@ -367,7 +353,6 @@ io.on('connection', socket => {
       });
       socket.emit('submittedProjectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsCount', '', socket.user.id);
     }
   });
 
@@ -416,7 +401,6 @@ io.on('connection', socket => {
       .populateAll().sort('createdAt DESC').then(projects => {
         socket.emit('submittedProjectsSearchIndex', projects);
       }).catch(error => {
-        ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsSearchIndex', '', socket.user.id);
       });
   });
 
@@ -500,7 +484,6 @@ io.on('connection', socket => {
         projects
       });
     }).catch(error => {
-      ErrorsLogService.logError('Projects', error.toString(), 'submittedProjectsSearch', '', socket.user.id);
     });
   });
 
@@ -515,7 +498,6 @@ io.on('connection', socket => {
       .populateAll().sort('uid DESC').then(projects => {
         socket.emit('projectsIndex', projects);
       }).catch(error => {
-        ErrorsLogService.logError('Projects', error.toString(), 'projectsIndex', '', socket.user.id);
       });
   });
 
@@ -526,7 +508,6 @@ io.on('connection', socket => {
       });
       socket.emit('projectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'projectsCount', '', socket.user.id);
     }
   });
 
@@ -585,7 +566,6 @@ io.on('connection', socket => {
         });
       });
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'projectsSearch', '', socket.user.id);
     }
   });
 
@@ -619,7 +599,6 @@ io.on('connection', socket => {
     }).populateAll().sort('uid DESC').then(projects => {
       socket.emit('projectsSearchIndex', projects);
     }).catch(error => {
-      ErrorsLogService.logError('Projects', error.toString(), 'projectsSearch', '', socket.user.id);
     })
   });
 
@@ -631,7 +610,6 @@ io.on('connection', socket => {
       subject: data.subject
     }, (err) => {
       if (err) {
-        ErrorsLogService.logError('Projects', `email: ${data.email}, ` + error.toString(), 'sendEmail', socket.user.id);
         console.log(err);
       } else {
         socket.emit('sendEmail', {
@@ -702,7 +680,6 @@ io.on('connection', socket => {
         attachments: attachments
       }, (err) => {
         if (err) {
-          ErrorsLogService.logError('Projects', `email: ${email}, ` + err.toString(), 'notifyAdminsbyEmail', socket.user.id);
           console.log(err);
           res.forbidden({
             message: "Error sending email."
@@ -728,7 +705,6 @@ module.exports = {
     }).limit(req.param('limit') || 10).populateAll().sort('uid DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
-      ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'userProjects', req);
     });
   },
 
@@ -739,7 +715,6 @@ module.exports = {
     }).sort('createdAt DESC').limit(10).then(projects => {
       res.ok(projects);
     }).catch(error => {
-      ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'getOutlineApprovedProjects', req);
       res.badRequest(error);
     });
   },
@@ -759,7 +734,6 @@ module.exports = {
     }).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
-      ErrorsLogService.logError('Projects', error.toString(), 'getSubmittedProjects', req);
       res.badRequest(error);
     });
   },
@@ -818,7 +792,6 @@ module.exports = {
         });
       });
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'getUserReport', req);
       res.badRequest(error);
     }
   },
@@ -832,7 +805,6 @@ module.exports = {
     }).then(projects => {
       res.ok(projects);
     }).catch(err => {
-      ErrorsLogService.logError('Projects', err.toString(), 'resetCount', req);
       res.badRequest(err);
     });
   },
@@ -866,14 +838,11 @@ module.exports = {
             approvalId: response.id
           });
         }).catch(error => {
-          ErrorsLogService.logError('Projects', `projectId: ${projectResponse.id}, ` + error.toString(), 'submitOutline', req);
         })
       }).catch(error => {
-        ErrorsLogService.logError('Projects', `projectId: ${projectResponse.id}, ` + error.toString(), 'submitOutline', req);
       })
     }).catch(error => {
-      ErrorsLogService.logError('Projects', error.toString(), 'submitOutline', req);
-    })
+      })
   },
 
   submitOutlineUpdateCase: async (req, res) => {
@@ -916,13 +885,10 @@ module.exports = {
             });
           });
         }).catch(error => {
-          ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'submitOutlineUpdateCase', req);
         })
       }).catch(error => {
-        ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'submitOutlineUpdateCase', req);
       })
     }).catch(error => {
-      ErrorsLogService.logError('Projects', `id: ${req.params.id}, ` + error.toString(), 'submitOutlineUpdateCase', req);
     })
   },
 
@@ -938,7 +904,6 @@ module.exports = {
 
       res.ok(projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'getRecentActiveProjects', req);
     }
   },
 
@@ -959,7 +924,6 @@ module.exports = {
 
       res.ok(projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'getResetProjects', req);
     }
   },
 
@@ -975,7 +939,6 @@ module.exports = {
 
       res.ok(projects);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'getClosedProjects', req);
     }
   },
 
@@ -990,7 +953,6 @@ module.exports = {
       }).limit(10).sort('projectName');
       res.ok(projectsList);
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'activeProjectsSearch', req);
     }
   },
 
@@ -1018,7 +980,6 @@ module.exports = {
       res.send(projects);
 
     } catch (error) {
-      ErrorsLogService.logError('Projects', error.toString(), 'search', req);
       res.badRequest(error);
     }
   }

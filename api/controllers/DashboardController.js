@@ -47,7 +47,6 @@ io.on('connection', socket => {
       let paginated = SocketService.paginateArray(projectsList, data.pageSize, data.pageIndex);
       socket.emit('dashboardProjectsIndex', paginated)
     } catch (error) {
-      ErrorsLogService.logError('Dasboard', error.toString(), 'dashboardProjectsIndex', '', socket.user.id);
     }
   });
 
@@ -79,7 +78,6 @@ io.on('connection', socket => {
         projectsCount: projectsList.length
       });
     }).catch(err => {
-      ErrorsLogService.logError('Dasboard', err.toString(), 'dashboardProjectsFilter', '', socket.user.id);
     });
   });
 });
@@ -111,13 +109,10 @@ module.exports = {
           });
           socketObj.emit('dashboardProjects', SocketService.paginateArray(projectsList, 10, 1))
         }).catch(error => {
-          ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
         });
       }).catch(error => {
-        ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
       });
     } catch (error) {
-      ErrorsLogService.logError('Dasboard', error.toString(), 'getDashboardData', req);
     }
   },
 
@@ -515,7 +510,6 @@ function updateDropdownsValues() {
       });
     });
   }).catch(error => {
-    ErrorsLogService.logError('Dasboard', error.toString(), 'dashboardProjectsFilter');
   })
 }
 

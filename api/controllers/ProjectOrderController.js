@@ -32,7 +32,6 @@ io.on('connection', socket => {
         order
       });
     } catch (error) {
-      ErrorsLogService.logError('Project Order', error.toString(), 'fetchProjectOrder', socket.user.id);
     }
   });
 });
@@ -57,7 +56,6 @@ module.exports = {
 
       res.ok(project);
     } catch (error) {
-      ErrorsLogService.logError('Project Order', error.toString(), 'updateProjectOrder', req);
       res.badRequest(error);
     }
   },
@@ -95,7 +93,6 @@ module.exports = {
 
       res.ok(approval);
     } catch (error) {
-      ErrorsLogService.logError('Projects Order', `projectId: ${req.body.projectId}, ` + error.toString(), 'submitOrder', req);
       res.badRequest(error);
     }
   },
@@ -137,7 +134,6 @@ module.exports = {
 
       res.ok(approval);
     } catch (error) {
-      ErrorsLogService.logError('Projects Order', `projectId: ${req.body.projectId}, ` + error.toString(), 'submitOrderUpdateCase', req);
       res.badRequest(error);
     }
   },

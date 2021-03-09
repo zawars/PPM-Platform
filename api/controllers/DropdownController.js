@@ -18,7 +18,6 @@ io.on('connection', socket => {
     }).then(dropdownList => {
       socket.emit('dropdownResolver', { count, data: dropdownList });
     }).catch(err => {
-      ErrorsLogService.logError('Dropdown', err.toString(), 'dropdownResolver', '', socket.user.id);
     });
   });
 
@@ -31,7 +30,6 @@ module.exports = {
     }).then(dropdownList => {
       res.ok(dropdownList);
     }).catch(err => {
-      ErrorsLogService.logError('Dropdown', err.toString(), 'index', req);
       res.badRequest(err);
     });
   },
@@ -41,7 +39,6 @@ module.exports = {
     Dropdown.create(data).populate('values').then(response => {
       res.ok(response);
     }).catch(err => {
-      ErrorsLogService.logError('Dropdown', err.toString(), 'create', req);
     })
   },
 

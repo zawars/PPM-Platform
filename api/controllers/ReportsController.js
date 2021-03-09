@@ -18,7 +18,6 @@ io.on('connection', socket => {
         isFicoApprovedClosingReport: data.isFicoApprovedClosingReport
       });
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'updateFicoApprovalStatus', '', socket.user.id);
     }
   });
 
@@ -34,7 +33,6 @@ io.on('connection', socket => {
         socket.emit('selectiveReportsIndex', projects);
       })
       .catch(error => {
-        ErrorsLogService.logError('Reports', error.toString(), 'selectiveReportsIndex', '', socket.user.id);
       });
   });
 
@@ -113,10 +111,8 @@ io.on('connection', socket => {
           });
         })
         .catch(error => {
-          ErrorsLogService.logError('Reports', error.toString(), 'selectiveReportsSearch', '', socket.user.id);
         });
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'selectiveReportsSearch', '', socket.user.id);
     }
   });
 
@@ -162,7 +158,6 @@ io.on('connection', socket => {
         socket.emit('selectiveReportsSearchIndex', projects);
       })
       .catch(error => {
-        ErrorsLogService.logError('Reports', error.toString(), 'selectiveReportsSearchIndex', '', socket.user.id);
       });
   });
 
@@ -172,7 +167,6 @@ io.on('connection', socket => {
       let count = await Reports.count();
       socket.emit('allReportsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'allReportsCount', '', socket.user.id);
     }
   });
 
@@ -187,7 +181,6 @@ io.on('connection', socket => {
         socket.emit('allReportsIndex', projects);
       })
       .catch(error => {
-        ErrorsLogService.logError('Reports', error.toString(), 'allReportsIndex', '', socket.user.id);
       });
   });
 
@@ -223,7 +216,6 @@ io.on('connection', socket => {
         reports: reportsResp
       });
     }).catch(error => {
-      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearch', '', socket.user.id);
     });
   });
 
@@ -246,7 +238,6 @@ io.on('connection', socket => {
     }).populateAll().sort('uid DESC').then(reportsResp => {
       socket.emit('reportsSearchIndex', reportsResp);
     }).catch(error => {
-      ErrorsLogService.logError('Reports', error.toString(), 'reportsSearchIndex', '', socket.user.id);
     });
   });
 
@@ -256,7 +247,6 @@ io.on('connection', socket => {
       let count = await Reports.count({});
       socket.emit('portfolioProjectsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsCount', '', socket.user.id);
     }
   });
 
@@ -271,7 +261,6 @@ io.on('connection', socket => {
         socket.emit('portfolioProjectsIndex', projects);
       })
       .catch(error => {
-        ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsIndex', '', socket.user.id);
       });
   });
 
@@ -316,7 +305,6 @@ io.on('connection', socket => {
         });
       });
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsSearch', '', socket.user.id);
     }
   });
 
@@ -341,7 +329,6 @@ io.on('connection', socket => {
         socket.emit('portfolioProjectsSearchIndex', paginatedProjects);
       });
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsSearchIndex', '', socket.user.id);
     }
   });
 
@@ -359,7 +346,6 @@ io.on('connection', socket => {
       socket.emit('portfolioProjectsFilterCount', count);
 
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilterCount', '', socket.user.id);
     }
   });
 
@@ -471,7 +457,6 @@ io.on('connection', socket => {
       });
       socket.emit('portfolioProjectsFilter', reports);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilter', '', socket.user.id);
     }
   });
 
@@ -491,7 +476,6 @@ io.on('connection', socket => {
         socket.emit('portfolioProjectsFilterIndex', paginatedProjects);
       })
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'portfolioProjectsFilterIndex', '', socket.user.id);
     }
   });
 
@@ -502,7 +486,6 @@ io.on('connection', socket => {
       }).populateAll();
       socket.emit('fetchReport', report);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'fetchReport', '', socket.user.id);
     }
   });
 });
@@ -514,7 +497,6 @@ module.exports = {
       let reports = await Reports.find().limit(req.query.limit || 10).populateAll().sort('uid DESC');
       res.ok(reports);
     } catch (error) {
-      ErrorsLogService.logError('Reports', err.toString(), 'getReports', req);
     }
   },
 
@@ -524,7 +506,6 @@ module.exports = {
     }).populate('user').then(reports => {
       res.ok(reports);
     }).catch(error => {
-      ErrorsLogService.logError('Reports', error.toString(), 'getReportsByUser', req);
     })
   },
 
@@ -543,7 +524,6 @@ module.exports = {
       });
       res.ok(resultReports);
     }).catch(error => {
-      ErrorsLogService.logError('Reports', error.toString(), 'getTeamReportsByUser', req);
     })
   },
 
@@ -719,7 +699,6 @@ module.exports = {
         });
       });
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'budgetImport', req);
     }
   },
 
@@ -815,7 +794,6 @@ module.exports = {
         message: 'Budget Switch Completed.'
       });
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'budgetSwitch', req);
     }
   },
 
@@ -833,7 +811,6 @@ module.exports = {
 
       res.ok(projects);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'projectsByPortfolio', req);
     }
   },
 
@@ -866,7 +843,6 @@ module.exports = {
 
       res.send(projects);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'searchProjectsReports', req);
     }
   },
 
@@ -889,7 +865,6 @@ module.exports = {
 
       res.ok(report);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'update', req);
     }
   },
 
@@ -908,7 +883,6 @@ module.exports = {
 
       res.send(documentAnswers);
     } catch (error) {
-      ErrorsLogService.logError('Reports', error.toString(), 'getReportsDocumentsAnswers', req);
     }
   }
 };

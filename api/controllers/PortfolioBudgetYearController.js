@@ -14,7 +14,6 @@ module.exports = {
 
       res.ok(budgetYears);
     } catch (error) {
-      ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'getBudgetYears', req);
       res.badRequest(error);
     }
   },
@@ -157,7 +156,6 @@ module.exports = {
         res.ok("Projects Not Found");
       }
     } catch (error) {
-      ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'fixYearlyBudget', req);
       res.badRequest(error);
     }
   },
@@ -306,7 +304,6 @@ module.exports = {
 
       }
     } catch (error) {
-      ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'fixYearlyBudget', req);
       res.badRequest(error);
     }
   },
@@ -394,7 +391,6 @@ module.exports = {
 
       res.ok(projectYearlyBudgets);
     } catch (error) {
-      ErrorsLogService.logError('Portfolio Budget Year', error.toString(), 'getProjectYearlyBudgets', req);
       res.badRequest(error);
     }
   },

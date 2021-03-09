@@ -27,7 +27,6 @@ module.exports = {
         fr: fr || ''
       });
     } catch (error) {
-      ErrorsLogService.logError('QuestionsMapper', `id: ${req.params.id}, ` + error.toString(), 'show', req);
     }
   },
 

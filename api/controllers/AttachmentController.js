@@ -11,7 +11,6 @@ module.exports = {
       dirname: '../../../uploads/'
     }, (err, uploadedFiles) => {
       if (err) {
-        ErrorsLogService.logError('Attachment', err.toString(), 'uploadFile', req);
         return res.send(500, err);
       }
 
@@ -37,7 +36,6 @@ module.exports = {
     // If a relative path was provided, resolve it relative
     // to the cwd (which is the top-level path of this sails app)
     // fs.createReadStream(process.cwd().split('\\' + process.cwd().split('\\').pop())[0] + `/uploads/${req.params.file}`).on('error', function (err) {
-    //   ErrorsLogService.logError('Attachment', err.toString(), 'download', req);
     //   return res.serverError(err);
     // }).pipe(res);
 

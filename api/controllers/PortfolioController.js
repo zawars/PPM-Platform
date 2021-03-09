@@ -16,7 +16,6 @@ io.on('connection', socket => {
 
       socket.emit('allPortfolios', portfolios);
     } catch (error) {
-      ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosCount', '', socket.user.id);
     }
   })
 
@@ -26,7 +25,6 @@ io.on('connection', socket => {
       let count = await Portfolio.count();
       socket.emit('portfoliosCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosCount', '', socket.user.id);
     }
   });
 
@@ -41,7 +39,6 @@ io.on('connection', socket => {
         socket.emit('portfoliosIndex', portfolios);
       })
       .catch(error => {
-        ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosIndex', '', socket.user.id);
       });
   });
 
@@ -53,7 +50,6 @@ io.on('connection', socket => {
     }).populateAll().then(response => {
       socket.emit('activePortfolios', response);
     }).catch(err => {
-      ErrorsLogService.logError('Portfolio', err.toString(), 'activePortfolios', '', socket.user.id);
       socket.emit('activePortfolios', err);
     });
   })
@@ -104,7 +100,6 @@ io.on('connection', socket => {
         });
       })
       .catch(error => {
-        ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosSearch', '', socket.user.id);
       });
   });
 
@@ -136,7 +131,6 @@ io.on('connection', socket => {
         socket.emit('portfoliosSearchIndex', portfolios);
       })
       .catch(error => {
-        ErrorsLogService.logError('Portfolio', error.toString(), 'portfoliosSearchIndex', '', socket.user.id);
       });
   });
 });
@@ -149,7 +143,6 @@ module.exports = {
     }).populateAll().then(response => {
       res.ok(response);
     }).catch(error => {
-      ErrorsLogService.logError('Project Outline', error.toString(), 'getActivePortfolios', req);
     });
   },
 
@@ -168,7 +161,6 @@ module.exports = {
         portfolios
       });
     } catch (error) {
-      ErrorsLogService.logError('Portfolio', error.toString(), 'getAllPortfoliosPrograms', req);
     }
   }
 };

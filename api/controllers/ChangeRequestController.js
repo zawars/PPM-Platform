@@ -34,7 +34,6 @@ io.on('connection', socket => {
         changeRequest
       });
     } catch (error) {
-      ErrorsLogService.logError('Change Request', error.toString(), 'fetchChangeRequest', socket.user.id);
     }
   });
 });
@@ -75,7 +74,6 @@ module.exports = {
 
       res.ok(approval);
     } catch (error) {
-      ErrorsLogService.logError('Change Request', `projectId: ${req.body.projectId}, ` + error.toString(), 'submitChangeRequest', req);
       res.badRequest(error);
     }
   },
@@ -127,7 +125,6 @@ module.exports = {
 
       res.ok(approval);
     } catch (error) {
-      ErrorsLogService.logError('Change Request', `projectId: ${req.body.projectId}, ` + error.toString(), 'submitChangeRequestUpdateCase', req);
       res.badRequest(error);
     }
   },

@@ -25,7 +25,6 @@ module.exports = {
         currentStatusReport
       });
     } catch (error) {
-      ErrorsLogService.logError('Small Order Status Report', `id: ${req.params.id}, ` + error.toString(), 'getPreviousCurrentOrderReport', req);
     }
   },
 
@@ -43,7 +42,6 @@ module.exports = {
         statusReport
       });
     } catch (error) {
-      ErrorsLogService.logError('Small Order Status Report', `id: ${req.params.id}, ` + error.toString(), 'getOrderReport', req);
     }
   },
 
@@ -55,7 +53,6 @@ module.exports = {
 
       res.ok(smallOrderStatusReports);
     } catch (err) {
-      ErrorsLogService.logError('Small Order Status Reports', `id: ${req.params.id}, ` + err.toString(), 'getStatusReportsByOrder', req);
       res.badRequest(err);
     };
   },

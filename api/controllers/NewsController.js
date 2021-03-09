@@ -27,7 +27,6 @@ io.on('connection', socket => {
         });
         socket.emit('newsIndex', newsArray);
       }).catch(error => {
-        ErrorsLogService.logError('News', error.toString(), 'newsIndex', '', socket.user.id);
       });
   });
 
@@ -36,7 +35,6 @@ io.on('connection', socket => {
       let count = await News.count();
       socket.emit('newsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('News', error.toString(), 'newsCount', '', socket.user.id);
     }
   });
 
@@ -70,7 +68,6 @@ io.on('connection', socket => {
       });
       socket.emit('newsSearch', { count: count, news: newsArray });
     }).catch(error => {
-      ErrorsLogService.logError('News', error.toString(), 'newsSearch', '', socket.user.id);
     });
   });
 
@@ -97,7 +94,6 @@ io.on('connection', socket => {
       });
       socket.emit('newsSearchIndex', newsArray);
     }).catch(error => {
-      ErrorsLogService.logError('News', error.toString(), 'newsSearchIndex', '', socket.user.id);
     });
   });
 
@@ -116,7 +112,6 @@ io.on('connection', socket => {
         pastNews.push(newsItem);
       });
     }).catch(err => {
-      ErrorsLogService.logError('News', err.toString(), 'newsByType', '', socket.user.id);
     });
 
     News.find({ isPast: false }).sort('eventDate DESC').limit(10).then(newsResp => {
@@ -131,7 +126,6 @@ io.on('connection', socket => {
       });
       socket.emit('newsByType', { upcomingNews, pastNews });
     }).catch(err => {
-      ErrorsLogService.logError('News', JSON.stringify(err), 'newsByType', '', socket.user.id);
     });
   })
 })
@@ -161,7 +155,6 @@ module.exports = {
         resp.ok(newsArray);
       })
       .catch(err => {
-        ErrorsLogService.logError('News', err.toString(), 'index', req);
         resp.badRequest(err);
       })
   },
@@ -171,7 +164,6 @@ module.exports = {
     News.create(data).then(response => {
       res.ok(response);
     }).catch(error => {
-      ErrorsLogService.logError('News', error.toString(), 'create', req);
     });
   },
 };

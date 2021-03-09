@@ -13,7 +13,6 @@ io.on('connection', socket => {
       let count = await ErrorsLog.count();
       socket.emit('errosLogsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Errors Log', error.toString(), 'errorLogsCount', '', socket.user.id);
     }
   })
 
@@ -23,7 +22,6 @@ io.on('connection', socket => {
       .populateAll().then(logs => {
         socket.emit('errosLogsIndex', logs);
       }).catch(error => {
-        ErrorsLogService.logError('Errors Log', error.toString(), 'errosLogsIndex', '', socket.user.id);
       })
   })
 });

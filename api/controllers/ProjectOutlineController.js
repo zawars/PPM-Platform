@@ -20,7 +20,6 @@ io.on('connection', socket => {
         socket.emit('usersFromRoles', users);
       }
     } catch(error) {
-      ErrorsLogService.logError('Project Outline', `role: ${data.role}, ` + error.toString(), 'usersFromRoles', socket.user.id);
     }
   });
 
@@ -30,7 +29,6 @@ io.on('connection', socket => {
       let projectOutline = await ProjectOutline.findOne({ id: project.projectOutline[0].id }).populateAll();
       socket.emit('fetchProjectOutline', { project, projectOutline });
     } catch (error) {
-      ErrorsLogService.logError('Project Outline', error.toString(), 'fetchProjectOutline', socket.user.id);
     }
   });
 });
@@ -51,7 +49,6 @@ module.exports = {
 
       res.ok({ message: 'Project Outline Updated' });
     } catch (error) {
-      ErrorsLogService.logError('Project Outline', error.toString(), 'updateProjectOutline', req);
       res.badRequest(error);
     }
   },

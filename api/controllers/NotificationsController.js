@@ -14,7 +14,6 @@ module.exports = {
       let file = fs.readFileSync('assets/langs/' + locale + '.json', 'utf8')
       res.ok(file);
     } catch (error) {
-      ErrorsLogService.logError('Notifications', error.toString(), 'fetchLanguage', req);
     }
   }
 };

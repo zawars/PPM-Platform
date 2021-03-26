@@ -51,7 +51,7 @@ module.exports.bootstrap = async function (cb) {
     EmailService.smallOrderCounter = uid;
   }
 
-  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report', 'Small Order Started', 'Small Order Closed', 'Project Submission Notification'];
+  let emailConfigEvents = ['Email Reminder Project Order', 'Email Reminder Pending Approval', 'Email Reminder Status Report', 'Email Reminder Closing Report', 'Small Order Started', 'Small Order Closed', 'Project Submission Notification', 'Project Recalled Email'];
 
   emailConfigEvents.forEach(async event => {
     let emailConfig = await EmailConfig.findOne({

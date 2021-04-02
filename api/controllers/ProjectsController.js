@@ -104,6 +104,44 @@ io.on('connection', socket => {
     }
   });
 
+
+  socket.on('resetProjectsCount', async data => {
+    try {
+      let count = await Projects.count({
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
+        ]
+      });
+      socket.emit('resetProjectsCount', count);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsCount', '', socket.user.id);
+    }
+  });
+
+  socket.on('resetProjectsIndex', async data => {
+    try {
+      let projectsList = await Projects.find({
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
+        ]
+      })
+        .paginate({
+          page: data.pageIndex,
+          limit: data.pageSize
+        })
+        .sort('createdAt', 'DESC').populateAll();
+      socket.emit('resetProjectsIndex', projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'resetProjectsIndex', '', socket.user.id);
+    }
+  });
+
   socket.on('closedProjectsCount', async data => {
     try {
       let count = await Projects.count({
@@ -924,6 +962,27 @@ module.exports = {
 
       res.ok(projectsList);
     } catch (error) {
+    }
+  },
+
+  getResetProjects: async (req, res) => {
+    try {
+      let limit = 0;
+      if (req.param('limit')) {
+        limit = req.param('limit');
+      }
+      let projectsList = await Projects.find({
+        or: [
+          { docType: 'Outline', outlineSubmitted: true, outlineApproved: false },
+          { docType: 'Order', orderSubmitted: true, orderApproved: false },
+          { docType: 'Change Request', changeRequestMade: true, changeRequestApproved: false },
+          { docType: 'Closing Report', closingReportSubmitted: true, closingReportApproved: false, status: 'Submitted' }
+        ]
+      }).limit(limit).populateAll();
+
+      res.ok(projectsList);
+    } catch (error) {
+      ErrorsLogService.logError('Projects', error.toString(), 'getResetProjects', req);
     }
   },
 

@@ -31,7 +31,6 @@ io.on('connection', socket => {
 
       socket.emit('ApprovalsFilterCount', approvalsResultCount);
     } catch (error) {
-      ErrorsLogService.logError('OutlineApproval', error.toString(), 'ApprovalsFilterCount', '', socket.user.id);
     }
   });
 
@@ -59,7 +58,6 @@ io.on('connection', socket => {
 
       socket.emit('ApprovalsFilter', approvalsResult);
     } catch (error) {
-      ErrorsLogService.logError('OutlineApproval', error.toString(), 'ApprovalsFilter', '', socket.user.id);
     }
   });
 
@@ -77,7 +75,6 @@ io.on('connection', socket => {
         socket.emit('approvalsIndex', projects);
       })
       .catch(error => {
-        ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsIndex', '', socket.user.id);
       });
   });
 
@@ -89,7 +86,6 @@ io.on('connection', socket => {
       });
       socket.emit('approvalsCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsCount', '', socket.user.id);
     }
   });
 
@@ -104,7 +100,6 @@ io.on('connection', socket => {
       socket.emit('userOpenOutlinesCount', openOutlinesCount);
 
     } catch (error) {
-      ErrorsLogService.logError('Outline Approval', `id: ${req.params.id}, ` + error.toString(), 'userOpenOutlinesCount', '', socket.user.id);
     }
   })
 
@@ -248,10 +243,8 @@ io.on('connection', socket => {
           approvals: projects
         });
       }).catch(error => {
-        ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
       })
     } catch (error) {
-      ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
     }
   });
 
@@ -328,7 +321,6 @@ io.on('connection', socket => {
     }).populateAll().sort('createdAt DESC').then(projects => {
       socket.emit('approvalsSearchIndex', projects);
     }).catch(error => {
-      ErrorsLogService.logError('Outline Approval', error.toString(), 'approvalsSearch', '', socket.user.id);
     });
   });
 
@@ -340,7 +332,6 @@ io.on('connection', socket => {
       }).populateAll();
       socket.emit('getOutlinesByPMO', approvals);
     } catch (error) {
-      ErrorsLogService.logError('Outline Approval', error.toString(), 'getOutlinesByPMO', '', socket.user.id);
     }
   });
 
@@ -354,7 +345,6 @@ module.exports = {
     }).limit(req.query.limit || 10).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
-      ErrorsLogService.logError('Outline Approval', `id: ${req.params.id}, ` + error.toString(), 'getOutlinesByUser', req);
     })
   },
 
@@ -364,7 +354,6 @@ module.exports = {
     }).limit(req.query.limit || 10).populateAll().sort('createdAt DESC').then(projects => {
       res.ok(projects);
     }).catch(error => {
-      ErrorsLogService.logError('Outline Approval', `id: ${req.params.id}, ` + error.toString(), 'getOutlinesByProject', req);
     })
   },
 
@@ -380,7 +369,6 @@ module.exports = {
         message: "Approvals assigned person has been updated."
       });
     }).catch(error => {
-      ErrorsLogService.logError('Outline Approval', error.toString(), 'updateApprovalOwner', req);
     });
   },
 
@@ -393,7 +381,6 @@ module.exports = {
         message: "Previous Approval has been updated."
       });
     }).catch(error => {
-      ErrorsLogService.logError('Outline Approval', `query: ${query}, ` + error.toString(), 'updatePreviousApproval', req);
     });
   }
 };

@@ -1051,7 +1051,6 @@ async function uploadExcelDumpToDrive(req, res) {
     // });
   } catch (error) {
     console.log(error)
-    ErrorsLogService.logError('Reports', error.toString(), 'uploadExcelDumpToDrive', req);
   }
 };
 

@@ -31,7 +31,6 @@ io.on('connection', socket => {
         closingReport
       });
     } catch (error) {
-      ErrorsLogService.logError('Closing Report', error.toString(), 'fetchClosingReport', socket.user.id);
     }
   });
 });
@@ -72,7 +71,6 @@ module.exports = {
 
       res.ok(approval);
     } catch (error) {
-      ErrorsLogService.logError('Closing Report', `projectId: ${req.body.projectId}, ` + error.toString(), 'submitClosingReport', req);
       res.badRequest(error);
     }
   },
@@ -129,7 +127,6 @@ module.exports = {
 
       res.ok(approval);
     } catch (error) {
-      ErrorsLogService.logError('Closing Report', `projectId: ${req.body.projectId}, ` + error.toString(), 'submitClosingReportUpdateCase', req);
       res.badRequest(error);
     }
   },

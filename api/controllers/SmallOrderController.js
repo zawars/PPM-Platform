@@ -16,7 +16,6 @@ io.on('connection', socket => {
     }).then(orders => {
       socket.emit('getSelectiveOrders', orders);
     }).catch(err => {
-      ErrorsLogService.logError('Orders', err.toString(), 'getSelectiveOrders', '', socket.user.id);
     })
   });
 
@@ -34,7 +33,6 @@ io.on('connection', socket => {
         socket.emit('smallOrdersFilter', orders);
       })
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersFilter', '', socket.user.id);
     }
   });
 
@@ -47,7 +45,6 @@ io.on('connection', socket => {
       }).populateAll();
       socket.emit('smallOrdersIndex', smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersIndex', '', socket.user.id);
     }
   });
 
@@ -57,7 +54,6 @@ io.on('connection', socket => {
       let count = await SmallOrder.count();
       socket.emit('smallOrdersCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersCount', '', socket.user.id);
     }
   });
 
@@ -73,7 +69,6 @@ io.on('connection', socket => {
         .populateAll().sort('createdAt DESC');
       socket.emit('smallOrdersByUserIndex', smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersByUserIndex', '', socket.user.id);
     }
   });
 
@@ -85,7 +80,6 @@ io.on('connection', socket => {
       });
       socket.emit('smallOrdersByUserCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersByUserCount', '', socket.user.id);
     }
   });
 
@@ -104,7 +98,6 @@ io.on('connection', socket => {
         .populateAll().sort('createdAt DESC');
       socket.emit('smallOrdersBySponsorIndex', smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersBySponsorIndex', '', socket.user.id);
     }
   });
 
@@ -119,7 +112,6 @@ io.on('connection', socket => {
       });
       socket.emit('smallOrdersBySponsorCount', count);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'smallOrdersBySponsorCount', '', socket.user.id);
     }
   });
 
@@ -133,7 +125,6 @@ io.on('connection', socket => {
       }).populateAll();
       socket.emit('selectiveSmallOrdersIndex', smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'selectiveSmallOrdersIndex', '', socket.user.id);
     }
   });
 
@@ -156,7 +147,6 @@ io.on('connection', socket => {
       });
       socket.emit('searchUsers', users);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', error.toString(), 'searchUsers', '', socket.user.id);
     }
   });
 
@@ -169,7 +159,6 @@ module.exports = {
       let smallOrders = await SmallOrder.find().limit(req.query.limit || 10).populateAll();
       res.ok(smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', err.toString(), 'index', req);
     }
   },
 
@@ -181,7 +170,6 @@ module.exports = {
         .populateAll().sort('createdAt DESC');
       res.ok(smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', `id: ${req.params.id}, ` + error.toString(), 'getSmallOrdersByUser', req);
     }
   },
 
@@ -196,7 +184,6 @@ module.exports = {
         .populateAll().sort('createdAt DESC');
       res.ok(smallOrders);
     } catch (error) {
-      ErrorsLogService.logError('Small Order', `id: ${req.params.id}, ` + error.toString(), 'getSmallOrdersBySponsor', req);
     }
   },
 
@@ -226,7 +213,6 @@ module.exports = {
       res.send(orders);
 
     } catch (error) {
-      ErrorsLogService.logError('SmallOrder', error.toString(), 'searchOrders', req);
       res.badRequest(error);
     }
   }

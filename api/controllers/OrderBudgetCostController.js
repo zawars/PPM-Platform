@@ -159,7 +159,7 @@ module.exports = {
           $unwind: '$order'
         }
       ]).toArray(function (err, orderBudgetCosts = []) {
-        if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
+        if (err) return;
         orderBudgetCosts.forEach(result => {
           if (result.order.costTypeTable) {
             for (let i = 0; i < 7; i++) {
@@ -189,7 +189,6 @@ module.exports = {
         }
       });
     } catch (error) {
-      ErrorsLogService.logError('Order Budget Cost', error.toString(), 'updateMultipleOrdersBudget', req);
     }
   },
 
@@ -202,7 +201,6 @@ module.exports = {
 
       res.ok(results);
     } catch (e) {
-      ErrorsLogService.logError('Order Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'getOrderBudget', req);
       res.badRequest(e);
     }
   },

@@ -46,7 +46,6 @@ module.exports = {
         res.ok([]);
       }
     } catch (e) {
-      ErrorsLogService.logError('Team', `id: ${req.params.id}` + e.toString(), 'projectTeam', req);
       res.badRequest(e);
     }
   },
@@ -83,7 +82,6 @@ module.exports = {
         res.ok([]);
       }
     } catch (e) {
-      ErrorsLogService.logError('Team', e.toString(), 'userTeamProjects', req);
       res.badRequest(e);
     }
   },

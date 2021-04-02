@@ -13,7 +13,6 @@ module.exports = {
     }).populateAll().then(result => {
       res.ok(result);
     }).catch(error => {
-      ErrorsLogService.logError('Subportfolio Status Report', error.toString(), 'subportfolio/statusReports/:subportfolioId', req);
       res.badRequest(error);
     })
   }

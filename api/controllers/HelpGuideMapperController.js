@@ -32,13 +32,11 @@ module.exports = {
           });
         }
       } else {
-        ErrorsLogService.logError('HelpGuideMapper', `id: ${req.params.id}, Data Not Found`, 'show', req);
         res.badRequest({
           message: 'Data not Found'
         });
       }
     }).catch(error => {
-      ErrorsLogService.logError('HelpGuideMapper', `id: ${req.params.id}, ` + error.toString(), 'show', req);
     })
   },
 
@@ -86,7 +84,6 @@ module.exports = {
         }
       });
     }).catch(error => {
-      ErrorsLogService.logError('HelpGuideMapper', `id: ${req.params.id}, ` + error.toString(), 'update', req);
     })
   }
 

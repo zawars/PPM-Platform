@@ -218,6 +218,7 @@ module.exports.routes = {
 
   //Gantt Logs
   'POST /createGanttLogs': 'GanttLogsController.createGanttLogs',
+  'GET /ganttLogsByProject/:id': 'GanttLogsController.getGanttLogsByProject',
 
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',

@@ -15,7 +15,12 @@ module.exports = {
         }
 
         resp.ok({ result: "success" });
+    },
+
+    getGanttLogsByProject: async (req, resp) => {
+        let ganttLogs = await GanttLogs.find({projectId: req.params.id}).populate('user');
+        resp.ok(ganttLogs);
     }
-    
+
 };
 

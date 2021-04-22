@@ -215,6 +215,9 @@ module.exports.routes = {
   'GET /projectBudget/:bucketId/names': 'ProjectBucketBudgetController.getItemsNamesByBucket',
   'POST /getProjectBucketItemsCount': 'ProjectBucketBudgetController.getItemsCountbyQuery',
 
+  //Gantt Logs
+  'POST /createGanttLogs': 'GanttLogsController.createGanttLogs',
+
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',

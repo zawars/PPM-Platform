@@ -28,11 +28,9 @@ module.exports = {
         }).then(adminUsers => {
           res.ok([...users, ...adminUsers]);
         }).catch(error => {
-          ErrorsLogService.logError('User', `role: ${req.params.role}, ` + error.toString(), 'getUsersFromRoles', req);
           res.badRequest(error);
         });
       }).catch(error => {
-        ErrorsLogService.logError('User', `role: ${req.params.role}, ` + error.toString(), 'getUsersFromRoles', req);
         res.badRequest(error);
       });
     } else {
@@ -41,7 +39,6 @@ module.exports = {
       }).then(users => {
         res.ok(users);
       }).catch(error => {
-        ErrorsLogService.logError('User', `role: ${req.params.role}, ` + error.toString(), 'getUsersFromRoles', req);
         res.badRequest(error);
       });
     }
@@ -53,7 +50,6 @@ module.exports = {
     }).then(user => {
       res.ok(user);
     }).catch(error => {
-      ErrorsLogService.logError('User', error.toString(), 'getUserByEmail', req);
     })
   },
 
@@ -64,7 +60,6 @@ module.exports = {
       subject: req.body.subject
     }, (err) => {
       if (err) {
-        ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'sendEmail', req);
         console.log(err);
         res.forbidden({
           message: "Error sending email."
@@ -128,7 +123,6 @@ module.exports = {
     }).then(users => {
       res.ok(users)
     }).catch(err => {
-      ErrorsLogService.logError('User', err.toString(), 'search', req);
       res.badRequest(err);
     });
   },
@@ -159,7 +153,6 @@ module.exports = {
                 subject: `Reminder oneView Projekt ID ${project.uid}: Projektauftrag fällig`
               }, (err) => {
                 if (err) {
-                  ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderProjectOrder', req);
                   console.log(err);
                   res.forbidden({
                     message: "Error sending email."
@@ -178,7 +171,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      ErrorsLogService.logError('User', error.toString(), 'emailReminderProjectOrder', req);
     }
   },
 
@@ -225,7 +217,6 @@ module.exports = {
                     subject: `Reminder oneView Projekt ID ${projects[index].uid}: Abschlussbericht fällig`
                   }, (err) => {
                     if (err) {
-                      ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderClosingReport', req);
                       console.log(err);
                       res.forbidden({
                         message: "Error sending email."
@@ -246,7 +237,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      ErrorsLogService.logError('User', error.toString(), 'emailReminderClosingReport', req);
     }
   },
 
@@ -271,7 +261,6 @@ module.exports = {
                 subject: 'Reminder oneView ausstehende Workflows '
               }, (err) => {
                 if (err) {
-                  ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderPendingApprovals', req);
                   console.log(err);
                   res.forbidden({
                     message: "Error sending email."
@@ -290,7 +279,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      ErrorsLogService.logError('User', error.toString(), 'emailReminderPendingApprovals', req);
     }
   },
 
@@ -354,7 +342,6 @@ module.exports = {
                       subject: `Reminder oneView Projekt ID ${projects[index].uid}: Statusbericht fällig`
                     }, (err) => {
                       if (err) {
-                        ErrorsLogService.logError('User', `email: ${email}, ` + err.toString(), 'emailReminderStatusReport', req);
                         console.log(err);
                         res.forbidden({
                           message: "Error sending email."
@@ -376,7 +363,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      ErrorsLogService.logError('User', error.toString(), 'emailReminderStatusReport', req);
     }
   },
 };
@@ -497,7 +483,6 @@ let parseUsers = async (options1, res, response) => {
           }
 
         } catch (error) {
-          ErrorsLogService.logError('User', error.toString(), 'parseUsers', req);
           sails.log.error(error);
         }
       }

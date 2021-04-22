@@ -13,7 +13,6 @@ module.exports = {
       res.send(assignedBudget);
 
     } catch (error) {
-      ErrorsLogService.logError('ProjectBucketBudget', error.toString(), 'findProjectBucketAssignedBudget', req);
     }
   },
 
@@ -30,7 +29,6 @@ module.exports = {
       res.send(assignedBudgetItems);
 
     } catch (error) {
-      ErrorsLogService.logError('ProjectBucketBudget', error.toString(), 'getItemsNamesByBucket', req);
     }
   },
 
@@ -39,7 +37,6 @@ module.exports = {
       let count = await ProjectBucketBudget.count(req.body);
       res.send({count});
     } catch (error) {
-      ErrorsLogService.logError('ProjectBucketBudget', error.toString(), 'getItemsCountbyQuery', req);
     }
   }
 

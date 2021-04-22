@@ -18,7 +18,6 @@ io.on('connection', socket => {
       socket.emit('subportfolioReports', reports);
 
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'subportfolioReports', '', socket.user.id);
     }
   });
 
@@ -31,7 +30,6 @@ io.on('connection', socket => {
       socket.emit('subportfolioOrders', orders);
 
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'subportfolioOrders', '', socket.user.id);
     }
   });
 
@@ -48,7 +46,6 @@ io.on('connection', socket => {
       socket.emit('subportfoliosByUserCount', subportfoliosCount);
 
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'subportfoliosByUserCount', '', socket.user.id);
     }
   });
 
@@ -68,7 +65,6 @@ io.on('connection', socket => {
       socket.emit('subportfoliosByUser', subportfolios);
 
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'subportfoliosByUser', '', socket.user.id);
     }
   });
 
@@ -110,7 +106,6 @@ module.exports = {
 
       res.ok(response[0]);
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'createSubportfolio', req);
     }
   },
 
@@ -139,7 +134,6 @@ module.exports = {
 
       res.send(updatedSubportfolio[0]);
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'update', req);
     }
   },
 
@@ -170,7 +164,6 @@ module.exports = {
         res.ok([]);
       }
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'getSubportfolioProjects', req);
     }
   },
 
@@ -192,7 +185,6 @@ module.exports = {
       res.ok(subportfolios);
 
     } catch (error) {
-      ErrorsLogService.logError('Subportfolio', error.toString(), 'getUserSubportfolios', req);
     }
   }
 };

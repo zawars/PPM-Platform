@@ -18,7 +18,6 @@ io.on('connection', socket => {
       }).populateAll();
       socket.emit('projectBudget', budget);
     } catch (err) {
-      ErrorsLogService.logError('Project Budget Cost', `id: ${data.id}, ` + err.toString(), 'projectBudget', '', socket.user.id);
     }
   })
 
@@ -108,7 +107,6 @@ module.exports = {
         message: 'Deleted Project Budget Cost'
       });
     } catch (e) {
-      ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'deleteProjectBudget', req);
       res.badRequest(e);
     }
   },
@@ -146,7 +144,6 @@ module.exports = {
         res.ok([]);
       }
     } catch (e) {
-      ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + e.toString(), 'getProjectBudget', req);
       res.badRequest(e);
     }
   },
@@ -260,7 +257,7 @@ module.exports = {
         //   }
         // }
       ]).toArray(function (err, results = []) {
-        if (err) return ErrorsLogService.logError('Project Budget Cost', `id: ${req.params.id}, ` + err.toString(), 'budgetsByYear', req);
+        if (err) return;
 
         let finalResult = results.filter(result => {
           return (result.projectitem && result.projectitem.mode == 'bucket') || (result.report && result.report.status == 'Active') || (result.report && result.report.status == 'Closed' && result.projectitem && result.projectitem.isFicoApprovedClosingReport == true && parseInt(moment(result.projectitem.ficoApprovedClosingReportDate).format('YYYY')) >= year);
@@ -306,7 +303,6 @@ module.exports = {
       res.ok(createdCost);
 
     } catch (error) {
-      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createProjectBudgetCost', req);
     }
   },
 
@@ -349,7 +345,6 @@ module.exports = {
         }
       });
     } catch (error) {
-      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'updateMultipleProjectsBudget', req);
     }
   },
 
@@ -454,7 +449,6 @@ module.exports = {
           }).then(result => {
             //
           }).catch(error => {
-            ErrorsLogService.logError('Order Budget Cost', error.toString(), 'createBudgetByYear', req);
             res.badRequest({
               error
             });
@@ -485,7 +479,6 @@ module.exports = {
               res.ok(result);
             }
           }).catch(error => {
-            ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
             res.badRequest({
               error
             });
@@ -497,7 +490,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      ErrorsLogService.logError('Project Budget Cost', error.toString(), 'createBudgetByYear', req);
     }
   },
 
@@ -534,7 +526,6 @@ module.exports = {
         message: 'Project Yearly Budget created.'
       });
     } catch (error) {
-      ErrorsLogService.logError('Project Budget Switch', `id: ${body.project}, ` + error.toString(), 'switchYearlyBudget', req);
       res.badRequest({
         message: error.message
       });
@@ -564,7 +555,6 @@ module.exports = {
 
       res.send(projectBudgetCosts);
     } catch (error) {
-      ErrorsLogService.logError('Project Budget Switch', `id: ${body.project}, ` + error.toString(), 'createProjectBudgetForSubportfolio', req);
       res.badRequest({
         message: error.message
       });

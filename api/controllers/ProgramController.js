@@ -15,7 +15,6 @@ io.on('connection', socket => {
     }).populateAll().then(program => {
       socket.emit('fetchProgram', program);
     }).catch(error => {
-      ErrorsLogService.logError('Program', `id: ${data.programId}, ` + error.toString(), 'fetchProgram', '', socket.user.id);
     });
   });
 
@@ -27,7 +26,6 @@ io.on('connection', socket => {
     }).populateAll().then(programsList => {
       socket.emit('activePrograms', programsList);
     }).catch(error => {
-      ErrorsLogService.logError('Program', error.toString(), 'activePrograms', '', socket.user.id);
     });
   });
 
@@ -37,7 +35,6 @@ io.on('connection', socket => {
     }).populateAll().then(programsList => {
       socket.emit('allPrograms', programsList);
     }).catch(error => {
-      ErrorsLogService.logError('Program', error.toString(), 'allPrograms', '', socket.user.id);
     });
   });
 
@@ -61,7 +58,6 @@ io.on('connection', socket => {
         .populateAll().then(programs => {
           socket.emit('programsIndex', programs);
         }).catch(error => {
-          ErrorsLogService.logError('Program', error.toString(), 'programsIndex', '', socket.user.id);
         });
     } else {
       Program.find()
@@ -72,7 +68,6 @@ io.on('connection', socket => {
         .populateAll().then(programs => {
           socket.emit('programsIndex', programs);
         }).catch(error => {
-          ErrorsLogService.logError('Program', `id: ${data.userId}, ` + error.toString(), 'programsIndex', '', socket.user.id);
         });
     }
   });
@@ -98,7 +93,6 @@ io.on('connection', socket => {
         socket.emit('programsCount', count);
       }
     } catch (error) {
-      ErrorsLogService.logError('Program', `id: ${data.userId}, ` + error.toString(), 'programsCount', '', socket.user.id);
     }
   });
 
@@ -184,7 +178,6 @@ io.on('connection', socket => {
           programs
         });
       }).catch(error => {
-        ErrorsLogService.logError('Program', error.toString(), 'programsSearch', '', socket.user.id);
       });
     } else {
       let count = await Program.count({
@@ -224,7 +217,6 @@ io.on('connection', socket => {
           programs
         });
       }).catch(error => {
-        ErrorsLogService.logError('Program', error.toString(), 'programsSearch', '', socket.user.id);
       });
     }
   });
@@ -273,7 +265,6 @@ io.on('connection', socket => {
       }).populateAll().sort('createdAt DESC').then(programs => {
         socket.emit('programsSearchIndex', programs);
       }).catch(error => {
-        ErrorsLogService.logError('Program', `userId: ${data.userId},` + error.toString(), 'programsSearchIndex', '', socket.user.id);
       });
     } else {
       Program.find({
@@ -297,7 +288,6 @@ io.on('connection', socket => {
       }).populateAll().sort('createdAt DESC').then(programs => {
         socket.emit('programsSearchIndex', programs);
       }).catch(error => {
-        ErrorsLogService.logError('Program', error.toString(), 'programsSearchIndex', '', socket.user.id);
       });
     }
   });
@@ -312,7 +302,6 @@ module.exports = {
     }).populateAll().then(programsList => {
       res.ok(programsList);
     }).catch(error => {
-      ErrorsLogService.logError('Program', error.toString(), 'getActivePrograms', req);
       res.badRequest(error);
     });
   },
@@ -337,7 +326,6 @@ module.exports = {
       res.ok(response);
     }).catch(error => {
       let userId = req.params.id;
-      ErrorsLogService.logError('Program', `userId: ${userId},` + error.toString(), 'getProgramsByUser/:id', req);
       res.badRequest(error);
     });
   },

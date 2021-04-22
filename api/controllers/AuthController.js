@@ -41,8 +41,6 @@ module.exports = {
                 res.ok({
                   uri
                 });
-              } else {
-                ErrorsLogService.logError('Auth', err.toString(), 'logout', req);
               }
             });
           });
@@ -79,7 +77,6 @@ module.exports = {
         req.forbidden('User not found');
       }
     } catch (error) {
-      ErrorsLogService.logError('Auth', error.toString(), 'externalLogin', req);
       res.badRequest(error)
     }
   },
@@ -115,7 +112,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      ErrorsLogService.logError('Auth', error.toString(), 'verifyTokenExternal', req);
       res.badRequest(error)
     }
   },
@@ -147,7 +143,6 @@ module.exports = {
                 });
                 res.end();
               }).catch(error => {
-                ErrorsLogService.logError('Auth', error.toString(), 'samlConsumeToken', req);
               })
             } else {
               await User.update({
@@ -161,7 +156,6 @@ module.exports = {
               res.end();
             }
           }).catch(err => {
-            ErrorsLogService.logError('Auth', err.toString(), 'samlConsumeToken', req);
           });
         });
       }

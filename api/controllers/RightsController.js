@@ -12,7 +12,6 @@ module.exports = {
             const right = await Rights.findOne({ project: req.params.projectId, user: req.params.userId }).populateAll();
             res.ok(right);
         } catch (error) {
-            ErrorsLogService.logError('Projects', `projectId: ${req.params.projectId}, userId: ${req.params.userId} ` + error.toString(), 'projectRights', req);
         }
     },
 

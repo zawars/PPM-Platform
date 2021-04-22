@@ -1,4 +1,11 @@
 const userController = require('../api/controllers/UserController');
+const XLSX = require('xlsx');
+const moment = require('moment');
+var {
+  DateTime
+} = require('luxon');
+const fs = require('fs');
+const XlsxPopulate = require('xlsx-populate');
 // const reportsController = require('../api/controllers/ReportsController');
 
 function cronJob(cb) {
@@ -32,22 +39,15 @@ function cronJob(cb) {
   }, intervalTimer);
 
   // Excel Export
-  uploadExcelDumpToDrive();
+  // uploadExcelDumpToDrive();
 
-  setInterval(() => {
-    uploadExcelDumpToDrive();
-  }, 1000 * 60 * 45);
+  // setInterval(() => {
+  //   uploadExcelDumpToDrive();
+  // }, 1000 * 60 * 45);
 };
 
 async function uploadExcelDumpToDrive(req, res) {
   try {
-    const XLSX = require('xlsx');
-    const moment = require('moment');
-    var {
-      DateTime
-    } = require('luxon');
-    const fs = require('fs');
-    const XlsxPopulate = require('xlsx-populate');
     const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
     const deJson = JSON.parse(fs.readFileSync('assets/langs/de.json', 'utf8'));
     const FrontEndPATH = config.callbackRedirectUrl.split('#')[0];
@@ -1051,7 +1051,6 @@ async function uploadExcelDumpToDrive(req, res) {
     // });
   } catch (error) {
     console.log(error)
-    ErrorsLogService.logError('Reports', error.toString(), 'uploadExcelDumpToDrive', req);
   }
 };
 

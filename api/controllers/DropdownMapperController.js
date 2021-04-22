@@ -25,7 +25,6 @@ module.exports = {
           fr: fr
         });
       } else {
-        ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, Data not found`, 'show', req);
         res.badRequest({
           message: 'Data not Found'
         });
@@ -57,7 +56,6 @@ module.exports = {
         });
       });
     } catch (error) {
-      ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, ` + error.toString(), 'delete', req);
     }
   },
 
@@ -92,10 +90,8 @@ module.exports = {
           fr: frFile
         });
       }).catch(error => {
-        ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, ` + error.toString(), 'update', req);
       })
     }).catch(error => {
-      ErrorsLogService.logError('DropdownMapper', `id: ${req.params.id}, ` + error.toString(), 'update', req);
     })
   },
 
@@ -113,7 +109,6 @@ module.exports = {
       res.ok(data);
     }
     catch (error) {
-      ErrorsLogService.logError('DropdownMapper', error.toString(), 'positionSort', req);
     }
   }
 };

@@ -14,7 +14,6 @@ io.on('connection', socket => {
     }).then(reports => {
       socket.emit('programStatusReports', reports);
     }).catch(error => {
-      ErrorsLogService.logError('Program Status Reports', `id: ${data.id}, ` + error.toString(), 'programStatusReports', '', socket.user.id);
     });
   });
 })
@@ -26,7 +25,6 @@ module.exports = {
     }).then(reports => {
       res.ok(reports);
     }).catch(err => {
-      ErrorsLogService.logError('Program Status Reports', `id: ${req.params.id}, ` + err.toString(), 'getStatusReportsByProgram', req);
       res.badRequest(err);
     });
   },

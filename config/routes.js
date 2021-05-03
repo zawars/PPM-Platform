@@ -221,7 +221,6 @@ module.exports.routes = {
   'GET /ganttLogsByProject/:id': 'GanttLogsController.getGanttLogsByProject',
 
   //Gantt Milestone report
-  'POST /createGanttMilestoneReport': 'GanttMilestonesReportController.createGanttMilestoneReport',
   'GET /ganttMilestoneReportByProject/:id': 'GanttMilestonesReportController.getGanttMilestoneReportByProject',
 
   // Attachments

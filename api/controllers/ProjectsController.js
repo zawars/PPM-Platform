@@ -880,7 +880,20 @@ module.exports = {
       }).catch(error => {
       })
     }).catch(error => {
+    })
+  },
+
+  cloneOutlineProject: (req, res) => {
+    let body = req.body;
+    Projects.create(body).then(projectResponse => {
+      Projects.findOne({
+        id: projectResponse.id
+      }).populate('projectOutline').then(async project => {
+        res.ok({ project });
+      }).catch(error => {
       })
+    }).catch(error => {
+    })
   },
 
   submitOutlineUpdateCase: async (req, res) => {

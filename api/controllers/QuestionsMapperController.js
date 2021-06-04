@@ -81,4 +81,23 @@ module.exports = {
       fr: frFile
     });
   },
+
+  delete: async (req, res) => {
+    let id = req.params.id;
+    let deFile = JSON.parse(fs.readFileSync('assets/langs/de.json'));
+    let frFile = JSON.parse(fs.readFileSync('assets/langs/fr.json'));
+
+    let oldObj = await QuestionsMapper.findOne({
+      id: id
+    });
+    delete (deFile[oldObj.question]);
+    delete (frFile[oldObj.question]);
+
+    fs.writeFileSync('assets/langs/de.json', JSON.stringify(deFile, null, 2));
+    fs.writeFileSync('assets/langs/fr.json', JSON.stringify(frFile, null, 2));
+
+    await QuestionsMapper.destroy({id: id});
+
+    res.ok({ result: 'Success' });
+  },
 };

@@ -100,6 +100,7 @@ module.exports.routes = {
   'GET /questions/getQuestionsByFormName/:query': 'QuestionsController.getQuestionsByFormName',
   'GET /questionsMapper/:id': 'QuestionsMapperController.show',
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
+  'POST /questionsMapper': 'QuestionsMapperController.create',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
   'GET /projects/getResetProjects': 'ProjectsController.getResetProjects',
   'GET /projects/closed': 'ProjectsController.getClosedProjects',

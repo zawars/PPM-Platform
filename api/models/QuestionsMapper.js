@@ -30,6 +30,9 @@ module.exports = {
 
     formName: {
       model: 'questions'
+    },
+    portfolioName: {
+      model: 'portfolio'
     }
   },
 

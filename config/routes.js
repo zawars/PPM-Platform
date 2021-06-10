@@ -122,6 +122,8 @@ module.exports.routes = {
 
   'GET /portfoliosPrograms': 'PortfolioController.getAllPortfoliosPrograms',
 
+  'GET /portfolioByReport/:id': 'PortfolioController.getPortfolioByReport',
+
   // Team Api
   'GET /project/team/:id': 'TeamController.projectTeam',
   'GET /user/team/project/:id': 'TeamController.userTeamProjects',

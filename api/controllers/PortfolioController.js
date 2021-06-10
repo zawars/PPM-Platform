@@ -59,46 +59,46 @@ io.on('connection', socket => {
 
     let count = await Portfolio.count({
       or: [{
-          name: {
-            contains: search
-          }
-        },
-        {
-          status: {
-            contains: search
-          }
-        },
-        {
-          'businessUnit.name': {
-            contains: search
-          }
+        name: {
+          contains: search
         }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        'businessUnit.name': {
+          contains: search
+        }
+      }
       ]
     });
 
     Portfolio.find({
-        or: [{
-            name: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            'businessUnit.name': {
-              contains: search
-            }
-          }
-        ]
-      }).limit(10).populateAll().then(portfolios => {
-        socket.emit('portfoliosSearch', {
-          count,
-          portfolios
-        });
-      })
+      or: [{
+        name: {
+          contains: search
+        }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        'businessUnit.name': {
+          contains: search
+        }
+      }
+      ]
+    }).limit(10).populateAll().then(portfolios => {
+      socket.emit('portfoliosSearch', {
+        count,
+        portfolios
+      });
+    })
       .catch(error => {
       });
   });
@@ -107,26 +107,26 @@ io.on('connection', socket => {
     let search = data.search;
 
     Portfolio.find({
-        or: [{
-            name: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            'businessUnit.name': {
-              contains: search
-            }
-          }
-        ]
-      }).paginate({
-        page: data.pageIndex,
-        limit: data.pageSize
-      })
+      or: [{
+        name: {
+          contains: search
+        }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        'businessUnit.name': {
+          contains: search
+        }
+      }
+      ]
+    }).paginate({
+      page: data.pageIndex,
+      limit: data.pageSize
+    })
       .populateAll().then(portfolios => {
         socket.emit('portfoliosSearchIndex', portfolios);
       })
@@ -160,6 +160,21 @@ module.exports = {
         programs,
         portfolios
       });
+    } catch (error) {
+    }
+  },
+
+  getPortfolioByReport: async (req, res) => {
+    try {
+      let report = await Reports.findOne({
+        id: req.params.id
+      }, {
+        fields: { portfolio: 1 }
+      });
+
+      let portfolio = await Portfolio.findOne({id: report.portfolio}).populateAll();
+
+      res.send(portfolio);
     } catch (error) {
     }
   }

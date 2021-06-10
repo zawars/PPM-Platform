@@ -877,7 +877,11 @@ module.exports = {
           question: 1,
           orderQuestion: 1,
           changeRequestQuestion: 1,
-          closingQuestion: 1
+          closingQuestion: 1,
+          portfolioQuestions: 1,
+          orderPortfolioQuestions: 1,
+          portfolioChangeRequestQuestion: 1,
+          portfolioClosingReportQuestion: 1
         }
       });
 

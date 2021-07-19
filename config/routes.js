@@ -83,6 +83,7 @@ module.exports.routes = {
   'GET /resetCount': 'ProjectsController.resetCount',
   'GET /resourceByReport/:id': 'ResourceController.resourceByReport',
   'POST /submitOutline': 'ProjectsController.submitOutline',
+  'POST /cloneOutlineProject': 'ProjectsController.cloneOutlineProject',
   'POST /submitOutlineUpdateCase/:id': 'ProjectsController.submitOutlineUpdateCase',
   'GET /user/search/:query': 'UserController.search',
   'GET /dropdown': 'DropdownController.index',

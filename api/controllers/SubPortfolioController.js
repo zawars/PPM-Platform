@@ -186,5 +186,18 @@ module.exports = {
 
     } catch (error) {
     }
-  }
+  },
+
+  searchByName: async (req, res) => {
+    let query = req.params.query;
+    let subportfolios = await SubPortfolio.find({ name: { 'contains': query } },
+      {
+        fields: {
+          name: 1,
+          portfolio: 1
+        }
+      }).populateAll();
+
+    res.ok(subportfolios);
+  },
 };

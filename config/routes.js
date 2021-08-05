@@ -171,6 +171,7 @@ module.exports.routes = {
   'PUT /subPortfolio/edit/:id': 'SubPortfolioController.updateSubportfolio',
   'GET /subPortfolio/:id/projects': 'SubPortfolioController.getSubportfolioProjects',
   'GET /subPortfolio/user/:id': 'SubPortfolioController.getUserSubportfolios',
+  'GET /subPortfolio/search/:query': 'SubPortfolioController.searchByName',
 
   //ProjectOutline
   'PUT /project/outline': 'ProjectOutlineController.updateProjectOutline',

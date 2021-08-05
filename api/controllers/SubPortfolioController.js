@@ -196,7 +196,7 @@ module.exports = {
           name: 1,
           portfolio: 1
         }
-      }).populateAll();
+      }).populate('portfolio');
 
     res.ok(subportfolios);
   },

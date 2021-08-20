@@ -83,6 +83,7 @@ module.exports.routes = {
   'GET /resetCount': 'ProjectsController.resetCount',
   'GET /resourceByReport/:id': 'ResourceController.resourceByReport',
   'POST /submitOutline': 'ProjectsController.submitOutline',
+  'POST /cloneOutlineProject': 'ProjectsController.cloneOutlineProject',
   'POST /submitOutlineUpdateCase/:id': 'ProjectsController.submitOutlineUpdateCase',
   'GET /user/search/:query': 'UserController.search',
   'GET /dropdown': 'DropdownController.index',
@@ -99,6 +100,8 @@ module.exports.routes = {
   'GET /questions/getQuestionsByFormName/:query': 'QuestionsController.getQuestionsByFormName',
   'GET /questionsMapper/:id': 'QuestionsMapperController.show',
   'PUT /questionsMapper/:id': 'QuestionsMapperController.update',
+  'POST /questionsMapper': 'QuestionsMapperController.create',
+  'DELETE /questionsMapper/:id': 'QuestionsMapperController.delete',
   'GET /projects/getRecentActiveProjects': 'ProjectsController.getRecentActiveProjects',
   'GET /projects/getResetProjects': 'ProjectsController.getResetProjects',
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
@@ -119,6 +122,8 @@ module.exports.routes = {
   'GET /reports/getDocumentAnswers/:id': 'ReportsController.getReportsDocumentsAnswers',
 
   'GET /portfoliosPrograms': 'PortfolioController.getAllPortfoliosPrograms',
+
+  'GET /portfolioByReport/:id': 'PortfolioController.getPortfolioByReport',
 
   // Team Api
   'GET /project/team/:id': 'TeamController.projectTeam',
@@ -165,6 +170,7 @@ module.exports.routes = {
   'PUT /subPortfolio/edit/:id': 'SubPortfolioController.updateSubportfolio',
   'GET /subPortfolio/:id/projects': 'SubPortfolioController.getSubportfolioProjects',
   'GET /subPortfolio/user/:id': 'SubPortfolioController.getUserSubportfolios',
+  'GET /subPortfolio/search/:query': 'SubPortfolioController.searchByName',
 
   //ProjectOutline
   'PUT /project/outline': 'ProjectOutlineController.updateProjectOutline',
@@ -214,6 +220,13 @@ module.exports.routes = {
   'POST /findAssignedProjectBucketBudget': 'ProjectBucketBudgetController.findProjectBucketAssignedBudget',
   'GET /projectBudget/:bucketId/names': 'ProjectBucketBudgetController.getItemsNamesByBucket',
   'POST /getProjectBucketItemsCount': 'ProjectBucketBudgetController.getItemsCountbyQuery',
+
+  //Gantt Logs
+  'POST /createGanttLogs': 'GanttLogsController.createGanttLogs',
+  'GET /ganttLogsByProject/:id': 'GanttLogsController.getGanttLogsByProject',
+
+  //Gantt Milestone report
+  'GET /ganttMilestoneReportByProject/:id': 'GanttMilestonesReportController.getGanttMilestoneReportByProject',
 
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',

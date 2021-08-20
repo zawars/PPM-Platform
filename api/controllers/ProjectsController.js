@@ -880,7 +880,33 @@ module.exports = {
       }).catch(error => {
       })
     }).catch(error => {
+    })
+  },
+
+  cloneOutlineProject: async (req, res) => {
+    let body = req.body;
+    let siblingProjects = await Projects.find({ parentProject: body.parentProject }, { fields: { projectName: 1 } });
+    let suffix = "";
+    if (siblingProjects.length > 0) {
+      let lastSibName = siblingProjects[siblingProjects.length - 1].projectName;
+      suffix = ErrorsLogService.nextLetter(lastSibName.substring(lastSibName.length - 1));
+    } else {
+      suffix = "a";
+    }
+
+    let projectName = body.projectName;
+    body.projectName = projectName + suffix;
+    body.projectOutline.projectName = projectName + suffix;
+
+    Projects.create(body).then(projectResponse => {
+      Projects.findOne({
+        id: projectResponse.id
+      }).populate('projectOutline').then(async project => {
+        res.ok({ project });
+      }).catch(error => {
       })
+    }).catch(error => {
+    })
   },
 
   submitOutlineUpdateCase: async (req, res) => {

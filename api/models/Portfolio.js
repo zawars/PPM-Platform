@@ -31,5 +31,9 @@ module.exports = {
       collection: 'subPortfolio',
       via: 'portfolio'
     },
+    questions: {
+      collection: 'questionsMapper',
+      via: 'portfolioName'
+    }
   }
 };

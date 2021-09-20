@@ -7,7 +7,7 @@
 
 module.exports = {
   getAllSubportfolioYears: async (req, res) => {
-    let subportfolioYearsCollection = await PortfolioBudgetYear.find({}, { fields: { year: 1 } });
+    let subportfolioYearsCollection = await PortfolioBudgetYear.find({});
     let projectBudgetGroupedByYears = _.groupBy(subportfolioYearsCollection, 'year');
     let yearsKeys = Object.keys(projectBudgetGroupedByYears);
     res.ok(yearsKeys);

@@ -176,7 +176,8 @@ module.exports = {
 
   fixAllYearlyBudget: async (req, res) => {
     try {
-      let budgetYears = await PortfolioBudgetYear.find();
+      let year = req.body.year;
+      let budgetYears = await PortfolioBudgetYear.find({ year });
 
       for (let i = 0; i < budgetYears.length; i++) {
         let projectBudgetCost = await ProjectBudgetCost.find({

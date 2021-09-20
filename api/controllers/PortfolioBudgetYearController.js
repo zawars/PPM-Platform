@@ -83,7 +83,8 @@ module.exports = {
           totalFixedThereofICT: totalThereofICT,
           totalFixedExternalIT: totalExternalIT,
           totalFixedopexCapexExternal: totalopexCapexExternal,
-          totalFixedCapex: totalCapex
+          totalFixedCapex: totalCapex,
+          fixDate: new Date().toDateString(),
         });
 
         let isdavonGEFixed = false;
@@ -236,7 +237,8 @@ module.exports = {
             totalFixedThereofICT: totalThereofICT,
             totalFixedExternalIT: totalExternalIT,
             totalFixedopexCapexExternal: totalopexCapexExternal,
-            totalFixedCapex: totalCapex
+            totalFixedCapex: totalCapex,
+            fixDate: new Date().toDateString(),
           });
 
           let fixedColumns = [{

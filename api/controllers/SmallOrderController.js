@@ -154,6 +154,14 @@ io.on('connection', socket => {
 
 module.exports = {
 
+  getSmallOrdersByStatus: async (req, res) => {
+    try {
+      let smallOrders = await SmallOrder.find({status: req.params.status}).limit(req.query.limit || 10);
+      res.ok(smallOrders);
+    } catch (error) {
+    }
+  },
+
   getSmallOrders: async (req, res) => {
     try {
       let smallOrders = await SmallOrder.find().limit(req.query.limit || 10).populateAll();

@@ -154,11 +154,35 @@ io.on('connection', socket => {
 
 module.exports = {
 
-  getSmallOrdersByStatus: async (req, res) => {
+  searchStartedOrders: async (req, res) => {
+    let query = req.params.query;
+
     try {
-      let smallOrders = await SmallOrder.find({status: req.params.status}).limit(req.query.limit || 10);
-      res.ok(smallOrders);
+      let orders = await SmallOrder.find({
+        or: [{
+            name: {
+              'contains': query
+            },
+            status: 'Start'
+          },
+          {
+            uid: {
+              'contains': query
+            },
+            status: 'Start'
+          }
+        ]
+      }, {
+        fields: {
+          uid: 1,
+          name: 1
+        }
+      }).limit(10).sort('uid DESC');
+
+      res.send(orders);
+
     } catch (error) {
+      res.badRequest(error);
     }
   },
 

@@ -201,7 +201,7 @@ module.exports.routes = {
   'GET /smallOrder/user/:id': 'SmallOrderController.getSmallOrdersByUser',
   'GET /smallOrder/sponsor/:id': 'SmallOrderController.getSmallOrdersBySponsor',
   'GET /smallOrder/search/:query': 'SmallOrderController.searchOrders',
-  'GET /startedSmallOrder/:query' : 'SmallOrderController.searchStartedOrders',
+  'GET /startedSmallOrder/:subportfolio/:query' : 'SmallOrderController.searchStartedOrders',
 
   // SmallOrderStatusReport Api
   'GET /smallOrder/statusReport/:id/:prev/:current': 'SmallOrderStatusReportController.getPreviousCurrentOrderReport',

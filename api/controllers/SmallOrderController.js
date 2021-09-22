@@ -156,6 +156,7 @@ module.exports = {
 
   searchStartedOrders: async (req, res) => {
     let query = req.params.query;
+    let subportfolio = req.params.subportfolio;
 
     try {
       let orders = await SmallOrder.find({
@@ -163,13 +164,15 @@ module.exports = {
             name: {
               'contains': query
             },
-            status: 'Start'
+            status: 'Start',
+            subPortfolio: subportfolio
           },
           {
             uid: {
               'contains': query
             },
-            status: 'Start'
+            status: 'Start',
+            subPortfolio: subportfolio
           }
         ]
       }, {

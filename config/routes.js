@@ -114,6 +114,7 @@ module.exports.routes = {
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
   'GET /reports/search/:query': 'ReportsController.searchProjectsReports',
+  'GET /reports/searchBySubportfolio/:subportfolio/:query': 'ReportsController.searchActiveReportsBySubportfolio',
   'POST /budgetImport': 'ReportsController.budgetImport',
   'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',

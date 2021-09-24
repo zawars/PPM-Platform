@@ -154,6 +154,41 @@ io.on('connection', socket => {
 
 module.exports = {
 
+  searchStartedOrders: async (req, res) => {
+    let query = req.params.query;
+    let subportfolio = req.params.subportfolio;
+
+    try {
+      let orders = await SmallOrder.find({
+        or: [{
+            name: {
+              'contains': query
+            },
+            status: 'Start',
+            subPortfolio: subportfolio
+          },
+          {
+            uid: {
+              'contains': query
+            },
+            status: 'Start',
+            subPortfolio: subportfolio
+          }
+        ]
+      }, {
+        fields: {
+          uid: 1,
+          name: 1
+        }
+      }).limit(10).sort('uid DESC');
+
+      res.send(orders);
+
+    } catch (error) {
+      res.badRequest(error);
+    }
+  },
+
   getSmallOrders: async (req, res) => {
     try {
       let smallOrders = await SmallOrder.find().limit(req.query.limit || 10).populateAll();

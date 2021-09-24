@@ -10,7 +10,7 @@ const XlsxPopulate = require('xlsx-populate');
 
 function cronJob(cb) {
   //Synchronize Users
-  userController.syncUsers();
+  // userController.syncUsers();
 
   // // Email Reminder For Project Order Creation
   // userController.emailReminderOrderCreation();
@@ -27,7 +27,7 @@ function cronJob(cb) {
   //Synchronize Users Cycle after every 24 Hours
   let intervalTimer = 1000 * 60 * 60 * 24;
   setInterval(() => {
-    userController.syncUsers();
+    // userController.syncUsers();
 
     userController.emailReminderOrderCreation();
 

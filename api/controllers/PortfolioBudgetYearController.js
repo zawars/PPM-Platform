@@ -6,6 +6,13 @@
  */
 
 module.exports = {
+  getAllSubportfolioYears: async (req, res) => {
+    let subportfolioYearsCollection = await PortfolioBudgetYear.find({});
+    let projectBudgetGroupedByYears = _.groupBy(subportfolioYearsCollection, 'year');
+    let yearsKeys = Object.keys(projectBudgetGroupedByYears);
+    res.ok(yearsKeys);
+  },
+
   getBudgetYears: async (req, res) => {
     try {
       let budgetYears = await PortfolioBudgetYear.find({
@@ -76,7 +83,8 @@ module.exports = {
           totalFixedThereofICT: totalThereofICT,
           totalFixedExternalIT: totalExternalIT,
           totalFixedopexCapexExternal: totalopexCapexExternal,
-          totalFixedCapex: totalCapex
+          totalFixedCapex: totalCapex,
+          fixDate: new Date().toDateString(),
         });
 
         let isdavonGEFixed = false;
@@ -162,7 +170,8 @@ module.exports = {
 
   fixAllYearlyBudget: async (req, res) => {
     try {
-      let budgetYears = await PortfolioBudgetYear.find();
+      let year = req.body.year;
+      let budgetYears = await PortfolioBudgetYear.find({ year });
 
       for (let i = 0; i < budgetYears.length; i++) {
         let projectBudgetCost = await ProjectBudgetCost.find({
@@ -213,7 +222,8 @@ module.exports = {
             totalFixedThereofICT: totalThereofICT,
             totalFixedExternalIT: totalExternalIT,
             totalFixedopexCapexExternal: totalopexCapexExternal,
-            totalFixedCapex: totalCapex
+            totalFixedCapex: totalCapex,
+            fixDate: new Date().toDateString(),
           });
 
           let fixedColumns = [{
@@ -290,8 +300,8 @@ module.exports = {
             }
 
             let result = await ProjectBudgetCost.update({
-                id: project.id
-              })
+              id: project.id
+            })
               .set({
                 budget: project.budget
               })

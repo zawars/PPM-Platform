@@ -825,6 +825,32 @@ module.exports = {
     res.ok(subportfolioProjects);
   },
 
+  searchActiveReportsBySubportfolio: async (req, res) => {
+    let search = req.params.query;
+    let subportfolio = req.params.subportfolio;
+
+    try {
+      let projects = await Reports.find({
+        or: [{
+            uid: parseInt(search),
+            status: 'Active',
+            subPortfolio: subportfolio
+          },
+          {
+            projectName: {
+              contains: search
+            },
+            status: 'Active',
+            subPortfolio: subportfolio
+          }
+        ]
+      }).limit(10).sort('uid DESC');
+
+      res.send(projects);
+    } catch (error) {
+    }
+  },
+
   searchProjectsReports: async (req, res) => {
     let search = req.params.query;
 

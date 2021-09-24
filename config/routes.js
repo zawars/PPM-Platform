@@ -113,6 +113,7 @@ module.exports.routes = {
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 
   'GET /reports/search/:query': 'ReportsController.searchProjectsReports',
+  'GET /reports/searchBySubportfolio/:subportfolio/:query': 'ReportsController.searchActiveReportsBySubportfolio',
   'POST /budgetImport': 'ReportsController.budgetImport',
   'GET /reports/budgetSwitch': 'ReportsController.budgetSwitch',
   'POST /reports/portfolio': 'ReportsController.projectsByPortfolio',
@@ -161,6 +162,7 @@ module.exports.routes = {
   'POST /portfolioBudgetYear/fixAllYearlyBudget': 'PortfolioBudgetYearController.fixAllYearlyBudget',
   'GET /portfolioBudgetYear/subportfolio/:id/yearlyBudget': 'PortfolioBudgetYearController.multiYearlyBudget',
   'GET /subPortfolio/project/year/budget/:id': 'PortfolioBudgetYearController.getProjectYearlyBudgets',
+  'GET /getAllSubportfolioYears' : 'PortfolioBudgetYearController.getAllSubportfolioYears',
 
   //Subportfolio status report
   'GET /subportfolio/statusReports/:subportfolioId': 'SubportfolioStatusReportController.statusReportsbySubportfolio',
@@ -199,6 +201,7 @@ module.exports.routes = {
   'GET /smallOrder/user/:id': 'SmallOrderController.getSmallOrdersByUser',
   'GET /smallOrder/sponsor/:id': 'SmallOrderController.getSmallOrdersBySponsor',
   'GET /smallOrder/search/:query': 'SmallOrderController.searchOrders',
+  'GET /startedSmallOrder/:subportfolio/:query' : 'SmallOrderController.searchStartedOrders',
 
   // SmallOrderStatusReport Api
   'GET /smallOrder/statusReport/:id/:prev/:current': 'SmallOrderStatusReportController.getPreviousCurrentOrderReport',

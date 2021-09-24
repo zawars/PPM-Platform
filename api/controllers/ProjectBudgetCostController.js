@@ -153,10 +153,10 @@ module.exports = {
     let budgetYears = await PortfolioBudgetYear.find({
       id: req.params.id
     }, {
-        fields: {
-          year: 1
-        }
-      });
+      fields: {
+        year: 1
+      }
+    });
 
     let year = parseInt(budgetYears[0].year);
 
@@ -425,7 +425,7 @@ module.exports = {
     },];
 
     try {
-      let smallOrders = await SmallOrder.find({
+      let smallOrdersRaw = await SmallOrder.find({
         or: [{
           status: 'Start',
           subPortfolio: subPortfolio
@@ -439,6 +439,12 @@ module.exports = {
         }
         ]
       });
+
+      //Remove all Start orders that have end date smaller than the year being added
+      let smallOrders = smallOrdersRaw.filter(order => {
+        let smallOrderEndYear = order.endDate.split('/')[0];
+        return order.status == 'Closed' || (order.status == 'Start' && parseInt(year) <= parseInt(smallOrderEndYear))
+      })
 
       if (smallOrders.length > 0) {
         smallOrders.forEach(async (order, index) => {

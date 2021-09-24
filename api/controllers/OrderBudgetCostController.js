@@ -5,6 +5,7 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 const ObjectId = require('mongodb').ObjectID;
+const moment = require('moment');
 
 module.exports = {
   createOrderBudgetCost: async (req, res) => {
@@ -19,6 +20,15 @@ module.exports = {
         subPortfolio: req.body.subPortfolioId
       });
     }
+
+    let smallOrder = await SmallOrder.findOne({ id: req.body.orderId });
+    let smallOrderEndYear = smallOrder.endDate.split('/')[0];
+
+    let currentYear = moment().format('YYYY');
+
+    let subportfolioBudgetYears = await PortfolioBudgetYear.find({
+      subPortfolio: req.body.subPortfolioId
+    });
 
     let budget = [{
       costType: "External Costs",
@@ -85,11 +95,18 @@ module.exports = {
       group: "Sonstiges",
     }];
 
-    await OrderBudgetCost.create({
-      budget: budget,
-      portfolioBudgetYear: portfolioBudgetYear.id,
-      order: req.body.orderId
-    });
+    let objects = [];
+    for (let i = 0; i < subportfolioBudgetYears.length; i++) {
+      if (parseInt(subportfolioBudgetYears[i].year) >= parseInt(currentYear) && parseInt(subportfolioBudgetYears[i].year) <= parseInt(smallOrderEndYear)) {
+        objects.push({
+          order: req.body.orderId,
+          budget: budget,
+          portfolioBudgetYear: subportfolioBudgetYears[i].id
+        })
+      }
+    }
+
+    await OrderBudgetCost.createEach(objects);
 
     res.ok({
       result: "Success"
@@ -100,64 +117,64 @@ module.exports = {
     OrderBudgetCost.native(async function (err, collection) {
       if (err) return res.serverError(err);
       collection.aggregate([{
-          $match: {
-            portfolioBudgetYear: ObjectId(req.params.id)
-          }
-        },
-        {
-          $lookup: {
-            from: "projectbucketbudget",
-            let: {
-              portfolioBudgetYear: '$portfolioBudgetYear',
-              orderId: "$order"
-            },
-            pipeline: [{
-                $match: {
-                  $expr: {
-                    $and: [{
-                        $eq: ["$portfolioBudgetYear", "$$portfolioBudgetYear"]
-                      },
-                      {
-                        $eq: ["$orderId", "$$orderId"]
-                      }
-                    ]
-                  }
-                },
-              },
-              {
-                $group: {
-                  _id: null,
-                  count: {
-                    $sum: 1
-                  }
-                }
-              },
-              {
-                $project: {
-                  _id: 0
-                }
-              }
-            ],
-            as: "assignmentsCount"
-          },
-        },
-        {
-          $unwind: {
-            path: '$assignmentsCount',
-            preserveNullAndEmptyArrays: true
-          }
-        },
-        {
-          $lookup: {
-            from: "smallorder",
-            localField: 'order',
-            foreignField: '_id',
-            as: "order"
-          }
-        },
-        {
-          $unwind: '$order'
+        $match: {
+          portfolioBudgetYear: ObjectId(req.params.id)
         }
+      },
+      {
+        $lookup: {
+          from: "projectbucketbudget",
+          let: {
+            portfolioBudgetYear: '$portfolioBudgetYear',
+            orderId: "$order"
+          },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $and: [{
+                  $eq: ["$portfolioBudgetYear", "$$portfolioBudgetYear"]
+                },
+                {
+                  $eq: ["$orderId", "$$orderId"]
+                }
+                ]
+              }
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              count: {
+                $sum: 1
+              }
+            }
+          },
+          {
+            $project: {
+              _id: 0
+            }
+          }
+          ],
+          as: "assignmentsCount"
+        },
+      },
+      {
+        $unwind: {
+          path: '$assignmentsCount',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "smallorder",
+          localField: 'order',
+          foreignField: '_id',
+          as: "order"
+        }
+      },
+      {
+        $unwind: '$order'
+      }
       ]).toArray(function (err, orderBudgetCosts = []) {
         if (err) return;
         orderBudgetCosts.forEach(result => {
@@ -178,8 +195,8 @@ module.exports = {
 
       ordersBudget.forEach(async (order, index) => {
         let result = await OrderBudgetCost.update({
-            id: order.id
-          })
+          id: order.id
+        })
           .set({
             budget: order.budget
           })

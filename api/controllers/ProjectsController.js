@@ -1067,6 +1067,62 @@ module.exports = {
     } catch (error) {
       res.badRequest(error);
     }
+  },
+
+  getOverDueOrderProjects: (req, res) => {
+    let todaysDate = new Date()
+    let offset = todaysDate.getTimezoneOffset()
+    todaysDate = new Date(todaysDate.getTime() - (offset * 60 * 1000))
+    todaysDate = todaysDate.toISOString().split('T')[0]
+
+    ProjectOutline.native(async function (err, collection) {
+      if (err) return res.serverError(err);
+      collection.aggregate([{
+        $match: {
+          $and: [
+            { initiationApprovalDate: { $lt: todaysDate } },
+            { status: "Approved" }
+          ]
+        }
+      },
+      {
+        $lookup: {
+          from: "projects",
+          let: {
+            projectId: "$projectId"
+          },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ["$_id", "$$projectId"]
+                  },
+                  {
+                    $eq: ["$isClosed", false]
+                  },
+                  {
+                    $eq: ["$orderSubmitted", false]
+                  },
+                ]
+              }
+            },
+          },
+          ],
+          as: "projectId"
+        },
+      },
+      {
+        $unwind: {
+          path: '$projectId',
+          preserveNullAndEmptyArrays: false
+        }
+      },
+      ]).toArray(function (err, outlineProjects = []) {
+        if (err) return res.serverError(err);
+        res.ok(outlineProjects);
+      });
+    });
   }
 
 };

@@ -110,6 +110,7 @@ module.exports.routes = {
   'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
   'GET /projects/search/:query': 'ProjectsController.search',
+  'GET /getOverDueOrderProjects': 'ProjectsController.getOverDueOrderProjects',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 

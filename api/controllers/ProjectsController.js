@@ -1123,6 +1123,126 @@ module.exports = {
         res.ok(outlineProjects);
       });
     });
-  }
+  },
+  
+  getOverDueClosingReportProjects: (req, res) => {
+    let todaysDate = new Date()
+    let offset = todaysDate.getTimezoneOffset()
+    todaysDate = new Date(todaysDate.getTime() - (offset * 60 * 1000))
+    todaysDate = todaysDate.toISOString().split('T')[0]
 
+    Reports.native(async function (err, collection) {
+      if (err) return res.serverError(err);
+      collection.aggregate([{
+        $match: {
+          $and: [
+            { forecastEndDate: { $lt: todaysDate } },
+            { status: "Active" }
+          ]
+        }
+      },
+      { $project: { _id: 1, projectName: 1, projectManager: 1, portfolio: 1, forecastEndDate: 1, project: 1 } },
+      {
+        $lookup: {
+          from: "portfolio",
+          localField: 'portfolio',
+          foreignField: '_id',
+          as: "portfolio"
+        }
+      },
+      {
+        $unwind: '$portfolio'
+      },
+      {
+        $lookup: {
+          from: "projects",
+          let: {
+            projectId: "$project"
+          },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ["$_id", "$$projectId"]
+                  },
+                  {
+                    $eq: ["$isClosed", false]
+                  },
+                  {
+                    $eq: ["$orderApproved", true]
+                  },
+                ]
+              }
+            },
+          },
+          { $project: { _id: 1 } },
+          ],
+          as: "project"
+        },
+      },
+      {
+        $unwind: {
+          path: '$project',
+          preserveNullAndEmptyArrays: false
+        }
+      },
+      {
+        $lookup: {
+          from: "closingreport",
+          let: {
+            projectId: "$project._id"
+          },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $or: [
+                  {
+                    $and: [
+                      {
+                        $eq: ["$project", "$$projectId"]
+                      },
+                      {
+                        $eq: ["$isSubmitted", true]
+                      }
+                    ]
+                  },
+                  {
+                    $and: [
+                      {
+                        $eq: ["$project", "$$projectId"]
+                      },
+                      {
+                        $eq: ["$isSubmitted", false]
+                      },
+                      {
+                        $eq: ["$status", "Returned"]
+                      }
+                    ]
+                  }
+                ],
+              }
+            },
+          },
+          ],
+          as: "closingreport"
+        },
+      },
+      {
+        $unwind: {
+          path: '$closingreport',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $match: {
+          closingreport: { $exists: false }
+        }
+      },
+      ]).toArray(function (err, closingReportProjects = []) {
+        if (err) return res.serverError(err);
+        res.ok(closingReportProjects);
+      });
+    });
+  }
 };

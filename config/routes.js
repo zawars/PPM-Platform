@@ -111,6 +111,7 @@ module.exports.routes = {
   'POST /thirdParties/register': 'ThirdPartiesController.register',
   'GET /projects/search/:query': 'ProjectsController.search',
   'GET /getOverDueOrderProjects': 'ProjectsController.getOverDueOrderProjects',
+  'GET /getOverDueClosingReportProjects': 'ProjectsController.getOverDueClosingReportProjects',
 
   'GET /api/v1/agilePlanning': 'ThirdPartiesController.agilePlanning',
 

@@ -1085,6 +1085,7 @@ module.exports = {
           ]
         }
       },
+      { $project: { _id: 1, projectName: 1, projectManager: 1, portfolio: 1, initiationApprovalDate: 1, projectId: 1 } },
       {
         $lookup: {
           from: "projects",

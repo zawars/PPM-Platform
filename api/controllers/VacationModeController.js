@@ -6,7 +6,10 @@
  */
 
 module.exports = {
-  
-
+    getLastActiveVacationRecord: async (req, res) => {
+        let user = req.params.user;
+        let lastVacationRecord = await VacationMode.findOne({ isVacationActive: true, user });
+        res.ok(lastVacationRecord);
+    }
 };
 

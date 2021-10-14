@@ -234,6 +234,9 @@ module.exports.routes = {
   //Gantt Milestone report
   'GET /ganttMilestoneReportByProject/:id': 'GanttMilestonesReportController.getGanttMilestoneReportByProject',
 
+  // Vacation Mode
+  'GET /getLastActiveVacationRecord/:user' : 'VacationModeController.getLastActiveVacationRecord',
+
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',
   'POST /deleteFile': 'AttachmentController.deleteFile',

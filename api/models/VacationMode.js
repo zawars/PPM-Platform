@@ -23,7 +23,7 @@ module.exports = {
     },
     isVacationActive: {
       type: 'boolean',
-      defaults: true
+      defaultsTo: true
     },
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗

@@ -13,7 +13,7 @@ module.exports = {
         todaysDate = new Date(todaysDate.getTime() - (offset * 60 * 1000))
         todaysDate = todaysDate.toISOString().split('T')[0]
 
-        let lastVacationRecord = await VacationMode.findOne({ isVacationActive: true, user, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 });
+        let lastVacationRecord = await VacationMode.findOne({ isVacationActive: true, user, endDate: { '>=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
         res.ok(lastVacationRecord);
     }
 };

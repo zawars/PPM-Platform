@@ -847,8 +847,30 @@ module.exports = {
     });
   },
 
-  submitOutline: (req, res) => {
+  submitOutline: async (req, res) => {
     let body = req.body;
+
+    let todaysDate = new Date()
+    let offset = todaysDate.getTimezoneOffset()
+    todaysDate = new Date(todaysDate.getTime() - (offset * 60 * 1000))
+    todaysDate = todaysDate.toISOString().split('T')[0]
+    let pmo = body.projectOutline.pmoOfficer;
+
+    let pmoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: pmo.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    if (pmoVacationMode != null) {
+      body.projectOutline.isPmoBackup = true;
+      body.projectOutline.originalPmoOfficer = body.projectOutline.pmoOfficer;
+      body.projectOutline.pmoOfficer = pmoVacationMode.backupUser;
+    }
+    let sponsor = body.projectOutline.projectSponsor;
+
+    let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    if (sponsorVacationMode != null) {
+      body.projectOutline.isSponsorBackup = true;
+      body.projectOutline.originalProjectSponsor = body.projectOutline.projectSponsor;
+      body.projectOutline.projectSponsor = sponsorVacationMode.backupUser;
+    }
+
     Projects.create(body).then(projectResponse => {
       Projects.findOne({
         id: projectResponse.id
@@ -914,6 +936,27 @@ module.exports = {
     let outline = JSON.parse(JSON.stringify(body.projectOutline));
     let backup = JSON.parse(JSON.stringify(body.projectOutline));
     delete (body.projectOutline);
+
+    let todaysDate = new Date()
+    let offset = todaysDate.getTimezoneOffset()
+    todaysDate = new Date(todaysDate.getTime() - (offset * 60 * 1000))
+    todaysDate = todaysDate.toISOString().split('T')[0]
+    let pmo = outline.pmoOfficer;
+
+    let pmoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: pmo.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    if (pmoVacationMode != null) {
+      outline.isPmoBackup = true;
+      outline.originalPmoOfficer = outline.pmoOfficer;
+      outline.pmoOfficer = pmoVacationMode.backupUser;
+    }
+    let sponsor = outline.projectSponsor;
+
+    let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    if (sponsorVacationMode != null) {
+      outline.isSponsorBackup = true;
+      outline.originalProjectSponsor = outline.projectSponsor;
+      outline.projectSponsor = sponsorVacationMode.backupUser;
+    }
 
     Projects.update({
       id: req.params.id

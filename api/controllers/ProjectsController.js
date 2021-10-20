@@ -945,6 +945,7 @@ module.exports = {
 
     let pmoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: pmo.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
     if (pmoVacationMode != null) {
+      delete pmoVacationMode.backupUser.tablesState;
       outline.isPmoBackup = true;
       outline.originalPmoOfficer = outline.pmoOfficer;
       outline.pmoOfficer = pmoVacationMode.backupUser;
@@ -953,6 +954,7 @@ module.exports = {
 
     let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
     if (sponsorVacationMode != null) {
+      delete sponsorVacationMode.backupUser.tablesState;
       outline.isSponsorBackup = true;
       outline.originalProjectSponsor = outline.projectSponsor;
       outline.projectSponsor = sponsorVacationMode.backupUser;

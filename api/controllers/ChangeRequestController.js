@@ -51,6 +51,7 @@ module.exports = {
       let pmo = body.obj.pmoOfficer;
       let pmoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: pmo.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
       if (pmoVacationMode != null) {
+        delete pmoVacationMode.backupUser.tablesState;
         body.obj.isPmoBackup = true;
         body.obj.originalPmoOfficer = body.obj.pmoOfficer;  
         body.obj.pmoOfficer = pmoVacationMode.backupUser;
@@ -60,6 +61,7 @@ module.exports = {
       let sponsor = body.obj.projectSponsor;
       let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
       if (sponsorVacationMode != null) {
+        delete sponsorVacationMode.backupUser.tablesState;
         body.obj.isSponsorBackup = true;
         body.obj.originalProjectSponsor = body.obj.projectSponsor;  
         body.obj.projectSponsor = sponsorVacationMode.backupUser;
@@ -68,6 +70,7 @@ module.exports = {
       let fico = body.obj.projectFico;
       let ficoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: fico.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
       if (ficoVacationMode != null) {
+        delete ficoVacationMode.backupUser.tablesState;
         body.obj.isFicoBackup = true;
         body.obj.originalProjectFico = body.obj.projectFico;  
         body.obj.projectFico = ficoVacationMode.backupUser;

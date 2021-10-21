@@ -71,6 +71,7 @@ module.exports = {
     transporter.sendMail({
       from: 'project.notification@bkw-oneview.com',
       to: options.email,
+      bcc: 'project.notification@bkw-oneview.com',
       subject: options.subject,
       html: options.message + `<br><br>
       <div>Freundliche Grüsse / Meilleures salutations / Best Regards,<br><br>

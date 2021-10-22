@@ -123,6 +123,7 @@ module.exports = {
       };
 
       let approval = await OutlineApproval.create(temp);
+      approval.pmoOfficer = body.obj.projectOrder.pmoOfficer;
 
       res.ok(approval);
     } catch (error) {
@@ -194,6 +195,7 @@ module.exports = {
       };
 
       let approval = await OutlineApproval.create(temp);
+      approval.pmoOfficer = body.order.pmoOfficer;
 
       res.ok(approval);
     } catch (error) {

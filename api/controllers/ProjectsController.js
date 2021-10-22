@@ -895,6 +895,7 @@ module.exports = {
 
         OutlineApproval.create(temp).then(response => {
           res.ok({
+            pmoOfficer: body.projectOutline.pmoOfficer,
             approvalId: response.id
           });
         }).catch(error => {
@@ -990,6 +991,7 @@ module.exports = {
             uid: projectResponse[0].uid
           }).then(response => {
             res.ok({
+              pmoOfficer: outline.pmoOfficer,
               approvalId: response.id
             });
           });

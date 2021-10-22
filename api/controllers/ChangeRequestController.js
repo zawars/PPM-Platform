@@ -104,6 +104,7 @@ module.exports = {
       };
 
       let approval = await OutlineApproval.create(temp);
+      approval.pmoOfficer = body.formObject.pmoOfficer;
 
       res.ok(approval);
     } catch (error) {
@@ -185,6 +186,7 @@ module.exports = {
       };
 
       let approval = await OutlineApproval.create(temp);
+      approval.pmoOfficer = body.formObject.pmoOfficer;
 
       res.ok(approval);
     } catch (error) {

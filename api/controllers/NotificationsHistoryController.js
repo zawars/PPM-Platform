@@ -11,7 +11,12 @@ io.on('connection', socket => {
 
   socket.on('getCount', async data => {
     try {
-      let notificationsCount = await NotificationsHistory.count();
+      var todaysDate = new Date();
+      var pastYear = todaysDate.getFullYear() - 1;
+      todaysDate.setFullYear(pastYear);
+      let yearbackdate = todaysDate.toISOString().split('T')[0]
+
+      let notificationsCount = await NotificationsHistory.count({ createdAt: { '>=': yearbackdate } });
       socket.emit('getCount', notificationsCount);
     } catch (error) {
     }
@@ -37,7 +42,12 @@ io.on('connection', socket => {
   });
 
   socket.on('notificationsIndex', data => {
-    NotificationsHistory.find()
+    var todaysDate = new Date();
+    var pastYear = todaysDate.getFullYear() - 1;
+    todaysDate.setFullYear(pastYear);
+    let yearbackdate = todaysDate.toISOString().split('T')[0]
+
+    NotificationsHistory.find({ createdAt: { '>=': yearbackdate } })
       .paginate({ page: data.pageIndex, limit: data.pageSize })
       .sort('createdAt DESC')
       .populateAll()
@@ -66,11 +76,16 @@ io.on('connection', socket => {
 
 module.exports = {
   getAllNotifications: (req, res) => {
+    var todaysDate = new Date();
+    var pastYear = todaysDate.getFullYear() - 1;
+    todaysDate.setFullYear(pastYear);
+    let yearbackdate = todaysDate.toISOString().split('T')[0]
+
     let limit = 0;
     if (req.param('limit')) {
       limit = req.param('limit');
     }
-    NotificationsHistory.find({})
+    NotificationsHistory.find({ createdAt: { '>=': yearbackdate } })
       .sort('createdAt DESC')
       .limit(limit)
       .populateAll()

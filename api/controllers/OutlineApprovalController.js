@@ -354,6 +354,8 @@ module.exports = {
         body.projectOutline.isSponsorBackup = true;
         body.projectOutline.originalProjectSponsor = body.projectOutline.projectSponsor;
         body.projectOutline.projectSponsor = assignedPersonVacationMode.backupUser;
+
+        await ProjectOutline.update({ id: body.projectOutline.id }).set({ isSponsorBackup: true, originalProjectSponsor: body.projectOutline.originalProjectSponsor, projectSponsor: body.projectOutline.projectSponsor })
       }
 
       if (body.docType == 'Order') {
@@ -362,6 +364,8 @@ module.exports = {
           body.projectOrder.isSponsorBackup = true;
           body.projectOrder.originalProjectSponsor = body.projectOrder.projectSponsor;
           body.projectOrder.projectSponsor = assignedPersonVacationMode.backupUser;
+
+          await ProjectOrder.update({ id: body.projectOrder.id }).set({ isSponsorBackup: true, originalProjectSponsor: body.projectOrder.originalProjectSponsor, projectSponsor: body.projectOrder.projectSponsor })
         }
 
         if (body.sentTo == 'FICO') {
@@ -369,6 +373,8 @@ module.exports = {
           body.projectOrder.isFicoBackup = true;
           body.projectOrder.originalProjectFico = body.projectOrder.projectFico;
           body.projectOrder.projectFico = assignedPersonVacationMode.backupUser;
+
+          await ProjectOrder.update({ id: body.projectOrder.id }).set({ isFicoBackup: true, originalProjectFico: body.projectOrder.originalProjectFico, projectFico: body.projectOrder.projectFico })
         }
       }
 
@@ -378,6 +384,8 @@ module.exports = {
           body.changeRequest.isSponsorBackup = true;
           body.changeRequest.originalProjectSponsor = body.changeRequest.projectSponsor;
           body.changeRequest.projectSponsor = assignedPersonVacationMode.backupUser;
+
+          await ChangeRequest.update({ id: body.changeRequest.id }).set({ isSponsorBackup: true, originalProjectSponsor: body.changeRequest.originalProjectSponsor, projectSponsor: body.changeRequest.projectSponsor })
         }
 
         if (body.sentTo == 'FICO') {
@@ -385,6 +393,8 @@ module.exports = {
           body.changeRequest.isFicoBackup = true;
           body.changeRequest.originalProjectFico = body.changeRequest.projectFico;
           body.changeRequest.projectFico = assignedPersonVacationMode.backupUser;
+
+          await ChangeRequest.update({ id: body.changeRequest.id }).set({ isFicoBackup: true, originalProjectFico: body.changeRequest.originalProjectFico, projectFico: body.changeRequest.projectFico })
         }
       }
 
@@ -394,6 +404,8 @@ module.exports = {
           body.closingReport.isSponsorBackup = true;
           body.closingReport.originalProjectSponsor = body.closingReport.projectSponsor;
           body.closingReport.projectSponsor = assignedPersonVacationMode.backupUser;
+
+          await ClosingReport.update({ id: body.closingReport.id }).set({ isSponsorBackup: true, originalProjectSponsor: body.closingReport.originalProjectSponsor, projectSponsor: body.closingReport.projectSponsor })
         }
 
         if (body.sentTo == 'FICO') {
@@ -401,6 +413,8 @@ module.exports = {
           body.closingReport.isFicoBackup = true;
           body.closingReport.originalProjectFico = body.closingReport.projectFico;
           body.closingReport.projectFico = assignedPersonVacationMode.backupUser;
+
+          await ClosingReport.update({ id: body.closingReport.id }).set({ isFicoBackup: true, originalProjectFico: body.closingReport.originalProjectFico, projectFico: body.closingReport.projectFico })
         }
       }
     }

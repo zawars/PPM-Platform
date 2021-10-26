@@ -862,14 +862,14 @@ module.exports = {
       body.projectOutline.originalPmoOfficer = body.projectOutline.pmoOfficer;
       body.projectOutline.pmoOfficer = pmoVacationMode.backupUser;
     }
-    let sponsor = body.projectOutline.projectSponsor;
+    // let sponsor = body.projectOutline.projectSponsor;
 
-    let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
-    if (sponsorVacationMode != null) {
-      body.projectOutline.isSponsorBackup = true;
-      body.projectOutline.originalProjectSponsor = body.projectOutline.projectSponsor;
-      body.projectOutline.projectSponsor = sponsorVacationMode.backupUser;
-    }
+    // let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    // if (sponsorVacationMode != null) {
+    //   body.projectOutline.isSponsorBackup = true;
+    //   body.projectOutline.originalProjectSponsor = body.projectOutline.projectSponsor;
+    //   body.projectOutline.projectSponsor = sponsorVacationMode.backupUser;
+    // }
 
     Projects.create(body).then(projectResponse => {
       Projects.findOne({
@@ -951,15 +951,15 @@ module.exports = {
       outline.originalPmoOfficer = outline.pmoOfficer;
       outline.pmoOfficer = pmoVacationMode.backupUser;
     }
-    let sponsor = outline.projectSponsor;
+    // let sponsor = outline.projectSponsor;
 
-    let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
-    if (sponsorVacationMode != null) {
-      delete sponsorVacationMode.backupUser.tablesState;
-      outline.isSponsorBackup = true;
-      outline.originalProjectSponsor = outline.projectSponsor;
-      outline.projectSponsor = sponsorVacationMode.backupUser;
-    }
+    // let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    // if (sponsorVacationMode != null) {
+    //   delete sponsorVacationMode.backupUser.tablesState;
+    //   outline.isSponsorBackup = true;
+    //   outline.originalProjectSponsor = outline.projectSponsor;
+    //   outline.projectSponsor = sponsorVacationMode.backupUser;
+    // }
 
     Projects.update({
       id: req.params.id

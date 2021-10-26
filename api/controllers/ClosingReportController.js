@@ -54,21 +54,21 @@ module.exports = {
         body.formObject.pmoOfficer = pmoVacationMode.backupUser;
       }
 
-      let sponsor = body.obj.projectSponsor;
-      let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
-      if (sponsorVacationMode != null) {
-        body.obj.isSponsorBackup = true;
-        body.obj.originalProjectSponsor = body.obj.projectSponsor;  
-        body.obj.projectSponsor = sponsorVacationMode.backupUser;
-      }
+      // let sponsor = body.obj.projectSponsor;
+      // let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+      // if (sponsorVacationMode != null) {
+      //   body.obj.isSponsorBackup = true;
+      //   body.obj.originalProjectSponsor = body.obj.projectSponsor;  
+      //   body.obj.projectSponsor = sponsorVacationMode.backupUser;
+      // }
 
-      let fico = body.obj.projectFico;
-      let ficoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: fico.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
-      if (ficoVacationMode != null) {
-        body.obj.isFicoBackup = true;
-        body.obj.originalProjectFico = body.obj.projectFico;  
-        body.obj.projectFico = ficoVacationMode.backupUser;
-      }
+      // let fico = body.obj.projectFico;
+      // let ficoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: fico.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+      // if (ficoVacationMode != null) {
+      //   body.obj.isFicoBackup = true;
+      //   body.obj.originalProjectFico = body.obj.projectFico;  
+      //   body.obj.projectFico = ficoVacationMode.backupUser;
+      // }
 
       let closingReportObj = await ClosingReport.create(body.obj);
 
@@ -125,23 +125,23 @@ module.exports = {
         body.formObject.pmoOfficer = pmoVacationMode.backupUser;
       }
 
-      let sponsor = body.obj.projectSponsor;
-      let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
-      if (sponsorVacationMode != null) {
-        delete sponsorVacationMode.backupUser.tablesState;
-        body.obj.isSponsorBackup = true;
-        body.obj.originalProjectSponsor = body.obj.projectSponsor;  
-        body.obj.projectSponsor = sponsorVacationMode.backupUser;
-      }
+      // let sponsor = body.obj.projectSponsor;
+      // let sponsorVacationMode = await VacationMode.findOne({ isVacationActive: true, user: sponsor.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+      // if (sponsorVacationMode != null) {
+      //   delete sponsorVacationMode.backupUser.tablesState;
+      //   body.obj.isSponsorBackup = true;
+      //   body.obj.originalProjectSponsor = body.obj.projectSponsor;  
+      //   body.obj.projectSponsor = sponsorVacationMode.backupUser;
+      // }
 
-      let fico = body.obj.projectFico;
-      let ficoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: fico.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
-      if (ficoVacationMode != null) {
-        delete ficoVacationMode.backupUser.tablesState;
-        body.obj.isFicoBackup = true;
-        body.obj.originalProjectFico = body.obj.projectFico;
-        body.obj.projectFico = ficoVacationMode.backupUser;
-      }
+      // let fico = body.obj.projectFico;
+      // let ficoVacationMode = await VacationMode.findOne({ isVacationActive: true, user: fico.id, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+      // if (ficoVacationMode != null) {
+      //   delete ficoVacationMode.backupUser.tablesState;
+      //   body.obj.isFicoBackup = true;
+      //   body.obj.originalProjectFico = body.obj.projectFico;
+      //   body.obj.projectFico = ficoVacationMode.backupUser;
+      // }
 
       await ClosingReport.update({
         id: body.closingReportId

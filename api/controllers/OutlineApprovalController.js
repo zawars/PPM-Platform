@@ -65,8 +65,8 @@ io.on('connection', socket => {
   //To paginate approvals table
   socket.on('approvalsIndex', data => {
     OutlineApproval.find({
-        assignedTo: data.userId
-      })
+      assignedTo: data.userId
+    })
       .paginate({
         page: data.pageIndex,
         limit: data.pageSize
@@ -110,150 +110,6 @@ io.on('connection', socket => {
       let count = await OutlineApproval.count({
         assignedTo: data.userId,
         or: [{
-            uid: parseInt(search)
-          },
-          {
-            version: parseInt(search)
-          },
-          {
-            sentTo: {
-              contains: search
-            }
-          },
-          {
-            docType: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            'projectOutline.projectName': {
-              contains: search
-            }
-          },
-          {
-            'projectOrder.projectName': {
-              contains: search
-            }
-          },
-          {
-            'changeRequest.projectName': {
-              contains: search
-            }
-          },
-          {
-            'closingReport.projectName': {
-              contains: search
-            }
-          },
-          {
-            'projectOutline.projectManager.name': {
-              contains: search
-            }
-          },
-          {
-            'projectOrder.projectManager.name': {
-              contains: search
-            }
-          },
-          {
-            'changeRequest.projectManager.name': {
-              contains: search
-            }
-          },
-          {
-            'closingReport.projectManager.name': {
-              contains: search
-            }
-          },
-        ]
-      });
-
-      OutlineApproval.find({
-        assignedTo: data.userId,
-        or: [{
-            uid: parseInt(search)
-          },
-          {
-            version: parseInt(search)
-          },
-          {
-            sentTo: {
-              contains: search
-            }
-          },
-          {
-            docType: {
-              contains: search
-            }
-          },
-          {
-            status: {
-              contains: search
-            }
-          },
-          {
-            'projectOutline.projectName': {
-              contains: search
-            }
-          },
-          {
-            'projectOrder.projectName': {
-              contains: search
-            }
-          },
-          {
-            'changeRequest.projectName': {
-              contains: search
-            }
-          },
-          {
-            'closingReport.projectName': {
-              contains: search
-            }
-          },
-          {
-            'projectOutline.projectManager.name': {
-              contains: search
-            }
-          },
-          {
-            'projectOrder.projectManager.name': {
-              contains: search
-            }
-          },
-          {
-            'changeRequest.projectManager.name': {
-              contains: search
-            }
-          },
-          {
-            'closingReport.projectManager.name': {
-              contains: search
-            }
-          },
-        ]
-      }).limit(10).populateAll().sort('createdAt DESC').then(projects => {
-        socket.emit('approvalsSearch', {
-          count: count,
-          approvals: projects
-        });
-      }).catch(error => {
-      })
-    } catch (error) {
-    }
-  });
-
-  //To paginate search results of approvals
-  socket.on('approvalsSearchIndex', data => {
-    let search = data.search;
-    OutlineApproval.find({
-      assignedTo: data.userId,
-      or: [{
           uid: parseInt(search)
         },
         {
@@ -314,6 +170,150 @@ io.on('connection', socket => {
             contains: search
           }
         },
+        ]
+      });
+
+      OutlineApproval.find({
+        assignedTo: data.userId,
+        or: [{
+          uid: parseInt(search)
+        },
+        {
+          version: parseInt(search)
+        },
+        {
+          sentTo: {
+            contains: search
+          }
+        },
+        {
+          docType: {
+            contains: search
+          }
+        },
+        {
+          status: {
+            contains: search
+          }
+        },
+        {
+          'projectOutline.projectName': {
+            contains: search
+          }
+        },
+        {
+          'projectOrder.projectName': {
+            contains: search
+          }
+        },
+        {
+          'changeRequest.projectName': {
+            contains: search
+          }
+        },
+        {
+          'closingReport.projectName': {
+            contains: search
+          }
+        },
+        {
+          'projectOutline.projectManager.name': {
+            contains: search
+          }
+        },
+        {
+          'projectOrder.projectManager.name': {
+            contains: search
+          }
+        },
+        {
+          'changeRequest.projectManager.name': {
+            contains: search
+          }
+        },
+        {
+          'closingReport.projectManager.name': {
+            contains: search
+          }
+        },
+        ]
+      }).limit(10).populateAll().sort('createdAt DESC').then(projects => {
+        socket.emit('approvalsSearch', {
+          count: count,
+          approvals: projects
+        });
+      }).catch(error => {
+      })
+    } catch (error) {
+    }
+  });
+
+  //To paginate search results of approvals
+  socket.on('approvalsSearchIndex', data => {
+    let search = data.search;
+    OutlineApproval.find({
+      assignedTo: data.userId,
+      or: [{
+        uid: parseInt(search)
+      },
+      {
+        version: parseInt(search)
+      },
+      {
+        sentTo: {
+          contains: search
+        }
+      },
+      {
+        docType: {
+          contains: search
+        }
+      },
+      {
+        status: {
+          contains: search
+        }
+      },
+      {
+        'projectOutline.projectName': {
+          contains: search
+        }
+      },
+      {
+        'projectOrder.projectName': {
+          contains: search
+        }
+      },
+      {
+        'changeRequest.projectName': {
+          contains: search
+        }
+      },
+      {
+        'closingReport.projectName': {
+          contains: search
+        }
+      },
+      {
+        'projectOutline.projectManager.name': {
+          contains: search
+        }
+      },
+      {
+        'projectOrder.projectManager.name': {
+          contains: search
+        }
+      },
+      {
+        'changeRequest.projectManager.name': {
+          contains: search
+        }
+      },
+      {
+        'closingReport.projectManager.name': {
+          contains: search
+        }
+      },
       ]
     }).paginate({
       page: data.pageIndex,
@@ -339,6 +339,76 @@ io.on('connection', socket => {
 
 
 module.exports = {
+  outlineApproval: async (req, res) => {
+    let body = req.body;
+
+    let todaysDate = new Date();
+    let offset = todaysDate.getTimezoneOffset();
+    todaysDate = new Date(todaysDate.getTime() - (offset * 60 * 1000));
+    todaysDate = todaysDate.toISOString().split('T')[0];
+    let assignedPerson = body.assignedTo;
+    let assignedPersonVacationMode = await VacationMode.findOne({ isVacationActive: true, user: assignedPerson, endDate: { '>=': todaysDate }, startDate: { '<=': todaysDate } }).sort({ createdAt: -1 }).populateAll();
+    if (assignedPersonVacationMode != null) {
+      if (body.docType == 'Outline' && body.sentTo == 'Sponsor') {
+        body.assignedTo = assignedPersonVacationMode.backupUser.id;
+        body.projectOutline.isSponsorBackup = true;
+        body.projectOutline.originalProjectSponsor = body.projectOutline.projectSponsor;
+        body.projectOutline.projectSponsor = assignedPersonVacationMode.backupUser;
+      }
+
+      if (body.docType == 'Order') {
+        if (body.sentTo == 'Sponsor') {
+          body.assignedTo = assignedPersonVacationMode.backupUser.id;
+          body.projectOrder.isSponsorBackup = true;
+          body.projectOrder.originalProjectSponsor = body.projectOrder.projectSponsor;
+          body.projectOrder.projectSponsor = assignedPersonVacationMode.backupUser;
+        }
+
+        if (body.sentTo == 'FICO') {
+          body.assignedTo = assignedPersonVacationMode.backupUser.id;
+          body.projectOrder.isFicoBackup = true;
+          body.projectOrder.originalProjectFico = body.projectOrder.projectFico;
+          body.projectOrder.projectFico = assignedPersonVacationMode.backupUser;
+        }
+      }
+
+      if (body.docType == 'Change Request') {
+        if (body.sentTo == 'Sponsor') {
+          body.assignedTo = assignedPersonVacationMode.backupUser.id;
+          body.changeRequest.isSponsorBackup = true;
+          body.changeRequest.originalProjectSponsor = body.changeRequest.projectSponsor;
+          body.changeRequest.projectSponsor = assignedPersonVacationMode.backupUser;
+        }
+
+        if (body.sentTo == 'FICO') {
+          body.assignedTo = assignedPersonVacationMode.backupUser.id;
+          body.changeRequest.isFicoBackup = true;
+          body.changeRequest.originalProjectFico = body.changeRequest.projectFico;
+          body.changeRequest.projectFico = assignedPersonVacationMode.backupUser;
+        }
+      }
+
+      if (body.docType == 'Closing Report') {
+        if (body.sentTo == 'Sponsor') {
+          body.assignedTo = assignedPersonVacationMode.backupUser.id;
+          body.closingReport.isSponsorBackup = true;
+          body.closingReport.originalProjectSponsor = body.closingReport.projectSponsor;
+          body.closingReport.projectSponsor = assignedPersonVacationMode.backupUser;
+        }
+
+        if (body.sentTo == 'FICO') {
+          body.assignedTo = assignedPersonVacationMode.backupUser.id;
+          body.closingReport.isFicoBackup = true;
+          body.closingReport.originalProjectFico = body.closingReport.projectFico;
+          body.closingReport.projectFico = assignedPersonVacationMode.backupUser;
+        }
+      }
+    }
+
+    let createdOutline = await OutlineApproval.create(body);
+    res.ok(createdOutline);
+  },
+
   getOutlinesByUser: (req, res) => {
     OutlineApproval.find({
       assignedTo: req.params.id

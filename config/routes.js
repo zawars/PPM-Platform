@@ -107,6 +107,7 @@ module.exports.routes = {
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
   'GET /projects/activeProjects/:search': 'ProjectsController.activeProjectsSearch',
   'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
+  'POST /outlineApproval': 'OutlineApprovalController.outlineApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
   'GET /projects/search/:query': 'ProjectsController.search',
 

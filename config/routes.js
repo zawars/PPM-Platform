@@ -134,6 +134,12 @@ module.exports.routes = {
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
 
+  // Small Order Team Api
+  'GET /smallOrder/team/:id': 'SmallOrderTeamController.smallOrderTeam',
+
+  // Small Order Rights Api
+  'GET /getRight/:smallOrderId/:userId': 'SmallOrderRightsController.smallOrderRights',
+
   // ProjectBudgetCost Api
   'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
   'GET /projectBudgetCost/project/:id': 'ProjectBudgetCostController.getProjectBudget',

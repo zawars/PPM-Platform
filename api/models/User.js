@@ -32,6 +32,10 @@ module.exports = {
       collection: 'projects',
       via: 'user'
     },
+    smallOrderTeam: {
+      collection: 'smallOrderTeam',
+      via: 'users'
+    },
     teams: {
       collection: 'team',
       via: 'users'

@@ -106,15 +106,15 @@ module.exports = {
     let query = req.params.query;
     User.find({
       or: [{
-          name: {
-            'contains': query
-          }
-        },
-        {
-          email: {
-            'contains': query
-          }
+        name: {
+          'contains': query
         }
+      },
+      {
+        email: {
+          'contains': query
+        }
+      }
       ]
     }).then(users => {
       res.ok(users)
@@ -214,15 +214,19 @@ module.exports = {
                   }, (err) => {
                     if (err) {
                       console.log(err);
-                      res.forbidden({
-                        message: "Error sending email."
-                      });
+                      if (res != undefined) {
+                        res.forbidden({
+                          message: "Error sending email."
+                        });
+                      }
                     } else {
                       if (index == details.length - 1) {
                         console.log('Closing Report Reminder Emails Sent.');
-                        res.send({
-                          message: "Closing Report Reminder Emails Sent."
-                        });
+                        if (res != undefined) {
+                          res.send({
+                            message: "Closing Report Reminder Emails Sent."
+                          });
+                        }
                       }
                     }
                   })

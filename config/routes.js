@@ -107,6 +107,7 @@ module.exports.routes = {
   'GET /projects/closed': 'ProjectsController.getClosedProjects',
   'GET /projects/activeProjects/:search': 'ProjectsController.activeProjectsSearch',
   'POST /updatePreviousApproval': 'OutlineApprovalController.updatePreviousApproval',
+  'POST /outlineApproval': 'OutlineApprovalController.outlineApproval',
   'POST /thirdParties/register': 'ThirdPartiesController.register',
   'GET /projects/search/:query': 'ProjectsController.search',
 
@@ -132,6 +133,12 @@ module.exports.routes = {
 
   // Rights Api
   'GET /getRight/:projectId/:userId': 'RightsController.projectRights',
+
+  // Small Order Team Api
+  'GET /smallOrder/team/:id': 'SmallOrderTeamController.smallOrderTeam',
+
+  // Small Order Rights Api
+  'GET /getSmallOrderRight/:smallOrderId/:userId': 'SmallOrderRightsController.smallOrderRights',
 
   // ProjectBudgetCost Api
   'DELETE /projectBudgetCost/project/:id': 'ProjectBudgetCostController.deleteProjectBudget',
@@ -230,6 +237,9 @@ module.exports.routes = {
 
   //Gantt Milestone report
   'GET /ganttMilestoneReportByProject/:id': 'GanttMilestonesReportController.getGanttMilestoneReportByProject',
+
+  // Vacation Mode
+  'GET /getLastActiveVacationRecord/:user' : 'VacationModeController.getLastActiveVacationRecord',
 
   // Attachments
   'POST /upload': 'AttachmentController.uploadFile',

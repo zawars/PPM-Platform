@@ -123,6 +123,8 @@ module.exports.routes = {
   'GET /reports/index': 'ReportsController.getAllReports',
   'GET /reports/getDocumentAnswers/:id': 'ReportsController.getReportsDocumentsAnswers',
 
+  'GET /reports/getPhasesReportsByParentProject/:id': 'ReportsController.getPhasesReportsByParentProject',
+
   'GET /portfoliosPrograms': 'PortfolioController.getAllPortfoliosPrograms',
 
   'GET /portfolioByReport/:id': 'PortfolioController.getPortfolioByReport',

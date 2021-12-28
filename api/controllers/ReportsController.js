@@ -914,6 +914,28 @@ module.exports = {
       res.send(documentAnswers);
     } catch (error) {
     }
+  },
+
+
+  getPhasesReportsByParentProject: async (req, res) => {
+    try {
+      let parentProjectReportID = req.params.id;
+      let parentProject = await Reports.findOne({id: parentProjectReportID})
+
+      let phasesProjects = await Reports.find({
+        projectName: {
+          'contains': `-${parentProject.uid}`
+        }
+      }, {
+        fields: {
+          statusReports: 1,
+          projectName: 1
+        }
+      });
+
+      res.send(phasesProjects);
+    } catch (error) {
+    }
   }
 };
 

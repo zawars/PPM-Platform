@@ -931,7 +931,8 @@ module.exports = {
           statusReports: 1,
           projectName: 1
         }
-      });
+      }
+    ).populate("statusReports");
 
       res.send(phasesProjects);
     } catch (error) {

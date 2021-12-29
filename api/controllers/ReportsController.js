@@ -928,6 +928,7 @@ module.exports = {
         }
       }, {
         fields: {
+          costTypeTable: 1,
           statusReports: 1,
           projectName: 1
         }

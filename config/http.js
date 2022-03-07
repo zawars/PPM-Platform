@@ -36,7 +36,7 @@ module.exports.http = {
     }),
     apiLimiter: new RateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 800,
+      max: 8000,
       delayMs: 0
     }),
     helmetGuard: helmet({

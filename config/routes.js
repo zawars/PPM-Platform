@@ -240,6 +240,10 @@ module.exports.routes = {
   'POST /createGanttLogs': 'GanttLogsController.createGanttLogs',
   'GET /ganttLogsByProject/:id': 'GanttLogsController.getGanttLogsByProject',
 
+  //Small Order Gantt Logs
+  'POST /createSmallOrderGanttLogs': 'SmallOrderGanttLogsController.createGanttLogs',
+  'GET /ganttLogsBySmallOrder/:id': 'SmallOrderGanttLogsController.getGanttLogsBySmallOrder',
+  
   //Gantt Milestone report
   'GET /ganttMilestoneReportByProject/:id': 'GanttMilestonesReportController.getGanttMilestoneReportByProject',
 
